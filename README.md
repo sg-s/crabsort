@@ -2,7 +2,7 @@
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/sg-s/crabsort.svg)]()
 
-![](./images/https://user-images.githubusercontent.com/6005346/34060825-71d11a74-e1b3-11e7-9fcd-dba33f85561c.png)
+![](https://user-images.githubusercontent.com/6005346/34060825-71d11a74-e1b3-11e7-9fcd-dba33f85561c.png)
 
 `crabsort` is a framework written in MATLAB to help you sort spikes from multi-channel extracellular recordings. It is 
 
