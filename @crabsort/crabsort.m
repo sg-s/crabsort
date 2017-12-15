@@ -55,7 +55,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         handles % a structure that handles everything else
 
         % debug
-        verbosity = 1;
+        verbosity = 10;
 
         % auto-update
         req_update
@@ -82,6 +82,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         spikes
 
         installed_plugins
+
+        channel_to_work_with
     end
 
     methods (Access = protected)
@@ -138,29 +140,47 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         end
 
+        function self = set.channel_to_work_with(self,value)
+            self.channel_to_work_with = value;
 
-        function s = set.loc(s,value)
-            
-            if any(isnan(s.filtered_voltage))
-                set(s.handles.ax1_A_spikes,'XData',NaN,'YData',NaN);
-                return
+            for i = 1:length(self.handles.ax)
+                self.handles.ax(i).YColor = 'k';
             end
-            s.loc = value;
+
+            self.handles.ax(value).YColor = 'r';
+
+        end
+
+        function self = set.raw_data(self,value)
+            self.raw_data = value;
+            if isfield(self.handles,'data') && ~isempty(self.handles.data)
+                for i = 1:size(self.raw_data,2)
+                    self.handles.data(i).YData = self.raw_data(:,i);
+                end
+            end
+        end
+
+
+        function self = set.loc(self,value)
+            
+
+            self.loc = value;
+            idx = self.channel_to_work_with;
             if isempty(value)
-                set(s.handles.ax1_all_spikes,'XData',NaN,'YData',NaN);
-                set(s.handles.ax1_A_spikes,'XData',NaN,'YData',NaN);
-                set(s.handles.ax1_B_spikes,'XData',NaN,'YData',NaN);
+                set(self.handles.found_spikes(idx),'XData',NaN,'YData',NaN);
+                % set(self.handles.ax(idx)_A_spikes,'XData',NaN,'YData',NaN);
+                % set(self.handles.ax(idx)_B_spikes,'XData',NaN,'YData',NaN);
                 return
             else
                 
-                set(s.handles.ax1_all_spikes,'XData',s.time(s.loc),'YData',s.filtered_voltage(s.loc));
-                set(s.handles.ax1_all_spikes,'Marker','o','Color',s.pref.putative_spike_colour,'LineStyle','none')
+                set(self.handles.found_spikes(idx),'XData',self.time(self.loc),'YData',self.raw_data(self.loc,idx));
+                set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.putative_spike_colour,'LineStyle','none')
 
-                % also update the YLim intelligently
-                if s.filter_trace
-                    set(s.handles.ax1,'YLim',[-1.1*max(abs(s.filtered_voltage(s.loc))) 1.1*max(abs(s.filtered_voltage(s.loc)))])
-                else
-                end
+                % % also update the YLim intelligently
+                % if s.filter_trace
+                %     set(s.handles.ax1,'YLim',[-1.1*max(abs(s.filtered_voltage(s.loc))) 1.1*max(abs(s.filtered_voltage(s.loc)))])
+                % else
+                % end
             end
         end % end set loc
 

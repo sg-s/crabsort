@@ -16,3 +16,5 @@ if strcmp(src.String{src.Value},'temperature')
 	self.handles.ax(idx).YLim = [0 30];
 
 end
+
+self.removeMean;

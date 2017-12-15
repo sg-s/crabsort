@@ -87,6 +87,7 @@ load_file_handle(self);
 % update the titlebar with the name of the file we are working with
 self.handles.main_fig.Name = self.file_name;
 
+self.redrawAxes;
 
 % check if there is a .crabsort file already
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
@@ -111,6 +112,8 @@ if exist(file_name,'file') == 2
         end
     end
 end
+
+self.removeMean;
 
 % % enable all controls
 % set(s.handles.method_control,'Enable','on')

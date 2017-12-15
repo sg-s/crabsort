@@ -38,6 +38,9 @@ c = lines;
 for i = 1:self.n_channels
 	self.handles.ax(i) = subplot(self.n_channels,1,i); hold on
 	self.handles.data(i) = plot(self.time,self.raw_data(:,i),'Color',c(i,:));
+
+	% make plots for found spikes
+	self.handles.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none');
 end
 
 bottom_plot = .05;
@@ -60,7 +63,6 @@ for i = 1:self.n_channels
 end
 
 % make the channel labels 
-
 for i = 1:self.n_channels
 	y = bottom_plot + spacing*(i-1);
 	self.handles.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .07 .05],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel);
@@ -73,3 +75,6 @@ end
 
 
 self.handles.scroll_bar.Visible = 'on';
+
+% link axes
+linkaxes(self.handles.ax,'x')

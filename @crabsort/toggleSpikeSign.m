@@ -1,16 +1,24 @@
-function [] =  toggleSpikeSign(s,~,~)
+%                 _                    _   
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+%
+% flips b/w finding +ve and -ve spikes
 
-if s.verbosity > 5
+function [] =  toggleSpikeSign(self,~,~)
+
+if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
 end
 
-if get(s.handles.spike_sign_control,'Value')
-	set(s.handles.spike_sign_control,'String','Finding +ve spikes')
-	s.pref.invert_V = false;
+if get(self.handles.spike_sign_control,'Value')
+	set(self.handles.spike_sign_control,'String','Finding +ve spikes')
+	self.pref.invert_V = false;
 else
-	set(s.handles.spike_sign_control,'String','Finding -ve spikes')
-	s.pref.invert_V = true;
+	set(self.handles.spike_sign_control,'String','Finding -ve spikes')
+	self.pref.invert_V = true;
 end
 
-s.findSpikes;
+self.findSpikes;

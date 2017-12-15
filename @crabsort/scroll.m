@@ -43,9 +43,9 @@ else
     self.handles.scroll_bar.Value = newlim(1)/max(self.time);
 end
 
-for i = 1:self.n_channels
-    self.handles.ax(i).XLim = newlim;
-end
+% scroll just one of them, since all of them should be linked
+self.handles.ax(1).XLim = newlim;
+
 
 % xlim = get(s.handles.ax1,'XLim');
 % if xlim(1) < min(self.time)

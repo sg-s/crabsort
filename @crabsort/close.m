@@ -1,12 +1,15 @@
 % callback when main window is closed
 
-function close(s,~,~)
+function close(self,~,~)
 
-if s.verbosity > 5
+if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
 end
 
 
-delete(s.handles.main_fig)
-delete(s)
+self.saveData;
+
+
+delete(self.handles.main_fig)
+delete(self)
