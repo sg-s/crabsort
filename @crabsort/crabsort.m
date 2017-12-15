@@ -27,23 +27,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         % data handling
         output_channel_names
-        sampling_rate
 
-        % current voltage trace
         R  % this holds the dimensionality reduced data
 
 
-        V_snippets % matrix of snippets around spike peaks
-        loc  % holds current spike times
 
-
-        use_this_fragment
-        A_amplitude
-        B_amplitude
-
-
-        this_trial
-        this_paradigm
 
         % plugins
         
@@ -80,10 +68,25 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         time
 
         spikes
+        putative_spikes
 
         installed_plugins
 
         channel_to_work_with
+
+        % this keeps track of which stage each channel is in 
+        % in the data analysis pipeline
+        % 
+        % 0 == raw (need to find spikes)
+        % 1 == spikes found (need to reduce dimensions)
+        % 2 == dimensions reduced (need to cluster)
+        % 3 == done (spikes assigned to neurons)
+        channel_stage
+
+        % this structure maps nerves onto the neurons that 
+        % are expected to be seen on them 
+        nerve2neuron = struct('pdn','PD','lpn','LP');
+
     end
 
     methods (Access = protected)
@@ -160,11 +163,76 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             end
         end
 
+        function self = set.channel_stage(self,value)
+            self.channel_stage = value;
 
-        function self = set.loc(self,value)
+            if isempty(self.channel_to_work_with)
+                return
+            end
+
+            this_channel_stage = self.channel_stage(self.channel_to_work_with);
+
+            sdp = self.handles.spike_detection_panel.Children;
+            dmp = self.handles.dim_red_panel.Children;
+            cp = self.handles.cluster_panel.Children;
+
+
+            switch this_channel_stage
+            case 0
+                % enable spike detection, turn everything else off
+                for i = 1:length(sdp)
+                    sdp(i).Enable = 'on';
+                end
+                for i = 1:length(dmp)
+                    dmp(i).Enable = 'off';
+                end
+                for i = 1:length(cp)
+                    cp(i).Enable = 'off';
+                end
+
+            case 1
+                % enable dim red, + spike detection, turn everyhting else off
+                for i = 1:length(sdp)
+                    sdp(i).Enable = 'on';
+                end
+                for i = 1:length(dmp)
+                    dmp(i).Enable = 'on';
+                end
+                for i = 1:length(cp)
+                    cp(i).Enable = 'off';
+                end
+            case 2
+
+                disp('only enable clustering ')
+                for i = 1:length(sdp)
+                    sdp(i).Enable = 'off';
+                end
+                for i = 1:length(dmp)
+                    dmp(i).Enable = 'off';
+                end
+                for i = 1:length(cp)
+                    cp(i).Enable = 'on';
+                end
+            case 3
+
+                disp('disable everything ')
+                for i = 1:length(sdp)
+                    sdp(i).Enable = 'off';
+                end
+                for i = 1:length(dmp)
+                    dmp(i).Enable = 'off';
+                end
+                for i = 1:length(cp)
+                    cp(i).Enable = 'off';
+                end
+            end
+        end
+
+
+        function self = set.putative_spikes(self,value)
             
 
-            self.loc = value;
+            self.putative_spikes = logical(value);
             idx = self.channel_to_work_with;
             if isempty(value)
                 set(self.handles.found_spikes(idx),'XData',NaN,'YData',NaN);
@@ -172,9 +240,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 % set(self.handles.ax(idx)_B_spikes,'XData',NaN,'YData',NaN);
                 return
             else
-                
-                set(self.handles.found_spikes(idx),'XData',self.time(self.loc),'YData',self.raw_data(self.loc,idx));
+
+                set(self.handles.found_spikes(idx),'XData',self.time(self.putative_spikes(:,idx)),'YData',self.raw_data(self.putative_spikes(:,idx),idx));
+
                 set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.putative_spike_colour,'LineStyle','none')
+
+                self.handles.method_control.Enable = 'on';
 
                 % % also update the YLim intelligently
                 % if s.filter_trace

@@ -1,29 +1,29 @@
 % master dispatched when we want to reduce dimensions
 
-function reduceDimensionsCallback(s,~,~)
+function reduceDimensionsCallback(self,~,~)
 
-if s.verbosity > 5
+if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     d = dbstack;
     cprintf('text',[mfilename ' called by ' d(2).name])
 end
 
-method = (get(s.handles.method_control,'Value'));
-temp = get(s.handles.method_control,'String');
+method = (get(self.handles.method_control,'Value'));
+temp = get(self.handles.method_control,'String');
 method = temp{method};
 method = str2func(method);
 
-s.handles.popup.Visible = 'on';
-s.handles.popup.String = {'','','','Reducing dimenisons...'};
+self.handles.popup.Visible = 'on';
+self.handles.popup.String = {'','','','Reducing dimenisons...'};
 drawnow;
 
-method(s);
+method(self);
 
-s.handles.popup.Visible = 'off';
+self.handles.popup.Visible = 'off';
 
 % change the marker on the identified spikes
-set(s.handles.ax1_all_spikes,'Marker','o','Color',s.pref.embedded_spike_colour,'LineStyle','none')
+idx = self.channel_to_work_with;
+set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.embedded_spike_colour,'LineStyle','none')
 drawnow;
 
-% disable the reduce dimensions callback
-s.handles.method_control.Enable = 'off';
+self.channel_stage(idx) = 2; 

@@ -43,26 +43,6 @@ handles.menu2 = uimenu('Label','Tools');
 % uimenu(handles.menu2,'Label','Reset zoom','Callback',@self.resetZoom);
 % delete(temp([1:8 11:15]))
 
-% % make the two axes
-% handles.ax1 = axes('parent',handles.main_fig,'Position',[0.07 0.05 0.87 0.29]); hold on
-% handles.jump_back = uicontrol(handles.main_fig,'units','normalized','Position',[0 .04 .04 .50],'Style', 'pushbutton', 'String', '<','callback',@self.jump);
-% handles.jump_fwd = uicontrol(handles.main_fig,'units','normalized','Position',[.96 .04 .04 .50],'Style', 'pushbutton', 'String', '>','callback',@self.jump);
-% handles.ax2 = axes('parent',handles.main_fig,'Position',[0.07 0.37 0.87 0.18]); hold on
-% linkaxes([handles.ax2,handles.ax1],'x')
-
-% % make dummy plots on these axes, for placeholders later on
-% handles.ax1_data = plot(handles.ax1,NaN,NaN);
-% handles.ax1_spike_marker = plot(handles.ax1,NaN,NaN);
-% handles.ax1_A_spikes = plot(handles.ax1,NaN,NaN);
-% handles.ax1_B_spikes = plot(handles.ax1,NaN,NaN);
-% handles.ax1_all_spikes = plot(handles.ax1,NaN,NaN);
-% handles.ax1_ignored_data = plot(handles.ax1,NaN,NaN);
-
-% % now some for ax1
-% handles.ax2_data = plot(handles.ax2,NaN,NaN);
-% for si = 1:10
-%     handles.ax2_control_signals(si) = plot(handles.ax2,NaN,NaN);
-% end
 
 
 % % make all the panels
@@ -78,24 +58,18 @@ handles.menu2 = uimenu('Label','Tools');
 % handles.resp_channel = uicontrol(handles.datapanel,'units','normalized','Position',[.01 .01 .910 .25],'Style', 'listbox', 'String', '','FontSize',self.pref.fs,'FontWeight',self.pref.fw);
 
 
-% file I/O
-uicontrol(handles.main_fig,'units','normalized','Position',[.05 .94 .05 .05],'Style', 'pushbutton', 'String', 'Load File','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
-uicontrol(handles.main_fig,'units','normalized','Position',[.01 .94 .03 .05],'Style', 'pushbutton', 'String', '<','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
-uicontrol(handles.main_fig,'units','normalized','Position',[.11 .94 .03 .05],'Style', 'pushbutton', 'String', '>','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
+% file I/O panel
+handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .2 .07],'BackgroundColor',[1 1 1]);
 
-% % paradigms and trials
-% handles.datachooserpanel = uipanel('Title','Paradigms and Trials','Position',[.03 .75 .25 .16],'BackgroundColor',[1 1 1]);
-% handles.paradigm_chooser = uicontrol(handles.datachooserpanel,'units','normalized','Position',[.25 .75 .5 .20],'Style', 'popupmenu', 'String', 'Choose Paradigm','callback',@self.updateTrialsParadigms,'Enable','off');
-% handles.next_paradigm = uicontrol(handles.datachooserpanel,'units','normalized','Position',[.75 .65 .15 .33],'Style', 'pushbutton', 'String', '>','callback',@self.updateTrialsParadigms,'Enable','off');
-% handles.prev_paradigm = uicontrol(handles.datachooserpanel,'units','normalized','Position',[.05 .65 .15 .33],'Style', 'pushbutton', 'String', '<','callback',@self.updateTrialsParadigms,'Enable','off');
+uicontrol(handles.data_panel,'units','normalized','Position',[.05 .2 .15 .6],'Style', 'pushbutton', 'String', '<','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
 
-% handles.trial_chooser = uicontrol(handles.datachooserpanel,'units','normalized','Position',[.25 .27 .5 .20],'Style', 'popupmenu', 'String', 'Choose Trial','callback',@self.updateTrialsParadigms,'Enable','off');
-% handles.next_trial = uicontrol(handles.datachooserpanel,'units','normalized','Position',[.75 .15 .15 .33],'Style', 'pushbutton', 'String', '>','callback',@self.updateTrialsParadigms,'Enable','off');
-% handles.prev_trial = uicontrol(handles.datachooserpanel,'units','normalized','Position',[.05 .15 .15 .33],'Style', 'pushbutton', 'String', '<','callback',@self.updateTrialsParadigms,'Enable','off');
+uicontrol(handles.data_panel,'units','normalized','Position',[.2 .1 .6 .8],'Style', 'pushbutton', 'String', 'Load File','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
+
+uicontrol(handles.data_panel,'units','normalized','Position',[.8 .2 .15 .6],'Style', 'pushbutton', 'String', '>','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
 
 
 % spike detection panel
-handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[.15 .92 .2 .07],'BackgroundColor',[1 1 1]);
+handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[.22 .92 .2 .07],'BackgroundColor',[1 1 1]);
 
 handles.prom_auto_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.5 .01 .4 .4],'Style','togglebutton','String','MANUAL','Value',0,'FontSize',self.pref.fs,'Callback',@self.togglePromControl);
 handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.85 .65 .1 .25],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider);
@@ -111,21 +85,21 @@ else
     handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .01 .4 .4],'Style','togglebutton','String','Finding +ve spikes','Value',1,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign);
 end
 
-% handles.kill_ringing_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.5 .4 .5 .2],'Style','pushbutton','String','Kill ringing','FontSize',self.pref.fs,'Callback',@self.killRinging,'Visible','on');
 
-% % dimension reduction and clustering panels
-% handles.dimredpanel = uipanel('Title','Dimensionality Reduction','Position',[.3 .67 .3 .07],'BackgroundColor',[1 1 1]);
-% all_plugin_names = {self.installed_plugins.name};
-% dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));
+handles.dim_red_panel = uipanel('Title','Dimensionality reduction','Position',[.43 .92 .2 .07],'BackgroundColor',[1 1 1]);
 
-% handles.method_control = uicontrol(handles.dimredpanel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.reduceDimensionsCallback,'Enable','off','FontSize',20);
+all_plugin_names = {self.installed_plugins.name};
+dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));
 
-% % find the available methods for clustering
-% all_plugin_names = {self.installed_plugins.name};
-% cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'cluster')));
+handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.reduceDimensionsCallback,'Enable','off','FontSize',20);
 
-% handles.cluster_panel = uipanel('Title','Clustering','Position',[.30 .57 .3 .07],'BackgroundColor',[1 1 1]);
-% handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'Enable','off','FontSize',20);
+handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.64 .92 .2 .07],'BackgroundColor',[1 1 1]);
+
+% find the available methods for clustering
+all_plugin_names = {self.installed_plugins.name};
+cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'cluster')));
+
+handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'Enable','off','FontSize',20);
 
 
 % % metadata panel

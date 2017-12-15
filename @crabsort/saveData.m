@@ -24,9 +24,10 @@ file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 
 data_channel_names = self.data_channel_names;
 spikes = self.spikes;
+channel_stage = self.channel_stage;
 
 if exist(file_name,'file') == 2
-    save(file_name,'spikes','data_channel_names','-append')
+    save(file_name,'spikes','data_channel_names','channel_stage','-append')
 else
-    save(file_name,'spikes','data_channel_names')
+    save(file_name,'spikes','data_channel_names','channel_stage')
 end

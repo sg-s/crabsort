@@ -1,19 +1,28 @@
-function [] = togglePromControl(s,~,~)
+%                 _                    _   
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+%
+% switches between manual and automatic spike
+% prominence detection
 
-if s.verbosity > 5
+function [] = togglePromControl(self,~,~)
+
+if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
 end
 
-if get(s.handles.prom_auto_control,'Value')
-	set(s.handles.prom_auto_control,'String','AUTO')
-	set(s.handles.prom_ub_control,'Visible','off')
-	set(s.handles.spike_prom_slider,'Visible','off')
+if get(self.handles.prom_auto_control,'Value')
+	set(self.handles.prom_auto_control,'String','AUTO')
+	set(self.handles.prom_ub_control,'Visible','off')
+	set(self.handles.spike_prom_slider,'Visible','off')
 
 else
-	set(s.handles.prom_auto_control,'String','MANUAL')
-	set(s.handles.prom_ub_control,'Visible','on')
-	set(s.handles.spike_prom_slider,'Visible','on')
+	set(self.handles.prom_auto_control,'String','MANUAL')
+	set(self.handles.prom_ub_control,'Visible','on')
+	set(self.handles.spike_prom_slider,'Visible','on')
 end
 
-s.findSpikes;
+self.findSpikes;

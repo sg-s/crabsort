@@ -18,6 +18,10 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
+if isempty(self.channel_to_work_with)
+    return
+end
+
 % figure out which channel to work with
 V = self.raw_data(:,self.channel_to_work_with);
 
@@ -85,4 +89,8 @@ if ~isempty(loc)
     s.V_snippets = V_snippets;
 end
 
-self.loc = loc;
+self.putative_spikes(:,self.channel_to_work_with) = 0;
+self.putative_spikes(loc,self.channel_to_work_with) = 1;
+
+% after finding spikes, we should update the channel_stage
+self.channel_stage(self.channel_to_work_with) = 1;

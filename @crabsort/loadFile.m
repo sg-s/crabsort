@@ -89,14 +89,19 @@ self.handles.main_fig.Name = self.file_name;
 
 self.redrawAxes;
 
+% set the channel_stages
+self.channel_stage = zeros(size(self.raw_data,2),1);
+
+
 % check if there is a .crabsort file already
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 
 if exist(file_name,'file') == 2
     disp('file exists -- need to load it and update tghe object')
-    load(file_name,'spikes','data_channel_names','-mat')
+    load(file_name,'spikes','data_channel_names','channel_stage','-mat')
     self.data_channel_names = data_channel_names;
     self.spikes = spikes;
+    self.channel_stage = channel_stage;
 
     % update data_channel_names
     for i = 1:length(self.data_channel_names)
@@ -114,6 +119,12 @@ if exist(file_name,'file') == 2
 end
 
 self.removeMean;
+
+% make a putative_spikes matrix
+self.putative_spikes = 0*self.raw_data;
+
+
+self.showSpikes;
 
 % % enable all controls
 % set(s.handles.method_control,'Enable','on')

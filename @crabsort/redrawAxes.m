@@ -41,6 +41,8 @@ for i = 1:self.n_channels
 
 	% make plots for found spikes
 	self.handles.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none');
+
+	self.handles.sorted_spikes(i).unit(1) = plot(NaN,NaN,'o','LineStyle','none');
 end
 
 bottom_plot = .05;

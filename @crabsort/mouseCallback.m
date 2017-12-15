@@ -1,9 +1,21 @@
 
+%                 _                    _   
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+%
+% this function gets called every time the mouse is clicked
+
 function mouseCallback(self,src,event)
 
 if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
+end
+
+if ~isfield(self.handles,'ax')
+	return
 end
 
 % figure out which plot is being clicked on 
