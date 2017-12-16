@@ -24,3 +24,5 @@ cluster_method_handle(self);
 
 self.channel_stage(self.channel_to_work_with) = 3; 
  
+
+self.showSpikes;

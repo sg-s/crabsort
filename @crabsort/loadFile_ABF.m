@@ -22,4 +22,4 @@ end
 
 self.n_channels = size(self.raw_data,2);
 self.time = (1:length(self.raw_data))*dt*1e-6;
-
+self.dt = mean(diff(self.time));

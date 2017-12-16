@@ -69,25 +69,6 @@ if self.verbosity
 end
 
 
-% cut out the snippets 
-self.R = [];
-if ~isempty(loc)
-
-    V_snippets = NaN(self.pref.t_before+self.pref.t_after,length(loc));
-    if loc(1) < self.pref.t_before+1
-        loc(1) = [];
-        V_snippets(:,1) = []; 
-    end
-    if loc(end) + self.pref.t_after+1 > length(V)
-        loc(end) = [];
-        V_snippets(:,end) = [];
-    end
-    for i = 1:length(loc)
-        V_snippets(:,i) = V(loc(i)-self.pref.t_before+1:loc(i)+self.pref.t_after);
-    end
-
-    s.V_snippets = V_snippets;
-end
 
 self.putative_spikes(:,self.channel_to_work_with) = 0;
 self.putative_spikes(loc,self.channel_to_work_with) = 1;

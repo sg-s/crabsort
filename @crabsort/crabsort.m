@@ -30,42 +30,30 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         R  % this holds the dimensionality reduced data
 
-
-
-
-        % plugins
-        
-
-        % some control variables
-        filter_trace = true;
-
-        % UI
-        handles % a structure that handles everything else
-
         % debug
         verbosity = 10;
 
-        % auto-update
-        req_update
-        req_toolboxes
-
         channel_names = {'???','lpn','lvn','pdn','mgn','temperature','pyn'};
+
+        % this structure maps nerves onto the neurons that 
+        % are expected to be seen on them 
+        nerve2neuron = struct('pdn','PD','lpn','LP');
 
     end % end properties 
 
     properties (SetAccess = protected)
 
+        % UI
+        handles % a structure that handles everything else
+
         metadata
 
-        version_name = 'crabsort';
-        build_number = 'automatically-generated';
-
+        % data 
         n_channels
         raw_data
-
         data_channel_names
-
         time
+        dt
 
         spikes
         putative_spikes
@@ -83,11 +71,20 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % 3 == done (spikes assigned to neurons)
         channel_stage
 
-        % this structure maps nerves onto the neurons that 
-        % are expected to be seen on them 
-        nerve2neuron = struct('pdn','PD','lpn','LP');
+        version_name = 'crabsort';
+        build_number = 'automatically-generated';
 
     end
+
+    properties (Access = protected)
+
+        % auto-update
+        req_update
+        req_toolboxes = {'srinivas.gs_mtools','crabsort','puppeteer'};
+
+
+
+    end % end protected props
 
     methods (Access = protected)
         function displayScalarObject(s)
@@ -98,12 +95,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
 
     methods
-        function s = crabsort()
+        function self = crabsort()
 
             % check for dependencies
-            % toolboxes = {'srinivas.gs_mtools','crabsort','bhtsne'};
-            % build_numbers = checkDeps(toolboxes);
-            % s.version_name = strcat('crabsort for Kontroller (Build-',oval(build_numbers(2)),')'); 
+            build_numbers = checkDeps(self.req_toolboxes);
+            self.version_name = strcat('crabsort for Kontroller (Build-',oval(build_numbers(2)),')'); 
 
             if verLessThan('matlab', '8.0.1')
                 error('Need MATLAB 2014b or better to run')
@@ -114,31 +110,26 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 error('Need Signal Processing toolbox version 6.22 or higher')
             end
 
-            % add src folder to path
-            % addpath([fileparts(fileparts(which(mfilename))) oss 'src'])
-
-
             % load preferences
-            s.pref = readPref(fileparts(fileparts(which(mfilename))));
+            self.pref = readPref(fileparts(fileparts(which(mfilename))));
 
             % figure out what plugins are installed, and link them
-            s = plugins(s);
+            self = self.plugins;
 
             % get the version name and number
-            s.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) oss 'build_number']))];
-            s.version_name = ['crabsort (' s.build_number ')'];
+            self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) oss 'build_number']))];
+            self.version_name = ['crabsort (' self.build_number ')'];
 
             % make gui
-            s.makeGUI;
+            self.makeGUI;
 
-            % configure somethings for auto-update
-            s.req_toolboxes = {'srinivas.gs_mtools','bhtsne','crabsort'};
-            [~,s.req_update] = checkDeps(s.req_toolboxes);
+            % % configure somethings for auto-update
+            % [~,s.req_update] = checkDeps(s.req_toolboxes);
 
             if ~nargout
                 cprintf('red','[WARN] ')
-                cprintf('text','crabsort called without assigning to a object. crabsort will create an object called "s" in the workspace\n')
-                assignin('base','s',s);
+                cprintf('text','crabsort called without assigning to a object. crabsort will create an object called "C" in the workspace\n')
+                assignin('base','C',self);
             end
 
         end
@@ -151,6 +142,10 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             end
 
             self.handles.ax(value).YColor = 'r';
+
+            % force a channel_stage update
+            self.channel_stage = self.channel_stage;
+
 
         end
 
@@ -254,11 +249,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 % end
             end
         end % end set loc
-
-        function s = set.filter_trace(s,value)
-            s.filter_trace = value;
-            s.plotResp;
-        end % end set filter_trace
 
 
         function delete(s)

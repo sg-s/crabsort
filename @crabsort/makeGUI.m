@@ -32,7 +32,7 @@ addlistener(handles.scroll_bar,'ContinuousValueChange',@self.scroll);
 handles.menu1 = uimenu('Label','Make Plots...');
 uimenu(handles.menu1,'Label','Stimulus','Callback',@self.plot);
 uimenu(handles.menu1,'Label','LFP','Callback',@self.plot);
-uimenu(handles.menu1,'Label','Raster','Callback',@self.plot);
+uimenu(handles.menu1,'Label','Raster','Callback',@self.makeRaster);
 uimenu(handles.menu1,'Label','Firing Rate','Callback',@self.plot);
 
 % pre-processing
@@ -71,18 +71,18 @@ uicontrol(handles.data_panel,'units','normalized','Position',[.8 .2 .15 .6],'Sty
 % spike detection panel
 handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[.22 .92 .2 .07],'BackgroundColor',[1 1 1]);
 
-handles.prom_auto_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.5 .01 .4 .4],'Style','togglebutton','String','MANUAL','Value',0,'FontSize',self.pref.fs,'Callback',@self.togglePromControl);
-handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.85 .65 .1 .25],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider);
-handles.spike_prom_slider = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .63 .8 .25],'Style','Slider','Min',0,'Max',1,'Value',.5,'Callback',@self.findSpikes);
+handles.prom_auto_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.5 .01 .4 .4],'Style','togglebutton','String','MANUAL','Value',0,'FontSize',self.pref.fs,'Callback',@self.togglePromControl,'Enable','off');
+handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.85 .65 .1 .25],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider,'Enable','off');
+handles.spike_prom_slider = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .63 .8 .25],'Style','Slider','Min',0,'Max',1,'Value',.5,'Callback',@self.findSpikes,'Enable','off');
 try    % R2013b and older
    addlistener(handles.spike_prom_slider,'ActionEvent',@self.findSpikes);
 catch  % R2014a and newer
    addlistener(handles.spike_prom_slider,'ContinuousValueChange',@self.findSpikes);
 end
 if self.pref.invert_V
-    handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .01 .4 .4],'Style','togglebutton','String','Finding -ve spikes','Value',0,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign);
+    handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .01 .4 .4],'Style','togglebutton','String','Finding -ve spikes','Value',0,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign,'Enable','off');
 else
-    handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .01 .4 .4],'Style','togglebutton','String','Finding +ve spikes','Value',1,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign);
+    handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .01 .4 .4],'Style','togglebutton','String','Finding +ve spikes','Value',1,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign,'Enable','off');
 end
 
 
@@ -93,6 +93,8 @@ dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_ty
 
 handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.reduceDimensionsCallback,'Enable','off','FontSize',20);
 
+
+
 handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.64 .92 .2 .07],'BackgroundColor',[1 1 1]);
 
 % find the available methods for clustering
@@ -101,6 +103,8 @@ cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_ty
 
 handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'Enable','off','FontSize',20);
 
+
+handles.redo_button = uicontrol(handles.main_fig,'units','normalized','Position',[.88 .93 .05 .04],'String','REDO','Style','pushbutton','Callback',@self.redo);
 
 % % metadata panel
 % handles.metadata_panel = uipanel('Title','Metadata','Position',[.62 .57 .11 .4],'BackgroundColor',[1 1 1]);
@@ -119,19 +123,6 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 % uicontrol(handles.manualpanel,'units','normalized','Position',[.1 0/8 .8 1/9],'Style','pushbutton','String','Retain View','Callback',@self.modifyTraceDiscard,'Enable','off');
 
 
-% % various toggle switches and pushbuttons
-% handles.filtermode = uicontrol(handles.main_fig,'units','normalized','Position',[.03 .69 .12 .05],'Style','togglebutton','String','Filter','Value',self.filter_trace,'Callback',@self.toggleFilter,'Enable','off');
-% if self.filter_trace
-%     set(handles.filtermode,'String','Filter is ON')
-% else
-%     set(handles.filtermode,'String','Filter is ON')
-% end
-
-% handles.redo_control = uicontrol(handles.main_fig,'units','normalized','Position',[.03 .64 .12 .05],'Style','pushbutton','String','Redo','Value',0,'Callback',@self.redo,'Enable','off');
-% handles.autosort_control = uicontrol(handles.main_fig,'units','normalized','Position',[.16 .64 .12 .05],'Style','togglebutton','String','Autosort','Value',0,'Enable','off','Callback',@autosortCallback);
-
-% handles.sine_control = uicontrol(handles.main_fig,'units','normalized','Position',[.03 .59 .12 .05],'Style','togglebutton','String',' Kill Ringing','Value',0,'Callback',@self.plotResp,'Enable','off');
-% handles.discard_control = uicontrol(handles.main_fig,'units','normalized','Position',[.16 .59 .12 .05],'Style','togglebutton','String',' Discard','Value',0,'Callback',@self.discard,'Enable','off');
 
 
 % % disable tagging on non unix systems
@@ -151,8 +142,8 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 
 % end
 
-% % make a pop-over for busy messages
-% handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 .57 1 .46],'Style', 'text', 'String', {'','','','Embedding...'},'FontSize',24,'FontWeight','normal','Visible','off');
+% make a pop-over for busy messages
+handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 .57 1 .46],'Style', 'text', 'String', {'','','','Embedding...'},'FontSize',24,'FontWeight','normal','Visible','off');
 
 
 self.handles = handles;

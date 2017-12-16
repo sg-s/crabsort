@@ -1,18 +1,37 @@
-function redo(s,~,~)
+%                 _                    _   
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+%
+% throws away all data in the current channel
+% and resets the state of this channel to 0
 
-if s.verbosity > 5
+function redo(self,~,~)
+
+if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
 end
 
-s.A = [];
-s.B = [];
-s.N = [];
-s.use_this_fragment = [];
 
-s.plotResp;
+if isempty(self.channel_to_work_with)
+	return
+end
 
-s.saveData;
+if isfield(self.spikes,self.data_channel_names{self.channel_to_work_with})
+	% remove this
+	self.spikes = rmfield(self.spikes,self.data_channel_names{self.channel_to_work_with})
+else
+end
 
-% re-enable some things
-s.handles.method_control.Enable = 'on';
+self.channel_stage(self.channel_to_work_with) = 0;
+
+N = self.handles.sorted_spikes(self.channel_to_work_with).unit;
+
+for i = 1:length(N)
+	N(i).YData = NaN;
+	N(i).XData = NaN;
+end
+
+self.showSpikes;

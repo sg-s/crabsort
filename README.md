@@ -22,6 +22,8 @@ The best way to install `crabsort` is through my package manager:
 urlwrite('http://srinivas.gs/install.m','install.m'); 
 install sg-s/crabsort
 install sg-s/srinivas.gs_mtools   % crabsort needs this package to run
+install sg-s/Multicore-TSNE % blazing fast t-sne embedding 
+install sg-s/puppeteer % for manipulation of various operations 
 ```
 
 This script grabs the code and fixes your path. 
@@ -39,6 +41,7 @@ Don't forget to download, install and configure the other packages too (see belo
 ## Limitations and Scope
 
 * `crabsort` is a tweaked version of an earlier spikesorting package that I wrote to sort spikes in extracellular recordings of *Drosophila* olfactory neurons. The changes I made here are specific to crabs and to the STG. 
+* Currently, only `.ABF` files are supported, though `crabsort`'s architecture makes adding support for a new file format trivial. 
 
 
 ## Architecture
