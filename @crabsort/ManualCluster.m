@@ -24,7 +24,7 @@ V_snippets = self.getSnippets(self.channel_to_work_with);
 default_neuron_name =  self.nerve2neuron.(self.data_channel_names{self.channel_to_work_with});
 default_names = {default_neuron_name, 'Noise'};
 
-[idx, labels] = manualCluster(R,V_snippets,default_names,@self.showSpikeInContext,[]);
+[idx, labels] = manualCluster(R,V_snippets,default_names,@self.showSpikeInContext);
 
 
 putative_spikes = find(self.putative_spikes(:,self.channel_to_work_with));

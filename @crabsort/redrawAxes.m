@@ -80,3 +80,11 @@ self.handles.scroll_bar.Visible = 'on';
 
 % link axes
 linkaxes(self.handles.ax,'x')
+
+% for every axes, make a red line that is used to indicate 
+% a spike -- this will be used by callbacks from 
+% clustering algorithms (and anything else, really)
+
+for i = 1:self.n_channels
+	self.handles.spike_marker(i) = plot(self.handles.ax(i),NaN,NaN,'r');
+end

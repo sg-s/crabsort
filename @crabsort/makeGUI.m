@@ -143,7 +143,7 @@ handles.redo_button = uicontrol(handles.main_fig,'units','normalized','Position'
 % end
 
 % make a pop-over for busy messages
-handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 .57 1 .46],'Style', 'text', 'String', {'','','','Embedding...'},'FontSize',24,'FontWeight','normal','Visible','off');
+handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 0 1 1],'Style', 'text', 'String', {'','','','Embedding...'},'FontSize',24,'FontWeight','normal','Visible','off');
 
 
 self.handles = handles;

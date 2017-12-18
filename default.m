@@ -57,3 +57,5 @@ V_cutoff = -1; 						% ignore peaks beyond this limit
 
 invert_V = false; 					% sometimes, it is easier to find spikes if you invert V
 
+% context width: window around the spike to show when clicked on in a reduced representation
+context_width = 1.5; % seconds. 
