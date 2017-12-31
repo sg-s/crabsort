@@ -86,28 +86,27 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
     end % end protected props
 
-    methods (Access = protected)
-        function displayScalarObject(s)
-            disp('crabsort')
-            s.build_number
-        end % end displayScalarObject
-    end % end protected methods
-
 
     methods
-        function self = crabsort()
+        function self = crabsort(make_gui)
 
-            % check for dependencies
-            build_numbers = checkDeps(self.req_toolboxes);
-            self.version_name = strcat('crabsort for Kontroller (Build-',oval(build_numbers(2)),')'); 
-
-            if verLessThan('matlab', '8.0.1')
-                error('Need MATLAB 2014b or better to run')
+            if nargin == 0 
+                make_gui = true;
             end
 
-            % check the signal processing toolbox version
-            if verLessThan('signal','6.22')
-                error('Need Signal Processing toolbox version 6.22 or higher')
+            % check for dependencies
+            self.version_name = 'crabsort';
+
+            if make_gui
+
+                if verLessThan('matlab', '8.0.1')
+                    error('Need MATLAB 2014b or better to run')
+                end
+
+                % check the signal processing toolbox version
+                if verLessThan('signal','6.22')
+                    error('Need Signal Processing toolbox version 6.22 or higher')
+                end
             end
 
             % load preferences
@@ -120,11 +119,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) oss 'build_number']))];
             self.version_name = ['crabsort (' self.build_number ')'];
 
-            % make gui
-            self.makeGUI;
+            
+            if make_gui 
+                self.makeGUI;
+            end
 
-            % % configure somethings for auto-update
-            % [~,s.req_update] = checkDeps(s.req_toolboxes);
 
             if ~nargout
                 cprintf('red','[WARN] ')
@@ -137,11 +136,19 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         function self = set.channel_to_work_with(self,value)
             self.channel_to_work_with = value;
 
-            for i = 1:length(self.handles.ax)
-                self.handles.ax(i).YColor = 'k';
+
+            if isempty(value)
+                return
             end
 
-            self.handles.ax(value).YColor = 'r';
+            if isfield(self.handles,'ax')
+                for i = 1:length(self.handles.ax)
+                    self.handles.ax(i).YColor = 'k';
+                end
+
+
+                self.handles.ax(value).YColor = 'r';
+            end
 
             % force a channel_stage update
             self.channel_stage = self.channel_stage;
@@ -164,6 +171,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             if isempty(self.channel_to_work_with)
                 return
             end
+
 
             this_channel_stage = self.channel_stage(self.channel_to_work_with);
 
@@ -230,11 +238,17 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             self.putative_spikes = logical(value);
             idx = self.channel_to_work_with;
             if isempty(value)
-                set(self.handles.found_spikes(idx),'XData',NaN,'YData',NaN);
-                % set(self.handles.ax(idx)_A_spikes,'XData',NaN,'YData',NaN);
-                % set(self.handles.ax(idx)_B_spikes,'XData',NaN,'YData',NaN);
+                try
+                    set(self.handles.found_spikes(idx),'XData',NaN,'YData',NaN);
+                catch
+                end
                 return
             else
+
+                if isempty(self.handles)
+                    return
+                end
+
 
                 set(self.handles.found_spikes(idx),'XData',self.time(self.putative_spikes(:,idx)),'YData',self.raw_data(self.putative_spikes(:,idx),idx));
 
@@ -242,11 +256,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
                 self.handles.method_control.Enable = 'on';
 
-                % % also update the YLim intelligently
-                % if s.filter_trace
-                %     set(s.handles.ax1,'YLim',[-1.1*max(abs(s.filtered_voltage(s.loc))) 1.1*max(abs(s.filtered_voltage(s.loc)))])
-                % else
-                % end
             end
         end % end set loc
 

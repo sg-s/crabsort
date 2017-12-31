@@ -14,29 +14,27 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
-% reset some pushbuttons and other things
-disp('need to clear current data')
-% self.clearCurrentData;
+if nargin == 1
+    src.String = '';
+end
 
 % figure out what file types we can work with
 allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}),'n/a');
 allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
 
 
-if strcmp(get(src,'String'),'Load File')
+if strcmp(src.String,'Load File')
     [self.file_name,self.path_name,filter_index] = uigetfile(allowed_file_extensions);
     if ~self.file_name
         return
     end
-elseif strcmp(get(src,'String'),'<')
+elseif strcmp(src.String,'<')
     if isempty(self.file_name)
         return
     else
         self.saveData;
+        self.reset;
 
-        self.this_trial = [];
-        self.this_paradigm = [];
-        
         % get the list of files
         [~,~,ext]=fileparts(self.file_name);
         allfiles = dir([self.path_name '*' ext]);
@@ -50,14 +48,13 @@ elseif strcmp(get(src,'String'),'<')
         filter_index = find(strcmp(['*' ext],allowed_file_extensions));
         
     end
-else
+elseif strcmp(src.String,'>')
     if isempty(self.file_name)
         return
     else
         self.saveData;
+        self.reset;
 
-        self.this_trial = [];
-        self.this_paradigm = [];
 
         % get the list of files
         [~,~,ext]=fileparts(self.file_name);
@@ -72,6 +69,10 @@ else
         filter_index = find(strcmp(['*' ext],allowed_file_extensions));
         
     end
+else
+    % do nothing, assuming that file_name is correctly set
+    [~,~,ext]=fileparts(self.file_name);
+    filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 end
 
 % OK, user has made some selection. let's figure out which plugin to use to load the data
@@ -85,9 +86,12 @@ load_file_handle = str2func(self.installed_plugins(plugin_to_use).name);
 load_file_handle(self);
 
 % update the titlebar with the name of the file we are working with
-self.handles.main_fig.Name = self.file_name;
 
-self.redrawAxes;
+
+if ~isempty(self.handles)
+    self.handles.main_fig.Name = self.file_name;
+    self.redrawAxes;
+end
 
 % set the channel_stages
 self.channel_stage = zeros(size(self.raw_data,2),1);
@@ -97,16 +101,24 @@ self.channel_stage = zeros(size(self.raw_data,2),1);
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 
 if exist(file_name,'file') == 2
-    disp('file exists -- need to load it and update tghe object')
+    disp('file exists -- need to load it and update the object')
     load(file_name,'spikes','data_channel_names','channel_stage','-mat')
     self.data_channel_names = data_channel_names;
     self.spikes = spikes;
-    self.channel_stage = channel_stage;
+    try
+        self.channel_stage = channel_stage;
+    catch
+    end
 
     % update data_channel_names
     for i = 1:length(self.data_channel_names)
         if ~isempty(self.data_channel_names{i})
             idx = find(strcmp(self.data_channel_names{i},self.channel_names));
+
+            if isempty(self.handles)
+                continue
+            end
+
             self.handles.channel_label_chooser(i).Value = idx;
 
             if strcmp(self.data_channel_names{i},'temperature')
@@ -123,29 +135,6 @@ self.removeMean;
 % make a putative_spikes matrix
 self.putative_spikes = 0*self.raw_data;
 
-
-self.showSpikes;
-
-% % enable all controls
-% set(s.handles.method_control,'Enable','on')
-% set(s.handles.sine_control,'Enable','on');
-% set(s.handles.autosort_control,'Enable','on');
-% set(s.handles.redo_control,'Enable','on');
-% set(s.handles.filtermode,'Enable','on');
-% set(s.handles.cluster_control,'Enable','on');
-% set(s.handles.trial_chooser,'Enable','on');
-% set(s.handles.paradigm_chooser,'Enable','on');
-% set(s.handles.discard_control,'Enable','on');
-% set(s.handles.metadata_text_control,'Enable','on')
-
-
-    
-% % check to see if this file is tagged. 
-% if ismac
-%     clear es
-%     es{1} = 'tag -l ';
-%     es{2} = strcat(s.path_name,s.file_name);
-%     [~,temp] = unix(strjoin(es));
-%     temp = strrep(temp,[s.path_name s.file_name],'');
-%     set(s.handles.tag_control,'String',strtrim(temp));
-% end
+if ~isempty(self.handles)
+    self.showSpikes;
+end

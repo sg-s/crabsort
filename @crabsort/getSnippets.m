@@ -6,14 +6,20 @@
 %
 % gets snippets from the raw data
 
-function V_snippets = getSnippets(self,channel)
+function V_snippets = getSnippets(self,channel, spiketimes)
+
+
 
 V_snippets = [];
-spiketimes = self.putative_spikes(:,channel);
-spiketimes = find(spiketimes);
 
-if isempty(spiketimes)
-	return
+
+if nargin == 2
+	spiketimes = self.putative_spikes(:,channel);
+	spiketimes = find(spiketimes);
+
+	if isempty(spiketimes)
+		return
+	end
 end
 
 V = self.raw_data(:,channel);
