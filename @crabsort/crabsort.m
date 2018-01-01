@@ -33,7 +33,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % debug
         verbosity = 10;
 
-        channel_names = {'???','lpn','lvn','pdn','mgn','temperature','pyn'};
+        channel_names = {'???','dgn','lgn','lpn','lvn','mgn','pdn','temperature','pyn'};
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 

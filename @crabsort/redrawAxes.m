@@ -39,6 +39,9 @@ for i = 1:self.n_channels
 	self.handles.ax(i) = subplot(self.n_channels,1,i); hold on
 	self.handles.data(i) = plot(self.time,self.raw_data(:,i),'Color',c(i,:));
 
+	% futz with the YLims to make sure huge outliers don't swamp the trace
+
+
 	% make plots for found spikes
 	self.handles.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none');
 

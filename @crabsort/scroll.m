@@ -8,7 +8,6 @@
 
 function scroll(self,src,event)
 
-
 xlimits = get(self.handles.ax(1),'XLim');
 xrange = (xlimits(2) - xlimits(1));
 
