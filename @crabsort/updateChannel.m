@@ -14,7 +14,7 @@ self.data_channel_names{idx} = src.String{src.Value};
 
 if strcmp(src.String{src.Value},'temperature')
 	self.handles.ax(idx).YLim = [0 30];
-
+else
+	self.removeMean(idx);
 end
 
-self.removeMean;

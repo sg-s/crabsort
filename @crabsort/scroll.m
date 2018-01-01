@@ -43,8 +43,17 @@ else
 end
 
 % scroll just one of them, since all of them should be linked
-self.handles.ax(1).XLim = newlim;
 
+
+% update the X and Y data since we don't want to show everything
+a = find(self.time >= newlim(1), 1, 'first');
+z = find(self.time <= newlim(2), 1, 'last');
+
+for i = 1:length(self.handles.data)
+    self.handles.ax(i).XLim = newlim;
+    self.handles.data(i).XData = self.time(a:z);
+    self.handles.data(i).YData = self.raw_data(a:z,i);
+end
 
 % xlim = get(s.handles.ax1,'XLim');
 % if xlim(1) < min(self.time)

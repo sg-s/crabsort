@@ -130,8 +130,6 @@ if exist(file_name,'file') == 2
     end
 end
 
-self.removeMean;
-
 % make a putative_spikes matrix
 self.putative_spikes = 0*self.raw_data;
 

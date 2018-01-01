@@ -35,9 +35,14 @@ end
 
 
 c = lines;
+z = find(self.time > 5,1,'first');
 for i = 1:self.n_channels
 	self.handles.ax(i) = subplot(self.n_channels,1,i); hold on
-	self.handles.data(i) = plot(self.time,self.raw_data(:,i),'Color',c(i,:));
+
+	% % show only 5 seconds at a time
+	self.handles.ax(i).XLim = [0 5];
+
+	self.handles.data(i) = plot(self.time(1:z),self.raw_data(1:z,i),'Color',c(i,:),'LineWidth',1);
 
 	% futz with the YLims to make sure huge outliers don't swamp the trace
 
@@ -47,6 +52,7 @@ for i = 1:self.n_channels
 
 	self.handles.sorted_spikes(i).unit(1) = plot(NaN,NaN,'o','LineStyle','none');
 end
+
 
 bottom_plot = .05;
 top_plot = .9;
@@ -63,8 +69,7 @@ for i = 1:self.n_channels
 		self.handles.ax(i).XTickLabel = {};
 	end
 
-	% show only 5 seconds at a time
-	self.handles.ax(i).XLim = [0 10];
+	
 end
 
 % make the channel labels 
@@ -82,7 +87,7 @@ end
 self.handles.scroll_bar.Visible = 'on';
 
 % link axes
-linkaxes(self.handles.ax,'x')
+% linkaxes(self.handles.ax,'x')
 
 % for every axes, make a red line that is used to indicate 
 % a spike -- this will be used by callbacks from 

@@ -156,14 +156,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         end
 
-        function self = set.raw_data(self,value)
-            self.raw_data = value;
-            if isfield(self.handles,'data') && ~isempty(self.handles.data)
-                for i = 1:size(self.raw_data,2)
-                    self.handles.data(i).YData = self.raw_data(:,i);
-                end
-            end
-        end
 
         function self = set.channel_stage(self,value)
             self.channel_stage = value;

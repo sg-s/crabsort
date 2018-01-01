@@ -4,12 +4,14 @@
 % | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
 %  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
 %
-% removes means from identified extracellular channels
+% removes means a given channel  
 
-function removeMean(self)
+function removeMean(self, channel)
 
-for i = 1:length(self.data_channel_names)
-	if ~isempty(self.data_channel_names{i}) && ~strcmp(self.data_channel_names{i},'temperature')
-		self.raw_data(:,i) = self.raw_data(:,i) - mean(self.raw_data(:,i));
-	end
-end
+
+self.raw_data(:,channel) = self.raw_data(:,channel) - mean(self.raw_data(:,channel));
+
+% update the YData
+a = find(self.time >= self.handles.data(channel).XData(1),1,'first');
+z = find(self.time <= self.handles.data(channel).XData(end),1,'last');
+self.handles.data(channel).YData = self.raw_data(a:z,channel);
