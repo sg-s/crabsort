@@ -40,11 +40,6 @@ else
 end
 
 
-% if ~isempty(s.A) || ~isempty(s.B)
-%     return
-% end
-
-
 
 % mpd = pref.minimum_peak_distance;
 % mpw = pref.minimum_peak_width;
@@ -68,6 +63,7 @@ if self.verbosity
     cprintf('text',[' found ' oval(length(loc)) ' spikes'])
 end
 
+self.handles.main_fig.Name = [self.file_name ' -- found ' oval(length(loc)) ' spikes'];
 
 
 self.putative_spikes(:,self.channel_to_work_with) = 0;

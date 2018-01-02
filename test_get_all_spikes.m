@@ -48,6 +48,8 @@ R = mctsne(all_spikes);
 
 c = parula(100);
 
+all_temp = removePointDefects(all_temp);
+
 cidx = all_temp;
 cidx = cidx - min(cidx);
 cidx = cidx/max(cidx);

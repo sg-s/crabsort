@@ -95,19 +95,21 @@ end
 
 % set the channel_stages
 self.channel_stage = zeros(size(self.raw_data,2),1);
-
+self.channel_ylims = zeros(size(self.raw_data,2),1);
 
 % check if there is a .crabsort file already
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 
 if exist(file_name,'file') == 2
     disp('file exists -- need to load it and update the object')
-    load(file_name,'spikes','data_channel_names','channel_stage','-mat')
-    self.data_channel_names = data_channel_names;
-    self.spikes = spikes;
-    try
-        self.channel_stage = channel_stage;
-    catch
+    load(file_name,'crabsort_obj','-mat')
+    
+    % copy over properties from crabsort_obj into self
+    fn = fieldnames(crabsort_obj);
+    for i = 1:length(fn)
+        if ~isempty(crabsort_obj.(fn{i}))
+            self.(fn{i}) = crabsort_obj.(fn{i});
+        end
     end
 
     % update data_channel_names

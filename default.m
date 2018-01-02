@@ -53,9 +53,9 @@ t_after = 4; 		% in ms
 minimum_peak_prominence = 'auto'; 	% minimum peak prominence for peak detection. you can use 'auto' or you can also specify a scalar value
 minimum_peak_width = 1;
 minimum_peak_distance = 1; 			% how separated should the peaks be?
-V_cutoff = -1; 						% ignore peaks beyond this limit 
+V_cutoff = -Inf; 						% ignore peaks beyond this limit 
 
 invert_V = false; 					% sometimes, it is easier to find spikes if you invert V
 
 % context width: window around the spike to show when clicked on in a reduced representation
-context_width = 1.5; % seconds. 
+context_width = .1; % seconds. 

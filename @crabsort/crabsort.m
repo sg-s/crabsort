@@ -54,6 +54,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         data_channel_names
         time
         dt
+        channel_ylims
 
         spikes
         putative_spikes
@@ -136,9 +137,15 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         function self = set.channel_to_work_with(self,value)
             self.channel_to_work_with = value;
 
-
             if isempty(value)
                 return
+            end
+
+            if ~isempty(self.channel_ylims) && ~isempty(self.channel_ylims(value)) && self.channel_ylims(value) > 0
+                % we have a custom y-lim for this axes --
+                % use it
+                yl = self.channel_ylims(value);
+                self.handles.ax(value).YLim = [-yl yl];
             end
 
             if isfield(self.handles,'ax')
@@ -166,6 +173,14 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
 
             this_channel_stage = self.channel_stage(self.channel_to_work_with);
+
+            if isempty(self.handles)
+                return
+            end
+
+            if ~isfield(self.handles,'spike_detection_panel')
+                return
+            end
 
             sdp = self.handles.spike_detection_panel.Children;
             dmp = self.handles.dim_red_panel.Children;
@@ -241,41 +256,23 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                     return
                 end
 
+                if ~isfield(self.handles,'found_spikes')
+                    return
+                end
 
-                set(self.handles.found_spikes(idx),'XData',self.time(self.putative_spikes(:,idx)),'YData',self.raw_data(self.putative_spikes(:,idx),idx));
 
-                set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.putative_spike_colour,'LineStyle','none')
+                try
+                    set(self.handles.found_spikes(idx),'XData',self.time(self.putative_spikes(:,idx)),'YData',self.raw_data(self.putative_spikes(:,idx),idx));
 
-                self.handles.method_control.Enable = 'on';
+                    set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.putative_spike_colour,'LineStyle','none')
+
+                    self.handles.method_control.Enable = 'on';
+                catch
+                end
 
             end
         end % end set loc
 
-
-        function delete(s)
-            if s.verbosity > 5
-                cprintf('green','[INFO] ')
-                cprintf('text','crabsort shutting down \n')
-            end
-
-            % save everything
-            s.saveData;
-
-            % try to shut down the GUI
-            try
-                delete(s.handles.main_fig)
-            catch
-            end
-
-            % % trigger an auto-update if needed
-            % for i = 1:length(s.req_toolboxes)
-            %     if s.req_update(i) 
-            %         install('-f',['sg-s/' s.req_toolboxes{i}])
-            %     end
-            % end
-
-            delete(s)
-        end
 
     end % end general methods
 

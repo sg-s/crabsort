@@ -41,3 +41,13 @@ for i = 1:length(labels)
 	self.spikes.(this_nerve).(labels{i}) = these_spikes;
 
 end
+
+% update the X and Y data since we don't want to show everything
+a = find(self.time >= 0, 1, 'first');
+z = find(self.time <= 5, 1, 'last');
+
+for i = 1:length(self.handles.data)
+    self.handles.ax(i).XLim = xlim;
+    self.handles.data(i).XData = self.time(a:z);
+    self.handles.data(i).YData = self.raw_data(a:z,i);
+end

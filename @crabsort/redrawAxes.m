@@ -69,25 +69,37 @@ for i = 1:self.n_channels
 		self.handles.ax(i).XTickLabel = {};
 	end
 
+	% ignore negative Yticks
+	self.handles.ax(i).YTick = self.handles.ax(i).YTick(self.handles.ax(i).YTick>=0);
+
 	
 end
 
 % make the channel labels 
 for i = 1:self.n_channels
 	y = bottom_plot + spacing*(i-1);
-	self.handles.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .07 .05],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel);
+	self.handles.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .05],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel);
 end
 
 for i = 1:self.n_channels
 	y = bottom_plot + spacing*(i-1) + .05;
-	self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .07 .02],'Style', 'text', 'String', self.metadata.recChNames{i});
+	self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.metadata.recChNames{i},'BackgroundColor',[1 1 1]);
+end
+
+% make a slider to futz with the YLims for each channel 
+
+
+self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.06 self.handles.ax(1).Position(2) .02 self.handles.ax(end).Position(2)],'Style', 'slider', 'Max',1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
+
+try    % R2013b and older
+   addlistener(self.handles.ylim_slider,'ActionEvent',@self.resetYLims);
+catch  % R2014a and newer
+   addlistener(self.handles.ylim_slider,'ContinuousValueChange',@self.resetYLims);
 end
 
 
 self.handles.scroll_bar.Visible = 'on';
 
-% link axes
-% linkaxes(self.handles.ax,'x')
 
 % for every axes, make a red line that is used to indicate 
 % a spike -- this will be used by callbacks from 

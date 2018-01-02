@@ -42,8 +42,6 @@ else
     self.handles.scroll_bar.Value = newlim(1)/max(self.time);
 end
 
-% scroll just one of them, since all of them should be linked
-
 
 % update the X and Y data since we don't want to show everything
 a = find(self.time >= newlim(1), 1, 'first');
