@@ -13,7 +13,8 @@ idx = find(self.handles.channel_label_chooser == src);
 self.data_channel_names{idx} = src.String{src.Value};
 
 if strcmp(src.String{src.Value},'temperature')
-	self.handles.ax(idx).YLim = [0 30];
+	self.handles.ax(idx).YLim = [10 35];
+	self.handles.ax(idx).YTickMode = 'auto';
 else
 	self.removeMean(idx);
 end

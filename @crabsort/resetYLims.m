@@ -21,9 +21,23 @@ e = max(abs(self.raw_data(:,idx)));
 yl = (src.Value)*e;
 self.handles.ax(idx).YLim = [-yl yl];
 
-self.handles.ax(idx).YTickMode = 'auto';
+is_temp = false;
 
-self.handles.ax(idx).YTick = self.handles.ax(idx).YTick(self.handles.ax(idx).YTick>=0);
+try
+	if strcmp(self.data_channel_names{idx},'temperature')
+		is_temp = true;
+	end
+catch
+end
+
+
+if ~is_temp
+	self.handles.ax(idx).YTickMode = 'auto';
+	self.handles.ax(idx).YTick = self.handles.ax(idx).YTick(self.handles.ax(idx).YTick>=0);
+else
+	self.handles.ax(idx).YLim = [10 35];
+	self.handles.ax(idx).YTickMode = 'auto';
+end
 
 
 self.handles.prom_ub_control.String = mat2str(yl);

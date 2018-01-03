@@ -33,7 +33,7 @@ elseif strcmp(src.String,'<')
         return
     else
         self.saveData;
-        self.reset;
+        self.reset(false);
 
         % get the list of files
         [~,~,ext]=fileparts(self.file_name);
@@ -53,7 +53,7 @@ elseif strcmp(src.String,'>')
         return
     else
         self.saveData;
-        self.reset;
+        self.reset(false);
 
 
         % get the list of files
@@ -112,23 +112,38 @@ if exist(file_name,'file') == 2
         end
     end
 
-    % update data_channel_names
-    for i = 1:length(self.data_channel_names)
-        if ~isempty(self.data_channel_names{i})
-            idx = find(strcmp(self.data_channel_names{i},self.channel_names));
+end
 
-            if isempty(self.handles)
-                continue
-            end
 
-            self.handles.channel_label_chooser(i).Value = idx;
+% remove mean for all channels that are names
+for i = 1:length(self.data_channel_names)
+    if isempty(self.data_channel_names{i})
+        continue
+    end
 
-            if strcmp(self.data_channel_names{i},'temperature')
-                self.handles.ax(i).YLim = [0 30];
+    if strcmp(self.data_channel_names{i},'temperature')
+        continue
+    end
+    self.removeMean(i);
+end
 
-            end
+% update data_channel_names
+for i = 1:length(self.data_channel_names)
+    if ~isempty(self.data_channel_names{i})
+        idx = find(strcmp(self.data_channel_names{i},self.channel_names));
+
+        if isempty(self.handles)
+            continue
+        end
+
+        self.handles.channel_label_chooser(i).Value = idx;
+
+        if strcmp(self.data_channel_names{i},'temperature')
+            self.handles.ax(i).YLim = [10 35];
+            self.handles.ax(i).YTickMode = 'auto';
 
         end
+
     end
 end
 

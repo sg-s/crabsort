@@ -37,7 +37,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 
-        nerve2neuron = struct('pdn','PD','lpn','LP','pyn','PY','lvn',{'LP','PD','PY'});
+        nerve2neuron
 
     end % end properties 
 
@@ -90,6 +90,13 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
     methods
         function self = crabsort(make_gui)
+
+
+
+            self.nerve2neuron.lpn = 'LP';
+            self.nerve2neuron.pdn = 'PD';
+            self.nerve2neuron.pyn = 'PY';
+            self.nerve2neuron.lvn = {'LP','PD','PY'};
 
             if nargin == 0 
                 make_gui = true;

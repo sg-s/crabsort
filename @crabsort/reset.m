@@ -6,16 +6,23 @@
 %
 % resets crabsort to default state
 
-function reset(self)
+function reset(self,wipe_all)
 
 
-self.metadata = [];
-self.n_channels = [];
 self.raw_data = [];
-self.data_channel_names = {};
 self.time = [];
 self.dt = [];
 self.spikes = [];
+self.metadata = [];
 self.putative_spikes = [];
 self.channel_to_work_with = [];
 self.channel_stage = [];
+self.n_channels = [];
+	
+if wipe_all 
+
+	
+	
+	self.data_channel_names = {};	
+	
+end

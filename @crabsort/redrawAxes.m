@@ -39,6 +39,11 @@ z = find(self.time > 5,1,'first');
 for i = 1:self.n_channels
 	self.handles.ax(i) = subplot(self.n_channels,1,i); hold on
 
+	self.handles.zoom_handles(i) = zoom(self.handles.ax(i));
+	self.handles.zoom_handles(i).Motion = 'horizontal';
+	self.handles.zoom_handles(i).ActionPostCallback = @self.zoomCallback;
+
+
 	% % show only 5 seconds at a time
 	self.handles.ax(i).XLim = [0 5];
 
@@ -48,9 +53,9 @@ for i = 1:self.n_channels
 
 
 	% make plots for found spikes
-	self.handles.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none');
+	self.handles.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none','Color',[1 0 0]);
 
-	self.handles.sorted_spikes(i).unit(1) = plot(NaN,NaN,'o','LineStyle','none');
+	self.handles.sorted_spikes(i).unit(1) = plot(NaN,NaN,'o','LineStyle','none','Color',c(i,:));
 end
 
 
