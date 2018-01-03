@@ -13,7 +13,9 @@ if nargin == 2
 	spiketimes = find(spiketimes);
 
 	if isempty(spiketimes)
+
 		return
+
 	end
 end
 

@@ -193,56 +193,67 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             dmp = self.handles.dim_red_panel.Children;
             cp = self.handles.cluster_panel.Children;
 
-
-            switch this_channel_stage
-            case 0
-                % enable spike detection, turn everything else off
-                for i = 1:length(sdp)
-                    sdp(i).Enable = 'on';
-                end
-                for i = 1:length(dmp)
-                    dmp(i).Enable = 'off';
-                end
-                for i = 1:length(cp)
-                    cp(i).Enable = 'off';
-                end
-
-            case 1
-                % enable dim red, + spike detection, turn everyhting else off
-                for i = 1:length(sdp)
-                    sdp(i).Enable = 'on';
-                end
-                for i = 1:length(dmp)
-                    dmp(i).Enable = 'on';
-                end
-                for i = 1:length(cp)
-                    cp(i).Enable = 'off';
-                end
-            case 2
-
-                disp('only enable clustering ')
-                for i = 1:length(sdp)
-                    sdp(i).Enable = 'off';
-                end
-                for i = 1:length(dmp)
-                    dmp(i).Enable = 'off';
-                end
-                for i = 1:length(cp)
-                    cp(i).Enable = 'on';
-                end
-            case 3
-
-                disp('disable everything ')
-                for i = 1:length(sdp)
-                    sdp(i).Enable = 'off';
-                end
-                for i = 1:length(dmp)
-                    dmp(i).Enable = 'off';
-                end
-                for i = 1:length(cp)
-                    cp(i).Enable = 'off';
-                end
+            for i = 1:length(sdp)
+                sdp(i).Enable = 'on';
             end
+            for i = 1:length(dmp)
+                dmp(i).Enable = 'on';
+            end
+            for i = 1:length(cp)
+                cp(i).Enable = 'on';
+            end
+
+
+
+            % switch this_channel_stage
+            % case 0
+            %     % enable spike detection, turn everything else off
+            %     for i = 1:length(sdp)
+            %         sdp(i).Enable = 'on';
+            %     end
+            %     for i = 1:length(dmp)
+            %         dmp(i).Enable = 'off';
+            %     end
+            %     for i = 1:length(cp)
+            %         cp(i).Enable = 'off';
+            %     end
+
+            % case 1
+            %     % enable dim red, + spike detection, turn everyhting else off
+            %     for i = 1:length(sdp)
+            %         sdp(i).Enable = 'on';
+            %     end
+            %     for i = 1:length(dmp)
+            %         dmp(i).Enable = 'on';
+            %     end
+            %     for i = 1:length(cp)
+            %         cp(i).Enable = 'off';
+            %     end
+            % case 2
+
+            %     disp('only enable clustering ')
+            %     for i = 1:length(sdp)
+            %         sdp(i).Enable = 'off';
+            %     end
+            %     for i = 1:length(dmp)
+            %         dmp(i).Enable = 'off';
+            %     end
+            %     for i = 1:length(cp)
+            %         cp(i).Enable = 'on';
+            %     end
+            % case 3
+
+            %     disp('disable everything ')
+            %     for i = 1:length(sdp)
+            %         sdp(i).Enable = 'off';
+            %     end
+            %     for i = 1:length(dmp)
+            %         dmp(i).Enable = 'off';
+            %     end
+            %     for i = 1:length(cp)
+            %         cp(i).Enable = 'off';
+            %     end
+            % end
         end
 
 

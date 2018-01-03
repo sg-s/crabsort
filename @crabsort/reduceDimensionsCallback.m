@@ -17,6 +17,16 @@ self.handles.popup.Visible = 'on';
 self.handles.popup.String = {'','','','Reducing Dimensions...'};
 drawnow;
 
+% make sure putative spikes is populated
+if ~any(self.putative_spikes(:,self.channel_to_work_with))
+
+	already_sorted_spikes = self.getSpikesOnThisNerve;
+	assert(any(already_sorted_spikes),'No putative spikes, no already sorted spikes. crabsort cant reduce dimensions on nothing. Try finding some spikes first.')
+
+	self.putative_spikes(:,self.channel_to_work_with) = already_sorted_spikes;
+end
+
+
 method(self);
 
 self.handles.popup.Visible = 'off';

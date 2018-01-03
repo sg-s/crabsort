@@ -21,6 +21,7 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
+
 V_snippets = self.getSnippets(self.channel_to_work_with);
 
 R = pca(V_snippets);

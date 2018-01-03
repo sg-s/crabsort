@@ -26,3 +26,6 @@ self.channel_stage(self.channel_to_work_with) = 3;
  
 
 self.showSpikes;
+
+temp = self.getSpikesOnThisNerve;
+self.putative_spikes(:,self.channel_to_work_with) = temp;
