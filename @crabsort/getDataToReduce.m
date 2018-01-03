@@ -20,7 +20,13 @@ if self.handles.time_before_control.Value
 	% first, we need to figure out what nerves to compare to
 	if isempty(self.handles.time_before_nerves.String)
 		nerves = fieldnames(self.spikes);
-	end 
+	else
+		nerves = self.handles.time_after_nerves.String;
+	end  
+
+	if ~iscell(nerves)
+		nerves = {nerves};
+	end
 
 
 	% get times to closest spikes on other nerves in the past
@@ -33,7 +39,14 @@ if self.handles.time_after_control.Value
 	% first, we need to figure out what nerves to compare to
 	if isempty(self.handles.time_after_nerves.String)
 		nerves = fieldnames(self.spikes);
+	else
+		nerves = self.handles.time_after_nerves.String;
 	end 
+
+	if ~iscell(nerves)
+		nerves = {nerves};
+	end
+
 
 	% get times to closest spikes on other nerves in the past
 	relative_times = self.measureTimesToIdentifiedSpikes(nerves,'past');

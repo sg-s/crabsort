@@ -59,3 +59,9 @@ invert_V = false; 					% sometimes, it is easier to find spikes if you invert V
 
 % context width: window around the spike to show when clicked on in a reduced representation
 context_width = .1; % seconds. 
+
+
+% this setting specifies an upper bound on 
+% how far back in time (or forward) we look 
+% for spikes in other channels
+max_relative_time = 1; % seconds

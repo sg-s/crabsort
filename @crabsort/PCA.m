@@ -22,6 +22,16 @@ if self.verbosity > 5
 end
 
 
-R = pca(self.data_to_reduce);
+if size(self.data_to_reduce,1) == 1
 
-self.R{self.channel_to_work_with} = R(:,1:2)';
+	self.R{self.channel_to_work_with} = [self.data_to_reduce; self.data_to_reduce];
+
+
+
+elseif size(self.data_to_reduce,1) == 2
+	self.R{self.channel_to_work_with} = self.data_to_reduce;
+else
+	R = pca(self.data_to_reduce);
+	self.R{self.channel_to_work_with} = R(:,1:2)';
+end
+

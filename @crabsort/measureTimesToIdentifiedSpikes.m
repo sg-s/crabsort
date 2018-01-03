@@ -11,7 +11,6 @@
 function relative_times = measureTimesToIdentifiedSpikes(self,nerves,direction)
 
 
-
 % augment the data using time from all other sorted spikes
 channels_with_spikes = false(length(self.data_channel_names),1);
 fn = fieldnames(self.spikes);
@@ -22,8 +21,6 @@ for i = 1:length(self.data_channel_names)
 end
 
 channels_with_spikes(self.channel_to_work_with) = false;
-
-
 
 n_spikes = sum(self.putative_spikes(:,self.channel_to_work_with));
 
@@ -57,13 +54,13 @@ for i = 1:length(self.data_channel_names)
 		before = delta_spiketime(delta_spiketime > 0);
 		after = delta_spiketime(delta_spiketime < 0);
 		if isempty(before)
-			relative_times((idx-1)*2 + 1,j) = 0;
+			relative_times((idx-1)*2 + 1,j) = Inf;
 		else
 			relative_times((idx-1)*2 + 1,j) = min(abs(before));
 		end
 
 		if isempty(after)
-			relative_times((idx-1)*2 + 2,j) = 0;
+			relative_times((idx-1)*2 + 2,j) = Inf;
 		else
 			relative_times((idx-1)*2 + 2,j) = min(abs(after));
 		end
@@ -76,3 +73,11 @@ case 'past'
 otherwise
 	relative_times = relative_times(2:2:end,:);
 end
+
+cutoff = floor(1/self.dt);
+
+max_value = max(relative_times(~isinf(relative_times)));
+
+relative_times(relative_times > cutoff) = max_value;
+
+relative_times = relative_times/max_value;
