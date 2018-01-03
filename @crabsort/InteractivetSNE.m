@@ -14,7 +14,7 @@
 % this plugin implements a single channel t-SNE of the spikes
 % using just the spike shape 
 % 
-function tSNE(self)
+function InteractivetSNE(self)
 
 if self.verbosity > 5
     cprintf('green','\n[INFO] ')
@@ -22,4 +22,4 @@ if self.verbosity > 5
 end
 
 % interactively t-sne the data 
-self.R{self.channel_to_work_with} = mctsne(self.data_to_reduce);
+self.R{self.channel_to_work_with} = imctsne(self.data_to_reduce);

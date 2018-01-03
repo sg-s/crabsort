@@ -75,6 +75,14 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         version_name = 'crabsort';
         build_number = 'automatically-generated';
 
+
+        % this is passed to the dimensional reduction callback
+        % in general, this is MxN elements long, where N is
+        % the number of putative spikes, and M is the dimension
+        % we are operating in (which depends on what options are
+        % selected for spike shape, timing, etc.)
+        data_to_reduce
+
     end
 
     properties (Access = protected)

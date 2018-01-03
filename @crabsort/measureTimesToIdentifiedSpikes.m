@@ -1,6 +1,3 @@
-% crabsort plugin
-% plugin_type = 'dim-red';
-% plugin_dimension = 2; 
 % 
 %                 _                    _   
 %   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
@@ -8,36 +5,30 @@
 % | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
 %  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
 %
-% 
-%
-% this plugin implements t-SNE on an augmented
-% data set that contains not just the full 
-% spike shape but also timing information of 
-% each spike relative to other, identified spikes
-%
-% Srinivas Gorur-Shandilya
-% https://srinivas.gs/
+% measures the time from putative spikes on the current
+% channel to identified spikes on other channels
 
-function RelativetSNE(self)
+function relative_times = measureTimesToIdentifiedSpikes(self,nerves,direction)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
-end
 
-% get the snippets 
-V_snippets = self.getSnippets(self.channel_to_work_with);
 
 % augment the data using time from all other sorted spikes
 channels_with_spikes = false(length(self.data_channel_names),1);
 fn = fieldnames(self.spikes);
 for i = 1:length(self.data_channel_names)
-	if any(strcmp(fn,self.data_channel_names{i}))
+	if any(strcmp(fn,self.data_channel_names{i})) && any(strcmp(nerves,self.data_channel_names{i}))
 		channels_with_spikes(i) = true;
 	end
 end
 
-relative_times = zeros(sum(channels_with_spikes)*2,size(V_snippets,2));
+channels_with_spikes(self.channel_to_work_with) = false;
+
+
+
+n_spikes = sum(self.putative_spikes(:,self.channel_to_work_with));
+
+
+relative_times = zeros(sum(channels_with_spikes)*2,n_spikes);
 
 spiketimes = find(self.putative_spikes(:,self.channel_to_work_with));
 
@@ -51,7 +42,7 @@ for i = 1:length(self.data_channel_names)
 	idx = idx + 1;
 
 	% for each spike, find the time to the closest
-	% spike in the past
+	% spike in the past and future
 	
 	neuron_name = self.nerve2neuron.(self.data_channel_names{i});
 	if iscell(neuron_name)
@@ -79,7 +70,9 @@ for i = 1:length(self.data_channel_names)
 	end
 end
 
-relative_times = relative_times/max(max(relative_times));
-
-% interactively t-sne the data 
-self.R{self.channel_to_work_with} = imctsne([V_snippets; relative_times]);
+switch direction
+case 'past'
+	relative_times = relative_times(1:2:end,:);
+otherwise
+	relative_times = relative_times(2:2:end,:);
+end

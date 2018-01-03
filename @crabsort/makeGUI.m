@@ -45,31 +45,18 @@ delete(temp([1:8 11:15]))
 
 
 
-% % make all the panels
-
-% % datapanel (allows you to choose what to plot where)
-% handles.datapanel = uipanel('Title','Data','Position',[.85 .57 .14 .4],'BackgroundColor',[1 1 1]);
-% uicontrol(handles.datapanel,'units','normalized','Position',[.02 .9 .510 .10],'Style', 'text', 'String', 'Control Signal','FontSize',self.pref.fs,'FontWeight',self.pref.fw);
-% handles.valve_channel = uicontrol(handles.datapanel,'units','normalized','Position',[.03 .68 .910 .25],'Style', 'listbox', 'String', '','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'Callback',@plotValve,'Min',0,'Max',2);
-% uicontrol(handles.datapanel,'units','normalized','Position',[.01 .56 .510 .10],'Style', 'text', 'String', 'Stimulus','FontSize',self.pref.fs,'FontWeight',self.pref.fw);
-% handles.stim_channel = uicontrol(handles.datapanel,'units','normalized','Position',[.03 .38 .910 .20],'Style', 'listbox', 'String', '','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'Callback',@self.plotStim);
-
-% uicontrol(handles.datapanel,'units','normalized','Position',[.01 .25 .610 .10],'Style', 'text', 'String', 'Response','FontSize',self.pref.fs,'FontWeight',self.pref.fw);
-% handles.resp_channel = uicontrol(handles.datapanel,'units','normalized','Position',[.01 .01 .910 .25],'Style', 'listbox', 'String', '','FontSize',self.pref.fs,'FontWeight',self.pref.fw);
-
-
 % file I/O panel
-handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .2 .07],'BackgroundColor',[1 1 1]);
+handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .12 .07],'BackgroundColor',[1 1 1]);
 
-uicontrol(handles.data_panel,'units','normalized','Position',[.05 .2 .15 .6],'Style', 'pushbutton', 'String', '<','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
+uicontrol(handles.data_panel,'units','normalized','Position',[.05 .2 .2 .6],'Style', 'pushbutton', 'String', '<','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
 
-uicontrol(handles.data_panel,'units','normalized','Position',[.2 .1 .6 .8],'Style', 'pushbutton', 'String', 'Load File','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
+uicontrol(handles.data_panel,'units','normalized','Position',[.25 .1 .5 .8],'Style', 'pushbutton', 'String', 'Load File','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
 
-uicontrol(handles.data_panel,'units','normalized','Position',[.8 .2 .15 .6],'Style', 'pushbutton', 'String', '>','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
+uicontrol(handles.data_panel,'units','normalized','Position',[.75 .2 .2 .6],'Style', 'pushbutton', 'String', '>','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile);
 
 
 % spike detection panel
-handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[.22 .92 .2 .07],'BackgroundColor',[1 1 1]);
+handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[.135 .92 .2 .07],'BackgroundColor',[1 1 1]);
 
 handles.prom_auto_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.5 .01 .4 .4],'Style','togglebutton','String','MANUAL','Value',0,'FontSize',self.pref.fs,'Callback',@self.togglePromControl,'Enable','off');
 handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.85 .65 .1 .4],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider,'Enable','off');
@@ -86,16 +73,25 @@ else
 end
 
 
-handles.dim_red_panel = uipanel('Title','Dimensionality reduction','Position',[.43 .92 .2 .07],'BackgroundColor',[1 1 1]);
+handles.dim_red_panel = uipanel('Title','Dimensionality reduction','Position',[.34 .92 .35 .07],'BackgroundColor',[1 1 1]);
+
+% controls to configure the data to include in the reduction
+handles.spike_shape_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','Spike shape','units','normalized','Position',[.01 .05 .18 .9],'Enable','on','FontSize',12,'BackgroundColor',[1 1 1],'Value',1);
+
+handles.time_after_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','Time after','units','normalized','Position',[.2 .0 .2 .5],'Enable','on','FontSize',12,'BackgroundColor',[1 1 1]);
+handles.time_after_nerves = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.4 .0 .2 .5],'Enable','on','FontSize',12,'BackgroundColor',[1 1 1]);
+
+handles.time_before_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','Time before','units','normalized','Position',[.2 .5 .2 .5],'Enable','on','FontSize',12,'BackgroundColor',[1 1 1]);
+handles.time_before_nerves = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.4 .5 .2 .5],'Enable','on','FontSize',12,'BackgroundColor',[1 1 1]);
 
 all_plugin_names = {self.installed_plugins.name};
 dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));
 
-handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.reduceDimensionsCallback,'Enable','off','FontSize',20);
+handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.7 .05 .25 .9],'Callback',@self.reduceDimensionsCallback,'Enable','off','FontSize',20);
 
 
 
-handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.64 .92 .2 .07],'BackgroundColor',[1 1 1]);
+handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.82 .92 .12 .07],'BackgroundColor',[1 1 1]);
 
 % find the available methods for clustering
 all_plugin_names = {self.installed_plugins.name};
@@ -104,7 +100,7 @@ cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_ty
 handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'Enable','off','FontSize',20);
 
 
-handles.redo_button = uicontrol(handles.main_fig,'units','normalized','Position',[.88 .93 .05 .04],'String','REDO','Style','pushbutton','Callback',@self.redo);
+handles.redo_button = uicontrol(handles.main_fig,'units','normalized','Position',[.94 .93 .05 .05],'String','REDO','Style','pushbutton','Callback',@self.redo);
 
 % % metadata panel
 % handles.metadata_panel = uipanel('Title','Metadata','Position',[.62 .57 .11 .4],'BackgroundColor',[1 1 1]);

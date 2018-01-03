@@ -22,8 +22,6 @@ if self.verbosity > 5
 end
 
 
-V_snippets = self.getSnippets(self.channel_to_work_with);
-
-R = pca(V_snippets);
+R = pca(self.data_to_reduce);
 
 self.R{self.channel_to_work_with} = R(:,1:2)';

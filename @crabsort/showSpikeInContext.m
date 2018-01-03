@@ -1,9 +1,13 @@
 % showSpikeInContext
-% 
-% created by Srinivas Gorur-Shandilya at 1:04 , 11 September 2015. Contact me at http://srinivas.gs/contact/
-% 
-% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. 
-% To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
+%
+%                 _                    _   
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+%
+% created by Srinivas Gorur-Shandilya 
+% https://srinivas.gs/
 
 function showSpikeInContext(self,idx)
 
