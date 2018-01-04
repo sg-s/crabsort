@@ -31,7 +31,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         R  % this holds the dimensionality reduced data
 
         % debug
-        verbosity = 10;
+        verbosity = 0;
 
         channel_names = {'???','dgn','lgn','lpn','lvn','mgn','pdn','temperature','pyn'};
 
