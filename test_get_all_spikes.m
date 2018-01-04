@@ -1,47 +1,57 @@
-% this test file pulls out all spikes from a 
-% PD neuron from a set of files, and saves them
-% together with the temperature the spike
-% occured at
-% 
-% this demonstrates how to use crabsort programatically 
+% this script is an example of how 
+% to use crabsort programatically
+% (without the GUI)
+% here, we are using it to pull all
+% spiketimes from an already sorted
+% dataset
 
 c = crabsort(false); c.path_name = pwd;
 
-all_spikes = NaN(47,22939);
-all_temp = NaN(22939,1);
-
 allfiles = dir('*.abf');
 
-idx = 1;
+
+% get the total length of the vector 
+% we need to create by scanning all the files
+
+N = 0;
 
 for i = 1:length(allfiles)
-
-	disp(i)
 
 	c.reset;
 	c.file_name = allfiles(i).name;
 	c.loadFile;
 
-	spiketimes = c.spikes.pdn.PD*c.dt;
+	N = N + length(c.time);
 
-	Vs = c.getSnippets(4,c.spikes.pdn.PD);
-	T = c.raw_data(c.spikes.pdn.PD,2);
+end
+
+PD_spikes = sparse(N,1);
+LP_spikes = sparse(N,1);
+PY_spikes = sparse(N,1);
+
+temperature = NaN(N,1);
+
+offset = 0;
+
+for i = 1:length(allfiles)
+
+	c.reset;
+	c.file_name = allfiles(i).name;
+	c.loadFile;
+
+	PD = c.spikes.pdn.PD + offset;
+	PD_spikes(PD) = 1;
+
+	LP = c.spikes.lpn.LP + offset;
+	LP_spikes(LP) = 1;
+
+	PY = c.spikes.pyn.PY + offset;
+	PY_spikes(PY) = 1;
 
 
-	rm_these = diff(c.spikes.pdn.PD)*c.dt < (c.pref.t_before + c.pref.t_after)*1e-3;
-	rm_these = circshift(rm_these,1) + rm_these;
+	temperature(offset + 1:offset + length(c.raw_data)) = c.raw_data(:,2);
 
-
-	Vs = Vs(:,~rm_these);
-	T = T(~rm_these);
-
-	all_spikes(:,idx:idx+size(Vs,2)-1) = Vs;
-	all_temp(idx:idx+size(Vs,2)-1) = T;
-
-
-	idx = idx + size(Vs,2);
-
-
+	offset =  offset + length(c.time);
 end
 
 R = mctsne(all_spikes);

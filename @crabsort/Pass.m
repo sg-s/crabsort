@@ -21,5 +21,4 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
-n_spikes = sum(self.putative_spikes(:,self.channel_to_work_with));
-self.R{self.channel_to_work_with} = zeros(n_spikes,2);
+self.R{self.channel_to_work_with} = self.data_to_reduce;

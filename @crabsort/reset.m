@@ -19,10 +19,10 @@ self.channel_to_work_with = [];
 self.channel_stage = [];
 self.n_channels = [];
 	
-if wipe_all 
+if nargin < 2
+	wipe_all = true;
+end
 
-	
-	
+if wipe_all 	
 	self.data_channel_names = {};	
-	
 end
