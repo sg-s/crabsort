@@ -71,7 +71,7 @@ elseif strcmp(src.String,'>')
     end
 else
     % do nothing, assuming that file_name is correctly set
-    [~,~,ext]=fileparts(self.file_name);
+    [~,~,ext] = fileparts(self.file_name);
     filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 end
 
@@ -108,7 +108,14 @@ if exist(file_name,'file') == 2
     fn = fieldnames(crabsort_obj);
     for i = 1:length(fn)
         if ~isempty(crabsort_obj.(fn{i}))
-            self.(fn{i}) = crabsort_obj.(fn{i});
+
+            % ignore channel_names
+            % this is a hack because channel_names was erronously
+            % saved in some .crabsort files
+            if ~strcmp(fn{i},'channel_names')
+
+                self.(fn{i}) = crabsort_obj.(fn{i});
+            end
         end
     end
 
