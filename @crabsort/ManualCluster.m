@@ -22,7 +22,12 @@ R = self.R{self.channel_to_work_with};
 V_snippets = self.getSnippets(self.channel_to_work_with);
 
 default_neuron_name =  self.nerve2neuron.(self.data_channel_names{self.channel_to_work_with});
-default_names = {default_neuron_name, 'Noise'};
+if iscell(default_neuron_name)
+	default_names = [default_neuron_name, 'Noise'];
+else
+	default_names = {default_neuron_name, 'Noise'};
+end
+
 
 [idx, labels] = manualCluster(R,V_snippets,default_names,@self.showSpikeInContext);
 
