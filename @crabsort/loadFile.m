@@ -75,6 +75,14 @@ else
     filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 end
 
+
+if ~isempty(self.handles)
+    self.handles.popup.Visible = 'on';
+    self.handles.popup.String = {'','','','Loading file...'};
+    drawnow;
+end
+
+
 % OK, user has made some selection. let's figure out which plugin to use to load the data
 chosen_data_ext = strrep(allowed_file_extensions{filter_index},'*.','');
 plugin_to_use = find(strcmp('load-file',{self.installed_plugins.plugin_type}).*(strcmp(chosen_data_ext,{self.installed_plugins.data_extension})));
@@ -131,6 +139,13 @@ for i = 1:length(self.data_channel_names)
     if strcmp(self.data_channel_names{i},'temperature')
         continue
     end
+
+    % check if channel is intracellular 
+    temp = isstrprop(self.data_channel_names{i},'upper');
+    if any(temp)
+        continue
+    end
+
     self.removeMean(i);
 end
 
@@ -145,11 +160,7 @@ for i = 1:length(self.data_channel_names)
 
         self.handles.channel_label_chooser(i).Value = idx;
 
-        if strcmp(self.data_channel_names{i},'temperature')
-            self.handles.ax(i).YLim = [10 35];
-            self.handles.ax(i).YTickMode = 'auto';
-
-        end
+        self.updateYTicks(i);
 
     end
 end
@@ -159,4 +170,9 @@ self.putative_spikes = 0*self.raw_data;
 
 if ~isempty(self.handles)
     self.showSpikes;
+end
+
+
+if ~isempty(self.handles)
+    self.handles.popup.Visible = 'off';
 end

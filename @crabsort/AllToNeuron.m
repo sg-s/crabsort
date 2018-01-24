@@ -23,11 +23,30 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
-spiketimes = (find(self.putative_spikes(:,self.channel_to_work_with)));
+channel = self.channel_to_work_with;
 
-nerve_name = self.handles.channel_label_chooser(self.channel_to_work_with).String;
-nerve_name = nerve_name{self.handles.channel_label_chooser(self.channel_to_work_with).Value};
+spiketimes = (find(self.putative_spikes(:,channel)));
 
-neuron_name = self.nerve2neuron.(nerve_name);
+% if it's intracellular
+temp = isstrprop(self.data_channel_names{channel},'upper');
+if any(temp)
 
-self.spikes.(nerve_name).(neuron_name) = spiketimes;
+	% intracellular 
+	neuron_name = self.data_channel_names{channel};
+	self.spikes.(neuron_name).(neuron_name) = spiketimes;
+else
+
+
+	% extracellular 
+	nerve_name = self.handles.channel_label_chooser(channel).String;
+	nerve_name = nerve_name{self.handles.channel_label_chooser(channel).Value};
+
+	neuron_name = self.nerve2neuron.(nerve_name);
+	if iscell(neuron_name)
+		neuron_name = neuron_name{1};
+	end
+
+	self.spikes.(nerve_name).(neuron_name) = spiketimes;
+
+
+end

@@ -33,7 +33,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % debug
         verbosity = 0;
 
-        channel_names = {'???','dgn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'};
+        channel_names = {'???','dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'};
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 
@@ -103,8 +103,10 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
             self.nerve2neuron.lpn = 'LP';
             self.nerve2neuron.pdn = 'PD';
-            self.nerve2neuron.pyn = 'PY';
+            self.nerve2neuron.pyn = {'PY', 'LPG'};
             self.nerve2neuron.lvn = {'LP','PD','PY'};
+            self.nerve2neuron.lgn = {'LG','MG'};
+            self.nerve2neuron.mvn = {'VD','IC','PY'};
 
             if nargin == 0 
                 make_gui = true;

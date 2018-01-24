@@ -45,8 +45,8 @@ end
 % mpw = pref.minimum_peak_width;
 v_cutoff = self.pref.V_cutoff;
 
-mpd = 1;
-mpw = 1;
+mpd = ceil(self.pref.minimum_peak_distance/(self.dt*1e3));
+mpw = ceil(self.pref.minimum_peak_width/(self.dt*1e3));
 
 % find peaks and remove spikes beyond v_cutoff
 if self.pref.invert_V

@@ -7,12 +7,12 @@
 % reads the preference file and updates prefs
 % within object  
 
-function reloadPreferences(s,~,~)
+function reloadPreferences(self,~,~)
 
-if s.verbosity > 5
+if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
 end
 
-s.pref = readPref(fileparts(fileparts(which(mfilename))));
+self.pref = readPref(fileparts(fileparts(which(mfilename))));
     

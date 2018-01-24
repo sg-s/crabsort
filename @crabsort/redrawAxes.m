@@ -40,6 +40,10 @@ M = {'o','s','d','p','h','+','x'};
 for i = 1:self.n_channels
 	self.handles.ax(i) = subplot(self.n_channels,1,i); hold on
 
+	if i > 1
+		self.handles.ax(i).XColor = 'w';
+	end
+
 	self.handles.zoom_handles(i) = zoom(self.handles.ax(i));
 	self.handles.zoom_handles(i).Motion = 'horizontal';
 	self.handles.zoom_handles(i).ActionPostCallback = @self.zoomCallback;
