@@ -14,7 +14,7 @@ if isempty(self.spikes)
 end
 
 
-figure('outerposition',[0 0 1500 500],'PaperUnits','points','PaperSize',[1500 500]); hold on
+figure('outerposition',[30 30 1501 900],'PaperUnits','points','PaperSize',[1501 900]); hold on
 
 spiketimes = {};
 L = {};

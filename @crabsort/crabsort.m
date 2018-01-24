@@ -107,6 +107,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             self.nerve2neuron.lvn = {'LP','PD','PY'};
             self.nerve2neuron.lgn = {'LG','MG'};
             self.nerve2neuron.mvn = {'VD','IC','PY'};
+            self.nerve2neuron.dgn = {'MG','PD'};
 
             if nargin == 0 
                 make_gui = true;
@@ -170,8 +171,26 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                     self.handles.ax(i).YColor = 'k';
                 end
 
-
                 self.handles.ax(value).YColor = 'r';
+
+                % if the name for this channel is unset, disable
+                % everything
+                if length(self.data_channel_names) < self.channel_to_work_with || strcmp(self.data_channel_names{self.channel_to_work_with},'???')
+                    % disable everything
+                    self.disable(self.handles.spike_detection_panel);
+                    self.disable(self.handles.dim_red_panel);
+                    self.disable(self.handles.cluster_panel);
+                    self.disable(self.handles.redo_button);
+
+                else
+                    % enable everything
+                    self.enable(self.handles.spike_detection_panel);
+                    self.enable(self.handles.dim_red_panel);
+                    self.enable(self.handles.cluster_panel);
+                    self.enable(self.handles.redo_button);
+
+                end
+
             end
 
             % force a channel_stage update
@@ -199,71 +218,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 return
             end
 
-            sdp = self.handles.spike_detection_panel.Children;
-            dmp = self.handles.dim_red_panel.Children;
-            cp = self.handles.cluster_panel.Children;
-
-            for i = 1:length(sdp)
-                sdp(i).Enable = 'on';
-            end
-            for i = 1:length(dmp)
-                dmp(i).Enable = 'on';
-            end
-            for i = 1:length(cp)
-                cp(i).Enable = 'on';
-            end
-
-
-
-            % switch this_channel_stage
-            % case 0
-            %     % enable spike detection, turn everything else off
-            %     for i = 1:length(sdp)
-            %         sdp(i).Enable = 'on';
-            %     end
-            %     for i = 1:length(dmp)
-            %         dmp(i).Enable = 'off';
-            %     end
-            %     for i = 1:length(cp)
-            %         cp(i).Enable = 'off';
-            %     end
-
-            % case 1
-            %     % enable dim red, + spike detection, turn everyhting else off
-            %     for i = 1:length(sdp)
-            %         sdp(i).Enable = 'on';
-            %     end
-            %     for i = 1:length(dmp)
-            %         dmp(i).Enable = 'on';
-            %     end
-            %     for i = 1:length(cp)
-            %         cp(i).Enable = 'off';
-            %     end
-            % case 2
-
-            %     disp('only enable clustering ')
-            %     for i = 1:length(sdp)
-            %         sdp(i).Enable = 'off';
-            %     end
-            %     for i = 1:length(dmp)
-            %         dmp(i).Enable = 'off';
-            %     end
-            %     for i = 1:length(cp)
-            %         cp(i).Enable = 'on';
-            %     end
-            % case 3
-
-            %     disp('disable everything ')
-            %     for i = 1:length(sdp)
-            %         sdp(i).Enable = 'off';
-            %     end
-            %     for i = 1:length(dmp)
-            %         dmp(i).Enable = 'off';
-            %     end
-            %     for i = 1:length(cp)
-            %         cp(i).Enable = 'off';
-            %     end
-            % end
         end
 
 
