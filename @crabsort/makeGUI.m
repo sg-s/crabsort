@@ -17,9 +17,6 @@ end
 handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w');
 temp =  findall(handles.main_fig,'Type','uitoggletool','-or','Type','uipushtool');
 
-% make plots menu
-handles.menu0 = uimenu('Label','Data');
-uimenu(handles.menu0,'Label','Load file...','Callback',@self.loadFile);
 
 % make a scrollbar at the bottom to quickly scroll
 % through the traces
@@ -30,10 +27,7 @@ addlistener(handles.scroll_bar,'ContinuousValueChange',@self.scroll);
 
 
 handles.menu1 = uimenu('Label','Make Plots...');
-uimenu(handles.menu1,'Label','Stimulus','Callback',@self.plot);
-uimenu(handles.menu1,'Label','LFP','Callback',@self.plot);
 uimenu(handles.menu1,'Label','Raster','Callback',@self.makeRaster);
-uimenu(handles.menu1,'Label','Firing Rate','Callback',@self.plot);
 
 % pre-processing
 handles.menu2 = uimenu('Label','Tools');

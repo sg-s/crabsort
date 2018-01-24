@@ -7,7 +7,7 @@
 `crabsort` is a framework written in MATLAB to help you sort spikes from multi-channel extracellular recordings. It is 
 
 1. **highly modular** Almost everything is written as a plugin. `crabsort` is a [MATLAB class](https://www.mathworks.com/help/matlab/matlab_oop/classes-in-the-matlab-language.html), and plugins are methods defined within the class. 
-2. **Accurate** 
+2. **Accurate** On data with paired intracellular and extracellular recordings, `crabsort` was able to identify >99% of intracellular `LP`, `PD` & `LG` spikes in `lpn`, `pdn`, and `lgn`. 
 3. **Data-agnostic** `crabsort` interfaces to your data through plugins, and `crabsort` doesn't care what your data format is.
 4. **Bring-your-own-algorithm** `crabsort` splits up the spike sorting problem into two steps: dimensionality reduction and clustering. Every algorithm in either step is written as a plugin, and you can write your and drop it in, with *zero* modifications to the core code. For example, `crabsort` can use the amazing [mutli-core t-SNE algorithm](https://github.com/DmitryUlyanov/Multicore-TSNE) to embed spike shapes in two dimensions *very* rapidly. 
 
@@ -23,7 +23,6 @@ urlwrite('http://srinivas.gs/install.m','install.m');
 install sg-s/crabsort
 install sg-s/srinivas.gs_mtools   % crabsort needs this package to run
 install sg-s/Multicore-TSNE % blazing fast t-sne embedding 
-install sg-s/puppeteer % for manipulation of various operations 
 ```
 
 This script grabs the code and fixes your path. 
@@ -42,7 +41,7 @@ Don't forget to download, install and configure the other packages too (see belo
 
 * `crabsort` is a tweaked version of an earlier spikesorting package that I wrote to sort spikes in extracellular recordings of *Drosophila* olfactory neurons. The changes I made here are specific to crabs and to the STG. 
 * Currently, only `.ABF` files are supported, though `crabsort`'s architecture makes adding support for a new file format trivial. 
-
+* No support for manually adding or removing spikes 
 
 ## Architecture
 
@@ -68,34 +67,25 @@ Plugins can be named whatever you want, though you are encouraged to use `camelC
 
 ```
 
-The first line identifies the method as a `crabsort` plugin, and the second line determines the type of plugin it is. Currently, plugins can be of six types:
+The first line identifies the method as a `crabsort` plugin, and the second line determines the type of plugin it is. Currently, plugins can be of several types:
 
 1. `dim-red`
 2. `cluster`
 3. `read-data`
-4. `save-data`
-5. `load-file`
-6. `plot`
+4. `load-file`
 
-If you are writing a `read-data`, `save-data`,`load-file` or `plot` plugin, the convention for the first three lines is as follows:
+If you are writing a `read-data`or `load-file` plugin, the convention for the first three lines is as follows:
 
- ```matlab
+```matlab
 % crabsort plugin
 % plugin_type = 'load-file';
-% data_extension = 'kontroller'
+% data_extension = 'ABF'
 % 
 ```
+
 `data_extension` identifies the extension that `crabsort` binds that plugin to. 
 
-`load-file` plugins are expected to populate the following fields in the `crabsort` object:
 
-```
-output_channel_names
-sampling_rate
-this_trial
-this_paradigm
-handles.paradigm_chooser.String
-```
 `plot-spikes` plugins are expected to read all spikes in that data file, and make a raster or a firing rate plot, with appropriate labels for each trial and paradigm set. 
 
 # License 
