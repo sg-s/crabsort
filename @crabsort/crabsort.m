@@ -17,7 +17,6 @@
 classdef crabsort < handle & matlab.mixin.CustomDisplay
 
     properties
-        % meta
        
         pref % stores the preferences
 
@@ -25,8 +24,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         file_name
         path_name
 
-        % data handling
-        output_channel_names
+        % these channel names exist in the raw data
+        builtin_channel_names
 
         R  % this holds the dimensionality reduced data
 

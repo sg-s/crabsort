@@ -1,6 +1,6 @@
 % crabsort plugin
 % plugin_type = 'load-file';
-% data_extension = 'abf';
+% data_extension = 'smr';
 % 
 %                 _                    _   
 %   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
@@ -9,7 +9,7 @@
 %  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
 %
 % 
-function loadFile_ABF(self,~,~)
+function loadFile_SMR(self,~,~)
 
 if self.verbosity > 5
     cprintf('green','\n[INFO] ')
@@ -18,10 +18,16 @@ end
 
 
 % read the file
-[self.raw_data,dt,self.metadata] = abfload(joinPath(self.path_name,self.file_name));
+[d,h] = loadSMR(joinPath(self.path_name,self.file_name));
 
-% populate builtin_channel_names
-self.builtin_channel_names = self.metadata.recChNames;
+self.raw_data = cell2mat(d(~cellfun(@isstruct,d)));
+dt = h{1}.sampleinterval;
+self.metadata = h;
+
+self.builtin_channel_names = {};
+for i = length(d):-1:1
+	self.builtin_channel_names{i} = strtrim(h{i}.title);
+end
 
 
 self.n_channels = size(self.raw_data,2);

@@ -96,7 +96,7 @@ end
 
 for i = 1:self.n_channels
 	y = bottom_plot + spacing*(i-1) + .05;
-	self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.metadata.recChNames{i},'BackgroundColor',[1 1 1]);
+	self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.builtin_channel_names{i},'BackgroundColor',[1 1 1]);
 end
 
 % make a slider to futz with the YLims for each channel 

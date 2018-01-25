@@ -21,6 +21,7 @@ end
 % figure out what file types we can work with
 allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}),'n/a');
 allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
+allowed_file_extensions = allowed_file_extensions(:);
 
 
 if strcmp(src.String,'Load File')
