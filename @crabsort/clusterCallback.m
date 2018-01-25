@@ -29,3 +29,11 @@ self.showSpikes;
 
 temp = self.getSpikesOnThisNerve;
 self.putative_spikes(:,self.channel_to_work_with) = temp;
+
+if self.automatic
+    return
+end
+
+
+% add to automate tracker
+self.automate_info(self.channel_to_work_with).cluster_method = cluster_method_handle;

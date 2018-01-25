@@ -40,9 +40,6 @@ else
 end
 
 
-
-% mpd = pref.minimum_peak_distance;
-% mpw = pref.minimum_peak_width;
 v_cutoff = self.pref.V_cutoff;
 
 mpd = ceil(self.pref.minimum_peak_distance/(self.dt*1e3));
@@ -71,3 +68,12 @@ self.putative_spikes(loc,self.channel_to_work_with) = 1;
 
 % after finding spikes, we should update the channel_stage
 self.channel_stage(self.channel_to_work_with) = 1;
+
+if self.automatic
+    return
+end
+
+% update the automate_info
+self.automate_info(self.channel_to_work_with).invert_V = self.pref.invert_V;
+
+self.automate_info(self.channel_to_work_with).mpp = mpp;

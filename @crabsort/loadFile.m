@@ -110,7 +110,6 @@ self.channel_ylims = zeros(size(self.raw_data,2),1);
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 
 if exist(file_name,'file') == 2
-    disp('file exists -- need to load it and update the object')
     load(file_name,'crabsort_obj','-mat')
     
     % copy over properties from crabsort_obj into self

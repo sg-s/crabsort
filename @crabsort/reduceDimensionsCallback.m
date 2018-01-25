@@ -46,3 +46,19 @@ set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.embedded_spike
 drawnow;
 
 self.channel_stage(idx) = 2; 
+
+if self.automatic
+    return
+end
+
+
+% save details about this for automation 
+self.automate_info(self.channel_to_work_with).use_spike_shape = self.handles.spike_shape_control.Value;
+
+self.automate_info(self.channel_to_work_with).use_time_after = self.handles.time_after_control.Value;
+self.automate_info(self.channel_to_work_with).time_after_string = self.handles.time_after_nerves.String;
+
+self.automate_info(self.channel_to_work_with).use_time_before = self.handles.time_before_control.Value;
+self.automate_info(self.channel_to_work_with).time_before_string = self.handles.time_before_nerves.String;
+
+self.automate_info(self.channel_to_work_with).reduce_dim_method = method;

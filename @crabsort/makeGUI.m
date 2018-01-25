@@ -16,7 +16,7 @@ end
 % make the master figure, and the axes to plot the voltage traces
 handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w');
 temp =  findall(handles.main_fig,'Type','uitoggletool','-or','Type','uipushtool');
-
+delete(temp([1:8 11:15]))
 
 % make a scrollbar at the bottom to quickly scroll
 % through the traces
@@ -31,11 +31,16 @@ uimenu(handles.menu1,'Label','Raster','Callback',@self.makeRaster);
 
 % pre-processing
 handles.menu2 = uimenu('Label','Tools');
-% uimenu(handles.menu2,'Label','Template Match','Callback',@self.matchTemplate);
-% handles.remove_artifacts_menu = uimenu(handles.menu2,'Label','Remove Artifacts','Callback',@removeArtifacts,'Checked',self.pref.remove_artifacts);
+
 uimenu(handles.menu2,'Label','Reload preferences','Callback',@self.reloadPreferences,'Separator','on');
 uimenu(handles.menu2,'Label','Reset zoom','Callback',@self.resetZoom);
-delete(temp([1:8 11:15]))
+
+handles.menu3 = uimenu('Label','Automate');
+uimenu(handles.menu3,'Label','Run on all files...','Callback',@self.automate);
+
+
+
+
 
 
 

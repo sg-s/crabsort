@@ -35,3 +35,9 @@ for i = 1:length(N)
 end
 
 self.showSpikes;
+
+% reset the automate_info for this channel
+if length(self.automate_info) < self.channel_to_work_with
+	return
+end
+self.automate_info(self.channel_to_work_with) = [];

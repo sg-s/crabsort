@@ -38,6 +38,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % are expected to be seen on them 
         nerve2neuron
 
+        automate_info
+        automatic@logical = false; % when true, crabsort is running automatically 
+
     end % end properties 
 
     properties (SetAccess = protected)
