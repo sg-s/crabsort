@@ -42,7 +42,6 @@ else
 	default_names = {default_neuron_name, 'Noise'};
 end
 
-
 [idx, labels] = manualCluster(R,V_snippets,default_names,@self.showSpikeInContext);
 
 

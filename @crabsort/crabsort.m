@@ -106,7 +106,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             self.nerve2neuron.lvn = {'LP','PD','PY'};
             self.nerve2neuron.lgn = {'LG','MG'};
             self.nerve2neuron.mvn = {'VD','IC','PY'};
-            self.nerve2neuron.dgn = {'MG','PD'};
+            self.nerve2neuron.dgn = {'DG','MG','AGR'};
 
             if nargin == 0 
                 make_gui = true;
@@ -187,6 +187,16 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                     self.enable(self.handles.dim_red_panel);
                     self.enable(self.handles.cluster_panel);
                     self.enable(self.handles.redo_button);
+
+                    % if it's intracellular
+                    temp = isstrprop(self.data_channel_names{value},'upper');
+                    if any(temp)
+                        new_max = diff(self.handles.ax(value).YLim)/2;
+                        self.handles.prom_ub_control.String = mat2str(new_max);
+                        self.handles.spike_prom_slider.Max = new_max;
+                        self.handles.spike_prom_slider.Value = new_max;
+                    end
+
 
                 end
 

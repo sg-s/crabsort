@@ -40,7 +40,7 @@ Don't forget to download, install and configure the other packages too (see belo
 ## Limitations and Scope
 
 * `crabsort` is a tweaked version of an earlier spikesorting package that I wrote to sort spikes in extracellular recordings of *Drosophila* olfactory neurons. The changes I made here are specific to crabs and to the STG. 
-* Currently, only `.ABF` files are supported, though `crabsort`'s architecture makes adding support for a new file format trivial. 
+* Currently, only `.ABF` and `.SMR` files are supported, though `crabsort`'s plugin architecture makes adding support for a new file format trivial. 
 * No support for manually adding or removing spikes 
 
 ## Architecture
@@ -79,7 +79,7 @@ If you are writing a `read-data`or `load-file` plugin, the convention for the fi
 ```matlab
 % crabsort plugin
 % plugin_type = 'load-file';
-% data_extension = 'ABF'
+% data_extension = 'abf'
 % 
 ```
 
