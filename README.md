@@ -20,12 +20,10 @@ The best way to install `crabsort` is through my package manager:
 ```
 % copy and paste this code in your MATLAB prompt
 urlwrite('http://srinivas.gs/install.m','install.m'); 
-install sg-s/crabsort
-install sg-s/srinivas.gs_mtools   % crabsort needs this package to run
-install sg-s/Multicore-TSNE % blazing fast t-sne embedding 
+install -f sg-s/crabsort
+install -f sg-s/srinivas.gs_mtools   % crabsort needs this 
+install -f sg-s/Multicore-TSNE % fast t-sne embedding 
 ```
-
-This script grabs the code and fixes your path. 
 
 Or, if you have `git` installed:
 
@@ -33,15 +31,14 @@ Or, if you have `git` installed:
 git clone git@github.com:sg-s/crabsort.git
 ````
 
-Don't forget to download, install and configure the other packages too (see below). 
-
+Don't forget to download, install and configure the other packages too. 
 
 
 ## Limitations and Scope
 
-* `crabsort` is a tweaked version of an earlier spikesorting package that I wrote to sort spikes in extracellular recordings of *Drosophila* olfactory neurons. The changes I made here are specific to crabs and to the STG. 
+* `crabsort` is a tweaked version of an [earlier spikesorting package](https://github.com/sg-s/spikesort) that I wrote to sort spikes in extracellular recordings of *Drosophila* olfactory neurons. The changes I made here are specific to crabs and to the STG. 
 * Currently, only `.ABF` and `.SMR` files are supported, though `crabsort`'s plugin architecture makes adding support for a new file format trivial. 
-* No support for manually adding or removing spikes 
+* No support for manually adding or removing spikes. 
 
 ## Architecture
 
