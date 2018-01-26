@@ -14,10 +14,21 @@ try
 catch
 end
 
+
+try
+	thing.Visible = 'on';
+catch
+end
+
 try
 	for i = 1:length(thing.Children)
 		try
 			thing.Children(i).Enable = 'on';
+		catch
+		end
+
+		try
+			thing.Children(i).Visible = 'on';
 		catch
 		end
 	end

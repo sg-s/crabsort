@@ -20,12 +20,15 @@ temp = get(self.handles.cluster_control,'String');
 cluster_method_handle = temp{cluster_method_handle};
 cluster_method_handle = str2func(cluster_method_handle);
 
-if ~self.automatic
+if ~self.automatic && strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
+
+
     operation = struct;
 
     operation.property = {{'handles','cluster_control','Value'}};
     operation.value = {self.handles.cluster_control.Value};
     operation.method = @clusterCallback;
+    operation.data = [];
 
     self.automate_info(self.channel_to_work_with).operation(end+1) = operation;
 

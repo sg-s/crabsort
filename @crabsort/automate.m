@@ -9,6 +9,12 @@
 
 function automate(self,~,~)
 
+
+% early exit
+if isempty(self.automate_info)
+	disp('No automate info, nothing to do')
+end
+
 % get a list of all files 
 % figure out what file types we can work with
 allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}),'n/a');
@@ -40,7 +46,8 @@ for i = 1:length(allfiles)-1
 	self.handles.popup.Visible = 'off';
 	drawnow
 
-	for j = 1:length(self.automate_info)
+
+	for j = self.automate_channel_order
 		if isempty(self.automate_info(j).operation)
 			continue
 		end
@@ -48,9 +55,19 @@ for i = 1:length(allfiles)-1
 		% switch to the correct channel
 		self.channel_to_work_with = j;
 
+		% check if this channel is already done
+		if isfield(self.spikes,(self.data_channel_names{self.channel_to_work_with}))
+			fn = fieldnames(self.spikes.(self.data_channel_names{self.channel_to_work_with}));
+			if ~isempty(self.spikes.(self.data_channel_names{self.channel_to_work_with}).(fn{1}))
+				continue
+			end
+		end
+
 		% go through all the steps in the operation 
 		for k = 1:length(self.automate_info(j).operation)
 			operation = self.automate_info(j).operation(k);
+
+			self.current_operation = k;
 
 			% assign all properties
 			for l = 1:length(operation.property)
@@ -62,14 +79,8 @@ for i = 1:length(allfiles)-1
 			operation.method(self);
 
 		end
-
-
-
 	end
-
 	self.saveData;
-
-	pause(1)
 
 end
 

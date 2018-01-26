@@ -41,3 +41,6 @@ if length(self.automate_info) < self.channel_to_work_with
 	return
 end
 self.automate_info(self.channel_to_work_with) = [];
+
+% remove this channel from the channel_order
+self.automate_channel_order(self.automate_channel_order == self.channel_to_work_with) = [];

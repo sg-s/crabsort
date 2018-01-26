@@ -73,13 +73,27 @@ if self.automatic
     return
 end
 
-% update the automate_info
-% find spikes is always the first step here, so we can safely overwrite everything 
 
-% create a description of the operations we just did 
-operation = struct;
-operation.property = {{'pref','invert_V'}, {'handles','spike_prom_slider','Max'}, {'handles','spike_prom_slider','Value'}};
-operation.value = {self.pref.invert_V, mpp, mpp};
-operation.method = @findSpikes;
 
-self.automate_info(self.channel_to_work_with).operation = operation;
+if strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
+
+
+    % update the automate_info
+    % find spikes is always the first step here, so we can safely overwrite everything 
+
+    % create a description of the operations we just did 
+    operation = struct;
+    operation.property = {{'pref','invert_V'}, {'handles','spike_prom_slider','Max'}, {'handles','spike_prom_slider','Value'}};
+    operation.value = {self.pref.invert_V, mpp, mpp};
+    operation.method = @findSpikes;
+    operation.data = [];
+
+    self.automate_info(self.channel_to_work_with).operation = operation;
+
+    % add this to the channel_order, so that automate can traverse the channels in the correct order
+    if ~any(find(self.automate_channel_order == self.channel_to_work_with))
+        self.automate_channel_order(end+1) = self.channel_to_work_with;
+    end
+                   
+end
+

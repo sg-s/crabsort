@@ -38,12 +38,14 @@ self.getDataToReduce;
 
 % create an operation manifest BEFORE calling the method so that
 % the method can modify, or add onto the operation. 
-if ~self.automatic
+if ~self.automatic && strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
+
 	% create a description of the operations we just did 
 	operation = struct;
 	operation.property = {{'handles','spike_shape_control','Value'}, {'handles','time_after_control','Value'}, {'handles','time_after_nerves','String'}, {'handles','time_before_control','Value'}, {'handles','time_before_nerves','String'},{'handles','method_control','Value'}};
 	operation.value = {self.handles.spike_shape_control.Value,   self.handles.time_after_control.Value,        self.handles.time_after_nerves.String,          self.handles.time_before_control.Value,        self.handles.time_after_nerves.String,         self.handles.method_control.Value};
 	operation.method = @reduceDimensionsCallback;
+	operation.data = [];
 
 	self.automate_info(self.channel_to_work_with).operation(end+1) = operation;
 

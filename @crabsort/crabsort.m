@@ -40,6 +40,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         automate_info
         automatic = false; % when true, crabsort is running automatically 
+        current_operation
+        automate_channel_order
 
     end % end properties 
 
@@ -177,19 +179,18 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
                 % if the name for this channel is unset, disable
                 % everything
-                if length(self.data_channel_names) < self.channel_to_work_with || strcmp(self.data_channel_names{self.channel_to_work_with},'???')
+                if length(self.data_channel_names) < self.channel_to_work_with || strcmp(self.data_channel_names{self.channel_to_work_with},'???') || isempty(self.data_channel_names{self.channel_to_work_with})
                     % disable everything
                     self.disable(self.handles.spike_detection_panel);
                     self.disable(self.handles.dim_red_panel);
                     self.disable(self.handles.cluster_panel);
-                    self.disable(self.handles.redo_button);
+    
 
                 else
                     % enable everything
                     self.enable(self.handles.spike_detection_panel);
                     self.enable(self.handles.dim_red_panel);
                     self.enable(self.handles.cluster_panel);
-                    self.enable(self.handles.redo_button);
 
                     % if it's intracellular
                     temp = isstrprop(self.data_channel_names{value},'upper');

@@ -9,7 +9,8 @@
 1. **highly modular** Almost everything is written as a plugin. `crabsort` is a [MATLAB class](https://www.mathworks.com/help/matlab/matlab_oop/classes-in-the-matlab-language.html), and plugins are methods defined within the class. 
 2. **Accurate** On data with paired intracellular and extracellular recordings, `crabsort` was able to identify >99% of intracellular `LP`, `PD` & `LG` spikes in `lpn`, `pdn`, and `lgn`. 
 3. **Data-agnostic** `crabsort` interfaces to your data through plugins, and `crabsort` doesn't care what your data format is.
-4. **Bring-your-own-algorithm** `crabsort` splits up the spike sorting problem into two steps: dimensionality reduction and clustering. Every algorithm in either step is written as a plugin, and you can write your and drop it in, with *zero* modifications to the core code. For example, `crabsort` can use the amazing [mutli-core t-SNE algorithm](https://github.com/DmitryUlyanov/Multicore-TSNE) to embed spike shapes in two dimensions *very* rapidly. 
+4. **Bring-your-own-algorithm** `crabsort` splits up the spike sorting problem into two steps: dimensionality reduction and clustering. Every algorithm in either step is written as a plugin, and you can write your and drop it in, with *zero* modifications to the core code. For example, `crabsort` can use the amazing [mutli-core t-SNE algorithm](https://github.com/DmitryUlyanov/Multicore-TSNE) to embed spike shapes in two dimensions with great alacrity. 
+5. **Fully-automated** `crabsort` offers powerful automation features, and is full script-able. Fully automated luxury gay space crabsort for the win.
 
 ## Installation
 

@@ -175,4 +175,10 @@ end
 
 if ~isempty(self.handles)
     self.handles.popup.Visible = 'off';
+
+    self.enable(self.handles.data_panel);
+    self.enable(self.handles.spike_detection_panel);
+    self.enable(self.handles.dim_red_panel);
+    self.enable(self.handles.cluster_panel);
+
 end
