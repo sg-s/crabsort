@@ -91,7 +91,7 @@ handles.time_before_nerves = uicontrol(handles.dim_red_panel,'Style','edit','Str
 all_plugin_names = {self.installed_plugins.name};
 dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));
 
-handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.7 .05 .25 .9],'Callback',@self.reduceDimensionsCallback,'FontSize',20);
+handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.61 .04 .34 .9],'Callback',@self.reduceDimensionsCallback,'FontSize',20);
 
 
 
@@ -141,7 +141,7 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 % end
 
 % make a pop-over for busy messages
-handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 0 1 1],'Style', 'text', 'String', {'','','','','','','','Embedding...'},'FontSize',36,'FontWeight','normal','Visible','off');
+handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 0 1 1],'Style', 'text', 'String', {'','','','','','','','Embedding...'},'FontSize',36,'FontWeight','normal','Visible','off','BackgroundColor',[1 1 1]);
 
 
 self.handles = handles;
