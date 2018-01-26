@@ -36,6 +36,20 @@ end
 % get the data to reduce
 self.getDataToReduce; 
 
+% create an operation manifest BEFORE calling the method so that
+% the method can modify, or add onto the operation. 
+if ~self.automatic
+	% create a description of the operations we just did 
+	operation = struct;
+	operation.property = {{'handles','spike_shape_control','Value'}, {'handles','time_after_control','Value'}, {'handles','time_after_nerves','String'}, {'handles','time_before_control','Value'}, {'handles','time_before_nerves','String'},{'handles','method_control','Value'}};
+	operation.value = {self.handles.spike_shape_control.Value,   self.handles.time_after_control.Value,        self.handles.time_after_nerves.String,          self.handles.time_before_control.Value,        self.handles.time_after_nerves.String,         self.handles.method_control.Value};
+	operation.method = @reduceDimensionsCallback;
+
+	self.automate_info(self.channel_to_work_with).operation(end+1) = operation;
+
+end
+
+
 method(self);
 
 self.handles.popup.Visible = 'off';
@@ -47,18 +61,5 @@ drawnow;
 
 self.channel_stage(idx) = 2; 
 
-if self.automatic
-    return
-end
 
 
-% save details about this for automation 
-self.automate_info(self.channel_to_work_with).use_spike_shape = self.handles.spike_shape_control.Value;
-
-self.automate_info(self.channel_to_work_with).use_time_after = self.handles.time_after_control.Value;
-self.automate_info(self.channel_to_work_with).time_after_string = self.handles.time_after_nerves.String;
-
-self.automate_info(self.channel_to_work_with).use_time_before = self.handles.time_before_control.Value;
-self.automate_info(self.channel_to_work_with).time_before_string = self.handles.time_before_nerves.String;
-
-self.automate_info(self.channel_to_work_with).reduce_dim_method = method;

@@ -29,6 +29,8 @@ allfiles = circshift({allfiles.name},[0,length(allfiles)-find(strcmp(self.file_n
 filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 
 
+self.automatic = true;
+
 for i = 1:length(allfiles)-1
 	self.reset(false);
 
@@ -39,31 +41,27 @@ for i = 1:length(allfiles)-1
 	drawnow
 
 	for j = 1:length(self.automate_info)
-		if isempty(self.automate_info(j).invert_V)
+		if isempty(self.automate_info(j).operation)
 			continue
 		end
 
 		% switch to the correct channel
 		self.channel_to_work_with = j;
 
-		% find spikes 
-		self.pref.invert_V = self.automate_info(j).invert_V;
-		self.handles.spike_prom_slider.Max = self.automate_info(j).mpp;
-		self.handles.spike_prom_slider.Value = self.automate_info(j).mpp;
-		self.findSpikes;
+		% go through all the steps in the operation 
+		for k = 1:length(self.automate_info(j).operation)
+			operation = self.automate_info(j).operation(k);
 
-		% reduce dimensions
-		self.handles.spike_shape_control.Value = self.automate_info(j).use_spike_shape;
-		self.handles.time_after_control.Value = self.automate_info(j).use_time_after;
-		self.handles.time_after_nerves.String = self.automate_info(j).time_after_string;
-		self.handles.time_before_control.Value = self.automate_info(j).use_time_before;
-		self.handles.time_before_nerves.String = self.automate_info(j).time_before_string;
+			% assign all properties
+			for l = 1:length(operation.property)
+				p = operation.property{l};
+				setfield(self,p{:},operation.value{l});
+			end
 
-		self.automate_info(j).reduce_dim_method(self);
+			% execute the method
+			operation.method(self);
 
-
-		% cluster 
-		self.automate_info(self.channel_to_work_with).cluster_method(self);
+		end
 
 
 
@@ -76,7 +74,7 @@ for i = 1:length(allfiles)-1
 end
 
  
-
+self.automatic = false;
 
 
 % go over all files

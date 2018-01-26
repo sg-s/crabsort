@@ -20,20 +20,25 @@ temp = get(self.handles.cluster_control,'String');
 cluster_method_handle = temp{cluster_method_handle};
 cluster_method_handle = str2func(cluster_method_handle);
 
-cluster_method_handle(self);
+if ~self.automatic
+    operation = struct;
 
+    operation.property = {{'handles','cluster_control','Value'}};
+    operation.value = {self.handles.cluster_control.Value};
+    operation.method = @clusterCallback;
+
+    self.automate_info(self.channel_to_work_with).operation(end+1) = operation;
+
+end
+
+
+cluster_method_handle(self);
 self.channel_stage(self.channel_to_work_with) = 3; 
  
-
 self.showSpikes;
 
 temp = self.getSpikesOnThisNerve;
 self.putative_spikes(:,self.channel_to_work_with) = temp;
 
-if self.automatic
-    return
-end
 
 
-% add to automate tracker
-self.automate_info(self.channel_to_work_with).cluster_method = cluster_method_handle;

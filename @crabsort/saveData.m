@@ -8,11 +8,6 @@
 
 function saveData(self)
 
-% if self.verbosity > 5
-%     cprintf('green','\n[INFO] ')
-%     d = dbstack;
-%     cprintf('text',[mfilename ' called by ' d(2).name])
-% end
 
 % early escape
 if isempty(self.time) 
@@ -29,7 +24,7 @@ channel_stage = self.channel_stage;
 crabsort_obj = self;
 
 % remove some stuff that shouldn't be saved
-ignore_these = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names'};
+ignore_these = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','automatic'};
 
 ignored_values = {};
 

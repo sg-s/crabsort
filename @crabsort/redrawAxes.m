@@ -36,7 +36,7 @@ end
 
 c = lines;
 z = find(self.time > 5,1,'first');
-M = {'o','s','d','p','h','+','x'};
+M = {'o','x','d','p','h','+','s'};
 for i = 1:self.n_channels
 	self.handles.ax(i) = subplot(self.n_channels,1,i); hold on
 
@@ -61,8 +61,9 @@ for i = 1:self.n_channels
 	self.handles.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none','Color',[1 0 0]);
 
 	% support up to 10 units on each 
-	for j = 1:length(M)
-		self.handles.sorted_spikes(i).unit(j) = plot(NaN,NaN,M{j},'LineStyle','none','Color',c(i,:));
+	self.handles.sorted_spikes(i).unit(1) = plot(NaN,NaN,M{1},'LineStyle','none','Color',c(i,:));
+	for j = 2:length(M)
+		self.handles.sorted_spikes(i).unit(j) = plot(NaN,NaN,M{j},'LineStyle','none','Color',c(j,:));
 	end
 end
 

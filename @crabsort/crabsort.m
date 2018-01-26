@@ -39,7 +39,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         nerve2neuron
 
         automate_info
-        automatic@logical = false; % when true, crabsort is running automatically 
+        automatic = false; % when true, crabsort is running automatically 
 
     end % end properties 
 

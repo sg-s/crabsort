@@ -74,6 +74,12 @@ if self.automatic
 end
 
 % update the automate_info
-self.automate_info(self.channel_to_work_with).invert_V = self.pref.invert_V;
+% find spikes is always the first step here, so we can safely overwrite everything 
 
-self.automate_info(self.channel_to_work_with).mpp = mpp;
+% create a description of the operations we just did 
+operation = struct;
+operation.property = {{'pref','invert_V'}, {'handles','spike_prom_slider','Max'}, {'handles','spike_prom_slider','Value'}};
+operation.value = {self.pref.invert_V, mpp, mpp};
+operation.method = @findSpikes;
+
+self.automate_info(self.channel_to_work_with).operation = operation;
