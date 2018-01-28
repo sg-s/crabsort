@@ -59,8 +59,7 @@ if ~self.automatic
 		self.automate_info(self.channel_to_work_with).operation(end).data.idx = idx;
 	end
 
-	X = [V_snippets; R];
-	self.tf_data(channel).X = X;
+	self.tf_data(channel).X = self.data_to_reduce;
 	self.tf_data(channel).Y = idx;
 
 

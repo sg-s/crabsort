@@ -50,6 +50,9 @@ uimenu(handles.menu_name(3),'Label','Delete all automate info','Callback',@self.
 handles.menu_name(4) = uimenu('Label','Tensorflow');
 uimenu(handles.menu_name(4),'Label','Train network','Callback',@self.train);
 uimenu(handles.menu_name(4),'Label','Predict','Callback',@self.predict);
+uimenu(handles.menu_name(4),'Label','Clear TF Data','Callback',@self.clearTFData,'Separator','on');
+uimenu(handles.menu_name(4),'Label','Delete Neural Network','Callback',@self.deleteTFNetwork,'Separator','on');
+
 
 % file I/O panel
 handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .12 .07],'BackgroundColor',[1 1 1]);

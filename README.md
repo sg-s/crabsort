@@ -1,4 +1,4 @@
-# 🦀crabsort🦀
+# 🦀 crabsort
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/sg-s/crabsort.svg)]()
 
