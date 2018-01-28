@@ -67,3 +67,38 @@ invert_V = false; 					% sometimes, it is easier to find spikes if you invert V
 % how far back in time (or forward) we look 
 % for spikes in other channels
 max_relative_time = 1; % seconds
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  _                             __ _               
+% | |_ ___ _ __  ___  ___  _ __ / _| | _____      __
+% | __/ _ \ '_ \/ __|/ _ \| '__| |_| |/ _ \ \ /\ / /
+% | ||  __/ | | \__ \ (_) | |  |  _| | (_) \ V  V / 
+%  \__\___|_| |_|___/\___/|_|  |_| |_|\___/ \_/\_/  
+%   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%       
+
+% You installed tensorflow in a conda environment:
+% what's the environment called?
+% (If you didn't, Tensorflow + crabsort won't work 
+% -- reinstall in its own environment)
+tf_env_name = 'tensorflow';
+
+% how many neurons in the first convolutional layer?
+tf_conv1_N = 32;
+
+%size of kernel in 1st conv layer
+tf_conv1_K = 15;
+
+%pool size of 1st pool layer
+tf_pool1_N = 2;
+
+% stride step of pool1 
+tf_pool1_S = 2;
+
+% number of neurons in dense layer
+tf_dense_N = 100;
+tf_dropout_rate = 0.4;
+
+% how many steps? how many epochs
+tf_nsteps = 100
+tf_nepochs = 10

@@ -3,3 +3,9 @@
 *sublime-workspace
 *.abf
 *.mat
+*__pycache__*
+tensorflow/models/*
+*.smr
+*.SMR
+*.ABF
+*.s2r

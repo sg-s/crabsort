@@ -1,4 +1,4 @@
-# 🦀 crabsort 🦀
+# 🦀crabsort🦀
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/sg-s/crabsort.svg)]()
 
@@ -11,6 +11,7 @@
 3. **Data-agnostic** `crabsort` interfaces to your data through plugins, and `crabsort` doesn't care what your data format is.
 4. **Bring-your-own-algorithm** `crabsort` splits up the spike sorting problem into two steps: dimensionality reduction and clustering. Every algorithm in either step is written as a plugin, and you can write your and drop it in, with *zero* modifications to the core code. For example, `crabsort` can use the amazing [mutli-core t-SNE algorithm](https://github.com/DmitryUlyanov/Multicore-TSNE) to embed spike shapes in two dimensions with great alacrity. 
 5. **Fully-automated** `crabsort` offers powerful automation features, and is full script-able. Fully automated luxury gay space crabsort for the win.
+6. **Tensorflow-powered** `crabsort` can use [tensorflow](https://www.tensorflow.org/), Google's scarily powerful deep learning toolbox, to learn from sorted data and sort new data automatically. 
 
 ## Installation
 
@@ -24,6 +25,7 @@ urlwrite('http://srinivas.gs/install.m','install.m');
 install -f sg-s/crabsort
 install -f sg-s/srinivas.gs_mtools   % crabsort needs this 
 install -f sg-s/Multicore-TSNE % fast t-sne embedding 
+install -f sg-s/condalab % switch between python envs
 ```
 
 Or, if you have `git` installed:
@@ -34,6 +36,19 @@ git clone git@github.com:sg-s/crabsort.git
 
 Don't forget to download, install and configure the other packages too. 
 
+### Dependencies 
+
+#### Anaconda 
+
+`crabsort` uses some python libraries that are assumed to be installed using [Anaconda](https://www.anaconda.com/)
+
+#### Multicore-tSNE
+
+[Read the docs](https://github.com/sg-s/Multicore-TSNE) to make sure your installation works, and your paths are correct. 
+
+#### Tensorflow
+
+Go to the [tensorflow website](https://www.tensorflow.org/) and follow the installation instructions there. 
 
 ## Limitations and Scope
 

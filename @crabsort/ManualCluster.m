@@ -48,6 +48,7 @@ if ~self.automatic
 	[idx, labels] = manualCluster(R,V_snippets,default_names,@self.showSpikeInContext);
 
 	if strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
+		% need to save this for automation later on 
 
 		self.automate_info(self.channel_to_work_with).operation(end).data.x = R(1,:);
 		if size(R,1) > 1
@@ -57,6 +58,11 @@ if ~self.automatic
 		end
 		self.automate_info(self.channel_to_work_with).operation(end).data.idx = idx;
 	end
+
+	X = [V_snippets; R];
+	self.tf_data(channel).X = X;
+	self.tf_data(channel).Y = idx;
+
 
 else
 	% we are running in automatic mode

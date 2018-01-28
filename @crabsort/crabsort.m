@@ -6,13 +6,8 @@
 %
 %
 % crabsort.m
-% Allows you to view, manipulate and sort spikes from experiments conducted by Kontroller. specifically meant to sort spikes from Drosophila ORNs
-% crabsort was written by Srinivas Gorur-Shandilya at 10:20 , 09 April 2014. Contact me at http://srinivas.gs/contact/
-% part of the crabsort package
 % https://github.com/sg-s/crabsort
-% 
-% This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. 
-% To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
+% Srinivas Gorur-Shandilya
 
 classdef crabsort < handle & matlab.mixin.CustomDisplay
 
@@ -24,28 +19,39 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         file_name
         path_name
 
+        % debug
+        verbosity = 0;
+
+        channel_to_work_with
+
+    end % end properties 
+
+    properties (SetAccess = protected)
+
         % these channel names exist in the raw data
         builtin_channel_names
 
         R  % this holds the dimensionality reduced data
 
-        % debug
-        verbosity = 0;
-
+        % this is the list of channel names that you can choose from
         channel_names = {'???','dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'};
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 
         nerve2neuron
 
+
+        % for use by automate()
         automate_info
         automatic = false; % when true, crabsort is running automatically 
         current_operation
         automate_channel_order
 
-    end % end properties 
+        % for use by TensorFlow
+        tf_data
+        tf_folder
+        tf_model_name
 
-    properties (SetAccess = protected)
 
         % UI
         handles % a structure that handles everything else
@@ -64,8 +70,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         putative_spikes
 
         installed_plugins
-
-        channel_to_work_with
 
         % this keeps track of which stage each channel is in 
         % in the data analysis pipeline
@@ -141,6 +145,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             % get the version name and number
             self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) oss 'build_number']))];
             self.version_name = ['crabsort (' self.build_number ')'];
+
+            % link the tensorflow folder
+            self.tf_folder = joinPath(fileparts(fileparts(which(mfilename))),'tensorflow');
 
             
             if make_gui 
