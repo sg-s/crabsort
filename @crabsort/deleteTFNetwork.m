@@ -17,3 +17,10 @@ try
 	rmdir(joinPath(self.tf_folder,'models',self.tf_model_name{self.channel_to_work_with}),'s')
 catch
 end
+
+% also unset the model name
+self.tf_model_name{self.channel_to_work_with} = [];
+
+% update the menu names
+ self.handles.menu_name(4).Children(4).Text = 'Train network';
+ self.handles.menu_name(4).Children(3).Enable = 'off';

@@ -36,6 +36,3 @@ end
 
 self.channel_to_work_with = this_ax;
 
-% p = get(self.handles.ax(1),'CurrentPoint');
-% p = p(1,1:2);
-% modify(s,p)

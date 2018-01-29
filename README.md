@@ -40,7 +40,7 @@ Don't forget to download, install and configure the other packages too.
 
 #### Anaconda 
 
-`crabsort` uses some python libraries that are assumed to be installed using [Anaconda](https://www.anaconda.com/)
+`crabsort` uses some python libraries that are assumed to be installed using [Anaconda](https://www.anaconda.com/). Make sure you install anaconda and then install python packages using conda environments! 
 
 #### Multicore-tSNE
 
@@ -48,7 +48,42 @@ Don't forget to download, install and configure the other packages too.
 
 #### Tensorflow
 
-Go to the [tensorflow website](https://www.tensorflow.org/) and follow the installation instructions there. 
+Make a `conda` environment for yourself and install tensorflow in that container. Follow the instructions on [this page](https://www.tensorflow.org/install/install_mac#installing_with_anaconda) under the "Anaconda Install" section. Make sure you install the Python 3 version -- it's 2018. 
+
+For clarity, I've listed the steps I went through to install Tensorflow. You should do something similar:
+
+```bash
+# assuming conda is installed
+
+# create a new environment called "tensorflow"
+# and install pip in it
+conda create -n tensorflow pip 
+
+# switch to this environment 
+source activate tensorflow 
+
+# install tensorflow 
+# your URL may by different 
+pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.5.0-py3-none-any.whl
+
+# install h5py
+pip install h5py
+
+```
+
+#### h5py
+
+You need to install this tool in **every** python environment you are using. 
+
+```bash
+# install h5py in your tensorflow env
+source activate tensorflow
+pip install h5py
+
+# install h5py in your mctsne env
+source activate mctsne
+pip install h5py
+``` 
 
 ## Limitations and Scope
 

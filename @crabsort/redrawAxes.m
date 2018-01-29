@@ -92,7 +92,7 @@ end
 % make the channel labels 
 for i = 1:self.n_channels
 	y = bottom_plot + spacing*(i-1);
-	self.handles.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .05],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel);
+	self.handles.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y-.01 .05 .06],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel,'FontSize',self.pref.fs);
 end
 
 for i = 1:self.n_channels

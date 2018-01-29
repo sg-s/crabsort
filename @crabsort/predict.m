@@ -37,6 +37,7 @@ if  self.channel_stage(channel) < 3
 	operation = self.automate_info(channel).operation(1);
 	self.current_operation = 1;
 
+
 	% assign all properties
 	for l = 1:length(operation.property)
 		p = operation.property{l};
@@ -56,29 +57,28 @@ if  self.channel_stage(channel) < 3
 
 	curdir = pwd;
 	cd(tf_model_dir)
-	try
-		[e,o] = system(['python -c ' char(39) 'import tf_conv_net; tf_conv_net.predict()' char(39)]);
-	catch
-		cd(curdir)
+
+	[e,o] = system(['python -c ' char(39) 'import tf_conv_net; tf_conv_net.predict()' char(39)]);
+	cd(curdir)
+	if e
+		disp(o)
 		error('Something went wrong when making predictions using the neural network')
 	end
-	cd(curdir)
+	
 
 	% read the predictions 
 	predictions = h5read(joinPath(tf_model_dir,'data.h5'),'/predictions');
 
-
-	labels = {'LP','Noise'};
+	labels = self.tf_labels{channel};
 
 	putative_spikes = find(self.putative_spikes(:,channel));
 	this_nerve = self.data_channel_names{channel};
-
 
 	for i = 1:length(labels)
 		if strcmp(labels{i},'Noise')
 			continue
 		end
-		these_spikes = putative_spikes(predictions==i);
+		these_spikes = putative_spikes(predictions == i);
 		self.spikes.(this_nerve).(labels{i}) = these_spikes;
 	end
 

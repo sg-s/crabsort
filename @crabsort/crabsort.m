@@ -48,9 +48,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         automate_channel_order
 
         % for use by TensorFlow
-        tf_data
         tf_folder
         tf_model_name
+        tf_labels % stores label names
 
 
         % UI
@@ -206,6 +206,33 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                         self.handles.prom_ub_control.String = mat2str(new_max);
                         self.handles.spike_prom_slider.Max = new_max;
                         self.handles.spike_prom_slider.Value = new_max;
+                    end
+
+                    % if the channel has sorted spikes, enable training
+                    s = self.getSpikesOnThisNerve;
+                    if any(s)
+                        % enable training
+                        self.handles.menu_name(4).Children(4).Enable = 'on';
+                        % do we already have a model trained?
+                        if length(self.tf_model_name) < self.channel_to_work_with  || isempty(self.tf_model_name{self.channel_to_work_with})
+                            self.handles.menu_name(4).Children(4).Text = 'Train network';
+                        else
+                            % we already have a model
+                            self.handles.menu_name(4).Children(4).Text = 'Retrain network';
+                        end
+
+                    else
+                        % disable training
+                        self.handles.menu_name(4).Children(4).Enable = 'off';
+
+                        if length(self.tf_model_name) < self.channel_to_work_with || isempty(self.tf_model_name{self.channel_to_work_with})
+                            % disable prediction
+                            self.handles.menu_name(4).Children(3).Enable = 'off';
+                        else
+                            % we already have a model
+                            self.handles.menu_name(4).Children(3).Enable = 'on';
+                        end
+
                     end
 
 

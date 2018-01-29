@@ -15,10 +15,8 @@ end
 
 if get(self.handles.spike_sign_control,'Value')
 	set(self.handles.spike_sign_control,'String','Finding +ve spikes')
-	self.pref.invert_V = false;
 else
 	set(self.handles.spike_sign_control,'String','Finding -ve spikes')
-	self.pref.invert_V = true;
 end
 
 self.findSpikes;

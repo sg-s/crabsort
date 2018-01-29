@@ -11,7 +11,11 @@
 % created by Srinivas Gorur-Shandilya at 8:58 , 20 November 2015. Contact me at http://srinivas.gs/contact/
 % 
 
-function findSpikes(self,~,~)
+function findSpikes(self,Npeaks,~)
+
+if nargin < 2
+    Npeaks = '';
+end
 
 if self.verbosity > 5
     cprintf('green','\n[INFO] ')
@@ -46,14 +50,22 @@ mpd = ceil(self.pref.minimum_peak_distance/(self.dt*1e3));
 mpw = ceil(self.pref.minimum_peak_width/(self.dt*1e3));
 
 % find peaks and remove spikes beyond v_cutoff
-if self.pref.invert_V
-    [~,loc] = findpeaks(-V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
-    loc(V(loc) < -abs(v_cutoff)) = [];
+if ~isa(Npeaks,'double')
+    if ~self.handles.spike_sign_control.Value
+        [~,loc] = findpeaks(-V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
+        loc(V(loc) < -abs(v_cutoff)) = [];
+    else
+        [~,loc] = findpeaks(V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
+        loc(V(loc) > abs(v_cutoff)) = [];
+    end
 else
-    [~,loc] = findpeaks(V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
-    loc(V(loc) > abs(v_cutoff)) = [];
+    % being called by train
+    if ~self.handles.spike_sign_control.Value
+        [~,loc] = findpeaks(-V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw,'NPeaks',Npeaks);
+    else
+        [~,loc] = findpeaks(V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw,'NPeaks',Npeaks);
+    end
 end
-
 
 if self.verbosity
 	cprintf('green','\n[INFO]')
@@ -66,13 +78,21 @@ self.handles.main_fig.Name = [self.file_name ' -- found ' oval(length(loc)) ' sp
 self.putative_spikes(:,self.channel_to_work_with) = 0;
 self.putative_spikes(loc,self.channel_to_work_with) = 1;
 
-% after finding spikes, we should update the channel_stage
-self.channel_stage(self.channel_to_work_with) = 1;
+if ~isa(Npeaks,'double')
+    % after finding spikes, we should update the channel_stage
+    self.channel_stage(self.channel_to_work_with) = 1;
+
+end
 
 if self.automatic
     return
 end
 
+% don't overwrite automate_info when called with Npeaks
+% that's because train is using this to create a -ve dataset
+if isa(Npeaks,'double')
+    return
+end
 
 
 if strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
@@ -83,8 +103,8 @@ if strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
 
     % create a description of the operations we just did 
     operation = struct;
-    operation.property = {{'pref','invert_V'}, {'handles','spike_prom_slider','Max'}, {'handles','spike_prom_slider','Value'}};
-    operation.value = {self.pref.invert_V, mpp, mpp};
+    operation.property = {{'handles','spike_sign_control','Value'}, {'handles','spike_prom_slider','Max'}, {'handles','spike_prom_slider','Value'}};
+    operation.value = {self.handles.spike_sign_control.Value, mpp, mpp};
     operation.method = @findSpikes;
     operation.data = [];
 

@@ -52,15 +52,14 @@ t_after = 4; 		% in ms
 
 minimum_peak_prominence = 'auto'; 	% minimum peak prominence for peak detection. you can use 'auto' or you can also specify a scalar value
 
+% minimum width of spikes, in ms
+minimum_peak_width = 0; 
 
-minimum_peak_width = 1; % minimum width of spikes, in ms
+% minimum distance b/w spikes, in ms	
+minimum_peak_distance = 0; 
 
-minimum_peak_distance = 1; % minimum distance b/w spikes, in ms	
-
-
-V_cutoff = -Inf; 						% ignore peaks beyond this limit 
-
-invert_V = false; 					% sometimes, it is easier to find spikes if you invert V
+% ignore peaks beyond this limit 
+V_cutoff = -Inf; 						
 
 
 % this setting specifies an upper bound on 
@@ -100,5 +99,5 @@ tf_dense_N = 100;
 tf_dropout_rate = 0.4;
 
 % how many steps? how many epochs
-tf_nsteps = 100
-tf_nepochs = 10
+tf_nsteps = 1000
+tf_nepochs = 2

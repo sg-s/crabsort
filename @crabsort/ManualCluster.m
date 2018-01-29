@@ -29,12 +29,9 @@ if any(temp)
 
 	% intracellular 
 	default_neuron_name = self.data_channel_names{channel};
-
 else
-
 	default_neuron_name =  self.nerve2neuron.(self.data_channel_names{channel});
 end
-
 
 if iscell(default_neuron_name)
 	default_names = [default_neuron_name, 'Noise'];
@@ -58,10 +55,6 @@ if ~self.automatic
 		end
 		self.automate_info(self.channel_to_work_with).operation(end).data.idx = idx;
 	end
-
-	self.tf_data(channel).X = self.data_to_reduce;
-	self.tf_data(channel).Y = idx;
-
 
 else
 	% we are running in automatic mode
