@@ -9,7 +9,17 @@
 % part of the crabsort package
 % deletes all automation info in current file
 
-function deleteAllAutomateInfo(self,~,~)
+function deleteAllAutomateInfo(self,src,~)
 
-self.automate_info = [];
-self.automate_channel_order = [];
+switch src.Text
+case 'Delete ALL automate info'
+	self.common.automate_info = [];
+	self.common.automate_channel_order = [];
+
+case 'Delete automate info for this channel'
+	self.common.automate_info(self.channel_to_work_with) = [];
+	self.common.automate_channel_order = setdiff(self.common.automate_channel_order, self.channel_to_work_with);
+otherwise
+	error('[#345] Unrecognised source of delete all automate info. Dont know what to do, so will default to doing nothing ')
+
+end

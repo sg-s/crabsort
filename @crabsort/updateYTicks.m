@@ -10,7 +10,7 @@
 function updateYTicks(self,channel)
 
 
-if strcmp(self.data_channel_names{channel},'temperature')
+if strcmp(self.common.data_channel_names{channel},'temperature')
     self.handles.ax(channel).YLim = [10 35];
     self.handles.ax(channel).YTickMode = 'auto';
 
@@ -18,7 +18,7 @@ if strcmp(self.data_channel_names{channel},'temperature')
 end
 
 % if it's intracellular
-temp = isstrprop(self.data_channel_names{channel},'upper');
+temp = isstrprop(self.common.data_channel_names{channel},'upper');
 if any(temp)
 	self.handles.ax(channel).YGrid = 'on';
 	self.handles.ax(channel).YTickMode = 'auto';

@@ -8,6 +8,10 @@
 
 function scroll(self,src,event)
 
+if ~isfield(self.handles,'ax')
+    return
+end
+
 xlimits = get(self.handles.ax(1),'XLim');
 xrange = (xlimits(2) - xlimits(1));
 

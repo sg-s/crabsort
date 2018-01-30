@@ -16,7 +16,6 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
-
 % read the file
 [d,h] = loadSMR(joinPath(self.path_name,self.file_name));
 

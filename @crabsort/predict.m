@@ -21,10 +21,23 @@ if isempty(tf_model_dir)
 end
 
 % check that this folder exists
-if exist(tf_model_dir) == 7
+if exist(tf_model_dir,'dir') == 7
 else
 	error('No TF model found. Train the model first')
 end
+
+
+curdir = pwd;
+cd(self.tf_folder)
+[e,~] = system('python test_tf_env.py');
+
+if e
+	% use condalab to switch to the correct environment 
+	% and hope this works
+	disp('Switching conda environment....')
+	conda.setenv(self.pref.tf_env_name)
+end
+cd(curdir)
 
 
 channel = self.channel_to_work_with;
@@ -34,7 +47,7 @@ if  self.channel_stage(channel) < 3
 
 
 	% findSpikes is always the first operation 
-	operation = self.automate_info(channel).operation(1);
+	operation = self.common.automate_info(channel).operation(1);
 	self.current_operation = 1;
 
 
@@ -72,7 +85,7 @@ if  self.channel_stage(channel) < 3
 	labels = self.tf_labels{channel};
 
 	putative_spikes = find(self.putative_spikes(:,channel));
-	this_nerve = self.data_channel_names{channel};
+	this_nerve = self.common.data_channel_names{channel};
 
 	for i = 1:length(labels)
 		if strcmp(labels{i},'Noise')

@@ -90,17 +90,18 @@ plugin_to_use = find(strcmp('load-file',{self.installed_plugins.plugin_type}).*(
 assert(~isempty(plugin_to_use),'[ERR 40] Could not figure out how to load the file you chose.')
 assert(length(plugin_to_use) == 1,'[ERR 41] Too many plugins bound to this file type. ')
 
+
 % load the file
 load_file_handle = str2func(self.installed_plugins(plugin_to_use).name);
 load_file_handle(self);
 
 % update the titlebar with the name of the file we are working with
 
-
 if ~isempty(self.handles)
     self.handles.main_fig.Name = self.file_name;
     self.redrawAxes;
 end
+
 
 % set the channel_stages
 self.channel_stage = zeros(size(self.raw_data,2),1);
@@ -116,12 +117,10 @@ if exist(file_name,'file') == 2
     fn = fieldnames(crabsort_obj);
     for i = 1:length(fn)
         if ~isempty(crabsort_obj.(fn{i}))
-
             % ignore channel_names
             % this is a hack because channel_names was erronously
             % saved in some .crabsort files
             if ~strcmp(fn{i},'channel_names')
-
                 self.(fn{i}) = crabsort_obj.(fn{i});
             end
         end
@@ -130,18 +129,35 @@ if exist(file_name,'file') == 2
 end
 
 
+% check that there is a common.crabsort file already
+file_name = joinPath(self.path_name, 'common.crabsort');
+
+if exist(file_name,'file') == 2
+    load(file_name,'common','-mat');
+    self.common = common;
+end
+
+% populate fields in common 
+req_fields = {'data_channel_names','tf_model_name','tf_data','tf_labels','tf_folder','automate_info','automate_channel_order'};
+for i = 1:length(req_fields)
+    if ~isfield(self.common,req_fields{i})
+        self.common.(req_fields{i}) = [];
+    end
+end
+
+
 % remove mean for all channels that are names
-for i = 1:length(self.data_channel_names)
-    if isempty(self.data_channel_names{i})
+for i = 1:length(self.common.data_channel_names)
+    if isempty(self.common.data_channel_names{i})
         continue
     end
 
-    if strcmp(self.data_channel_names{i},'temperature')
+    if strcmp(self.common.data_channel_names{i},'temperature')
         continue
     end
 
     % check if channel is intracellular 
-    temp = isstrprop(self.data_channel_names{i},'upper');
+    temp = isstrprop(self.common.data_channel_names{i},'upper');
     if any(temp)
         continue
     end
@@ -150,9 +166,9 @@ for i = 1:length(self.data_channel_names)
 end
 
 % update data_channel_names
-for i = 1:length(self.data_channel_names)
-    if ~isempty(self.data_channel_names{i})
-        idx = find(strcmp(self.data_channel_names{i},self.channel_names));
+for i = 1:length(self.common.data_channel_names)
+    if ~isempty(self.common.data_channel_names{i})
+        idx = find(strcmp(self.common.data_channel_names{i},self.channel_names));
 
         if isempty(self.handles)
             continue

@@ -14,7 +14,7 @@ function [spiketimes, st_by_unit] = getSpikesOnThisNerve(self)
 spiketimes = 0*self.putative_spikes(:,self.channel_to_work_with);
 
 try
-	this_nerve_spikes = self.spikes.(self.data_channel_names{self.channel_to_work_with});
+	this_nerve_spikes = self.spikes.(self.common.data_channel_names{self.channel_to_work_with});
 catch
 	return
 end

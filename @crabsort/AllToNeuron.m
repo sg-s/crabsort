@@ -28,11 +28,11 @@ channel = self.channel_to_work_with;
 spiketimes = (find(self.putative_spikes(:,channel)));
 
 % if it's intracellular
-temp = isstrprop(self.data_channel_names{channel},'upper');
+temp = isstrprop(self.common.data_channel_names{channel},'upper');
 if any(temp)
 
 	% intracellular 
-	neuron_name = self.data_channel_names{channel};
+	neuron_name = self.common.data_channel_names{channel};
 	self.spikes.(neuron_name).(neuron_name) = spiketimes;
 else
 

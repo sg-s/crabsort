@@ -19,9 +19,11 @@ temp = get(self.handles.method_control,'String');
 method = temp{method};
 method = str2func(method);
 
-self.handles.popup.Visible = 'on';
-self.handles.popup.String = {'','','','Reducing Dimensions...'};
-drawnow;
+if ~self.automatic
+	self.handles.popup.Visible = 'on';
+	self.handles.popup.String = {'','','','Reducing Dimensions...'};
+	drawnow;
+end
 
 % make sure putative spikes is populated
 if ~any(self.putative_spikes(:,self.channel_to_work_with))
@@ -38,7 +40,7 @@ self.getDataToReduce;
 
 % create an operation manifest BEFORE calling the method so that
 % the method can modify, or add onto the operation. 
-if ~self.automatic && strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
+if self.watch_me && ~self.automatic
 
 	% create a description of the operations we just did 
 	operation = struct;
@@ -47,7 +49,7 @@ if ~self.automatic && strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
 	operation.method = @reduceDimensionsCallback;
 	operation.data = [];
 
-	self.automate_info(self.channel_to_work_with).operation(end+1) = operation;
+	self.common.automate_info(self.channel_to_work_with).operation(end+1) = operation;
 
 end
 

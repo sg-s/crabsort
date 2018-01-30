@@ -12,10 +12,10 @@ function relative_times = measureTimesToIdentifiedSpikes(self,nerves,direction)
 
 
 % augment the data using time from all other sorted spikes
-channels_with_spikes = false(length(self.data_channel_names),1);
+channels_with_spikes = false(length(self.common.data_channel_names),1);
 fn = fieldnames(self.spikes);
-for i = 1:length(self.data_channel_names)
-	if any(strcmp(fn,self.data_channel_names{i})) && any(strcmp(nerves,self.data_channel_names{i}))
+for i = 1:length(self.common.data_channel_names)
+	if any(strcmp(fn,self.common.data_channel_names{i})) && any(strcmp(nerves,self.common.data_channel_names{i}))
 		channels_with_spikes(i) = true;
 	end
 end
@@ -31,7 +31,7 @@ spiketimes = find(self.putative_spikes(:,self.channel_to_work_with));
 
 idx = 0;
 
-for i = 1:length(self.data_channel_names)
+for i = 1:length(self.common.data_channel_names)
 	if ~channels_with_spikes(i)
 		continue
 	end
@@ -41,12 +41,12 @@ for i = 1:length(self.data_channel_names)
 	% for each spike, find the time to the closest
 	% spike in the past and future
 	
-	neuron_name = self.nerve2neuron.(self.data_channel_names{i});
+	neuron_name = self.nerve2neuron.(self.common.data_channel_names{i});
 	if iscell(neuron_name)
 		neuron_name = neuron_name{1};
 	end
 
-	other_neuron_spiketimes = self.spikes.(self.data_channel_names{i}).(neuron_name);
+	other_neuron_spiketimes = self.spikes.(self.common.data_channel_names{i}).(neuron_name);
 
 
 	for j = 1:length(spiketimes)

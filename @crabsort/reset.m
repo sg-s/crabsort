@@ -24,5 +24,5 @@ if nargin < 2
 end
 
 if wipe_all 	
-	self.data_channel_names = {};	
+	self.common.data_channel_names = {};	
 end

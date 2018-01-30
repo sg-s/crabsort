@@ -22,7 +22,7 @@ channel = self.channel_to_work_with;
 % in the automate info
 all_methods = '';
 try
-	all_methods = cellfun(@func2str, {self.automate_info(channel).operation.method},'UniformOutput',false);
+	all_methods = cellfun(@func2str, {self.common.automate_info(channel).operation.method},'UniformOutput',false);
 catch
 end
 assert(~isempty(all_methods),'No methods in automate_info for this channel')
@@ -33,7 +33,7 @@ assert(any(strcmp(all_methods,'reduceDimensionsCallback')),'Automate info does n
 % what was done. otherwise we won't get the correct
 % data slice to train the network on 
 idx = find(strcmp(all_methods,'reduceDimensionsCallback'),1,'first');
-operation = self.automate_info(channel).operation(idx);
+operation = self.common.automate_info(channel).operation(idx);
 % assign all properties
 for l = 1:length(operation.property)
 	p = operation.property{l};
@@ -97,7 +97,7 @@ end
 
 
 % halve the spike prominence and find spikes
-new_spike_prom = self.automate_info(channel).operation(1).value{3};
+new_spike_prom = self.common.automate_info(channel).operation(1).value{3};
 new_spike_prom = new_spike_prom/2;
 
 
@@ -115,13 +115,13 @@ X = [X X2];
 Y = [Y ones(1,size(X2,2))*(max(Y)+1)];
 
 % if it's intracellular
-temp = isstrprop(self.data_channel_names{channel},'upper');
+temp = isstrprop(self.common.data_channel_names{channel},'upper');
 if any(temp)
 
 	% intracellular 
-	default_neuron_name = self.data_channel_names{channel};
+	default_neuron_name = self.common.data_channel_names{channel};
 else
-	default_neuron_name =  self.nerve2neuron.(self.data_channel_names{channel});
+	default_neuron_name =  self.nerve2neuron.(self.common.data_channel_names{channel});
 end
 
 if iscell(default_neuron_name)
@@ -160,13 +160,19 @@ L{end+1} = ['tf_snippet_dim = ' mat2str(size(X,1))];
 L{end+1} = ['tf_N_classes = ' mat2str(max(Y))];
 lineWrite(joinPath(tf_model_dir,'params.py'),L)
 
-waitbar(.2, self.handles.tf_trainbar, 'Switching conda envs...')
-% use condalab to switch to the correct environment 
-conda.setenv(self.pref.tf_env_name)
+waitbar(.2, self.handles.tf_trainbar, 'Testing environment...')
 
-
-% save current dir
 curdir = pwd;
+cd(self.tf_folder)
+[e,o] = system('python test_tf_env.py');
+
+if e
+	% use condalab to switch to the correct environment 
+	% and hope this works
+	disp('Switching conda environment....')
+	conda.setenv(self.pref.tf_env_name)
+end
+
 
 % switch to tf_model_dir
 cd(tf_model_dir)

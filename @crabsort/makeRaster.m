@@ -25,7 +25,7 @@ fn = fieldnames(self.spikes);
 for i = 1:length(fn)
 	this_nerve = fn{i};
 
-	idx = find(strcmp(self.data_channel_names,fn{i}));
+	idx = find(strcmp(self.common.data_channel_names,fn{i}));
 
 	fn2 = fieldnames(self.spikes.(fn{i}));
 	for j = 1:length(fn2)

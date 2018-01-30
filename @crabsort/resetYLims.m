@@ -24,7 +24,7 @@ self.handles.ax(idx).YLim = [-yl yl];
 is_temp = false;
 
 try
-	if strcmp(self.data_channel_names{idx},'temperature')
+	if strcmp(self.common.data_channel_names{idx},'temperature')
 		is_temp = true;
 	end
 catch

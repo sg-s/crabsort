@@ -10,4 +10,4 @@ function updateChannel(self, src, value)
 
 idx = find(self.handles.channel_label_chooser == src);
 
-self.data_channel_names{idx} = src.String{src.Value};
+self.common.data_channel_names{idx} = src.String{src.Value};

@@ -99,5 +99,5 @@ tf_dense_N = 100;
 tf_dropout_rate = 0.4;
 
 % how many steps? how many epochs
-tf_nsteps = 1000
-tf_nepochs = 2
+tf_nsteps = 1000;
+tf_nepochs = 2;

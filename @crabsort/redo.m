@@ -19,9 +19,9 @@ if isempty(self.channel_to_work_with)
 	return
 end
 
-if isfield(self.spikes,self.data_channel_names{self.channel_to_work_with})
+if isfield(self.spikes,self.common.data_channel_names{self.channel_to_work_with})
 	% remove this
-	self.spikes = rmfield(self.spikes,self.data_channel_names{self.channel_to_work_with})
+	self.spikes = rmfield(self.spikes,self.common.data_channel_names{self.channel_to_work_with})
 else
 end
 
@@ -35,12 +35,3 @@ for i = 1:length(N)
 end
 
 self.showSpikes;
-
-% reset the automate_info for this channel
-if length(self.automate_info) < self.channel_to_work_with
-	return
-end
-self.automate_info(self.channel_to_work_with) = [];
-
-% remove this channel from the channel_order
-self.automate_channel_order(self.automate_channel_order == self.channel_to_work_with) = [];

@@ -36,13 +36,8 @@ if any(isnan(V))
     return
 end
 
-if get(self.handles.prom_auto_control,'Value')
-    %guess some nice value
-    mpp = nanstd(V)/2;
-else
-    mpp = get(self.handles.spike_prom_slider,'Value');
-end
 
+mpp = get(self.handles.spike_prom_slider,'Value');
 
 v_cutoff = self.pref.V_cutoff;
 
@@ -95,7 +90,8 @@ if isa(Npeaks,'double')
 end
 
 
-if strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
+
+if self.watch_me && ~self.automatic
 
 
     % update the automate_info
@@ -108,11 +104,11 @@ if strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
     operation.method = @findSpikes;
     operation.data = [];
 
-    self.automate_info(self.channel_to_work_with).operation = operation;
+    self.common.automate_info(self.channel_to_work_with).operation = operation;
 
     % add this to the channel_order, so that automate can traverse the channels in the correct order
-    if ~any(find(self.automate_channel_order == self.channel_to_work_with))
-        self.automate_channel_order(end+1) = self.channel_to_work_with;
+    if ~any(find(self.common.automate_channel_order == self.channel_to_work_with))
+        self.common.automate_channel_order(end+1) = self.channel_to_work_with;
     end
                    
 end

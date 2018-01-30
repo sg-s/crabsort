@@ -122,3 +122,5 @@ self.handles.scroll_bar.Visible = 'on';
 for i = 1:self.n_channels
 	self.handles.spike_marker(i) = plot(self.handles.ax(i),NaN,NaN,'r');
 end
+
+uistack(self.handles.popup,'top')

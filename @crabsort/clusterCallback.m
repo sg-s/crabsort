@@ -20,17 +20,18 @@ temp = get(self.handles.cluster_control,'String');
 cluster_method_handle = temp{cluster_method_handle};
 cluster_method_handle = str2func(cluster_method_handle);
 
-if ~self.automatic && strcmp(self.handles.menu_name(3).Children(3).Checked,'on')
+% append to automate info before we run the method
+% so that the method can modify/add to this if it wants to
 
+if self.watch_me && ~self.automatic
 
     operation = struct;
-
     operation.property = {{'handles','cluster_control','Value'}};
     operation.value = {self.handles.cluster_control.Value};
     operation.method = @clusterCallback;
     operation.data = [];
 
-    self.automate_info(self.channel_to_work_with).operation(end+1) = operation;
+    self.common.automate_info(self.channel_to_work_with).operation(end+1) = operation;
 
 end
 

@@ -34,7 +34,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         R  % this holds the dimensionality reduced data
 
         % this is the list of channel names that you can choose from
-        channel_names = {'???','dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'};
+        channel_names = sort({'???','dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'});
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 
@@ -42,16 +42,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
 
         % for use by automate()
-        automate_info
         automatic = false; % when true, crabsort is running automatically 
         current_operation
-        automate_channel_order
-
-        % for use by TensorFlow
-        tf_folder
-        tf_model_name
-        tf_labels % stores label names
-
 
         % UI
         handles % a structure that handles everything else
@@ -61,7 +53,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % data 
         n_channels
         raw_data
-        data_channel_names
         time
         dt
         channel_ylims
@@ -91,6 +82,13 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % selected for spike shape, timing, etc.)
         data_to_reduce
 
+        % common data to all files in this folder
+        common
+
+        % this propoerty mirrors the checked state of 
+        % the "watch me" menu item
+        watch_me = true;
+
     end
 
     properties (Access = protected)
@@ -106,7 +104,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
     methods
         function self = crabsort(make_gui)
-
 
 
             self.nerve2neuron.lpn = 'LP';
@@ -145,15 +142,10 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             % get the version name and number
             self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) oss 'build_number']))];
             self.version_name = ['crabsort (' self.build_number ')'];
-
-            % link the tensorflow folder
-            self.tf_folder = joinPath(fileparts(fileparts(which(mfilename))),'tensorflow');
-
             
             if make_gui 
                 self.makeGUI;
             end
-
 
             if ~nargout
                 cprintf('red','[WARN] ')
@@ -170,75 +162,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 return
             end
 
-            if ~isempty(self.channel_ylims) && ~isempty(self.channel_ylims(value)) && self.channel_ylims(value) > 0
-                % we have a custom y-lim for this axes --
-                % use it
-                yl = self.channel_ylims(value);
-                self.handles.ax(value).YLim = [-yl yl];
-            end
-
-            if isfield(self.handles,'ax')
-                for i = 1:length(self.handles.ax)
-                    self.handles.ax(i).YColor = 'k';
-                end
-
-                self.handles.ax(value).YColor = 'r';
-
-                % if the name for this channel is unset, disable
-                % everything
-                if length(self.data_channel_names) < self.channel_to_work_with || strcmp(self.data_channel_names{self.channel_to_work_with},'???') || isempty(self.data_channel_names{self.channel_to_work_with})
-                    % disable everything
-                    self.disable(self.handles.spike_detection_panel);
-                    self.disable(self.handles.dim_red_panel);
-                    self.disable(self.handles.cluster_panel);
-    
-
-                else
-                    % enable everything
-                    self.enable(self.handles.spike_detection_panel);
-                    self.enable(self.handles.dim_red_panel);
-                    self.enable(self.handles.cluster_panel);
-
-                    % if it's intracellular
-                    temp = isstrprop(self.data_channel_names{value},'upper');
-                    if any(temp)
-                        new_max = diff(self.handles.ax(value).YLim)/2;
-                        self.handles.prom_ub_control.String = mat2str(new_max);
-                        self.handles.spike_prom_slider.Max = new_max;
-                        self.handles.spike_prom_slider.Value = new_max;
-                    end
-
-                    % if the channel has sorted spikes, enable training
-                    s = self.getSpikesOnThisNerve;
-                    if any(s)
-                        % enable training
-                        self.handles.menu_name(4).Children(4).Enable = 'on';
-                        % do we already have a model trained?
-                        if length(self.tf_model_name) < self.channel_to_work_with  || isempty(self.tf_model_name{self.channel_to_work_with})
-                            self.handles.menu_name(4).Children(4).Text = 'Train network';
-                        else
-                            % we already have a model
-                            self.handles.menu_name(4).Children(4).Text = 'Retrain network';
-                        end
-
-                    else
-                        % disable training
-                        self.handles.menu_name(4).Children(4).Enable = 'off';
-
-                        if length(self.tf_model_name) < self.channel_to_work_with || isempty(self.tf_model_name{self.channel_to_work_with})
-                            % disable prediction
-                            self.handles.menu_name(4).Children(3).Enable = 'off';
-                        else
-                            % we already have a model
-                            self.handles.menu_name(4).Children(3).Enable = 'on';
-                        end
-
-                    end
-
-
-                end
-
-            end
+            self.updateControlsOnChannelChange;
 
             % force a channel_stage update
             self.channel_stage = self.channel_stage;
@@ -292,9 +216,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
                 try
                     set(self.handles.found_spikes(idx),'XData',self.time(self.putative_spikes(:,idx)),'YData',self.raw_data(self.putative_spikes(:,idx),idx));
-
-                    set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.putative_spike_colour,'LineStyle','none')
-
+                    set(self.handles.found_spikes(idx),'Marker','o','Color',self.pref.putative_spike_colour,'LineStyle','none');
                     self.handles.method_control.Enable = 'on';
                 catch
                 end
