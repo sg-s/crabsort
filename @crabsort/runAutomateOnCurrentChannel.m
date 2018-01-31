@@ -27,9 +27,20 @@ for k = 1:length(self.common.automate_info(channel).operation)
 	self.current_operation = k;
 
 	% assign all properties
+	% we have to be careful here because of MATLAB's
+	% poor architecture of popupmenu items 
 	for l = 1:length(operation.property)
-		p = operation.property{l};
-		setfield(self,p{:},operation.value{l});
+		if any(strcmp(operation.property{l},'method_control'))
+			V = find(strcmp(self.handles.method_control.String,operation.value{l}));
+			assert(~isempty(V),'[#444] Fatal error in automate: automate wants to perform a dimensionality reduction method that cant be found any more.')
+			self.handles.method_control.Value = V;
+		elseif  any(strcmp(operation.property{l},'cluster_control'))
+			assert(~isempty(V),'[#445] Fatal error in automate: automate wants to perform a clustering method that cant be found any more.')
+			self.handles.cluster_control.Value = V;
+		else
+			p = operation.property{l};
+			setfield(self,p{:},operation.value{l});
+		end
 	end
 
 	% execute the method

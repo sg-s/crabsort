@@ -26,8 +26,8 @@ cluster_method_handle = str2func(cluster_method_handle);
 if self.watch_me && ~self.automatic
 
     operation = struct;
-    operation.property = {{'handles','cluster_control','Value'}};
-    operation.value = {self.handles.cluster_control.Value};
+    operation.property = {{'cluster_control'}};
+    operation.value = {self.handles.cluster_control.String{self.handles.method_control.Value}};
     operation.method = @clusterCallback;
     operation.data = [];
 
