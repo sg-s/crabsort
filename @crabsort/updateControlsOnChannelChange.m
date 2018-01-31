@@ -31,6 +31,8 @@ self.handles.ax(value).YColor = 'r';
 self.handles.ax(value).LineWidth = 3;
 
 
+% disable allowing automation on this channel
+disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this channel');
 
 % if the name for this channel is unset, disable
 % everything
@@ -56,6 +58,17 @@ else
         self.handles.spike_prom_slider.Value = new_max;
     end
 
+    % if this channel has automate_info
+    % enable automation on this channel 
+
+    if length(self.common.automate_info) >= self.channel_to_work_with && ~isempty(self.common.automate_info(self.channel_to_work_with).operation)
+
+        enableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this channel');
+        enableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Delete automate info for this channel');
+    else
+        disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this channel');
+        disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Delete automate info for this channel');
+    end
 
 
     % if the channel has sorted spikes, enable training

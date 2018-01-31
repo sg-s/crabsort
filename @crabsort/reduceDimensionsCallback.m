@@ -45,7 +45,7 @@ if self.watch_me && ~self.automatic
 	% create a description of the operations we just did 
 	operation = struct;
 	operation.property = {{'handles','spike_shape_control','Value'}, {'handles','time_after_control','Value'}, {'handles','time_after_nerves','String'}, {'handles','time_before_control','Value'}, {'handles','time_before_nerves','String'},{'method_control'}};
-	operation.value = {self.handles.spike_shape_control.Value,   self.handles.time_after_control.Value,        self.handles.time_after_nerves.String,          self.handles.time_before_control.Value,        self.handles.time_after_nerves.String,         self.handles.method_control.String{self.handles.method_control.Value}};
+	operation.value = {self.handles.spike_shape_control.Value,   self.handles.time_after_control.Value,        self.handles.time_after_nerves.String,          self.handles.time_before_control.Value,        self.handles.time_before_nerves.String,         self.handles.method_control.String{self.handles.method_control.Value}};
 	operation.method = @reduceDimensionsCallback;
 	operation.data = [];
 

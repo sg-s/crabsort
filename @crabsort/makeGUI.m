@@ -38,7 +38,7 @@ uimenu(handles.menu_name(2),'Label','Reset current channel','Callback',@self.red
 % view
 handles.menu_name(3) = uimenu('Label','View');
 uimenu(handles.menu_name(3),'Label','Reset zoom','Callback',@self.resetZoom);
-uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace);
+uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,'Enable','off');
 
 handles.menu_name(3) = uimenu('Label','Automate');
 uimenu(handles.menu_name(3),'Label','Watch me','Checked','on','Callback',@self.updateWatchMe);
@@ -48,6 +48,8 @@ uimenu(handles.menu_name(3),'Label','Run on all files...','Callback',@self.autom
 
 uimenu(handles.menu_name(3),'Label','Delete ALL automate info','Callback',@self.deleteAllAutomateInfo,'Separator','on');
 uimenu(handles.menu_name(3),'Label','Delete automate info for this channel','Callback',@self.deleteAllAutomateInfo);
+
+uimenu(handles.menu_name(3),'Label','Show automate info','Callback',@self.showAutomateInfo,'Separator','on');
 
 % tensorflow 
 % handles.menu_name(4) = uimenu('Label','Tensorflow');

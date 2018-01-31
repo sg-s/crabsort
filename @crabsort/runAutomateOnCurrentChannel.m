@@ -35,6 +35,7 @@ for k = 1:length(self.common.automate_info(channel).operation)
 			assert(~isempty(V),'[#444] Fatal error in automate: automate wants to perform a dimensionality reduction method that cant be found any more.')
 			self.handles.method_control.Value = V;
 		elseif  any(strcmp(operation.property{l},'cluster_control'))
+			V = find(strcmp(self.handles.cluster_control.String,operation.value{l}));
 			assert(~isempty(V),'[#445] Fatal error in automate: automate wants to perform a clustering method that cant be found any more.')
 			self.handles.cluster_control.Value = V;
 		else
