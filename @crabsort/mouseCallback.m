@@ -34,5 +34,14 @@ if isempty(this_ax)
 	return
 end
 
-self.channel_to_work_with = this_ax;
+if this_ax == self.channel_to_work_with
+	% still working with same channel, do things based
+	% on the mode we are in manual_override
+	self.modify(p(:,this_ax));
+
+else
+	% switch to new hcannel
+	self.channel_to_work_with = this_ax;
+end
+
 

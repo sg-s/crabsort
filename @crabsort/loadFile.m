@@ -196,5 +196,6 @@ if ~isempty(self.handles)
     self.enable(self.handles.spike_detection_panel);
     self.enable(self.handles.dim_red_panel);
     self.enable(self.handles.cluster_panel);
+    self.disable(self.handles.manual_panel)
 
 end

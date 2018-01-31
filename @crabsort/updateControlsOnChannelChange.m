@@ -86,3 +86,17 @@ else
     % end
 
 end
+
+% reset the manual_override to off
+self.handles.mode_off.Value = 1;
+
+% if this channel has sorted spike, enable the manual override 
+if self.channel_stage(self.channel_to_work_with) > 2
+    self.enable(self.handles.manual_panel)
+
+    % update the neuron names
+    neuron_names = self.nerve2neuron.(self.common.data_channel_names{self.channel_to_work_with});
+    self.handles.new_spike_type.String = neuron_names;
+else
+    self.disable(self.handles.manual_panel)
+end
