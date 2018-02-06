@@ -230,4 +230,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
     end % end general methods
 
+    methods (Static)
+        [accuracy, nsteps] = parseTFOutput(output_string);
+    end % end static methods
+
 end % end classdef

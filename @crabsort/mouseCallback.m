@@ -40,7 +40,7 @@ if this_ax == self.channel_to_work_with
 	self.modify(p(:,this_ax));
 
 else
-	% switch to new hcannel
+	% switch to new channel
 	self.channel_to_work_with = this_ax;
 end
 

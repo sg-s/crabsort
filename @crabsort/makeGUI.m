@@ -54,11 +54,8 @@ uimenu(handles.menu_name(3),'Label','Delete automate info for this channel','Cal
 uimenu(handles.menu_name(3),'Label','Show automate info','Callback',@self.showAutomateInfo,'Separator','on');
 
 % tensorflow 
-% handles.menu_name(4) = uimenu('Label','Tensorflow');
-% uimenu(handles.menu_name(4),'Label','Train network','Callback',@self.train);
-% uimenu(handles.menu_name(4),'Label','Predict','Callback',@self.predict);
-% uimenu(handles.menu_name(4),'Label','Clear TF Data','Callback',@self.clearTFData,'Separator','on');
-% uimenu(handles.menu_name(4),'Label','Delete Neural Network','Callback',@self.deleteTFNetwork,'Separator','on');
+handles.menu_name(4) = uimenu('Label','Tensorflow');
+uimenu(handles.menu_name(4),'Label','Open tensorflow...','Callback',@self.makeTensorFlowGUI);
 
 
 % file I/O panel
