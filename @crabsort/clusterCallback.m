@@ -45,4 +45,6 @@ temp = self.getSpikesOnThisNerve;
 self.putative_spikes(:,self.channel_to_work_with) = temp;
 
 
-
+% hide all the putative spikes
+self.handles.found_spikes(self.channel_to_work_with).XData = NaN;
+self.handles.found_spikes(self.channel_to_work_with).YData = NaN;

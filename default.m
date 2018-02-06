@@ -22,6 +22,8 @@
 %            
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+plot_line_width = .5;
+
 putative_spike_colour = 'm';
 embedded_spike_colour = 'g';
 

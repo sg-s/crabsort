@@ -34,6 +34,8 @@ handles.menu_name(2) = uimenu('Label','Tools');
 
 uimenu(handles.menu_name(2),'Label','Reload preferences','Callback',@self.reloadPreferences);
 uimenu(handles.menu_name(2),'Label','Reset current channel','Callback',@self.redo,'Separator','on');
+uimenu(handles.menu_name(2),'Label','Ignore section','Callback',@self.ignoreSection,'Enable','on','Separator','on');
+uimenu(handles.menu_name(2),'Label','UNignore section','Callback',@self.ignoreSection,'Enable','on','Separator','off');
 
 % view
 handles.menu_name(3) = uimenu('Label','View');
@@ -41,7 +43,7 @@ uimenu(handles.menu_name(3),'Label','Reset zoom','Callback',@self.resetZoom);
 uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,'Enable','off');
 
 handles.menu_name(3) = uimenu('Label','Automate');
-uimenu(handles.menu_name(3),'Label','Watch me','Checked','on','Callback',@self.updateWatchMe);
+uimenu(handles.menu_name(3),'Label','Watch me','Checked','off','Callback',@self.updateWatchMe);
 uimenu(handles.menu_name(3),'Label','Run on this channel','Callback',@self.automate,'Separator','on');
 uimenu(handles.menu_name(3),'Label','Run on this file','Callback',@self.automate,'Separator','off');
 uimenu(handles.menu_name(3),'Label','Run on all files...','Callback',@self.automate);
@@ -115,7 +117,7 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 handles.manual_panel = uibuttongroup(handles.main_fig,'Title','Manual Override','Position',[.8 .92 .195 .07],'FontSize',self.pref.fs,'Visible','off','BackgroundColor',[ 1 1 1]);
 
 handles.mode_new_spike = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 .5 .08 .5], 'Style', 'radiobutton', 'String', '+','FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1]);
-handles.new_spike_type = uicontrol(handles.manual_panel,'units','normalized','Position',[.1 .45 .3 .5], 'Style', 'popupmenu', 'String', {'Choose'},'FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1]);
+handles.new_spike_type = uicontrol(handles.manual_panel,'units','normalized','Position',[.1 .45 .3 .5], 'Style', 'popupmenu', 'String', {'Choose'},'FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1],'Callback',@self.activateAddNewNeuronMode);
 handles.mode_delete_spike = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 0 .5 .5], 'Style', 'radiobutton', 'String', 'Mark as noise','FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1]);
 handles.mode_off = uicontrol(handles.manual_panel,'units','normalized','Position',[.51 .25 .3 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1],'Value',1);
 

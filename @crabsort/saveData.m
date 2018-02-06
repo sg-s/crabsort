@@ -38,9 +38,9 @@ end
 
 try 
 	if exist(file_name,'file') == 2
-	    save(file_name,'crabsort_obj')
+	    savefast(file_name,'crabsort_obj')
 	else
-	    save(file_name,'crabsort_obj')
+	    savefast(file_name,'crabsort_obj')
 	end
 catch err
 	if strcmp(err.identifier,'MATLAB:save:permissionDenied')
@@ -56,4 +56,4 @@ end
 % now save the common items
 common = self.common;
 file_name = joinPath(self.path_name, 'common.crabsort');
-save(file_name,'common')
+savefast(file_name,'common')

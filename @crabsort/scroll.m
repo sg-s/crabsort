@@ -56,21 +56,3 @@ for i = 1:length(self.handles.data)
     self.handles.data(i).XData = self.time(a:z);
     self.handles.data(i).YData = self.raw_data(a:z,i);
 end
-
-% xlim = get(s.handles.ax1,'XLim');
-% if xlim(1) < min(self.time)
-%     xlim(1) = min(self.time);
-% end
-% if xlim(2) > max(self.time)
-%     xlim(2) = max(self.time);
-% end
-% xlim(2) = (floor(xlim(2)/s.pref.deltat))*s.pref.deltat;
-% xlim(1) = (floor(xlim(1)/s.pref.deltat))*s.pref.deltat;
-% ylim(2) = max(V(find(time==xlim(1)):find(time==xlim(2))));
-% ylim(1) = min(V(find(time==xlim(1)):find(time==xlim(2))));
-% yr = 2*std(V(find(time==xlim(1)):find(time==xlim(2))));
-% if yr==0
-%     set(s.handles.ax1,'YLim',[ylim(1)-1 ylim(2)+1]);
-% else
-%     set(s.handles.ax1,'YLim',[ylim(1)-yr ylim(2)+yr]);
-% end

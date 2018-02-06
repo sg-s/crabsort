@@ -93,7 +93,27 @@ assert(length(plugin_to_use) == 1,'[ERR 41] Too many plugins bound to this file 
 
 % load the file
 load_file_handle = str2func(self.installed_plugins(plugin_to_use).name);
-load_file_handle(self);
+
+try
+    load_file_handle(self);
+catch
+    warning('Error opening file')
+    disp(self.file_name)
+    if ~isempty(self.handles)
+        self.handles.popup.Visible = 'off';
+
+        self.enable(self.handles.data_panel);
+        self.enable(self.handles.spike_detection_panel);
+        self.enable(self.handles.dim_red_panel);
+        self.enable(self.handles.cluster_panel);
+        self.disable(self.handles.manual_panel);
+
+        self.handles.main_fig.Name = 'ERROR OPENING FILE';
+
+    end
+
+    return
+end
 
 % update the titlebar with the name of the file we are working with
 

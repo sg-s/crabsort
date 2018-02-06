@@ -40,19 +40,7 @@ for i = 1:length(allfiles)-1
 	self.handles.popup.Visible = 'off';
 	drawnow
 
-
-	for j = self.common.automate_channel_order
-		if isempty(self.common.automate_info(j).operation)
-			continue
-		end
-
-		% switch to the correct channel
-		self.channel_to_work_with = j;
-
-		self.runAutomateOnCurrentChannel;
-	end
-	self.saveData;
-
+	self.runAutomateOnCurrentFile;
 end
 
  

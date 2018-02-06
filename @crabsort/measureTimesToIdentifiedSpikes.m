@@ -10,6 +10,7 @@
 
 function relative_times = measureTimesToIdentifiedSpikes(self,nerves,direction)
 
+assert(~isempty(nerves{1}),'nerves cannot be empty')
 
 % augment the data using time from all other sorted spikes
 channels_with_spikes = false(length(self.common.data_channel_names),1);

@@ -11,7 +11,7 @@
 % created by Srinivas Gorur-Shandilya at 8:58 , 20 November 2015. Contact me at http://srinivas.gs/contact/
 % 
 
-function findSpikes(self,Npeaks,~)
+function findSpikes(self,Npeaks,event)
 
 if nargin < 2
     Npeaks = '';
@@ -43,6 +43,26 @@ v_cutoff = self.pref.V_cutoff;
 
 mpd = ceil(self.pref.minimum_peak_distance/(self.dt*1e3));
 mpw = ceil(self.pref.minimum_peak_width/(self.dt*1e3));
+
+% first, find spikes in current window
+if ~isa(Npeaks,'double')
+    xlim = self.handles.ax(1).XLim;
+    a = find(self.time >= xlim(1), 1, 'first');
+    z = find(self.time <= xlim(2), 1, 'last');
+    V2 = V(a:z);
+    if ~self.handles.spike_sign_control.Value
+        [~,loc] = findpeaks(-V2,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
+    else
+        [~,loc] = findpeaks(V2,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
+    end
+    self.handles.main_fig.Name = [self.file_name ' -- found ' oval(length(loc)) ' spikes in current view'];
+    self.putative_spikes(:,self.channel_to_work_with) = 0;
+    self.putative_spikes(loc+a-1,self.channel_to_work_with) = 1;
+    drawnow
+    if nargin > 2 && strcmp(event.EventName,'ContinuousValueChange')
+        return
+    end
+end
 
 % find peaks and remove spikes beyond v_cutoff
 if ~isa(Npeaks,'double')

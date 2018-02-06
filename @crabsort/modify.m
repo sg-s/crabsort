@@ -24,58 +24,45 @@ yrange = ylimits(2) - ylimits(1);
 p(1) = p(1)/self.dt;
 
 % get the width over which to search for spikes dynamically from the zoom factor
-% search_width = floor((.005*xrange));
+search_width = floor((.005*xrange));
 
 V = self.raw_data(:,channel);
+this_nerve = self.common.data_channel_names{channel};
 
-% if get(self.handles.mode_new_A,'Value') == 1
-%     % snip out a small waveform around the point
-%     if s.pref.invert_V
-%         [~,loc] = min(V(floor(p(1)-search_width:p(1)+search_width)));
-%     else
-%         [~,loc] = max(V(floor(p(1)-search_width:p(1)+search_width)));
-%     end
-%     A = [A; -search_width+loc+floor(p(1))];
+if self.handles.mode_new_spike.Value == 1
+    % snip out a small waveform around the point
 
-% elseif get(s.handles.mode_new_B,'Value')==1
-%     % snip out a small waveform around the point
-%     if s.pref.invert_V
-%         [~,loc] = min(V(floor(p(1)-search_width:p(1)+search_width)));
-%     else
-%         [~,loc] = max(V(floor(p(1)-search_width:p(1)+search_width)));
-%     end
-%     B = [B; -search_width+loc+floor(p(1))];
+    if ~self.handles.spike_sign_control.Value
+        [~,loc] = min(V(floor(p(1)-search_width:p(1)+search_width)));
+    else
+        [~,loc] = max(V(floor(p(1)-search_width:p(1)+search_width)));
+    end
 
-if self.handles.mode_delete_spike.Value == 1
+    new_spike = floor(loc + p(1) - search_width);
+
+    % which neuron are we adding to
+    S = self.handles.new_spike_type.String;
+    if iscell(S)
+        S = S{self.handles.new_spike_type.Value};
+    end
+
+    self.spikes.(this_nerve).(S) = sort([self.spikes.(this_nerve).(S); new_spike]);
+
+elseif self.handles.mode_delete_spike.Value == 1
 
     % get all spikes on this nerve
     [spiketimes, st_by_unit] = self.getSpikesOnThisNerve;
     spiketimes = find(spiketimes);
     % find the closest spike
-    D = (((spiketimes-p(1))/(xrange)).^2  + ((V(spiketimes) - p(2))/(yrange)).^2);
+    D = (((spiketimes-p(1))/(xrange)).^2  + ((V(spiketimes) - p(2))/(5*yrange)).^2);
 
     [~,idx] = min(D);
 
     % go through every neuron on this channel and wipe this spike 
-    this_nerve = self.common.data_channel_names{channel};
     fn = fieldnames(self.spikes.(this_nerve));
     for i = 1:length(fn)
         self.spikes.(this_nerve).(fn{i}) = setdiff(self.spikes.(this_nerve).(fn{i}),spiketimes(idx));
     end
-
-% elseif get(s.handles.mode_A2B,'Value') == 1 
-% % find the closest B spike
-%     dA = (((A-p(1))/(xrange)).^2  + ((V(A) - p(2))/(5*yrange)).^2);
-%     [~,closest_spike] = min(dA);
-%     B = [B; A(closest_spike)];
-%     A(closest_spike) = [];
-
-% elseif get(s.handles.mode_B2A,'Value') == 1
-%     % find the closest B spike
-%     dB = (((B-p(1))/(xrange)).^2  + ((V(B) - p(2))/(5*yrange)).^2);
-%     [~,closest_spike] = min(dB);
-%     A = [A; B(closest_spike)];
-%     B(closest_spike) = [];
 
 end
 

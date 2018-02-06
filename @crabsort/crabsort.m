@@ -87,7 +87,10 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         % this propoerty mirrors the checked state of 
         % the "watch me" menu item
-        watch_me = true;
+        watch_me = false;
+
+        % ignores this section
+        ignore_section
 
     end
 

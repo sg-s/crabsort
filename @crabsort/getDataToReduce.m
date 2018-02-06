@@ -21,7 +21,7 @@ if self.handles.time_before_control.Value
 	if isempty(self.handles.time_before_nerves.String)
 		nerves = fieldnames(self.spikes);
 	else
-		nerves = self.handles.time_after_nerves.String;
+		nerves = self.handles.time_before_nerves.String;
 	end  
 
 	if ~iscell(nerves)
