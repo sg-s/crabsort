@@ -20,6 +20,20 @@ if isfield(self.spikes,(self.common.data_channel_names{self.channel_to_work_with
 	end
 end
 
+% check if there is a tensorflow model for this channel
+% that is accurate enough
+use_tf = false;
+try
+	if max(self.common.tf.metrics(self.channel_to_work_with).accuracy) > self.pref.tf_predict_accuracy
+		use_tf = true;
+	end
+catch
+end
+if use_tf
+	self.predict;
+	return
+end
+
 % go through all the steps in the operation 
 for k = 1:length(self.common.automate_info(channel).operation)
 	operation = self.common.automate_info(channel).operation(k);

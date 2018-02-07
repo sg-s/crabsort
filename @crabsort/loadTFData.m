@@ -11,7 +11,7 @@
 
 function loadTFData(self,~,~)
 
-allfiles = self.handles.tf.available_data.String{self.handles.tf.available_data.Value};
+allfiles = self.handles.tf.available_data.String(self.handles.tf.available_data.Value);
 
 if ~iscell(allfiles)
 	allfiles = {allfiles};
@@ -24,8 +24,9 @@ Y = [];
 
 for i = 1:length(allfiles)
 	[this_X, this_Y] = self.getTFDataForThisFile(allfiles{i});
-	X = [X; this_X];
-	Y = [Y; this_Y];
+
+	X = [X this_X];
+	Y = [Y this_Y];
 
 end
 

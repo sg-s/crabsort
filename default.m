@@ -103,3 +103,12 @@ tf_dropout_rate = 0.4;
 % how many steps? how many epochs
 tf_nsteps = 1000;
 tf_nepochs = 2;
+
+% when should training stop? at what
+% level of accuracy? 
+tf_stop_accuracy = 0.95;
+
+% how accurate should a tensorflow model
+% be so that automate uses it instead of 
+% whatever program is has memorized? 
+tf_predict_accuracy = 0.95;

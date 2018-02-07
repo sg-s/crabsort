@@ -9,12 +9,9 @@
 
 function predict(self,~,~)
 
-tf_model_dir = '';
+nerve_name = self.common.data_channel_names{self.channel_to_work_with};
+tf_model_dir = joinPath(self.path_name,'tensorflow',nerve_name);
 
-try
-	tf_model_dir = joinPath(self.tf_folder,'models',self.tf_model_name{self.channel_to_work_with});
-catch
-end
 
 if isempty(tf_model_dir)
 	error('No neural network associated with this channel.')
@@ -28,7 +25,7 @@ end
 
 
 curdir = pwd;
-cd(self.tf_folder)
+cd(tf_model_dir)
 [e,~] = system('python test_tf_env.py');
 
 if e
@@ -37,7 +34,6 @@ if e
 	disp('Switching conda environment....')
 	conda.setenv(self.pref.tf_env_name)
 end
-cd(curdir)
 
 
 channel = self.channel_to_work_with;
@@ -58,7 +54,42 @@ if  self.channel_stage(channel) < 3
 	end
 
 	self.findSpikes;
+
+	% make sure that the data_reduction panel matches
+	% what was done. otherwise we won't get the correct
+	% data slice to train the network on 
+
+	% there should be a findSpikes and reduceDimensions operation
+	% in the automate info
+	all_methods = '';
+	try
+		all_methods = cellfun(@func2str, {self.common.automate_info(channel).operation.method},'UniformOutput',false);
+	catch
+	end
+	assert(~isempty(all_methods),'No methods in automate_info for this channel')
+	assert(any(strcmp(all_methods,'reduceDimensionsCallback')),'Automate info does not have a reduceDimensionsCallback operation. Sort spikes while "watch me" is checked')
+
+
+	idx = find(strcmp(all_methods,'reduceDimensionsCallback'),1,'first');
+	operation = self.common.automate_info(channel).operation(idx);
+
+	% assign properties for the dim red step
+	for l = 1:length(operation.property)
+		if any(strcmp(operation.property{l},'method_control'))
+			V = find(strcmp(self.handles.method_control.String,operation.value{l}));
+			assert(~isempty(V),'[#445] Fatal error in getTFDataForThisFile: automate wants to perform a dimensionality reduction method that cant be found any more.')
+			self.handles.method_control.Value = V;
+		else
+			p = operation.property{l};
+			setfield(self,p{:},operation.value{l});
+		end
+	end
+
 	self.getDataToReduce;
+
+	self.handles.main_fig.Name = 'Using Tensorflow to classify spikes...';
+	drawnow
+
 
 	% pass through TensorFlow
 	X_test = self.data_to_reduce;
@@ -82,7 +113,7 @@ if  self.channel_stage(channel) < 3
 	% read the predictions 
 	predictions = h5read(joinPath(tf_model_dir,'data.h5'),'/predictions');
 
-	labels = self.tf_labels{channel};
+	labels = self.common.tf.labels{self.channel_to_work_with};
 
 	putative_spikes = find(self.putative_spikes(:,channel));
 	this_nerve = self.common.data_channel_names{channel};
@@ -101,10 +132,19 @@ if  self.channel_stage(channel) < 3
 
 	self.showSpikes;
 
+	% mark it as done
+	self.channel_stage(self.channel_to_work_with) = 3; 
+
+	
 
 
 else
 	% we already have spikes
+	disp('this case not coded #143')
 	keyboard
 end
 
+
+cd(curdir)
+
+self.handles.main_fig.Name = [self.file_name '   DONE!'];

@@ -12,6 +12,9 @@ function train(self,~,~)
 nerve_name = self.handles.tf.channel_picker.String{self.handles.tf.channel_picker.Value};
 tf_model_dir = joinPath(self.path_name,'tensorflow',nerve_name);
 
+self.handles.tf.train_button.String = 'Training...';
+drawnow
+
 curdir = pwd;
 cd(tf_model_dir)
 [e,o] = system('python test_tf_env.py');
@@ -88,7 +91,7 @@ while goon
 
 	drawnow;
 
-	if self.common.tf.metrics(self.channel_to_work_with).accuracy > .95
+	if self.common.tf.metrics(self.channel_to_work_with).accuracy > self.pref.tf_stop_accuracy
 		goon = false;
 	end
 
@@ -101,3 +104,6 @@ end
 cd(curdir)
 
 self.handles.tf.fig.Name = ['Training finished. Accuracy = ' oval(max(self.common.tf.metrics(self.channel_to_work_with).accuracy))];
+
+self.handles.tf.train_button.Value = 0;
+self.handles.tf.train_button.String = 'TRAIN';
