@@ -18,10 +18,9 @@ idx = self.channel_to_work_with;
 % compute the extremum of the channel
 e = max(abs(self.raw_data(:,idx)));
 
-yl = (src.Value)*e;
-self.handles.ax(idx).YLim = [-yl yl];
-
 is_temp = false;
+
+is_intracellular = any(isstrprop(self.common.data_channel_names{idx},'upper'));
 
 try
 	if strcmp(self.common.data_channel_names{idx},'temperature')
@@ -31,11 +30,20 @@ catch
 end
 
 
-if ~is_temp
+if ~is_temp && ~is_intracellular
+	% normal extracellular recording
+	yl = (src.Value)*e;
+	self.handles.ax(idx).YLim = [-yl yl];
 	self.handles.ax(idx).YTickMode = 'auto';
 	self.handles.ax(idx).YTick = self.handles.ax(idx).YTick(self.handles.ax(idx).YTick>=0);
-else
+elseif is_temp
 	self.handles.ax(idx).YLim = [10 35];
+	self.handles.ax(idx).YTickMode = 'auto';
+elseif is_intracellular
+	% find the mean
+	m = mean(self.raw_data(:,idx));
+	yl = (src.Value)*100;
+	self.handles.ax(idx).YLim = [m-yl m+yl];
 	self.handles.ax(idx).YTickMode = 'auto';
 end
 

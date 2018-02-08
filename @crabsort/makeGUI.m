@@ -13,8 +13,14 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
+
+f = get(0, 'Children');
+for i = 1:length(f)
+	assert(~strcmp(f(i).Tag,'crabsort_main_window'),'Crabsort window already exists, refusing to make a new GUI while that is open. Close all existing crabsort windows first.')
+end
+
 % make the master figure, and the axes to plot the voltage traces
-handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w');
+handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w','Tag','crabsort_main_window');
 temp =  findall(handles.main_fig,'Type','uitoggletool','-or','Type','uipushtool');
 delete(temp([1:5 7:8 11:15]))
 

@@ -11,6 +11,10 @@
 
 function loadTFData(self,~,~)
 
+self.handles.tf.fig.Name = 'Loading data...';
+disable(self.handles.tf.fig)
+drawnow
+
 allfiles = self.handles.tf.available_data.String(self.handles.tf.available_data.Value);
 
 if ~iscell(allfiles)
@@ -78,9 +82,10 @@ for i = length(fn):-1:1
 		L{i} = [fn{i} ' = ' mat2str(self.pref.(fn{i}))];
 	end
 end
-L{end+1} = ['tf_model_dir = "' tf_model_dir '"'];
 L{end+1} = ['tf_snippet_dim = ' mat2str(size(X,1))];
 L{end+1} = ['tf_N_classes = ' mat2str(max(Y))];
 lineWrite(joinPath(tf_model_dir,'params.py'),L)
 
-
+self.handles.tf.fig.Name = 'Done loading data. Click "TRAIN" to begin.';
+enable(self.handles.tf.fig)
+drawnow

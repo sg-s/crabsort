@@ -20,11 +20,11 @@ value = self.channel_to_work_with;
 % highlight the currently chosen channel
 for i = 1:length(self.handles.ax)
     self.handles.ax(i).YColor = 'k';
-    self.handles.ax(i).LineWidth = 1;
+    self.handles.channel_label_chooser(i).ForegroundColor = [0 0 0];
 end
 self.handles.ax(value).YColor = 'r';
-self.handles.ax(value).LineWidth = 3;
-
+self.handles.channel_label_chooser(value).ForegroundColor = [1 0 0];
+self.handles.ax(value).GridColor = [.15 .15 .15];
 
 % disable allowing automation on this channel
 disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this channel');
@@ -37,18 +37,18 @@ if length(self.common.data_channel_names) < self.channel_to_work_with || strcmp(
     % disable everything and force user to name the channel
 
     % disable everything
-    self.disable(self.handles.spike_detection_panel);
-    self.disable(self.handles.dim_red_panel);
-    self.disable(self.handles.cluster_panel);
+    disable(self.handles.spike_detection_panel);
+    disable(self.handles.dim_red_panel);
+    disable(self.handles.cluster_panel);
 
 
 else
     % this channel is named
     % lots of possibilities here 
     % enable everything
-    self.enable(self.handles.spike_detection_panel);
-    self.enable(self.handles.dim_red_panel);
-    self.enable(self.handles.cluster_panel);
+    enable(self.handles.spike_detection_panel);
+    enable(self.handles.dim_red_panel);
+    enable(self.handles.cluster_panel);
 
     % if it's intracellular
     temp = isstrprop(self.common.data_channel_names{value},'upper');
@@ -106,35 +106,6 @@ else
         end
 
     end
-
-
-    % if the channel has sorted spikes, enable training
-    % s = self.getSpikesOnThisNerve;
-    % if any(s)
-    %     % enable training
-    %     self.handles.menu_name(4).Children(4).Enable = 'on';
-    %     % do we already have a model trained?
-    %     if length(self.common.tf_model_name) < self.channel_to_work_with  || isempty(self.common.tf_model_name{self.channel_to_work_with})
-    %         self.handles.menu_name(4).Children(4).Text = 'Train network';
-    %     else
-    %         % we already have a model
-    %         self.handles.menu_name(4).Children(4).Text = 'Retrain network';
-    %     end
-
-    % else
-    %     % disable training
-    %     self.handles.menu_name(4).Children(4).Enable = 'off';
-
-    %     if length(self.common.tf_model_name) < self.channel_to_work_with || isempty(self.common.tf_model_name{self.channel_to_work_with})
-    %         % disable prediction
-    %         self.handles.menu_name(4).Children(3).Enable = 'off';
-    %     else
-    %         % we already have a model
-    %         self.handles.menu_name(4).Children(3).Enable = 'on';
-    %     end
-
-    % end
-
 end
 
 % reset the manual_override to off
@@ -142,7 +113,7 @@ self.handles.mode_off.Value = 1;
 
 % if this channel has sorted spike, enable the manual override 
 if self.channel_stage(self.channel_to_work_with) > 2
-    self.enable(self.handles.manual_panel)
+    enable(self.handles.manual_panel)
 
     % update the neuron names if extracellular
     temp = isstrprop(self.common.data_channel_names{self.channel_to_work_with},'upper');
@@ -154,5 +125,5 @@ if self.channel_stage(self.channel_to_work_with) > 2
     end
     
 else
-    self.disable(self.handles.manual_panel)
+    disable(self.handles.manual_panel)
 end

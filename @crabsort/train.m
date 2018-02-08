@@ -13,11 +13,13 @@ nerve_name = self.handles.tf.channel_picker.String{self.handles.tf.channel_picke
 tf_model_dir = joinPath(self.path_name,'tensorflow',nerve_name);
 
 self.handles.tf.train_button.String = 'Training...';
+disable(self.handles.tf.fig)
+enable(self.handles.tf.train_button)
 drawnow
 
 curdir = pwd;
 cd(tf_model_dir)
-[e,o] = system('python test_tf_env.py');
+[e,~] = system('python test_tf_env.py');
 
 if e
 	% use condalab to switch to the correct environment 
@@ -29,6 +31,10 @@ end
 
 goon = true;
 
+if ~isfield(self.common.tf,'metrics')
+	self.common.tf.metrics.accuracy = [];
+	self.common.tf.metrics.nsteps = [];
+end
 
 if length(self.common.tf.metrics) < self.channel_to_work_with
 	self.common.tf.metrics(self.channel_to_work_with).accuracy = [];
@@ -107,3 +113,4 @@ self.handles.tf.fig.Name = ['Training finished. Accuracy = ' oval(max(self.commo
 
 self.handles.tf.train_button.Value = 0;
 self.handles.tf.train_button.String = 'TRAIN';
+enable(self.handles.tf.unload_data)

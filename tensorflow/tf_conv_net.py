@@ -126,7 +126,7 @@ def train():
 
   # Create the Estimator
   mnist_classifier = tf.estimator.Estimator(
-      model_fn=cnn_model_fn, model_dir=p.tf_model_dir)
+      model_fn=cnn_model_fn, model_dir='.')
 
 
   # Train the model
@@ -169,7 +169,7 @@ def predict():
 
   # Create the Estimator
   mnist_classifier = tf.estimator.Estimator(
-      model_fn=cnn_model_fn, model_dir=p.tf_model_dir)
+      model_fn=cnn_model_fn, model_dir='.')
 
 
   # Evaluate the model and print results

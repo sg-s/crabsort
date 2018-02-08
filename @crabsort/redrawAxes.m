@@ -70,6 +70,7 @@ for i = 1:self.n_channels
 
 		if i > 1 && i < self.n_channels
 			self.handles.ax(i).XColor = 'w';
+			self.handles.ax(i).XTick = [];
 		end
 
 		if i == self.n_channels && i > 1

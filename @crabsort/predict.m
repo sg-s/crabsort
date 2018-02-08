@@ -55,94 +55,97 @@ if  self.channel_stage(channel) < 3
 
 	self.findSpikes;
 
-	% make sure that the data_reduction panel matches
-	% what was done. otherwise we won't get the correct
-	% data slice to train the network on 
-
-	% there should be a findSpikes and reduceDimensions operation
-	% in the automate info
-	all_methods = '';
-	try
-		all_methods = cellfun(@func2str, {self.common.automate_info(channel).operation.method},'UniformOutput',false);
-	catch
-	end
-	assert(~isempty(all_methods),'No methods in automate_info for this channel')
-	assert(any(strcmp(all_methods,'reduceDimensionsCallback')),'Automate info does not have a reduceDimensionsCallback operation. Sort spikes while "watch me" is checked')
-
-
-	idx = find(strcmp(all_methods,'reduceDimensionsCallback'),1,'first');
-	operation = self.common.automate_info(channel).operation(idx);
-
-	% assign properties for the dim red step
-	for l = 1:length(operation.property)
-		if any(strcmp(operation.property{l},'method_control'))
-			V = find(strcmp(self.handles.method_control.String,operation.value{l}));
-			assert(~isempty(V),'[#445] Fatal error in getTFDataForThisFile: automate wants to perform a dimensionality reduction method that cant be found any more.')
-			self.handles.method_control.Value = V;
-		else
-			p = operation.property{l};
-			setfield(self,p{:},operation.value{l});
-		end
-	end
-
-	self.getDataToReduce;
-
-	self.handles.main_fig.Name = 'Using Tensorflow to classify spikes...';
-	drawnow
-
-
-	% pass through TensorFlow
-	X_test = self.data_to_reduce;
-	Y_test = ones(size(self.data_to_reduce,2),1);
-
-
-	savefast(joinPath(tf_model_dir,'spike_data.mat'),'X_test','Y_test')
-
-
-	curdir = pwd;
-	cd(tf_model_dir)
-
-	[e,o] = system(['python -c ' char(39) 'import tf_conv_net; tf_conv_net.predict()' char(39)]);
-	cd(curdir)
-	if e
-		disp(o)
-		error('Something went wrong when making predictions using the neural network')
-	end
-	
-
-	% read the predictions 
-	predictions = h5read(joinPath(tf_model_dir,'data.h5'),'/predictions');
-
-	labels = self.common.tf.labels{self.channel_to_work_with};
-
-	putative_spikes = find(self.putative_spikes(:,channel));
-	this_nerve = self.common.data_channel_names{channel};
-
-	for i = 1:length(labels)
-		if strcmp(labels{i},'Noise')
-			continue
-		end
-		these_spikes = putative_spikes(predictions == i);
-		self.spikes.(this_nerve).(labels{i}) = these_spikes;
-	end
-
-
-	self.handles.found_spikes(self.channel_to_work_with).XData = [];
-	self.handles.found_spikes(self.channel_to_work_with).YData = [];
-
-	self.showSpikes;
-
-	% mark it as done
-	self.channel_stage(self.channel_to_work_with) = 3; 
-
-	
-
-
 else
-	% we already have spikes
-	disp('this case not coded #143')
-	keyboard
+	already_sorted_spikes = self.getSpikesOnThisNerve;
+	assert(any(already_sorted_spikes),'No putative spikes, no already sorted spikes. #354')
+
+	self.putative_spikes(:,self.channel_to_work_with) = already_sorted_spikes;
+
 end
+
+% make sure that the data_reduction panel matches
+% what was done. otherwise we won't get the correct
+% data slice to train the network on 
+
+% there should be a findSpikes and reduceDimensions operation
+% in the automate info
+all_methods = '';
+try
+	all_methods = cellfun(@func2str, {self.common.automate_info(channel).operation.method},'UniformOutput',false);
+catch
+end
+assert(~isempty(all_methods),'No methods in automate_info for this channel')
+assert(any(strcmp(all_methods,'reduceDimensionsCallback')),'Automate info does not have a reduceDimensionsCallback operation. Sort spikes while "watch me" is checked')
+
+
+idx = find(strcmp(all_methods,'reduceDimensionsCallback'),1,'first');
+operation = self.common.automate_info(channel).operation(idx);
+
+% assign properties for the dim red step
+for l = 1:length(operation.property)
+	if any(strcmp(operation.property{l},'method_control'))
+		V = find(strcmp(self.handles.method_control.String,operation.value{l}));
+		assert(~isempty(V),'[#445] Fatal error in getTFDataForThisFile: automate wants to perform a dimensionality reduction method that cant be found any more.')
+		self.handles.method_control.Value = V;
+	else
+		p = operation.property{l};
+		setfield(self,p{:},operation.value{l});
+	end
+end
+
+self.getDataToReduce;
+
+self.handles.main_fig.Name = 'Using Tensorflow to classify spikes...';
+drawnow
+
+
+% pass through TensorFlow
+X_test = self.data_to_reduce;
+Y_test = ones(1,size(self.data_to_reduce,2));
+
+
+savefast(joinPath(tf_model_dir,'spike_data.mat'),'X_test','Y_test')
+
+
+
+
+curdir = pwd;
+cd(tf_model_dir)
+
+[e,o] = system(['python -c ' char(39) 'import tf_conv_net; tf_conv_net.predict()' char(39)]);
+cd(curdir)
+if e
+	disp(o)
+	error('Something went wrong when making predictions using the neural network')
+end
+
+
+% read the predictions 
+predictions = h5read(joinPath(tf_model_dir,'data.h5'),'/predictions');
+
+labels = self.common.tf.labels{self.channel_to_work_with};
+
+putative_spikes = find(self.putative_spikes(:,channel));
+this_nerve = self.common.data_channel_names{channel};
+
+for i = 1:length(labels)
+	if strcmp(labels{i},'Noise')
+		continue
+	end
+	these_spikes = putative_spikes(predictions == i);
+	self.spikes.(this_nerve).(labels{i}) = these_spikes;
+end
+
+
+self.handles.found_spikes(self.channel_to_work_with).XData = [];
+self.handles.found_spikes(self.channel_to_work_with).YData = [];
+
+self.showSpikes;
+
+% mark it as done
+self.channel_stage(self.channel_to_work_with) = 3; 
+
+
 
 
 cd(curdir)

@@ -102,11 +102,11 @@ catch
     if ~isempty(self.handles)
         self.handles.popup.Visible = 'off';
 
-        self.enable(self.handles.data_panel);
-        self.enable(self.handles.spike_detection_panel);
-        self.enable(self.handles.dim_red_panel);
-        self.enable(self.handles.cluster_panel);
-        self.disable(self.handles.manual_panel);
+        enable(self.handles.data_panel);
+        enable(self.handles.spike_detection_panel);
+        enable(self.handles.dim_red_panel);
+        enable(self.handles.cluster_panel);
+        disable(self.handles.manual_panel);
 
         self.handles.main_fig.Name = 'ERROR OPENING FILE';
 
@@ -212,10 +212,15 @@ end
 if ~isempty(self.handles)
     self.handles.popup.Visible = 'off';
 
-    self.enable(self.handles.data_panel);
-    self.enable(self.handles.spike_detection_panel);
-    self.enable(self.handles.dim_red_panel);
-    self.enable(self.handles.cluster_panel);
-    self.disable(self.handles.manual_panel)
+    enable(self.handles.data_panel);
+    enable(self.handles.spike_detection_panel);
+    enable(self.handles.dim_red_panel);
+    enable(self.handles.cluster_panel);
+    disable(self.handles.manual_panel)
 
 end
+
+% round the sampling time to the nearest microsecond
+% this fixes bugs that arise from dt being slightly different
+% and causing a different frame size when calling getSnippets
+self.dt = round(self.dt*1e6)/1e6;
