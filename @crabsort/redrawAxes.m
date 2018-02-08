@@ -116,22 +116,21 @@ if ~no_destroy
 		self.handles.ax(i).YTick = self.handles.ax(i).YTick(self.handles.ax(i).YTick>=0);
 
 	end
-end
 
-% make the channel labels 
-for i = 1:self.n_channels
-	y = bottom_plot + spacing*(i-1);
-	self.handles.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y-.01 .05 .06],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel,'FontSize',self.pref.fs);
-end
 
-for i = 1:self.n_channels
-	y = bottom_plot + spacing*(i-1) + .05;
-	self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.builtin_channel_names{i},'BackgroundColor',[1 1 1]);
-end
+	% make the channel labels 
+	for i = 1:self.n_channels
+		y = bottom_plot + spacing*(i-1);
+		self.handles.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y-.01 .05 .06],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel,'FontSize',self.pref.fs);
+	end
 
-% make a slider to futz with the YLims for each channel 
+	for i = 1:self.n_channels
+		y = bottom_plot + spacing*(i-1) + .05;
+		self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.builtin_channel_names{i},'BackgroundColor',[1 1 1]);
+	end
 
-if ~no_destroy
+
+	% make a slider to futz with the YLims for each channel 
 	self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.06 self.handles.ax(1).Position(2) .02 self.handles.ax(end).Position(2)],'Style', 'slider', 'Max',1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
 
 	try    % R2013b and older

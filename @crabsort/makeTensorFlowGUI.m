@@ -8,6 +8,8 @@
 
 function makeTensorFlowGUI(self,~,~)
 
+self.saveData;
+
 self.handles.tf.fig = figure('Units','normalized','position',[0.2 0.2 .6 .6], 'Toolbar','figure','Menubar','none','Name','crabsort::Tensorflow','NumberTitle','off','IntegerHandle','off','Color','w');
 
 S = self.common.data_channel_names(~(cellfun(@isempty,self.common.data_channel_names)));

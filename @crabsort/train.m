@@ -114,3 +114,5 @@ self.handles.tf.fig.Name = ['Training finished. Accuracy = ' oval(max(self.commo
 self.handles.tf.train_button.Value = 0;
 self.handles.tf.train_button.String = 'TRAIN';
 enable(self.handles.tf.unload_data)
+enable(self.handles.tf.accuracy_ax)
+enable(self.handles.tf.pca_ax)
