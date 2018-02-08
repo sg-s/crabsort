@@ -58,7 +58,7 @@ minimum_peak_prominence = 'auto'; 	% minimum peak prominence for peak detection.
 minimum_peak_width = 0; 
 
 % minimum distance b/w spikes, in ms	
-minimum_peak_distance = 0; 
+minimum_peak_distance = .5; 
 
 % ignore peaks beyond this limit 
 V_cutoff = -Inf; 						

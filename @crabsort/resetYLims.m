@@ -41,7 +41,9 @@ elseif is_temp
 	self.handles.ax(idx).YTickMode = 'auto';
 elseif is_intracellular
 	% find the mean
-	m = mean(self.raw_data(:,idx));
+	a = find(self.time > self.handles.ax(idx).XLim(1),1,'first');
+	z = find(self.time > self.handles.ax(idx).XLim(2),1,'first');
+	m = mean(self.raw_data(a:z,idx));
 	yl = (src.Value)*100;
 	self.handles.ax(idx).YLim = [m-yl m+yl];
 	self.handles.ax(idx).YTickMode = 'auto';

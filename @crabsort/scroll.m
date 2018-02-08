@@ -56,3 +56,19 @@ for i = 1:length(self.handles.data)
     self.handles.data(i).XData = self.time(a:z);
     self.handles.data(i).YData = self.raw_data(a:z,i);
 end
+
+% if the current channel is intracellular, futz with the YLims to keep things in view
+if isempty(self.channel_to_work_with)
+    return
+end
+
+is_intracellular = any(isstrprop(self.common.data_channel_names{self.channel_to_work_with},'upper'));
+
+if is_intracellular
+    a = find(self.time > self.handles.ax(self.channel_to_work_with).XLim(1),1,'first');
+    z = find(self.time > self.handles.ax(self.channel_to_work_with).XLim(2),1,'first');
+    m = mean(self.raw_data(a:z,self.channel_to_work_with));
+    yl = (self.handles.ylim_slider.Value)*100;
+    self.handles.ax(self.channel_to_work_with).YLim = [m-yl m+yl];
+
+end
