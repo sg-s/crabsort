@@ -57,7 +57,9 @@ if  self.channel_stage(channel) < 3
 
 else
 	already_sorted_spikes = self.getSpikesOnThisNerve;
-	assert(any(already_sorted_spikes),'No putative spikes, no already sorted spikes. #354')
+	if ~any(already_sorted_spikes)
+		return
+	end
 
 	self.putative_spikes(:,self.channel_to_work_with) = already_sorted_spikes;
 
