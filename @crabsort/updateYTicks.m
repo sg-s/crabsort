@@ -11,7 +11,7 @@ function updateYTicks(self,channel)
 
 
 if strcmp(self.common.data_channel_names{channel},'temperature')
-    self.handles.ax(channel).YLim = [10 35];
+    self.handles.ax(channel).YLim = [5 35];
     self.handles.ax(channel).YTickMode = 'auto';
 
     return

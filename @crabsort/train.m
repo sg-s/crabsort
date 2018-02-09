@@ -76,6 +76,15 @@ while goon
 	if e
 		cd(curdir)
 		disp(o)
+
+		% re-enable everything
+		self.handles.tf.fig.Name = 'Training aborted. Something went wrong';
+		self.handles.tf.train_button.Value = 0;
+		self.handles.tf.train_button.String = 'TRAIN';
+		enable(self.handles.tf.unload_data)
+		enable(self.handles.tf.accuracy_ax)
+		enable(self.handles.tf.pca_ax)
+
 		error('Something went wrong when making predictions using the neural network')
 	end
 

@@ -17,6 +17,9 @@ drawnow
 
 allfiles = self.handles.tf.available_data.String(self.handles.tf.available_data.Value);
 
+nerve_name = self.handles.tf.channel_picker.String{self.handles.tf.channel_picker.Value};
+channel = find(strcmp(self.common.data_channel_names,nerve_name));
+
 if ~iscell(allfiles)
 	allfiles = {allfiles};
 end
@@ -34,11 +37,26 @@ for i = 1:length(allfiles)
 
 end
 
+% normalize -- this is tricky
+% if we normalize simply by dividing by the max,
+% we get swamped by outliers
+% we can still get swamped by outliers if we divide by
+% the std. one solution is to "remember" the scale
+% and use it always 
+try
+	mean_peak = self.common.tf.mean_peak(channel);
+catch
+	mean_peak = mean(max(X(:,Y==1)));
+	self.common.tf.mean_peak(channel) = mean_peak;
+end
+X = X/mean_peak;
+
 % split evenly into test and training groups
 X_train = X(:,1:2:end);
 X_test = X(:,2:2:end);
 Y_train = Y(:,1:2:end);
 Y_test = Y(:,2:2:end);
+
 
 self.common.tf.X = X_test;
 self.common.tf.Y = Y_test;
@@ -86,6 +104,7 @@ L{end+1} = ['tf_snippet_dim = ' mat2str(size(X,1))];
 L{end+1} = ['tf_N_classes = ' mat2str(max(Y))];
 lineWrite(joinPath(tf_model_dir,'params.py'),L)
 
-self.handles.tf.fig.Name = 'Done loading data. Click "TRAIN" to begin.';
+self.handles.tf.fig.Name = ['Loaded dataset with ' mat2str(size(X,2)) ' points. Click "TRAIN" to begin.'];
 enable(self.handles.tf.fig)
+figure(self.handles.tf.fig)
 drawnow

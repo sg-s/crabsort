@@ -103,13 +103,12 @@ drawnow
 X_test = self.data_to_reduce;
 Y_test = ones(1,size(self.data_to_reduce,2));
 
+% normalize
+X_test = X_test/self.common.tf.mean_peak(channel);
 
 savefast(joinPath(tf_model_dir,'spike_data.mat'),'X_test','Y_test')
 
 
-
-
-curdir = pwd;
 cd(tf_model_dir)
 
 [e,o] = system(['python -c ' char(39) 'import tf_conv_net; tf_conv_net.predict()' char(39)]);
@@ -151,3 +150,6 @@ self.channel_stage(self.channel_to_work_with) = 3;
 cd(curdir)
 
 self.handles.main_fig.Name = [self.file_name '   DONE!'];
+
+% no putative spikes
+self.putative_spikes(:,self.channel_to_work_with) = 0;

@@ -37,7 +37,7 @@ if ~is_temp && ~is_intracellular
 	self.handles.ax(idx).YTickMode = 'auto';
 	self.handles.ax(idx).YTick = self.handles.ax(idx).YTick(self.handles.ax(idx).YTick>=0);
 elseif is_temp
-	self.handles.ax(idx).YLim = [10 35];
+	self.handles.ax(idx).YLim = [5 35];
 	self.handles.ax(idx).YTickMode = 'auto';
 elseif is_intracellular
 	% find the mean

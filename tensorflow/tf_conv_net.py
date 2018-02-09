@@ -125,7 +125,7 @@ def train():
 
 
   # Create the Estimator
-  mnist_classifier = tf.estimator.Estimator(
+  spike_classifier = tf.estimator.Estimator(
       model_fn=cnn_model_fn, model_dir='.')
 
 
@@ -136,7 +136,7 @@ def train():
       batch_size=100,
       num_epochs=None,
       shuffle=True)
-  mnist_classifier.train(
+  spike_classifier.train(
       input_fn=train_input_fn,
       steps=p.tf_nsteps)
 
@@ -146,7 +146,7 @@ def train():
       y=eval_labels,
       num_epochs=1,
       shuffle=False)
-  eval_results = mnist_classifier.evaluate(input_fn=eval_input_fn)
+  eval_results = spike_classifier.evaluate(input_fn=eval_input_fn)
   print(eval_results)
 
 
@@ -168,7 +168,7 @@ def predict():
 
 
   # Create the Estimator
-  mnist_classifier = tf.estimator.Estimator(
+  spike_classifier = tf.estimator.Estimator(
       model_fn=cnn_model_fn, model_dir='.')
 
 
@@ -178,17 +178,17 @@ def predict():
       y=eval_labels,
       num_epochs=1,
       shuffle=False)
-  eval_results = mnist_classifier.evaluate(input_fn=eval_input_fn)
+  eval_results = spike_classifier.evaluate(input_fn=eval_input_fn)
   print(eval_results)
 
   # make predictions 
-  eval_results = mnist_classifier.predict(input_fn=eval_input_fn)
+  eval_results = spike_classifier.predict(input_fn=eval_input_fn)
 
   s = eval_data.shape
   predictions = np.zeros(s[0])
 
   c = 0
-  eval_results = mnist_classifier.predict(input_fn=eval_input_fn)
+  eval_results = spike_classifier.predict(input_fn=eval_input_fn)
   for result in eval_results:
     predictions[c] = result['classes']
     c = c + 1
