@@ -30,7 +30,11 @@ for i = 1:length(allfiles)
 			continue
 		end
    	else
-		if length(spikes.(channel).(self.nerve2neuron.(channel))) < 30
+   		neuron_name = self.nerve2neuron.(channel);
+   		if iscell(neuron_name) && length(neuron_name) > 1
+   			neuron_name = neuron_name{1};
+   		end
+		if length(spikes.(channel).(neuron_name)) < 30
 			continue
 		end
 	end

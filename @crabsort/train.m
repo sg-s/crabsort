@@ -9,12 +9,17 @@
 
 function train(self,~,~)
 
+
+
 nerve_name = self.handles.tf.channel_picker.String{self.handles.tf.channel_picker.Value};
+channel = find(strcmp(self.common.data_channel_names,nerve_name));
 tf_model_dir = joinPath(self.path_name,'tensorflow',nerve_name);
 
 self.handles.tf.train_button.String = 'Training...';
 disable(self.handles.tf.fig)
 enable(self.handles.tf.train_button)
+enable(self.handles.tf.accuracy_ax)
+enable(self.handles.tf.pca_ax)
 drawnow
 
 curdir = pwd;
@@ -36,9 +41,9 @@ if ~isfield(self.common.tf,'metrics')
 	self.common.tf.metrics.nsteps = [];
 end
 
-if length(self.common.tf.metrics) < self.channel_to_work_with
-	self.common.tf.metrics(self.channel_to_work_with).accuracy = [];
-	self.common.tf.metrics(self.channel_to_work_with).nsteps = [];
+if length(self.common.tf.metrics) < channel
+	self.common.tf.metrics(channel).accuracy = [];
+	self.common.tf.metrics(channel).nsteps = [];
 end
 
 while goon
@@ -59,12 +64,12 @@ while goon
 	[accuracy, nsteps] = crabsort.parseTFOutput(o);
 
 	if ~isfield(self.common.tf,'metrics')
-		self.common.tf.metrics(self.channel_to_work_with).accuracy = [];
-		self.common.tf.metrics(self.channel_to_work_with).nsteps = [];
+		self.common.tf.metrics(channel).accuracy = [];
+		self.common.tf.metrics(channel).nsteps = [];
 	end
 
-	self.common.tf.metrics(self.channel_to_work_with).accuracy = [self.common.tf.metrics(self.channel_to_work_with).accuracy accuracy];
-	self.common.tf.metrics(self.channel_to_work_with).nsteps = [self.common.tf.metrics(self.channel_to_work_with).nsteps nsteps];
+	self.common.tf.metrics(channel).accuracy = [self.common.tf.metrics(channel).accuracy accuracy];
+	self.common.tf.metrics(channel).nsteps = [self.common.tf.metrics(channel).nsteps nsteps];
 
 	% now use it to make predictions so we can update the plot 
 	[e,o] = system(['python -c ' char(39) 'import tf_conv_net; tf_conv_net.predict()' char(39)]);
@@ -90,14 +95,15 @@ while goon
 		self.handles.tf.pca_plot(i).CData(~these_correct,1) = 1;
 	end
 
-	self.handles.tf.accuracy_plot.XData = self.common.tf.metrics(self.channel_to_work_with).nsteps;
-	self.handles.tf.accuracy_plot.YData = self.common.tf.metrics(self.channel_to_work_with).accuracy;
+	self.handles.tf.accuracy_plot.XData = self.common.tf.metrics(channel).nsteps;
+	self.handles.tf.accuracy_ax.XLim = [0 max(self.common.tf.metrics(channel).nsteps)];
+	self.handles.tf.accuracy_plot.YData = 1 - self.common.tf.metrics(channel).accuracy;
 
 
 
 	drawnow;
 
-	if self.common.tf.metrics(self.channel_to_work_with).accuracy > self.pref.tf_stop_accuracy
+	if self.common.tf.metrics(channel).accuracy > self.pref.tf_stop_accuracy
 		goon = false;
 	end
 
@@ -109,7 +115,7 @@ end
 
 cd(curdir)
 
-self.handles.tf.fig.Name = ['Training finished. Accuracy = ' oval(max(self.common.tf.metrics(self.channel_to_work_with).accuracy))];
+self.handles.tf.fig.Name = ['Training finished. Accuracy = ' oval(max(self.common.tf.metrics(channel).accuracy))];
 
 self.handles.tf.train_button.Value = 0;
 self.handles.tf.train_button.String = 'TRAIN';

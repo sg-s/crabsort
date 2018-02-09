@@ -49,6 +49,14 @@ else
 		self.handles = rmfield(self.handles,'channel_names');
 	end
 
+	% destroy the "recording" indicators 
+	if isfield(self.handles,'recording')
+		for i = 1:length(self.handles.recording)
+			delete(self.handles.recording(i));
+		end
+		self.handles = rmfield(self.handles,'recording');
+	end
+
 end
 
 
@@ -126,7 +134,10 @@ if ~no_destroy
 
 	for i = 1:self.n_channels
 		y = bottom_plot + spacing*(i-1) + .05;
-		self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.builtin_channel_names{i},'BackgroundColor',[1 1 1]);
+		self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.builtin_channel_names{i},'BackgroundColor',[1 1 1],'FontSize',self.pref.fs);
+
+		y = bottom_plot + spacing*(i-1) + .075;
+		self.handles.recording(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.015 y .045 .02],'Style', 'text', 'String', 'REC','BackgroundColor',[1 0 0],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','off');
 	end
 
 

@@ -81,4 +81,7 @@ max_value = max(relative_times(~isinf(relative_times)));
 
 relative_times(relative_times > cutoff) = max_value;
 
-relative_times = relative_times/max_value;
+try
+	relative_times = relative_times/max_value;
+catch
+end

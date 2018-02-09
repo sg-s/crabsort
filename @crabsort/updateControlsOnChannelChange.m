@@ -21,6 +21,7 @@ value = self.channel_to_work_with;
 for i = 1:length(self.handles.ax)
     self.handles.ax(i).YColor = 'k';
     self.handles.channel_label_chooser(i).ForegroundColor = [0 0 0];
+    self.handles.recording(i).Visible = 'off';
 end
 self.handles.ax(value).YColor = 'r';
 self.handles.channel_label_chooser(value).ForegroundColor = [1 0 0];
@@ -82,6 +83,7 @@ else
             if strcmp(m(i).Text,'Watch me')
                 m(i).Checked = 'off';
                 self.watch_me = false;
+                self.handles.recording(value).Visible = 'off';
             end
         end
     else
@@ -99,6 +101,7 @@ else
             for i = 1:length(m)
                 if strcmp(m(i).Text,'Watch me')
                     m(i).Checked = 'on';
+                    self.handles.recording(value).Visible = 'on';
                     self.watch_me = true;
                 end
             end

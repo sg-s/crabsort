@@ -40,9 +40,14 @@ self.handles.tf.pca_ax.YTick = [];
 self.handles.tf.accuracy_ax = axes(self.handles.tf.fig,'Units','normalized','Position',[.4 .1 .4 .2]);
 hold(self.handles.tf.accuracy_ax,'on')
 xlabel(self.handles.tf.accuracy_ax,'nsteps')
-ylabel(self.handles.tf.accuracy_ax,'Accuracy')
-self.handles.tf.accuracy_ax.YLim = [0 1];
+ylabel(self.handles.tf.accuracy_ax,'1 - Accuracy')
+self.handles.tf.accuracy_ax.YScale = 'log';
+self.handles.tf.accuracy_ax.YLim = [1e-3 1];
+self.handles.tf.accuracy_ax.YTick = [1e-3 1e-2 1e-1 1]
+self.handles.tf.accuracy_ax.YGrid = 'on';
 self.handles.tf.accuracy_plot = plot(self.handles.tf.accuracy_ax,NaN,NaN,'ko-','LineWidth',2);
 
 
 self.handles.tf.train_button = uicontrol(self.handles.tf.fig,'Style','togglebutton','String','TRAIN','units','normalized','Position',[.9 .01 .08 .07],'FontSize',self.pref.fs,'Callback',@self.train);
+
+prettyFig;
