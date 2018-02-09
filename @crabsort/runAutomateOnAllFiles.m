@@ -34,13 +34,41 @@ self.automatic = true;
 for i = 1:length(allfiles)-1
 	self.reset(false);
 
-	self.file_name = allfiles{i};
-	self.loadFile;
-
-	self.handles.popup.Visible = 'off';
-	drawnow
-
-	self.runAutomateOnCurrentFile;
+	% check if there are spikes for every channel we have
+	must_load = false;
+	if exist(joinPath(self.path_name, [allfiles{i} '.crabsort']),'file') == 2
+		load(joinPath(self.path_name, [allfiles{i} '.crabsort']),'-mat');
+		clear spikes
+		spikes = crabsort_obj.spikes;
+		for j = 1:length(self.common.automate_info)
+			if ~isempty(self.common.automate_info(j).operation)
+				this_nerve = self.common.data_channel_names{j};
+				if ~isfield(spikes,this_nerve)
+					must_load = true;
+					continue
+				else
+					fn = fieldnames(spikes.(this_nerve));
+					for k = 1:length(fn)
+						if isempty(spikes.(this_nerve).(fn{k}))
+							must_load = true;
+						end
+					end
+				end
+			end
+		end
+		clear crabsort_obj
+	else
+		must_load = true;
+	end
+	if must_load
+		self.file_name = allfiles{i};
+		self.loadFile;
+		self.handles.popup.Visible = 'off';
+		drawnow
+		self.runAutomateOnCurrentFile;
+	else
+		% disp(['Skipping ' allfiles{i}])
+	end
 end
 
  
