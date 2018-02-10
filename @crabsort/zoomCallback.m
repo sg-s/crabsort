@@ -16,6 +16,9 @@ for i = 1:length(self.handles.ax)
 		continue
 	end
 
-	self.handles.ax(i).XLim = self.handles.ax(idx).XLim;
+	try
+		self.handles.ax(i).XLim = self.handles.ax(idx).XLim;
+	catch
+	end
 
 end 

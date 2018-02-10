@@ -18,9 +18,12 @@ value = self.channel_to_work_with;
 
 % highlight the currently chosen channel
 for i = 1:length(self.handles.ax)
-    self.handles.ax(i).YColor = 'k';
-    self.handles.channel_label_chooser(i).ForegroundColor = [0 0 0];
-    self.handles.recording(i).Visible = 'off';
+    try
+        self.handles.ax(i).YColor = 'k';
+        self.handles.channel_label_chooser(i).ForegroundColor = [0 0 0];
+        self.handles.recording(i).Visible = 'off';
+    catch
+    end
 
 end
 self.handles.ax(value).YColor = 'r';

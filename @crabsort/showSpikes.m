@@ -22,6 +22,10 @@ for i = 1:length(fn)
 	idx = find(strcmp(self.common.data_channel_names,fn{i}));
 
 
+	if strcmp(self.common.show_hide_channels{idx},'off')
+		continue
+	end
+
 	fn2 = fieldnames(self.spikes.(fn{i}));
 	for j = 1:length(fn2)
 		this_neuron = fn2{j};
