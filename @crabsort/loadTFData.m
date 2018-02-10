@@ -77,6 +77,7 @@ if exist(joinPath(self.path_name,'tensorflow'),'dir') ~=7
 end
 
 nerve_name = self.handles.tf.channel_picker.String{self.handles.tf.channel_picker.Value};
+channel = find(strcmp(self.common.data_channel_names,nerve_name));
 
 tf_model_dir = joinPath(self.path_name,'tensorflow',nerve_name);
 
@@ -103,6 +104,11 @@ end
 L{end+1} = ['tf_snippet_dim = ' mat2str(size(X,1))];
 L{end+1} = ['tf_N_classes = ' mat2str(max(Y))];
 lineWrite(joinPath(tf_model_dir,'params.py'),L)
+
+% hide all the putative spikes
+self.handles.found_spikes(channel).XData = NaN;
+self.handles.found_spikes(channel).YData = NaN;
+
 
 self.handles.tf.fig.Name = ['Loaded dataset with ' mat2str(size(X,2)) ' points. Click "TRAIN" to begin.'];
 enable(self.handles.tf.fig)

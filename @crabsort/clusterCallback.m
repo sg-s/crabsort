@@ -15,6 +15,8 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
+channel = self.channel_to_work_with;
+
 cluster_method_handle = (get(self.handles.cluster_control,'Value'));
 temp = get(self.handles.cluster_control,'String');
 cluster_method_handle = temp{cluster_method_handle};
@@ -31,20 +33,25 @@ if self.watch_me && ~self.automatic
     operation.method = @clusterCallback;
     operation.data = [];
 
-    self.common.automate_info(self.channel_to_work_with).operation(end+1) = operation;
+    self.common.automate_info(channel).operation(end+1) = operation;
 
 end
 
 
 cluster_method_handle(self);
-self.channel_stage(self.channel_to_work_with) = 3; 
+self.channel_stage(channel) = 3; 
  
 self.showSpikes;
 
 temp = self.getSpikesOnThisNerve;
-self.putative_spikes(:,self.channel_to_work_with) = temp;
+self.putative_spikes(:,channel) = temp;
 
 
 % hide all the putative spikes
-self.handles.found_spikes(self.channel_to_work_with).XData = NaN;
-self.handles.found_spikes(self.channel_to_work_with).YData = NaN;
+self.handles.found_spikes(channel).XData = NaN;
+self.handles.found_spikes(channel).YData = NaN;
+
+if self.watch_me && ~self.automatic
+	% show that we have automate info, if we do
+	self.handles.has_automate(channel).Visible = 'on';
+end

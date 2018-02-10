@@ -115,13 +115,6 @@ catch
     return
 end
 
-% update the titlebar with the name of the file we are working with
-
-if ~isempty(self.handles)
-    self.handles.main_fig.Name = self.file_name;
-    self.redrawAxes;
-end
-
 
 % set the channel_stages
 self.channel_stage = zeros(size(self.raw_data,2),1);
@@ -164,6 +157,13 @@ for i = 1:length(req_fields)
         self.common.(req_fields{i}) = [];
     end
 end
+
+% update the titlebar with the name of the file we are working with
+if ~isempty(self.handles)
+    self.handles.main_fig.Name = self.file_name;
+    self.redrawAxes;
+end
+
 
 
 % remove mean for all channels that are names

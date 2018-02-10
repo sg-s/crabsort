@@ -23,6 +23,11 @@ end
 if isfield(self.handles,'ax') && length(self.handles.ax) == self.n_channels
 	% no need to redraw axes
 	no_destroy = true;
+
+	% remove all the automate info
+	for i = 1:self.n_channels
+		self.handles.has_automate(i).Visible = 'off';
+	end
 else
 	no_destroy = false;
 	% destroy it all
@@ -137,12 +142,15 @@ if ~no_destroy
 		self.handles.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.builtin_channel_names{i},'BackgroundColor',[1 1 1],'FontSize',self.pref.fs);
 
 		y = bottom_plot + spacing*(i-1) + .075;
-		self.handles.recording(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.015 y .045 .02],'Style', 'text', 'String', 'REC','BackgroundColor',[1 0 0],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','off');
+		self.handles.recording(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .03 .02],'Style', 'text', 'String', 'REC','BackgroundColor',[1 0 0],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','off');
+
+
+		self.handles.has_automate(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.05 y .01 .02],'Style', 'text', 'String', 'A','BackgroundColor',[0 0.5 0],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','off');
 	end
 
 
 	% make a slider to futz with the YLims for each channel 
-	self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.06 self.handles.ax(1).Position(2) .02 self.handles.ax(end).Position(2)],'Style', 'slider', 'Max',1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
+	self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.06 self.handles.ax(1).Position(2) .02 self.handles.ax(end).Position(2)+self.handles.ax(end).Position(4)/2],'Style', 'slider', 'Max',1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
 
 	try    % R2013b and older
 	   addlistener(self.handles.ylim_slider,'ActionEvent',@self.resetYLims);
@@ -161,6 +169,16 @@ self.handles.scroll_bar.Visible = 'on';
 
 for i = 1:self.n_channels
 	self.handles.spike_marker(i) = plot(self.handles.ax(i),NaN,NaN,'r');
+
+	% if a channel has automate info, mark it as such
+	try
+		operation = self.common.automate_info(i).operation;
+		if length(operation) > 2
+			self.handles.has_automate(i).Visible = 'on';
+		end
+	catch
+	end
+
 end
 
 uistack(self.handles.popup,'top')

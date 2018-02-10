@@ -77,7 +77,7 @@ uicontrol(handles.data_panel,'units','normalized','Position',[.75 .2 .2 .6],'Sty
 % spike detection panel
 handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[.135 .92 .2 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 
-handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.85 .65 .1 .4],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider,'Enable','off');
+handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.85 .6 .1 .4],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider,'Enable','off');
 handles.spike_prom_slider = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .63 .8 .25],'Style','Slider','Min',0,'Max',1,'Value',.5,'Callback',@self.findSpikes,'Enable','off');
 try    % R2013b and older
    addlistener(handles.spike_prom_slider,'ActionEvent',@self.findSpikes);
