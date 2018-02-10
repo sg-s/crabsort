@@ -2,7 +2,6 @@
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/sg-s/crabsort.svg)]()
 
-![](https://user-images.githubusercontent.com/6005346/35454557-80c6ac9c-029c-11e8-881b-246e0d992307.gif)
 
 `crabsort` is a framework written in MATLAB to help you sort spikes from multi-channel extracellular recordings. It is 
 
@@ -12,6 +11,28 @@
 4. **Bring-your-own-algorithm** `crabsort` splits up the spike sorting problem into two steps: dimensionality reduction and clustering. Every algorithm in either step is written as a plugin, and you can write your and drop it in, with *zero* modifications to the core code. For example, `crabsort` can use the amazing [mutli-core t-SNE algorithm](https://github.com/DmitryUlyanov/Multicore-TSNE) to embed spike shapes in two dimensions with great alacrity. 
 5. **Fully-automated** `crabsort` offers powerful automation features, and is full script-able. Fully automated luxury gay space crabsort for the win.
 6. **Tensorflow-powered** `crabsort` can use [tensorflow](https://www.tensorflow.org/), Google's scarily powerful deep learning toolbox, to learn from sorted data and sort new data automatically. 
+
+## Features
+
+### Real-time live spike detection using peak prominence 
+
+![](https://user-images.githubusercontent.com/6005346/36066160-3e672d94-0e73-11e8-917e-2838e574955d.gif)
+
+Find spikes with a given prominence, and see the spikes you get live for a chosen prominence. Immediate, live detection works no matter how big your dataset is. 
+
+### Customize the features of the spike you care about 
+
+### Use the best dimensionality reduction algorithm for the task
+
+### Interactive clustering in 2D
+
+### Manual correction 
+
+### Multi-pass sorting 
+
+### Automate all the things
+
+### Machine learning built-in 
 
 ## Installation
 
