@@ -181,7 +181,6 @@ end
 % update the titlebar with the name of the file we are working with
 if ~isempty(self.handles)
     self.handles.main_fig.Name = self.file_name;
-    self.redrawAxes(false);
 end
 
 
@@ -202,7 +201,6 @@ if ~isempty(self.handles)
     enable(self.handles.dim_red_panel);
     enable(self.handles.cluster_panel);
     disable(self.handles.manual_panel)
-
 end
 
 % round the sampling time to the nearest microsecond
@@ -225,7 +223,7 @@ catch
 end
 
 for i = self.n_channels:-1:1
-    if isempty(self.common.data_channel_names{i})
+    if isempty(self.common.data_channel_names) || isempty(self.common.data_channel_names{i})
         S = self.builtin_channel_names{i};
     else
         S = [self.builtin_channel_names{i} '/' self.common.data_channel_names{i}];
@@ -233,4 +231,8 @@ for i = self.n_channels:-1:1
 
     uimenu(self.handles.menu_name(5),'Label',S,'Callback',@self.showHideChannels,'Checked',self.common.show_hide_channels{i});
 
+end
+
+if ~isempty(self.handles)
+    self.redrawAxes(false);
 end

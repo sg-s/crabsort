@@ -94,7 +94,7 @@ for i = 1:self.n_channels
 
 
 	% make the channel labels 
-	if ~isempty(self.common.data_channel_names{i})
+	if ~isempty(self.common.data_channel_names) && ~isempty(self.common.data_channel_names{i})
 		V = find(strcmp(self.channel_names,self.common.data_channel_names{i}));
 	else
 		V = 1;
