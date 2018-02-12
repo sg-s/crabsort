@@ -11,9 +11,6 @@ function runAutomateOnCurrentChannel(self)
 
 
 channel = self.channel_to_work_with;
-if isempty(channel)
-	return
-end
 
 % check if this channel is already done
 if isfield(self.spikes,(self.common.data_channel_names{self.channel_to_work_with}))

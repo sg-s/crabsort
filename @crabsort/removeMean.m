@@ -11,17 +11,11 @@ function removeMean(self, channel)
 
 self.raw_data(:,channel) = self.raw_data(:,channel) - mean(self.raw_data(:,channel));
 
-if isempty(self.handles) 
-	return
-end
-if ~isfield(self.handles,'data')
+if isempty(self.handles)
 	return
 end
 
-% update the YData if need be
-if ~strcmp(class(self.handles.data(channel)),'matlab.graphics.chart.primitive.Line')
-	return
-end
+% update the YData
 a = find(self.time >= self.handles.data(channel).XData(1),1,'first');
 z = find(self.time <= self.handles.data(channel).XData(end),1,'last');
 self.handles.data(channel).YData = self.raw_data(a:z,channel);

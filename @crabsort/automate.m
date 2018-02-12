@@ -24,27 +24,8 @@ switch src.Text
 case 'Run on this channel'
 	self.runAutomateOnCurrentChannel;
 case 'Run on this file'
-
-	% make sure that every channel that 
-	% automate is going to run on is visible
-	if any(strcmp(self.common.show_hide_channels(self.common.automate_channel_order),'off'))
-		for i = self.common.automate_channel_order
-			self.common.show_hide_channels{i} = 'on';
-		end
-		self.redrawAxes(true);
-		self.showSpikes;
-	end
 	self.runAutomateOnCurrentFile;
 case 'Run on all files...'
-	% only show the channels that 
-	% automate is going to run on
-	if any(strcmp(self.common.show_hide_channels(self.common.automate_channel_order),'off'))
-		for i = self.common.automate_channel_order
-			self.common.show_hide_channels{i} = 'on';
-		end
-		self.redrawAxes(true);
-		self.showSpikes;
-	end
 	self.runAutomateOnAllFiles;
 otherwise
 	self.automatic = false;

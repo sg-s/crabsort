@@ -20,16 +20,13 @@ end
 
 % figure out which plot is being clicked on 
 p = NaN(2,length(self.handles.ax));
-ylims = NaN(2,length(self.handles.ax));
 for i = 1:length(self.handles.ax)
-	try
-		temp = get(self.handles.ax(i),'CurrentPoint');
-		p(:,i) = temp(1,1:2);
-		ylims(:,i) = self.handles.ax(i).YLim;
-	catch
-	end
+	temp = get(self.handles.ax(i),'CurrentPoint');
+	p(:,i) = temp(1,1:2);
 end
 	
+ylims = [self.handles.ax.YLim];
+ylims = reshape(ylims,2,length(self.handles.ax));
 
 this_ax =  find(p(2,:) > ylims(1,:) & p(2,:) < ylims(2,:));
 

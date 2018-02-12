@@ -158,6 +158,14 @@ for i = 1:length(req_fields)
     end
 end
 
+% update the titlebar with the name of the file we are working with
+if ~isempty(self.handles)
+    self.handles.main_fig.Name = self.file_name;
+    self.redrawAxes;
+end
+
+
+
 % remove mean for all channels that are names
 for i = 1:length(self.common.data_channel_names)
     if isempty(self.common.data_channel_names{i})
@@ -177,13 +185,21 @@ for i = 1:length(self.common.data_channel_names)
     self.removeMean(i);
 end
 
+% update data_channel_names
+for i = 1:length(self.common.data_channel_names)
+    if ~isempty(self.common.data_channel_names{i})
+        idx = find(strcmp(self.common.data_channel_names{i},self.channel_names));
 
-% update the titlebar with the name of the file we are working with
-if ~isempty(self.handles)
-    self.handles.main_fig.Name = self.file_name;
+        if isempty(self.handles)
+            continue
+        end
+
+        self.handles.channel_label_chooser(i).Value = idx;
+
+        self.updateYTicks(i);
+
+    end
 end
-
-
 
 % make a putative_spikes matrix
 self.putative_spikes = 0*self.raw_data;
@@ -201,38 +217,10 @@ if ~isempty(self.handles)
     enable(self.handles.dim_red_panel);
     enable(self.handles.cluster_panel);
     disable(self.handles.manual_panel)
+
 end
 
 % round the sampling time to the nearest microsecond
 % this fixes bugs that arise from dt being slightly different
 % and causing a different frame size when calling getSnippets
 self.dt = round(self.dt*1e6)/1e6;
-
-% update the channels menu to indicate the channels
-% first nuke all the old name
-
-delete(self.handles.menu_name(5).Children)
-
-% do we already have some preference for which channels to hide?
-try
-    show_hide_channels = self.common.show_hide_channels;
-catch
-    for i = 1:self.n_channels
-        self.common.show_hide_channels{i} = 'on';
-    end
-end
-
-for i = self.n_channels:-1:1
-    if isempty(self.common.data_channel_names) || isempty(self.common.data_channel_names{i})
-        S = self.builtin_channel_names{i};
-    else
-        S = [self.builtin_channel_names{i} '/' self.common.data_channel_names{i}];
-    end
-
-    uimenu(self.handles.menu_name(5),'Label',S,'Callback',@self.showHideChannels,'Checked',self.common.show_hide_channels{i});
-
-end
-
-if ~isempty(self.handles)
-    self.redrawAxes(false);
-end

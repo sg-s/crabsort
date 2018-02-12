@@ -46,7 +46,7 @@ mpw = ceil(self.pref.minimum_peak_width/(self.dt*1e3));
 
 % first, find spikes in current window
 if ~isa(Npeaks,'double')
-    xlim = self.handles.ax(self.channel_to_work_with).XLim;
+    xlim = self.handles.ax(1).XLim;
     a = find(self.time >= xlim(1), 1, 'first');
     z = find(self.time <= xlim(2), 1, 'last');
     V2 = V(a:z);

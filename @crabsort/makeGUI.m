@@ -63,10 +63,6 @@ uimenu(handles.menu_name(3),'Label','Show automate info','Callback',@self.showAu
 handles.menu_name(4) = uimenu('Label','Tensorflow');
 uimenu(handles.menu_name(4),'Label','Open tensorflow...','Callback',@self.makeTensorFlowGUI);
 
-% channels (show and hide)
-handles.menu_name(5) = uimenu('Label','Channels');
-
-
 
 % file I/O panel
 handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .12 .07],'BackgroundColor',[1 1 1],'FontSize',self.pref.fs);

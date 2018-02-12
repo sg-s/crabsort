@@ -12,9 +12,7 @@ if ~isfield(self.handles,'ax')
     return
 end
 
-first_plot = find(strcmp(self.common.show_hide_channels,'on'),1,'first');
-
-xlimits = get(self.handles.ax(first_plot),'XLim');
+xlimits = get(self.handles.ax(1),'XLim');
 xrange = (xlimits(2) - xlimits(1));
 
 if self.handles.scroll_bar == src
@@ -54,11 +52,9 @@ a = find(self.time >= newlim(1), 1, 'first');
 z = find(self.time <= newlim(2), 1, 'last');
 
 for i = 1:length(self.handles.data)
-    if strcmp(self.common.show_hide_channels{i},'on')
-        self.handles.ax(i).XLim = newlim;
-        self.handles.data(i).XData = self.time(a:z);
-        self.handles.data(i).YData = self.raw_data(a:z,i);
-    end
+    self.handles.ax(i).XLim = newlim;
+    self.handles.data(i).XData = self.time(a:z);
+    self.handles.data(i).YData = self.raw_data(a:z,i);
 end
 
 % if the current channel is intracellular, futz with the YLims to keep things in view
