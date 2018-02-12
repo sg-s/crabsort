@@ -2,7 +2,6 @@
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/sg-s/crabsort.svg)]()
 
-![](https://user-images.githubusercontent.com/6005346/35454557-80c6ac9c-029c-11e8-881b-246e0d992307.gif)
 
 `crabsort` is a framework written in MATLAB to help you sort spikes from multi-channel extracellular recordings. It is 
 
@@ -12,6 +11,46 @@
 4. **Bring-your-own-algorithm** `crabsort` splits up the spike sorting problem into two steps: dimensionality reduction and clustering. Every algorithm in either step is written as a plugin, and you can write your and drop it in, with *zero* modifications to the core code. For example, `crabsort` can use the amazing [mutli-core t-SNE algorithm](https://github.com/DmitryUlyanov/Multicore-TSNE) to embed spike shapes in two dimensions with great alacrity. 
 5. **Fully-automated** `crabsort` offers powerful automation features, and is full script-able. Fully automated luxury gay space crabsort for the win.
 6. **Tensorflow-powered** `crabsort` can use [tensorflow](https://www.tensorflow.org/), Google's scarily powerful deep learning toolbox, to learn from sorted data and sort new data automatically. 
+
+## Features
+
+### Real-time live spike detection using peak prominence 
+
+![](https://user-images.githubusercontent.com/6005346/36066160-3e672d94-0e73-11e8-917e-2838e574955d.gif)
+
+Find spikes with a given prominence, and see the spikes you get live for a chosen prominence. Immediate, live detection works no matter how big your dataset is. 
+
+### Customize the features of the spike you care about 
+
+Some spikes can be sorted using just the spike shape. Others need information on other spikes in other channels. Choose what's best for the problem, and `crabsort` will remember this on a per-channel basis and automatically use the right features.
+
+### Use the best dimensionality reduction algorithm for the task
+
+![](https://user-images.githubusercontent.com/6005346/36075850-5865b922-0f22-11e8-82bc-dbcae7cda8c7.png)
+
+Use principal components, which is fast but not very powerful. Or use t-SNE, which can segment data far more effectively. `crabsort` uses a [multi-core implementation of t-SNE](https://github.com/sg-s/Multicore-TSNE) which is **much** faster than anything else out there. 
+
+### Interactive clustering in 2D
+
+### Manual correction 
+
+![](https://user-images.githubusercontent.com/6005346/36075988-5bd2f6fe-0f24-11e8-9703-76b5c46ff341.gif)
+
+One-click manual override allows you to add or remove spikes at whim. 
+
+### Multi-pass sorting 
+
+The spike-sorting problem too hard to solve in one pass? No problem -- make multiple passes through the same data, using arbitrary combinations of dimensionality reduction and clustering algorithms. 
+
+### Automate all the things
+
+`crabsort` can watch -- and reproduce -- every action you make on novel data. So sorting a massive dataset can be as simple as performing some actions once, on one file, and asking `crabsort` to repeat it for every file. No programming required. 
+
+### Machine learning built-in 
+
+|  |  |
+| --- | --- | 
+| ![](https://www.tensorflow.org/_static/images/tensorflow/logo.png) | `crabsort` can use Google's powerful tensorflow library to train models and to use it to predict and classify spikes in new data. `crabsort` ships with a convolutional neural network that seems to work well for spikes. 
 
 ## Installation
 
@@ -84,12 +123,6 @@ pip install h5py
 source activate mctsne
 pip install h5py
 ``` 
-
-## Limitations and Scope
-
-* `crabsort` is a tweaked version of an [earlier spikesorting package](https://github.com/sg-s/spikesort) that I wrote to sort spikes in extracellular recordings of *Drosophila* olfactory neurons. The changes I made here are specific to crabs and to the STG. 
-* Currently, only `.ABF` and `.SMR` files are supported, though `crabsort`'s plugin architecture makes adding support for a new file format trivial. 
-* No support for manually adding or removing spikes. 
 
 ## Architecture
 
