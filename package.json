@@ -1,0 +1,9 @@
+{
+  "name": "crabsort",
+  "description": "automated spike sorting of extracellular data",
+  "author": "Srinivas Gorur-Shandilya",
+  "license": "GPL",
+  "dependencies": {
+    "name1" : "git://github.com/sg-s/srinivas.gs_mtools.git#d026431a45348b50608c510f42edd91c6094e9dd"
+  }
+}
