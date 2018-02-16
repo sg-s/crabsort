@@ -6,7 +6,7 @@
 %
 % callback when channel_label_picker is used
 
-function updateChannel(self, src, value)
+function updateChannel(self, src, ~)
 
 if self.verbosity > 5
     cprintf('green','\n[INFO] ')
@@ -37,4 +37,10 @@ else
 
 	self.channel_to_work_with = idx;
 	self.removeMean(idx);
+end
+
+
+if strcmp(self.common.data_channel_names{idx},'temperature')
+	self.handles.ax.ax(idx).YLim = [5 35];
+	self.handles.ax.ax(idx).YTickMode = 'auto';
 end

@@ -6,23 +6,23 @@
 %
 % zoom callback
 
-function zoomCallback(self,src,event)
+function zoomCallback(self,~,event)
 
 if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
 end
 
-idx = find(self.handles.ax == event.Axes);
+idx = find(self.handles.ax.ax == event.Axes);
 
 % change the XLim of all the other axes to match this
-for i = 1:length(self.handles.ax)
+for i = 1:length(self.handles.ax.ax)
 	if i == idx
 		continue
 	end
 
 	try
-		self.handles.ax(i).XLim = self.handles.ax(idx).XLim;
+		self.handles.ax.ax(i).XLim = self.handles.ax.ax(idx).XLim;
 	catch
 	end
 

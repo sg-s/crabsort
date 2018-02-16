@@ -242,3 +242,14 @@ end
 self.redrawAxes;
 
 self.showSpikes;
+
+% try to rescale the temperature channel correctly
+try
+    for i = 1:self.n_channels
+        if strcmp(self.common.data_channel_names{i},'temperature')
+            self.handles.ax.ax(i).YLim = [5 35];
+            self.handles.ax.ax(i).YTickMode = 'auto';
+        end
+    end
+catch
+end

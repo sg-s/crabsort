@@ -26,12 +26,11 @@ is_temp = false;
 
 is_intracellular = any(isstrprop(self.common.data_channel_names{idx},'upper'));
 
-try
-	if strcmp(self.common.data_channel_names{idx},'temperature')
-		is_temp = true;
-	end
-catch
+
+if strcmp(self.common.data_channel_names{idx},'temperature')
+	is_temp = true;
 end
+
 
 
 if ~is_temp && ~is_intracellular

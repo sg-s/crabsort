@@ -13,6 +13,10 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called'])
 end
 
+if strcmp(self.common.data_channel_names{channel},'temperature')
+	return
+end
+
 
 self.raw_data(:,channel) = self.raw_data(:,channel) - mean(self.raw_data(:,channel));
 
