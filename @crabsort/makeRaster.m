@@ -25,6 +25,9 @@ L = {};
 
 fn = fieldnames(self.spikes);
 
+% use this color matrix
+c = [];
+C = lines;
 
 for i = 1:length(fn)
 	this_nerve = fn{i};
@@ -37,8 +40,12 @@ for i = 1:length(fn)
 
 		spiketimes{end+1} = self.spikes.(fn{i}).(fn2{j});
 		L{end+1} = [fn{i} '/' fn2{j}];
+
+		c(end + 1,:) = C(idx,:);
 	end
 end
+
+
 
 % NaN-pad to make all the things the same size 
 N = max(cellfun(@(x) length(x), spiketimes));
@@ -50,8 +57,9 @@ for i = 1:length(spiketimes)
 	end
 end
 
-raster(spiketimes{:},'deltat',self.dt);
+raster(spiketimes{:},'deltat',self.dt,'Color',c);
 
 set(gca,'YTick',(1:length(L)) - .5,'YTickLabel',L)
+xlabel(gca,'Time (s)')
 
 prettyFig();
