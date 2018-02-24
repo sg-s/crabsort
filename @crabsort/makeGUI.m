@@ -108,7 +108,7 @@ handles.time_before_nerves = uicontrol(handles.dim_red_panel,'Style','edit','Str
 all_plugin_names = {self.installed_plugins.name};
 dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));
 
-handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.61 .04 .34 .9],'Callback',@self.reduceDimensionsCallback,'FontSize',20);
+handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.61 .04 .34 .9],'Callback',@self.reduceDimensionsCallback,'FontSize',self.pref.fs);
 
 
 
@@ -118,20 +118,20 @@ handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.645 .92 .1
 all_plugin_names = {self.installed_plugins.name};
 cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'cluster')));
 
-handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'FontSize',20);
+handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'FontSize',self.pref.fs);
 
 
 % manual override panel
 handles.manual_panel = uibuttongroup(handles.main_fig,'Title','Manual Override','Position',[.8 .92 .195 .07],'FontSize',self.pref.fs,'Visible','off','BackgroundColor',[ 1 1 1]);
 
-handles.mode_new_spike = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 .5 .08 .5], 'Style', 'radiobutton', 'String', '+','FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1]);
-handles.new_spike_type = uicontrol(handles.manual_panel,'units','normalized','Position',[.1 .45 .3 .5], 'Style', 'popupmenu', 'String', {'Choose'},'FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1],'Callback',@self.activateAddNewNeuronMode);
-handles.mode_delete_spike = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 0 .5 .5], 'Style', 'radiobutton', 'String', 'Mark as noise','FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1]);
-handles.mode_off = uicontrol(handles.manual_panel,'units','normalized','Position',[.51 .25 .3 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs*1.5,'BackgroundColor',[1 1 1],'Value',1);
+handles.mode_new_spike = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 .5 .2 .5], 'Style', 'radiobutton', 'String', 'add to','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
+handles.new_spike_type = uicontrol(handles.manual_panel,'units','normalized','Position',[.2 .5 .3 .5], 'Style', 'popupmenu', 'String', {'Choose'},'FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Callback',@self.activateAddNewNeuronMode);
+handles.mode_delete_spike = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 0 .5 .5], 'Style', 'radiobutton', 'String', 'Mark as noise','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
+handles.mode_off = uicontrol(handles.manual_panel,'units','normalized','Position',[.71 .25 .3 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',1);
 
 
 % make a pop-over for busy messages
-handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 0 1 1],'Style', 'text', 'String', {'','','','','','','','Embedding...'},'FontSize',48,'FontWeight','normal','Visible','off','BackgroundColor',[1 1 1]);
+handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 0 1 1],'Style', 'text', 'String', {'','','','','','','','Embedding...'},'FontSize',self.pref.fs*3,'FontWeight','normal','Visible','off','BackgroundColor',[1 1 1]);
 
 
 self.handles = handles;
