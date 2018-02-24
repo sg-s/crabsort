@@ -34,7 +34,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         R  % this holds the dimensionality reduced data
 
         % this is the list of channel names that you can choose from
-        channel_names = sort({'???','dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'});
+        channel_names
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 
@@ -112,15 +112,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
     methods
         function self = crabsort(make_gui)
 
-
-            self.nerve2neuron.lpn = 'LP';
-            self.nerve2neuron.pdn = 'PD';
-            self.nerve2neuron.pyn = {'PY', 'LPG'};
-            self.nerve2neuron.lvn = {'LP','PD','PY'};
-            self.nerve2neuron.lgn = {'LG','MG'};
-            self.nerve2neuron.mvn = {'VD','IC','PY'};
-            self.nerve2neuron.dgn = {'DG','MG','AGR'};
-
             if nargin == 0 
                 make_gui = true;
             end
@@ -142,6 +133,14 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
             % load preferences
             self.pref = readPref(fileparts(fileparts(which(mfilename))));
+
+            % for backward compatibility, convert some things
+            % into base props
+            self.nerve2neuron = self.pref.nerve2neuron;
+            self.channel_names = self.pref.channel_names;
+            if ~any(strcmp(self.channel_names,'???'))
+                self.channel_names = ['???' self.channel_names];
+            end
 
             % figure out what plugins are installed, and link them
             self = self.plugins;

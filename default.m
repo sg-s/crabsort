@@ -11,6 +11,29 @@
 % created by Srinivas Gorur-Shandilya at 4:52 , 16 September 2015. Contact me at http://srinivas.gs/contact/
 % 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           _       _        
+%        __| | __ _| |_ __ _ 
+%       / _` |/ _` | __/ _` |
+%      | (_| | (_| | || (_| |
+%       \__,_|\__,_|\__\__,_|
+%                            
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
+% what are the possible names of nerves, units, channels?
+channel_names = sort({'dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'});
+
+
+% specify which units exist on which nerves
+
+nerve2neuron.lpn = 'LP';
+nerve2neuron.pdn = 'PD';
+nerve2neuron.pyn = {'PY', 'LPG'};
+nerve2neuron.lvn = {'LP','PD','PY'};
+nerve2neuron.lgn = {'LG','MG'};
+nerve2neuron.mvn = {'VD','IC','PY'};
+nerve2neuron.dgn = {'DG','MG','AGR'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                 _ _           _             
