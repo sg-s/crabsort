@@ -243,6 +243,15 @@ self.redrawAxes;
 
 self.showSpikes;
 
+% show the data
+
+for i = 1:self.n_channels
+    a = find(self.time >= self.handles.ax.data(i).XData(1),1,'first');
+    z = find(self.time <= self.handles.ax.data(i).XData(end),1,'last');
+    self.handles.ax.data(i).YData = self.raw_data(a:z,i);
+end
+
+
 % try to rescale the temperature channel correctly
 try
     for i = 1:self.n_channels
