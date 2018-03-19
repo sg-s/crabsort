@@ -146,7 +146,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             self = self.plugins;
 
             % get the version name and number
-            self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) oss 'build_number']))];
+            self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) filesep 'build_number']))];
             self.version_name = ['crabsort (' self.build_number ')'];
             
             if make_gui 

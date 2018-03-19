@@ -24,12 +24,12 @@ if ~nargout
     disp('The following plugins for spikesort have been installed:')
 end
 
-m = dir([fileparts(which(mfilename)) oss '*.m']);
+m = dir([fileparts(which(mfilename)) filesep '*.m']);
 
 c = 1;
 for i = 1:length(m)
     % read the file
-    t = lineRead([fileparts(which(mfilename)) oss m(i).name]);
+    t = lineRead([fileparts(which(mfilename)) filesep m(i).name]);
 
     if ~any(strfind(t{1},'crabsort plugin'))
         continue
