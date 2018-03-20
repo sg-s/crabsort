@@ -143,3 +143,6 @@ tf_stop_accuracy = 0.95;
 % be so that automate uses it instead of 
 % whatever program is has memorized? 
 tf_predict_accuracy = 0.95;
+
+% use MATLAB's built in t-SNE?
+use_matlab_tsne = true;

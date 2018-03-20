@@ -22,4 +22,9 @@ if self.verbosity > 5
 end
 
 % interactively t-sne the data 
-self.R{self.channel_to_work_with} = mctsne(self.data_to_reduce);
+if self.pref.use_matlab_tsne
+	R = tsne(self.data_to_reduce');
+	self.R{self.channel_to_work_with} = R';
+else
+	self.R{self.channel_to_work_with} = mctsne(self.data_to_reduce);
+end
