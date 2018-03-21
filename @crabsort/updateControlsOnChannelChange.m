@@ -57,7 +57,12 @@ disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this cha
 % everything
 if length(self.common.data_channel_names) < self.channel_to_work_with || strcmp(self.common.data_channel_names{self.channel_to_work_with},'???') || isempty(self.common.data_channel_names{self.channel_to_work_with})
 
-    % the name for this channel is unset 
+    if self.verbosity > 5
+        cprintf('green','\n[INFO] ')
+        cprintf('text','the name for this channel is unset')
+    end
+
+    %  
     % disable everything and force user to name the channel
 
     % disable everything
@@ -67,7 +72,12 @@ if length(self.common.data_channel_names) < self.channel_to_work_with || strcmp(
 
 
 else
-    % this channel is named
+
+    if self.verbosity > 5
+        cprintf('green','\n[INFO] ')
+        cprintf('text','This channel is named')
+    end
+
     % lots of possibilities here 
     % enable everything
     enable(self.handles.spike_detection_panel);

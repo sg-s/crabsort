@@ -205,7 +205,13 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
             switch this_channel_stage
             case 0
-                enable(self.handles.spike_detection_panel)
+                if length(self.common.data_channel_names) < self.channel_to_work_with || strcmp(self.common.data_channel_names{self.channel_to_work_with},'???') || isempty(self.common.data_channel_names{self.channel_to_work_with})
+                    % channel name unset
+                    disable(self.handles.spike_detection_panel)
+                else
+                    enable(self.handles.spike_detection_panel)
+                end
+                
                 disable(self.handles.dim_red_panel)
                 disable(self.handles.cluster_panel)
                 disable(self.handles.manual_panel)
