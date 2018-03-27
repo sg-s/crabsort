@@ -29,6 +29,12 @@ if strcmp(src.String,'Load File')
     if ~self.file_name
         return
     end
+
+    % check to make sure all .ABF files have the same structure
+    if strcmpi(self.file_name(end-2:end),'ABF')
+        self.checkABFFiles;
+    end
+
 elseif strcmp(src.String,'<')
     if isempty(self.file_name)
         return
