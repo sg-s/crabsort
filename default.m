@@ -21,6 +21,11 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
+% if you're sure that all your ABF files in a single folder
+% have the same format (same #channels, etc), then 
+% set this to true
+skip_abf_check = false;
+
 % what are the possible names of nerves, units, channels?
 channel_names = sort({'dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'});
 
@@ -145,4 +150,4 @@ tf_stop_accuracy = 0.95;
 tf_predict_accuracy = 0.95;
 
 % use MATLAB's built in t-SNE?
-use_matlab_tsne = true;
+use_matlab_tsne = false;

@@ -31,7 +31,7 @@ if strcmp(src.String,'Load File')
     end
 
     % check to make sure all .ABF files have the same structure
-    if strcmpi(self.file_name(end-2:end),'ABF')
+    if strcmpi(self.file_name(end-2:end),'ABF') && ~self.pref.skip_abf_check
         self.checkABFFiles;
     end
 
