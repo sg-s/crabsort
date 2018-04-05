@@ -67,4 +67,9 @@ for k = 1:length(self.common.automate_info(channel).operation)
 
 	% execute the method
 	operation.method(self);
+
+	% if we find no spikes, skip everything
+	if k == 1 && ~any(self.putative_spikes(:,self.channel_to_work_with))
+		return
+	end
 end
