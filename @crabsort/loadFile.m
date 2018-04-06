@@ -23,8 +23,11 @@ allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}
 allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
 allowed_file_extensions = allowed_file_extensions(:);
 
+self.saveData;
+self.reset(false);
 
 if strcmp(src.String,'Load File')
+    
     [self.file_name,self.path_name,filter_index] = uigetfile(allowed_file_extensions);
     if ~self.file_name
         return
@@ -39,8 +42,6 @@ elseif strcmp(src.String,'<')
     if isempty(self.file_name)
         return
     else
-        self.saveData;
-        self.reset(false);
 
         % get the list of files
         [~,~,ext]=fileparts(self.file_name);
@@ -59,8 +60,6 @@ elseif strcmp(src.String,'>')
     if isempty(self.file_name)
         return
     else
-        self.saveData;
-        self.reset(false);
 
 
         % get the list of files

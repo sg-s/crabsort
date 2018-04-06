@@ -70,7 +70,6 @@ for k = 1:length(self.common.automate_info(channel).operation)
 
 	% if we find too few spikes, give up
 	n_spikes = sum(self.putative_spikes(:,self.channel_to_work_with));
-	min_n_spikes_to_process_channel
 	if k == 1 && n_spikes < self.pref.min_n_spikes_to_process_channel
 		return
 	end
