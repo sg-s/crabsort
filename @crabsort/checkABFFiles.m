@@ -65,7 +65,6 @@ function channel_names = readABFChannelNames(file_name)
 	 	case 'ABF ' % ** note the blank
 	 		disp('v1')
 	    	channel_names = readChannelsInABFv1();
-	    	keyboard
 	  	case 'ABF2'
 	  		disp('ABF2 file')
 	  		channel_names = readChannelsInABFv2();
