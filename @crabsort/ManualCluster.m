@@ -62,51 +62,58 @@ else
 	% check if we're working in 1D or 2D
 	if isempty(data.y)
 		% 1D
-		% center and scale the data
-		x = data.x; 
-		% x = x - mean(x); 
-		% x = x/std(x); 
 
+		x = data.x; 
 		X = R(1,:); 
-		% X = X - mean(X); 
-		% X = X/std(X); 
 
 		% find the gravitational "pull" on every point from
 		% the reference data set
 		W = 0*unique(data.idx);
+		unique_idx = unique(data.idx);
 		idx = 0*X;
 		for i = 1:length(X)
 			d = 1./((X(i) - x).^2);
 			W = 0*W;
 			for j = 1:length(W)
-				W(j) = sum(d(data.idx == j));
+				W(j) = sum(d(data.idx == unique_idx(j)));
 			end
 			[~,idx(i)] = max(W);
+			idx(i) = unique_idx(idx(i));
 		end
 		labels = default_names;
+		if self.verbosity > 5
+			figure('outerposition',[300 300 1200 999],'PaperUnits','points','PaperSize',[1200 999]); hold on
+			ax(1) = subplot(2,1,1); hold on
+			ax(2) = subplot(2,1,2); hold on
+			c = lines;
+			for i = 1:max(data.idx)
+				temp = data.x(data.idx == i);
+				plot(ax(1),temp,randn(length(temp),1),'o','Color',c(i,:));
+				temp = X(idx == i);
+				plot(ax(2),temp,randn(length(temp),1),'s','Color',c(i,:))
+			end
+			equalizeAxes
+
+		end
 	else
 		% 2D
-		% center and scale the data
 		x = data.x; y = data.y;
-		% x = x - mean(x); y = y - mean(y);
-		% x = x/std(x); y = y/std(y);
-
 		X = R(1,:); Y = R(2,:);
-		% X = X - mean(X); Y = Y - mean(Y);
-		% X = X/std(X); Y = Y/std(Y);
 
 
 		% find the gravitational "pull" on every point from
 		% the reference data set
 		W = 0*unique(data.idx);
+		unique_idx = unique(data.idx);
 		idx = 0*X;
 		for i = 1:length(X)
 			d = 1./((X(i) - x).^2 + (Y(i) - y).^2);
 			W = 0*W;
 			for j = 1:length(W)
-				W(j) = sum(d(data.idx == j));
+				W(j) = sum(d(data.idx == unique_idx(j)));
 			end
 			[~,idx(i)] = max(W);
+			idx(i) = unique_idx(idx(i));
 		end
 		labels = default_names;
 	end

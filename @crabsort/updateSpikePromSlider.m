@@ -27,7 +27,7 @@ if ub <= 0
 end
 
 set(self.handles.spike_prom_slider,'Max',ub);
-
+set(self.handles.spike_prom_slider,'Min',ub/100);
 self.handles.spike_prom_slider.Value = ub;
 
 
