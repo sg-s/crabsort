@@ -64,7 +64,7 @@ else
 		% 1D
 
 		x = data.x; 
-		X = R(1,:); 
+		X = R(1,:);  
 
 		% find the gravitational "pull" on every point from
 		% the reference data set
