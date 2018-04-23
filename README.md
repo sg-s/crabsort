@@ -54,7 +54,7 @@ The spike-sorting problem too hard to solve in one pass? No problem -- make mult
 
 ## Installation
 
-`crabsort` is written in MATLAB, with a sprinkling of Python wrapper code. It should work on any OS that modern MATLAB runs on, but has only been tested on macOS Sierra with MATLAB R2017b. 
+`crabsort` is written in MATLAB, with a sprinkling of Python wrapper code. It should work on any OS that modern MATLAB runs on, and has been tested on macOS Sierra with MATLAB R2017b and Ubuntu with MATLAB R2017a. 
 
 The best way to install `crabsort` is through my package manager: 
 
@@ -102,8 +102,7 @@ conda create -n tensorflow pip
 source activate tensorflow 
 
 # install tensorflow 
-# your URL may by different 
-pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.5.0-py3-none-any.whl
+pip install tensorflow
 
 # install h5py
 pip install h5py
