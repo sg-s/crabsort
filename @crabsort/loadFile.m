@@ -27,8 +27,11 @@ self.saveData;
 self.reset(false);
 
 if strcmp(src.String,'Load File')
-    
-    [self.file_name,self.path_name,filter_index] = uigetfile(allowed_file_extensions);
+    self.file_name  = '';
+    try
+        [self.file_name,self.path_name,filter_index] = uigetfile(allowed_file_extensions);
+    catch
+    end
     if ~self.file_name
         return
     end

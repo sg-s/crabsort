@@ -43,6 +43,7 @@ uimenu(handles.menu_name(2),'Label','Reload preferences','Callback',@self.reload
 uimenu(handles.menu_name(2),'Label','Reset current channel','Callback',@self.redo,'Separator','on');
 uimenu(handles.menu_name(2),'Label','Ignore section','Callback',@self.ignoreSection,'Enable','on','Separator','on');
 uimenu(handles.menu_name(2),'Label','UNignore section','Callback',@self.ignoreSection,'Enable','on','Separator','off');
+uimenu(handles.menu_name(2),'Label','Update crabsort...','Callback',@self.update,'Enable','on','Separator','on');
 
 % view
 handles.menu_name(3) = uimenu('Label','View');
