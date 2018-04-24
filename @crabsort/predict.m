@@ -143,8 +143,8 @@ for i = 1:length(labels)
 end
 
 
-self.handles.found_spikes(self.channel_to_work_with).XData = [];
-self.handles.found_spikes(self.channel_to_work_with).YData = [];
+self.handles.ax.found_spikes(self.channel_to_work_with).XData = [];
+self.handles.ax.found_spikes(self.channel_to_work_with).YData = [];
 
 self.showSpikes;
 

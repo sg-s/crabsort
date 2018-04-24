@@ -60,3 +60,11 @@ end
 enable(self.handles.manual_panel)
 
 self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_method_handle)]
+
+% now lock the channel names on this channel and prevent the user from ever renaming it
+if ~isfield(self.common,'channel_name_lock')
+    self.common.channel_name_lock = zeros(self.n_channels,1);
+end
+self.common.channel_name_lock(self.channel_to_work_with) = 1;
+
+self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';

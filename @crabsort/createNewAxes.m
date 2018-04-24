@@ -104,6 +104,13 @@ for i = 1:self.n_channels
 	end
 	self.handles.ax.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y-.06 .05 .06],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel,'FontSize',self.pref.fs,'Value',V);
 
+	% disable the channel_label_chooser if need be
+	if isfield(self.common,'channel_name_lock')
+		if self.common.channel_name_lock(i) == 1
+			self.handles.ax.channel_label_chooser(i).Enable = 'off';
+		end
+	end
+
 	self.handles.ax.recording(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y+.02 .03 .02],'Style', 'text', 'String', 'REC','BackgroundColor',[1 0 0],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','off');
 
 	% show indicator of automate status

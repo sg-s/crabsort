@@ -108,14 +108,19 @@ for i = length(fn):-1:1
 end
 L{end+1} = ['tf_snippet_dim = ' mat2str(size(X,1))];
 L{end+1} = ['tf_N_classes = ' mat2str(max(Y))];
+warning off
 lineWrite(joinPath(tf_model_dir,'params.py'),L)
+warning on
 
 % hide all the putative spikes
-self.handles.found_spikes(channel).XData = NaN;
-self.handles.found_spikes(channel).YData = NaN;
+self.handles.ax.found_spikes(channel).XData = NaN;
+self.handles.ax.found_spikes(channel).YData = NaN;
 
 
 self.handles.tf.fig.Name = ['Loaded dataset with ' mat2str(size(X,2)) ' points. Click "TRAIN" to begin.'];
 enable(self.handles.tf.fig)
 figure(self.handles.tf.fig)
 drawnow
+
+self.handles.tf.train_button.Enable = 'on';
+self.handles.tf.unload_data.Enable = 'on';

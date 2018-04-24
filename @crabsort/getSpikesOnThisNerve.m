@@ -16,6 +16,7 @@ if self.verbosity > 5
 end
 
 spiketimes = 0*self.putative_spikes(:,self.channel_to_work_with);
+st_by_unit = zeros(length(spiketimes),1);
 
 try
 	this_nerve_spikes = self.spikes.(self.common.data_channel_names{self.channel_to_work_with});
@@ -24,8 +25,8 @@ catch
 end
 
 fn = fieldnames(this_nerve_spikes);
-
 st_by_unit = zeros(length(spiketimes),length(fn));
+
 
 for i = 1:length(fn)
 	st_by_unit(this_nerve_spikes.(fn{i}),i) = 1;

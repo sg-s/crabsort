@@ -44,8 +44,6 @@ self.handles.tf.available_data.String = S;
 
 % enable stuff
 self.handles.tf.reset_training.Enable = 'on';
-self.handles.tf.train_button.Enable = 'on';
-self.handles.tf.unload_data.Enable = 'on';
 self.handles.tf.load_data.Enable = 'on';
 self.handles.tf.reset_network_button.Enable = 'on';
 self.handles.tf.available_data.Enable = 'on';
