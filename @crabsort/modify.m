@@ -34,6 +34,19 @@ this_nerve = self.common.data_channel_names{channel};
 if self.handles.mode_new_spike.Value == 1
     % snip out a small waveform around the point
 
+    % need to update the spike sign control to match automate info, if it exists 
+    try
+        self.common.automate_info(self.channel_to_work_with).operation(1);
+        operation = self.common.automate_info(self.channel_to_work_with).operation(1);
+        for i = 1:length(operation.property)
+            if strcmp(strjoin(operation.property{i},'.'),'handles.spike_sign_control.Value')
+                self.handles.spike_sign_control.Value = operation.value{i};
+            end
+        end
+    catch
+        
+    end
+
     if ~self.handles.spike_sign_control.Value
         [~,loc] = min(V(floor(p(1)-search_width:p(1)+search_width)));
     else
