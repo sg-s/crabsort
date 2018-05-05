@@ -23,10 +23,10 @@ allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}
 allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
 allowed_file_extensions = allowed_file_extensions(:);
 
-self.saveData;
-self.reset(false);
+
 
 if strcmp(src.String,'Load File')
+    self.saveData;
     self.file_name  = '';
     try
         [self.file_name,self.path_name,filter_index] = uigetfile(allowed_file_extensions);
@@ -41,7 +41,10 @@ if strcmp(src.String,'Load File')
         self.checkABFFiles;
     end
 
+    
+
 elseif strcmp(src.String,'<')
+    self.saveData;
     if isempty(self.file_name)
         return
     else
@@ -58,8 +61,10 @@ elseif strcmp(src.String,'<')
         % figure out what the filter_index is
         filter_index = find(strcmp(['*' ext],allowed_file_extensions));
         
+    
     end
 elseif strcmp(src.String,'>')
+    self.saveData;
     if isempty(self.file_name)
         return
     else
@@ -77,12 +82,15 @@ elseif strcmp(src.String,'>')
         % figure out what the filter_index is
         filter_index = find(strcmp(['*' ext],allowed_file_extensions));
         
+
     end
 else
     % do nothing, assuming that file_name is correctly set
     [~,~,ext] = fileparts(self.file_name);
     filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 end
+
+self.reset(false);
 
 
 if ~isempty(self.handles)
@@ -135,7 +143,15 @@ self.common.data_channel_names = cell(self.n_channels,1);
 % check if there is a .crabsort file already
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 
+
+
 if exist(file_name,'file') == 2
+
+    if self.verbosity > 5
+        cprintf('green','\n[INFO] ')
+        cprintf('text','loadFile::crabsort file exists, loading...')
+    end
+
     load(file_name,'crabsort_obj','-mat')
     
     % copy over properties from crabsort_obj into self
@@ -143,7 +159,7 @@ if exist(file_name,'file') == 2
     for i = 1:length(fn)
         if ~isempty(crabsort_obj.(fn{i}))
             % ignore channel_names
-            % this is a hack because channel_names was erronously
+            % this is a hack because channel_names was erroneously
             % saved in some .crabsort files
             if ~strcmp(fn{i},'channel_names')
                 self.(fn{i}) = crabsort_obj.(fn{i});

@@ -1,4 +1,10 @@
-
+%                 _                    _   
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+%
+% returns data for given file and loads into tensorflow
 
 function [X, Y] = getTFDataForThisFile(self, thisfile)
 
@@ -6,6 +12,7 @@ if self.verbosity > 5
     cprintf('green','\n[INFO] ')
     cprintf('text',[mfilename ' called'])
 end
+
 
 if ~strcmp(self.file_name,thisfile)
 	self.file_name = thisfile;
@@ -77,7 +84,7 @@ else
 	Y = ones(1,length(X));
 end
 
-
+% now create some -ve training data
 % halve the spike prominence and find spikes
 new_spike_prom = self.common.automate_info(channel).operation(1).value{3};
 new_spike_prom = new_spike_prom/2;

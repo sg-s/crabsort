@@ -189,6 +189,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         end
 
 
+
         function self = set.channel_stage(self,value)
             self.channel_stage = value;
 
