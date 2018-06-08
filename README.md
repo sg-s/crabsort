@@ -60,7 +60,7 @@ The best way to install `crabsort` is through my package manager:
 
 ```
 % copy and paste this code in your MATLAB prompt
-urlwrite('http://srinivas.gs/install.m','install.m'); 
+urlwrite('https://srinivas.gs/install.m','install.m'); 
 install -f sg-s/crabsort
 install -f sg-s/srinivas.gs_mtools   % crabsort needs this 
 install -f sg-s/Multicore-TSNE % fast t-sne embedding 
