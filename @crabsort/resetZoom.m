@@ -8,10 +8,11 @@
 
 function [] = resetZoom(self,~,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 % update the X and Y data since we don't want to show everything
 a = find(self.time >= 0, 1, 'first');

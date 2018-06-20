@@ -8,10 +8,11 @@
 
 function S = getFilesWithSortedSpikesOnChannel(self,channel)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 % get all crabsort data for this channel
 [~,~,ext] = fileparts(joinPath(self.path_name,self.file_name));

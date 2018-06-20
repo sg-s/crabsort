@@ -9,10 +9,11 @@
 
 function loadFile(self,src,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 if nargin == 1
     src.String = '';
@@ -26,14 +27,22 @@ allowed_file_extensions = allowed_file_extensions(:);
 
 
 if strcmp(src.String,'Load File')
+
+    if self.verbosity > 5
+        disp(['[loadFile] load_file_button is src'])
+    end
+
+
     self.saveData;
-    self.file_name  = '';
     try
-        [self.file_name,self.path_name,filter_index] = uigetfile(allowed_file_extensions);
+        [file_name,path_name,filter_index] = uigetfile(allowed_file_extensions);
     catch
     end
-    if ~self.file_name
+    if ~file_name
         return
+    else
+        self.file_name = file_name;
+        self.path_name = path_name;
     end
 
     % check to make sure all .ABF files have the same structure
@@ -44,6 +53,11 @@ if strcmp(src.String,'Load File')
     
 
 elseif strcmp(src.String,'<')
+
+    if self.verbosity > 5
+        disp(['[loadFile] < is src]'])
+    end
+
     self.saveData;
     if isempty(self.file_name)
         return
@@ -64,6 +78,11 @@ elseif strcmp(src.String,'<')
     
     end
 elseif strcmp(src.String,'>')
+
+    if self.verbosity > 5
+        disp(['[loadFile] > is src'])
+    end
+
     self.saveData;
     if isempty(self.file_name)
         return
@@ -85,13 +104,21 @@ elseif strcmp(src.String,'>')
 
     end
 else
+
+    if self.verbosity > 5
+        disp(['[loadFile] no src.'])
+    end
+
     % do nothing, assuming that file_name is correctly set
     [~,~,ext] = fileparts(self.file_name);
     filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 end
 
-self.reset(false);
+if self.verbosity > 5
+    disp(['[loadFile] calling reset'])
+end
 
+self.reset(false);
 
 if ~isempty(self.handles)
     uistack(self.handles.popup,'top')
@@ -110,6 +137,8 @@ assert(length(plugin_to_use) == 1,'[ERR 41] Too many plugins bound to this file 
 
 % load the file
 load_file_handle = str2func(self.installed_plugins(plugin_to_use).name);
+
+self.builtin_channel_names = {};
 
 try
     load_file_handle(self);
@@ -132,6 +161,9 @@ catch
     return
 end
 
+% reset common
+self.common = [];
+
 
 % set the channel_stages
 self.channel_stage = zeros(size(self.raw_data,2),1);
@@ -148,8 +180,7 @@ file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 if exist(file_name,'file') == 2
 
     if self.verbosity > 5
-        cprintf('green','\n[INFO] ')
-        cprintf('text','loadFile::crabsort file exists, loading...')
+        disp('[loadFile] .crabsort  file exists. Loading...');
     end
 
     load(file_name,'crabsort_obj','-mat')
@@ -174,9 +205,18 @@ end
 file_name = joinPath(self.path_name, 'common.crabsort');
 
 if exist(file_name,'file') == 2
+    if self.verbosity > 5
+        disp(['[loadFile] common.crabsort exists.'])
+    end
+
     load(file_name,'common','-mat');
     self.common = common;
+else
+    if self.verbosity > 5
+        disp(['[loadFile] No common.crabsort!'])
+    end
 end
+
 
 % populate fields in common 
 req_fields = {'data_channel_names','tf_model_name','tf_data','tf_labels','tf_folder','automate_info','automate_channel_order'};
@@ -186,7 +226,11 @@ for i = 1:length(req_fields)
     end
 end
 
-% remove mean for all channels that are names
+if self.verbosity > 5
+    disp(['[loadFile] remove mean for all channels that have names'])
+end
+
+
 for i = 1:length(self.common.data_channel_names)
     if isempty(self.common.data_channel_names{i})
         continue
@@ -264,6 +308,16 @@ for i = 1:self.n_channels
 end
 
 self.redrawAxes;
+
+% force an update of built-in channel names
+for i = 1:length(self.builtin_channel_names)
+	self.handles.ax.channel_names(i).String = self.builtin_channel_names{i};
+	if isempty(self.common.data_channel_names{i})
+		self.handles.ax.channel_label_chooser(i).Value = 1;
+	else
+		self.handles.ax.channel_label_chooser(i).Value = find(strcmp(self.common.data_channel_names{i},self.handles.ax.channel_label_chooser(i).String));
+	end
+end
 
 self.showSpikes;
 

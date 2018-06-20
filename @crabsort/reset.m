@@ -9,8 +9,7 @@
 function reset(self,wipe_all)
 
 if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+	disp(['[reset]'])
 end
 
 self.raw_data = [];

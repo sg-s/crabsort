@@ -10,10 +10,11 @@
 
 function clusterCallback(self,~,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 channel = self.channel_to_work_with;
 

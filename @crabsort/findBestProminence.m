@@ -9,10 +9,11 @@
 
 function best_prom = findBestProminence(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 % figure out which channel to work with
 V = self.raw_data(:,self.channel_to_work_with);

@@ -8,10 +8,11 @@
 
 function resetYLims(self,src,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 if isempty(self.channel_to_work_with)
 	return
@@ -47,7 +48,7 @@ elseif is_intracellular
 	a = find(self.time > self.handles.ax.ax(idx).XLim(1),1,'first');
 	z = find(self.time > self.handles.ax.ax(idx).XLim(2),1,'first');
 	m = mean(self.raw_data(a:z,idx));
-	yl = (src.Value)*100;
+	yl = (src.Value)*100+1;
 	self.handles.ax.ax(idx).YLim = [m-yl m+yl];
 	self.handles.ax.ax(idx).YTickMode = 'auto';
 end

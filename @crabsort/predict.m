@@ -9,10 +9,11 @@
 
 function predict(self,~,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 nerve_name = self.common.data_channel_names{self.channel_to_work_with};
 tf_model_dir = joinPath(self.path_name,'tensorflow',nerve_name);

@@ -7,10 +7,11 @@
 % modifies data based on mouse clicks 
 function modify(self,p)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 channel = self.channel_to_work_with;
 if self.channel_stage(channel) < 3

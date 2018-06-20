@@ -9,15 +9,16 @@
 
 function redrawAxes(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 figure(self.handles.main_fig)
 
 % are there already some axes handles? 
-if isfield(self.handles,'ax') && ~isempty(self.handles.ax)
+if isfield(self.handles,'ax') && ~isempty(self.handles.ax) && isfield(self.handles.ax,'ax')
 
 	% there exist some axes already
 	if length(self.handles.ax.ax) == self.n_channels
@@ -25,6 +26,7 @@ if isfield(self.handles,'ax') && ~isempty(self.handles.ax)
 	else
 		% need to destroy all axes and start from scratch
 		self.destroyAllAxes;
+		self.createNewAxes;
 	end
 else
 	% no axes handles at all.

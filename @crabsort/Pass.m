@@ -16,9 +16,10 @@
 
 function Pass(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 self.R{self.channel_to_work_with} = self.data_to_reduce;

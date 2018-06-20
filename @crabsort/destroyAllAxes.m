@@ -1,48 +1,38 @@
+%                 _                    _   
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+%
+% destroys all axes and associated
+% UI control elements in self.handles.ax
 
 
 function destroyAllAxes(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 % destroy it all
-if isfield(self.handles,'ax')
-	for i = 1:length(self.handles.ax)
-		delete(self.handles.ax(i));
+fn1 = fieldnames(self.handles.ax);
+
+
+for i = 1:length(fn1)
+	if strcmp(fn1{i},'sorted_spikes')
+		% since we're deleting the axes that contains this
+		% let's hope they are also deleted 
+
+	else
+		for j = 1:length(self.handles.ax.(fn1{i}))
+			delete(self.handles.ax.(fn1{i})(j))
+		end
 	end
-	self.handles = rmfield(self.handles,'ax');
+
+
 end
 
-% destroy the channel pickers
-if isfield(self.handles,'channel_label_chooser')
-	for i = 1:length(self.handles.channel_label_chooser)
-		delete(self.handles.channel_label_chooser(i));
-	end
-	self.handles = rmfield(self.handles,'channel_label_chooser');
-end
-
-% also destroy the labels for the built in channel names
-if isfield(self.handles,'channel_names')
-	for i = 1:length(self.handles.channel_names)
-		delete(self.handles.channel_names(i));
-	end
-	self.handles = rmfield(self.handles,'channel_names');
-end
-
-% destroy the "recording" indicators 
-if isfield(self.handles,'recording')
-	for i = 1:length(self.handles.recording)
-		delete(self.handles.recording(i));
-	end
-	self.handles = rmfield(self.handles,'recording');
-end
-
-% destroy the "automate" indicators
-if isfield(self.handles,'has_automate')
-	for i = 1:length(self.handles.has_automate)
-		delete(self.handles.has_automate(i));
-	end
-	self.handles = rmfield(self.handles,'has_automate');
-end
+self.handles.ax = [];
+self.handles = rmfield(self.handles,'ax');

@@ -9,10 +9,11 @@
 
 function train(self,~,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 
 nerve_name = self.handles.tf.channel_picker.String{self.handles.tf.channel_picker.Value};

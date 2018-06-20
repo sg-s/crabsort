@@ -8,10 +8,11 @@
 
 function showSpikes(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 % first, hide all spikes
 for i = 1:length(self.handles.ax.sorted_spikes)

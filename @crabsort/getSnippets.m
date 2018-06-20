@@ -8,10 +8,11 @@
 
 function V_snippets = getSnippets(self,channel, spiketimes)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 if nargin == 2
 	spiketimes = self.putative_spikes(:,channel);

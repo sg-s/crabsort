@@ -9,10 +9,11 @@
 
 function runAutomateOnAllFiles(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 % get a list of all files 
 % figure out what file types we can work with

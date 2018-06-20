@@ -8,10 +8,13 @@
 
 function showHideAxes(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
+
+assert(isfield(self.handles,'ax'),'No axes found in self.handles. showHideAxes was called, but there is nothing to do because the there are no axes handles. it looks like createNewAxes needed to be called, but was not.')
 
 n_channels_to_show = sum(self.common.show_hide_channels);
 
@@ -70,27 +73,40 @@ for i = 1:self.n_channels
 				else
 					self.handles.ax.(fn{j})(i).Visible = 'off';
 				end
+			elseif strcmp(fn{j},'sorted_spikes')
+				for k = 1:length(self.handles.ax.sorted_spikes(i).unit)
+					self.handles.ax.sorted_spikes(i).unit(k).Visible = 'on';
+				end
 			else
-				self.handles.ax.(fn{j})(i).Visible = 'on';
+			
+				set(self.handles.ax.(fn{j})(i),'Visible','on');
+
 			end
 		end
 
 		% show all children of plot
 		ax = self.handles.ax.ax(i);
 		for j = 1:length(ax.Children)
-			ax.Children(j).Visible = 'on';
+			set(ax.Children(j),'Visible','on');
 		end
+
 
 	else
 		% hide the plot and associated controls
 		for j = 1:length(fn)
-			self.handles.ax.(fn{j})(i).Visible = 'off';
+			if strcmp(fn{j},'sorted_spikes')
+				for k = 1:length(self.handles.ax.sorted_spikes(i).unit)
+					set(self.handles.ax.sorted_spikes(i).unit(k),'Visible','on');
+				end
+			else
+				set(self.handles.ax.(fn{j})(i),'Visible','off');
+			end
 		end
 
 		% hide all children of the plot
 		ax = self.handles.ax.ax(i);
 		for j = 1:length(ax.Children)
-			ax.Children(j).Visible = 'off';
+			set(ax.Children(j),'Visible','off');
 		end
 
 	end

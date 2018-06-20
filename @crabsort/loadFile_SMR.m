@@ -11,10 +11,11 @@
 % 
 function loadFile_SMR(self,~,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 % read the file
 [d,h] = loadSMR(joinPath(self.path_name,self.file_name));

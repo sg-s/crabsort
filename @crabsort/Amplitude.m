@@ -16,10 +16,11 @@
 
 function Amplitude(self)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 
 if size(self.data_to_reduce,1) <= 2

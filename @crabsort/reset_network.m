@@ -9,10 +9,11 @@
 % discards the network
 function reset_network(self,~,~)
 
-if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
 end
+
 
 this_channel = self.handles.tf.channel_picker.String{self.handles.tf.channel_picker.Value};
 idx = find(strcmp(self.common.data_channel_names,this_channel));

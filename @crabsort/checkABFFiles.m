@@ -10,6 +10,12 @@
 
 function checkABFFiles(self)
 
+d = dbstack;
+if self.verbosity > 3
+	disp(['[' mfilename '] called by ' d(2).name])
+end
+
+
 % get all files 
 machineF='ieee-le';
 fid = 0;
