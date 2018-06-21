@@ -102,7 +102,11 @@ self.putative_spikes(loc,self.channel_to_work_with) = 1;
 
 if ~isa(Npeaks,'double')
     % after finding spikes, we should update the channel_stage
-    self.channel_stage(self.channel_to_work_with) = 1;
+    if any(self.putative_spikes(:,self.channel_to_work_with))
+    	self.channel_stage(self.channel_to_work_with) = 1;
+    else
+    	self.channel_stage(self.channel_to_work_with) = 0;
+    end
 
 end
 
