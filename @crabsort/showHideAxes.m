@@ -6,11 +6,13 @@
 %
 % shows or hides axes based on self.common.show_hide_channels
 
-function showHideAxes(self)
+function showHideAxes(self, bottom_plot, top_plot)
 
 d = dbstack;
 if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+	if length(d)>1
+		disp(['[' mfilename '] called by ' d(2).name])
+	end
 end
 
 
@@ -18,8 +20,11 @@ assert(isfield(self.handles,'ax'),'No axes found in self.handles. showHideAxes w
 
 n_channels_to_show = sum(self.common.show_hide_channels);
 
-bottom_plot = .05;
-top_plot = .9;
+
+if nargin == 1
+	bottom_plot = .05;
+	top_plot = .9;
+end
 spacing = (top_plot - bottom_plot)/n_channels_to_show;
 
 % plot_idx keeps track of how many plots 

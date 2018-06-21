@@ -20,7 +20,7 @@ for i = 1:length(f)
 end
 
 % make the master figure, and the axes to plot the voltage traces
-handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w','Tag','crabsort_main_window');
+handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w','Tag','crabsort_main_window','ResizeFcn',@self.resize);
 temp =  findall(handles.main_fig,'Type','uitoggletool','-or','Type','uipushtool');
 
 delete(temp([2:5 7:8 11:15]))
