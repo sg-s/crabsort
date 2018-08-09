@@ -55,6 +55,10 @@ catch
 	mean_peak = mean(max(X(:,Y==1)));
 	self.common.tf.mean_peak(channel) = mean_peak;
 end
+if mean_peak == 0
+	mean_peak = mean(max(X(:,Y==1)));
+	self.common.tf.mean_peak(channel) = mean_peak;
+end
 X = X/mean_peak;
 
 % split evenly into test and training groups
