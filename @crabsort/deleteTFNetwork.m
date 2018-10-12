@@ -20,7 +20,10 @@ end
 
 try
 	rmdir(joinPath(self.tf_folder,'models',self.tf_model_name{self.channel_to_work_with}),'s')
-catch
+catch err
+	for ei = 1:length(err)
+	    err.stack(ei)
+	end
 end
 
 % also unset the model name

@@ -35,7 +35,10 @@ try
 	if max(self.common.tf.metrics(self.channel_to_work_with).accuracy) > self.pref.tf_predict_accuracy
 		use_tf = true;
 	end
-catch
+catch err
+	for ei = 1:length(err)
+        err.stack(ei)
+    end
 end
 if use_tf
 	self.predict;

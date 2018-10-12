@@ -51,7 +51,10 @@ end
 % and use it always 
 try
 	mean_peak = self.common.tf.mean_peak(channel);
-catch
+catch err
+	for ei = 1:length(err)
+        err.stack(ei)
+    end
 	mean_peak = mean(max(X(:,Y==1)));
 	self.common.tf.mean_peak(channel) = mean_peak;
 end

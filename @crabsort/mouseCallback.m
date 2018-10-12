@@ -30,7 +30,10 @@ for i = 1:length(self.handles.ax.ax)
 			p(:,i) = temp(1,1:2);
 			ylims(:,i) = self.handles.ax.ax(i).YLim;
 		end
-	catch
+	catch err
+		for ei = 1:length(err)
+            err.stack(ei)
+        end
 	end
 end
 	

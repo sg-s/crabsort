@@ -44,7 +44,10 @@ if self.handles.mode_new_spike.Value == 1
                 self.handles.spike_sign_control.Value = operation.value{i};
             end
         end
-    catch
+    catch err
+        for ei = 1:length(err)
+            err.stack(ei)
+        end
         
     end
 

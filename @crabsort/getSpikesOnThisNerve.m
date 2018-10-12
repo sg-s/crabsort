@@ -21,7 +21,10 @@ st_by_unit = zeros(length(spiketimes),1);
 
 try
 	this_nerve_spikes = self.spikes.(self.common.data_channel_names{self.channel_to_work_with});
-catch
+catch err
+	for ei = 1:length(err)
+        err.stack(ei)
+    end
 	return
 end
 

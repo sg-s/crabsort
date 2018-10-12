@@ -83,7 +83,10 @@ try
 	all_methods = '';
 	try
 		all_methods = cellfun(@func2str, {self.common.automate_info(channel).operation.method},'UniformOutput',false);
-	catch
+	catch err
+		for ei = 1:length(err)
+            err.stack(ei)
+        end
 	end
 	assert(~isempty(all_methods),'No methods in automate_info for this channel')
 	assert(any(strcmp(all_methods,'reduceDimensionsCallback')),'Automate info does not have a reduceDimensionsCallback operation. Sort spikes while "watch me" is checked')

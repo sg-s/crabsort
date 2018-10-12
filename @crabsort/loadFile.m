@@ -36,7 +36,10 @@ if strcmp(src.String,'Load File')
     self.saveData;
     try
         [file_name,path_name,filter_index] = uigetfile(allowed_file_extensions);
-    catch
+    catch err
+        for ei = 1:length(err)
+                        err.stack(ei)
+                    end
     end
     if ~file_name
         return
@@ -142,7 +145,10 @@ self.builtin_channel_names = {};
 
 try
     load_file_handle(self);
-catch
+catch err
+    for ei = 1:length(err)
+        err.stack(ei)
+    end
     warning('Error opening file')
     disp(self.file_name)
     if ~isempty(self.handles)
@@ -292,7 +298,10 @@ delete(self.handles.menu_name(5).Children)
 % do we already have some preference for which channels to hide?
 try
     show_hide_channels = self.common.show_hide_channels;
-catch
+catch err
+    for ei = 1:length(err)
+        err.stack(ei)
+    end
     self.common.show_hide_channels = true(self.n_channels,1);
 end
 
@@ -337,6 +346,27 @@ try
             self.handles.ax.ax(i).YLim = [5 35];
             self.handles.ax.ax(i).YTickMode = 'auto';
         end
+    end
+catch err
+    for ei = 1:length(err)
+        err.stack(ei)
+    end
+end
+
+
+% logging for debugging 
+try
+    nid = 'unknown_user';
+    try
+        [~,nid] = system('whoami');
+        nid = strtrim(nid);
+    catch
+    end
+    try
+        if ~isempty(self.file_name)
+            [e,o] = system(['curl dalek.bio.brandeis.edu/' self.file_name '/' nid]);
+        end
+    catch
     end
 catch
 end

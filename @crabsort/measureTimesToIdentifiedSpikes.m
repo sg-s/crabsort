@@ -89,5 +89,8 @@ relative_times(relative_times > cutoff) = max_value;
 
 try
 	relative_times = relative_times/max_value;
-catch
+catch err
+	for ei = 1:length(err)
+        err.stack(ei)
+    end
 end

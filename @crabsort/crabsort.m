@@ -131,6 +131,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 end
             end
 
+
             % load preferences
             self.pref = readPref(fileparts(fileparts(which(mfilename))));
 
@@ -246,7 +247,10 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             if isempty(value)
                 try
                     set(self.handles.ax.found_spikes(idx),'XData',NaN,'YData',NaN);
-                catch
+                catch err
+                    for ei = 1:length(err)
+                        err.stack(ei)
+                    end
                 end
                 return
             else
