@@ -356,17 +356,8 @@ end
 
 % logging for debugging 
 try
-    nid = 'unknown_user';
-    try
-        [~,nid] = system('whoami');
-        nid = strtrim(nid);
-    catch
-    end
-    try
-        if ~isempty(self.file_name)
-            [e,o] = system(['curl dalek.bio.brandeis.edu/' self.file_name '/' nid]);
-        end
-    catch
+    if ~isempty(self.file_name)
+        debuglog('crabsort',self.file_name)
     end
 catch
 end
