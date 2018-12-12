@@ -128,11 +128,6 @@ self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized',
 try    % R2013b and older
    addlistener(self.handles.ylim_slider,'ActionEvent',@self.resetYLims);
 catch err % R2014a and newer
-
-	for ei = 1:length(err)
-        err.stack(ei)
-    end
-
    addlistener(self.handles.ylim_slider,'ContinuousValueChange',@self.resetYLims);
 end
 

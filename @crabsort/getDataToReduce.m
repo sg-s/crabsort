@@ -27,6 +27,8 @@ if self.handles.spike_shape_control.Value
 	data_to_reduce = self.getSnippets(self.channel_to_work_with);
 end
 
+original_data = data_to_reduce;
+
 
 if self.handles.multi_channel_control.Value
 
@@ -54,7 +56,15 @@ if self.handles.multi_channel_control.Value
 
 			spiketimes = find(self.putative_spikes(:,self.channel_to_work_with)) + D;
 
-			data_to_reduce = [data_to_reduce; self.getSnippets(this_channel, spiketimes)];
+			these_snippets = self.getSnippets(this_channel, spiketimes);
+
+			% normalize to match scale of original data
+			if ~isempty(original_data)
+				these_snippets = these_snippets/mean(std(these_snippets));
+				these_snippets = these_snippets*mean(std(original_data));
+			end
+
+			data_to_reduce = [data_to_reduce; ];
 
 		end
 	end

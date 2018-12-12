@@ -322,7 +322,7 @@ end
 self.redrawAxes;
 
 % force an update of built-in channel names
-for i = 1:length(self.builtin_channel_names)
+for i = 1:self.n_channels
 	self.handles.ax.channel_names(i).String = self.builtin_channel_names{i};
 	if isempty(self.common.data_channel_names{i})
 		self.handles.ax.channel_label_chooser(i).Value = 1;

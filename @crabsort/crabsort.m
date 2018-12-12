@@ -248,9 +248,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 try
                     set(self.handles.ax.found_spikes(idx),'XData',NaN,'YData',NaN);
                 catch err
-                    for ei = 1:length(err)
-                        err.stack(ei)
-                    end
+                    % for ei = 1:length(err)
+                    %     err.stack(ei)
+                    % end
                 end
                 return
             else
