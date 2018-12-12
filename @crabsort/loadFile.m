@@ -223,6 +223,9 @@ else
     end
 end
 
+% make sure we have computed the delays
+self.estimateDelay;
+
 
 % populate fields in common 
 req_fields = {'data_channel_names','tf_model_name','tf_data','tf_labels','tf_folder','automate_info','automate_channel_order'};

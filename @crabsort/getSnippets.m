@@ -5,6 +5,11 @@
 %  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
 %
 % gets snippets from the raw data
+% usage:
+% 
+% V_snippets = getSnippets(self,channel, spiketimes)
+% where channel is a integer
+% and spiketimes is vector of vector indices
 
 function V_snippets = getSnippets(self,channel, spiketimes)
 
@@ -15,15 +20,20 @@ end
 
 
 if nargin == 2
+
+	assert(mtools.maths.iswhole(channel),'channel should be a whole number')
+	assert(channel>0,'Channel must be +ve integer')
+	assert(channel <= self.n_channels,'Channel must be <= self.n_channels')
+
 	spiketimes = self.putative_spikes(:,channel);
 	spiketimes = find(spiketimes);
 
-	if isempty(spiketimes)
-
-		return
-
-	end
 end
+
+if isempty(spiketimes)
+	return
+end
+
 
 before = ceil(self.pref.t_before/(self.dt*1e3));
 after = ceil(self.pref.t_after/(self.dt*1e3));
