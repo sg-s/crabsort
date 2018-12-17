@@ -24,8 +24,8 @@ V_snippets = self.getSnippets(self.channel_to_work_with);
 
 
 % temporary fix
-% disp('TEMP HOTFIX: showing data_to_reduce instead of V_snippets')
-% V_snippets = self.data_to_reduce;
+disp('TEMP HOTFIX: showing data_to_reduce instead of V_snippets')
+V_snippets = self.data_to_reduce;
 
 channel = self.channel_to_work_with;
 % if it's intracellular

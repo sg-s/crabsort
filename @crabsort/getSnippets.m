@@ -15,7 +15,10 @@ function V_snippets = getSnippets(self,channel, spiketimes)
 
 d = dbstack;
 if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+	try
+		disp(['[' mfilename '] called by ' d(2).name])
+	catch
+	end
 end
 
 

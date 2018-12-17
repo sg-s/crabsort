@@ -58,7 +58,8 @@ for i = 1:length(spiketimes)
 	end
 end
 
-raster(spiketimes{:},'deltat',self.dt,'Color',c);
+
+mtools.neuro.raster(spiketimes{:},'deltat',self.dt,'Color',c);
 
 set(gca,'YTick',(1:length(L)) - .5,'YTickLabel',L)
 xlabel(gca,'Time (s)')

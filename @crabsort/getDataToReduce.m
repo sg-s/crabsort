@@ -29,7 +29,6 @@ end
 
 original_data = data_to_reduce;
 
-
 if self.handles.multi_channel_control.Value
 
 	if self.verbosity > 5
@@ -43,11 +42,6 @@ if self.handles.multi_channel_control.Value
 		
 		N = strsplit(self.handles.multi_channel_control_text.String,',');
 
-		if length(N) > 1
-			disp('More than one nerve chosen, not coded')
-			keyboard
-		end
-
 		for i = 1:length(N)
 			assert(any(strcmp(self.common.data_channel_names,N{i})),'Unknown channel name')
 			this_channel = find(strcmp(self.common.data_channel_names,N{i}));
@@ -56,7 +50,16 @@ if self.handles.multi_channel_control.Value
 
 			spiketimes = find(self.putative_spikes(:,self.channel_to_work_with)) + D;
 
+
+			% get some extra context 
+			old_t_before = self.pref.t_before;
+			old_t_after = self.pref.t_after;
+			self.pref.t_before = self.pref.t_before*3;
+			self.pref.t_after = self.pref.t_after*3;
 			these_snippets = self.getSnippets(this_channel, spiketimes);
+
+			self.pref.t_before = old_t_before;
+			self.pref.t_after = old_t_after;
 
 			% normalize to match scale of original data
 			if ~isempty(original_data)
@@ -64,7 +67,7 @@ if self.handles.multi_channel_control.Value
 				these_snippets = these_snippets*mean(std(original_data));
 			end
 
-			data_to_reduce = [data_to_reduce; ];
+			data_to_reduce = [data_to_reduce; these_snippets];
 
 		end
 	end
