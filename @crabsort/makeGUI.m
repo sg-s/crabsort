@@ -71,7 +71,7 @@ handles.menu_name(5) = uimenu('Label','Channels');
 
 
 % file I/O panel
-handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .12 .07],'BackgroundColor',[1 1 1],'FontSize',self.pref.fs);
+handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .08 .07],'BackgroundColor',[1 1 1],'FontSize',self.pref.fs);
 
 uicontrol(handles.data_panel,'units','normalized','Position',[.05 .2 .2 .6],'Style', 'pushbutton', 'String', '<','FontSize',self.pref.fs,'FontWeight',self.pref.fw,'callback',@self.loadFile,'Visible','off');
 
@@ -81,19 +81,19 @@ uicontrol(handles.data_panel,'units','normalized','Position',[.75 .2 .2 .6],'Sty
 
 
 % spike detection panel
-handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[.135 .92 .2 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
+handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[0.09 .92 .15 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 
-handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.85 .6 .1 .4],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider,'Enable','off');
-handles.spike_prom_slider = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .63 .8 .25],'Style','Slider','Min',0,'Max',1,'Value',.5,'Callback',@self.findSpikes,'Enable','off');
+handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.55 .03 .1 .4],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider,'Enable','off');
+handles.spike_prom_slider = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .63 .95 .25],'Style','Slider','Min',0,'Max',1,'Value',.5,'Callback',@self.findSpikes,'Enable','off');
 
 addlistener(handles.spike_prom_slider,'ContinuousValueChange',@self.findSpikes);
 
 
-handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .01 .4 .4],'Style','togglebutton','String','Finding +ve spikes','Value',1,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign,'Enable','off');
+handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .03 .4 .4],'Style','togglebutton','String','Finding +ve spikes','Value',1,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign,'Enable','off');
 
 
 
-handles.dim_red_panel = uipanel('Title','Dimensionality reduction','Position',[.34 .92 .3 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
+handles.dim_red_panel = uipanel('Title','Dimensionality reduction','Position',[.24 .92 .25 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 
 % controls to configure the data to include in the reduction
 handles.spike_shape_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','Spike shape','units','normalized','Position',[.01 .5 .18 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',1);
@@ -113,13 +113,20 @@ handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','St
 
 
 
-handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.645 .92 .12 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
+handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.49 .92 .12 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 
 % find the available methods for clustering
 all_plugin_names = {self.installed_plugins.name};
 cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'cluster')));
 
 handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'FontSize',self.pref.fs);
+
+
+% neural network panel
+handles.nn_panel = uipanel('Title','Neural Network','Position',[.61 .92 .19 .07],'BackgroundColor',[1 1 1],'Visible','on','FontSize',self.pref.fs);
+handles.nn_accuracy = uicontrol(handles.nn_panel,'Style','text','String','N/A','units','normalized','Position',[.01 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*3,'FontWeight','bold','BackgroundColor','w');
+
+handles.nn_epochs = uicontrol(handles.nn_panel,'Style','text','String','0','units','normalized','Position',[.31 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*3,'FontWeight','bold','BackgroundColor','w');
 
 
 % manual override panel

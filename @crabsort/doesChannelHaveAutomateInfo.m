@@ -5,6 +5,8 @@ if self.verbosity > 3
 	disp(['[' mfilename '] called by ' d(2).name])
 end
 
+assert(~isempty(channel),'channel must not be empty')
+
 
 tf = false;
 
