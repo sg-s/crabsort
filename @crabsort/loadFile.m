@@ -364,3 +364,13 @@ try
     end
 catch
 end
+
+
+
+% check if we have the scales set 
+if ~isfield(self.common,'y_scales')
+    disp('Computing y_scales...')
+    for i = 1:self.n_channels
+        self.common.y_scales(i) = prctile(abs(self.raw_data(:,i)),99);
+    end
+end

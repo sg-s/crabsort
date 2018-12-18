@@ -64,8 +64,8 @@ if self.handles.multi_channel_control.Value
 
 			% normalize to match scale of original data
 			if ~isempty(original_data)
-				these_snippets = these_snippets/mean(std(these_snippets));
-				these_snippets = these_snippets*mean(std(original_data));
+				these_snippets = these_snippets/self.common.y_scales(this_channel);
+				these_snippets = these_snippets*self.common.y_scales(self.channel_to_work_with);
 			end
 
 			data_to_reduce = [data_to_reduce; these_snippets];

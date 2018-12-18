@@ -43,7 +43,7 @@ end
 
 
 self.updateSettingsFromAutomateInfo()
-new_spike_prom = self.common.automate_info(channel).spike_prom/2;
+new_spike_prom = self.common.automate_info(channel).spike_prom;
 self.handles.spike_prom_slider.Max = new_spike_prom;
 self.handles.spike_prom_slider.Value = new_spike_prom;
 
@@ -52,7 +52,7 @@ self.getDataToReduce;
 X = self.data_to_reduce;
 
 
-network_loc = [self.path_name 'network' filesep self.common.data_channel_names{self.channel_to_work_with} filesep 'trained_network.mat'];
+network_loc = [self.path_name 'network' filesep self.common.data_channel_names{self.channel_to_work_with} filesep 'trained_network.mat']
 
 if exist(network_loc,'file') == 2
 	load(network_loc,'trainedNet')
@@ -79,9 +79,12 @@ putative_spikes = find(self.putative_spikes(:,self.channel_to_work_with));
 
 assert(length(putative_spikes) == length(Y_pred),'Y_pred and putative spikes do not match')
 
+
+self.putative_spikes(:,self.channel_to_work_with) = 0;
+
 for i = 1:length(unit_names)
 	self.spikes.(nerve_name).(unit_names{i}) = putative_spikes(Y_pred==i);
 end
 
-self.putative_spikes(:,self.channel_to_work_with) = 0;
+
 self.showSpikes;

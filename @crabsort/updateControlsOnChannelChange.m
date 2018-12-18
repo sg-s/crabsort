@@ -41,14 +41,15 @@ self.handles.ax.ax(value).GridColor = [.15 .15 .15];
 if isempty(value)
     % no channel chosen, show all channels
     for i = 1:length(self.handles.ax.ax)
-        self.handles.ax.data(i).Color = [self.handles.ax.data(i).Color(1:3) 1];
+        self.handles.ax.data(i).Color = self.handles.ax.data(i).Color(1:3);
     end
 else
-    % make all other channels semi-transparent
+    % make all other channels desaturated
+    c = lines;
     for i = 1:length(self.handles.ax.ax)
-        self.handles.ax.data(i).Color = [self.handles.ax.data(i).Color(1:3) self.pref.data_opacity];
+        self.handles.ax.data(i).Color = [.5 .5 .5];
     end
-    self.handles.ax.data(value).Color = [self.handles.ax.data(value).Color(1:3) 1];
+    self.handles.ax.data(value).Color = c(value,:);
 end
 
 % disable allowing automation on this channel

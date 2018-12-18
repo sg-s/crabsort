@@ -66,7 +66,9 @@ checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_nam
 
 saved_files = dir([checkpoint_path filesep '*.mat']);
 
+
 if length(saved_files) == 0
+    disp('Making new network...')
 	layers = self.NNmake(SZ,length(unique(Y_train)));
 else
 
