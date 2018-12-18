@@ -43,13 +43,12 @@ self.getDataToReduce;
 if self.watch_me && ~self.automatic
 
 	% create a description of the operations we just did 
-	operation = struct;
-	operation.property = {{'handles','spike_shape_control','Value'}, {'handles','time_after_control','Value'}, {'handles','time_after_nerves','String'}, {'handles','time_before_control','Value'}, {'handles','time_before_nerves','String'},{'method_control'}};
-	operation.value = {self.handles.spike_shape_control.Value,   self.handles.time_after_control.Value,        self.handles.time_after_nerves.String,          self.handles.time_before_control.Value,        self.handles.time_before_nerves.String,         self.handles.method_control.String{self.handles.method_control.Value}};
-	operation.method = @reduceDimensionsCallback;
-	operation.data = [];
 
-	self.common.automate_info(self.channel_to_work_with).operation(end+1) = operation;
+	this_channel = self.channel_to_work_with;
+
+	self.common.automate_info(this_channel).other_nerves = self.handles.multi_channel_control_text.String;
+	self.common.automate_info(this_channel).other_nerves_control = self.handles.multi_channel_control.Value;
+
 
 end
 

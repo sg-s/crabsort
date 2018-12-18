@@ -43,6 +43,7 @@ if self.handles.multi_channel_control.Value
 		N = strsplit(self.handles.multi_channel_control_text.String,',');
 
 		for i = 1:length(N)
+			N{i} = strtrim(N{i});
 			assert(any(strcmp(self.common.data_channel_names,N{i})),'Unknown channel name')
 			this_channel = find(strcmp(self.common.data_channel_names,N{i}));
 

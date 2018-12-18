@@ -19,7 +19,6 @@ end
 switch src.Text
 case 'Delete ALL automate info'
 	self.common.automate_info = [];
-	self.common.automate_channel_order = [];
 
 	% delete all markers
 	for i = 1:self.n_channels
@@ -27,11 +26,18 @@ case 'Delete ALL automate info'
 	end
 
 case 'Delete automate info for this channel'
-	self.common.automate_info(self.channel_to_work_with) = struct('operation',[]);
-	self.common.automate_channel_order = setdiff(self.common.automate_channel_order, self.channel_to_work_with);
+	self.common.automate_info(self.channel_to_work_with).spike_prom = [];
+	self.common.automate_info(self.channel_to_work_with).spike_sign = [];
+	self.common.automate_info(self.channel_to_work_with).other_nerves = {};
+	self.common.automate_info(self.channel_to_work_with).other_nerves_control=[];
 
 	% hide the marker
 	self.handles.ax.has_automate(self.channel_to_work_with).Visible = 'off';
+
+	% start watching
+	obj = self.handles.menu_name(3).findobj('Text','Watch me');
+	% simulate a mouse click
+	self.updateWatchMe(obj)
 otherwise
 	error('[#345] Unrecognised source of delete all automate info. Dont know what to do, so will default to doing nothing ')
 

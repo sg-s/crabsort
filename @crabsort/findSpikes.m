@@ -125,22 +125,14 @@ end
 if self.watch_me && ~self.automatic
 
 
-    % update the automate_info
-    % find spikes is always the first step here, so we can safely overwrite everything 
+    this_channel = self.channel_to_work_with;
 
-    % create a description of the operations we just did 
-    operation = struct;
-    operation.property = {{'handles','spike_sign_control','Value'}, {'handles','spike_prom_slider','Max'}, {'handles','spike_prom_slider','Value'}};
-    operation.value = {self.handles.spike_sign_control.Value, mpp, mpp};
-    operation.method = @findSpikes;
-    operation.data = [];
-
-    self.common.automate_info(self.channel_to_work_with).operation = operation;
-
-    % add this to the channel_order, so that automate can traverse the channels in the correct order
-    if ~any(find(self.common.automate_channel_order == self.channel_to_work_with))
-        self.common.automate_channel_order(end+1) = self.channel_to_work_with;
+    if isempty(self.common.automate_info)
+        self.makeAutomateInfoPlaceholders;
     end
+
+    self.common.automate_info(this_channel).spike_prom = mpp;
+    self.common.automate_info(this_channel).spike_sign = self.handles.spike_sign_control.Value;
                    
 end
 

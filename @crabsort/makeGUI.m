@@ -124,9 +124,11 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 
 % neural network panel
 handles.nn_panel = uipanel('Title','Neural Network','Position',[.61 .92 .19 .07],'BackgroundColor',[1 1 1],'Visible','on','FontSize',self.pref.fs);
-handles.nn_accuracy = uicontrol(handles.nn_panel,'Style','text','String','N/A','units','normalized','Position',[.01 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*3,'FontWeight','bold','BackgroundColor','w');
+handles.nn_accuracy = uicontrol(handles.nn_panel,'Style','text','String','N/A','units','normalized','Position',[.01 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*2,'FontWeight','bold','BackgroundColor','w');
 
-handles.nn_epochs = uicontrol(handles.nn_panel,'Style','text','String','0','units','normalized','Position',[.31 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*3,'FontWeight','bold','BackgroundColor','w');
+handles.nn_iter = uicontrol(handles.nn_panel,'Style','text','String','0','units','normalized','Position',[.31 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*2,'FontWeight','bold','BackgroundColor','w');
+
+handles.nn_predict_control = uicontrol(handles.nn_panel,'Style','pushbutton','String','Predict','units','normalized','Position',[.61 .3 .3 .5],'Callback',@self.NNpredict,'FontSize',self.pref.fs);
 
 
 % manual override panel
@@ -140,6 +142,11 @@ handles.mode_off = uicontrol(handles.manual_panel,'units','normalized','Position
 
 % make a pop-over for busy messages
 handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Position',[0 0 1 1],'Style', 'text', 'String', {'','','','','','','','Embedding...'},'FontSize',self.pref.fs*3,'FontWeight','normal','Visible','off','BackgroundColor',[1 1 1]);
+
+
+% create a timer to read the progress of the parallel worker
+self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',.5);
+start(self.timer_handle);
 
 
 self.handles = handles;

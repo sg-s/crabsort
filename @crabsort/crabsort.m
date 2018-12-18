@@ -96,6 +96,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % ignores this section
         ignore_section
 
+        % parallel workers
+        workers@parallel.FevalFuture
+
     end
 
     properties (Access = protected)
@@ -104,6 +107,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         req_update
         req_toolboxes = {'srinivas.gs_mtools','crabsort','puppeteer'};
 
+
+        timer_handle
 
 
     end % end protected props

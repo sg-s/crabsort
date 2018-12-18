@@ -14,6 +14,20 @@ if self.verbosity > 3
 end
 
 
+try
+	cancel(self.workers);
+catch
+end
+try
+	delete(self.workers);
+catch
+end
+
+try
+	stop(self.timer_handle)
+catch
+end
+
 
 self.saveData;
 

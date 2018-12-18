@@ -102,47 +102,7 @@ else
         end
     end
 
-    % if this channel has automate_info
-    % enable automation on this channel 
-
-    if length(self.common.automate_info) >= self.channel_to_work_with && ~isempty(self.common.automate_info(self.channel_to_work_with).operation)
-
-        enableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this channel');
-        enableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Delete automate info for this channel');
-
-        % this channel has automation info
-        % automatically turn "watch me" off
-        m = vertcat(self.handles.menu_name.Children);
-        for i = 1:length(m)
-            if strcmp(m(i).Text,'Watch me')
-                m(i).Checked = 'off';
-                self.watch_me = false;
-                self.handles.ax.recording(value).Visible = 'off';
-            end
-        end
-    else
-        % this channel has no automation info
-        disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this channel');
-        disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Delete automate info for this channel');
-
-
-        s = self.getSpikesOnThisNerve;
-        if ~any(s)
-            % this channel has no automaton info, and has no spikes
-            % automatically turn "watch_me" on
-            
-            m = vertcat(self.handles.menu_name.Children);
-            for i = 1:length(m)
-                if strcmp(m(i).Text,'Watch me')
-                    m(i).Checked = 'on';
-                    self.handles.ax.recording(value).Visible = 'on';
-                    self.watch_me = true;
-                end
-            end
-
-        end
-
-    end
+    
 end
 
 % reset the manual_override to off
