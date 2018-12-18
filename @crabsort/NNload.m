@@ -1,7 +1,7 @@
 
-function net = NNload(self)
+function net = NNload(self, channel)
 
-checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{self.channel_to_work_with}];
+checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
 
 
 saved_files = dir([checkpoint_path filesep '*.mat']);

@@ -28,6 +28,12 @@ try
 catch
 end
 
+try
+	delete(self.timer_handle)
+catch
+end
+
+
 
 self.saveData;
 

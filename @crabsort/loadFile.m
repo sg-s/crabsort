@@ -25,6 +25,12 @@ allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'Unifor
 allowed_file_extensions = allowed_file_extensions(:);
 
 
+% attempt to cancel all workers
+try
+    cancel(self.workers)
+catch
+end
+
 
 if strcmp(src.String,'Load File')
 
@@ -374,3 +380,5 @@ if ~isfield(self.common,'y_scales')
         self.common.y_scales(i) = prctile(abs(self.raw_data(:,i)),99);
     end
 end
+
+self.handles.nn_panel.Visible = 'on';

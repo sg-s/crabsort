@@ -28,13 +28,15 @@ if self.verbosity > 3
 	disp(['[' mfilename '] called by ' d(2).name])
 end
 
-if isempty(self.channel_to_work_with)
+channel = self.channel_to_work_with;
+
+if isempty(channel)
 	disp('No channel selected')
 	return
 end
 
 % check if there's automate data on this channel
-if ~self.doesChannelHaveAutomateInfo(self.channel_to_work_with)
+if ~self.doesChannelHaveAutomateInfo(channel)
 	disp('there is no automate info, cannot train')
 	return
 end
@@ -61,7 +63,7 @@ SZ = size(X_train,1);
 % is there a previously saved network? 
 self.NNmakeCheckpointDirs;
 
-checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{self.channel_to_work_with}];
+checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
 
 
 saved_files = dir([checkpoint_path filesep '*.mat']);
@@ -73,7 +75,7 @@ if length(saved_files) == 0
 else
 
 	% load
-	net = self.NNload();
+	net = self.NNload(channel);
     layers = net.Layers;
 end
 
@@ -102,10 +104,6 @@ options = trainingOptions('sgdm',...
     'OutputFcn',@self.NNshowResult);
 
 
-% self.workers(self.channel_to_work_with) = parfeval(gcp,@self.NNtrainAndSave,0,X_train,Y_train,layers,options);
+self.workers(channel) = parfeval(gcp,@self.NNtrainAndSave,0,X_train,Y_train,layers,options, channel);
 
 
-self.NNtrainAndSave(X_train,Y_train,layers,options);
-
-% debug, save validation data
-save('validation_data.mat','X_validate','Y_validate')

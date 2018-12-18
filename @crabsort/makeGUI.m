@@ -20,7 +20,7 @@ for i = 1:length(f)
 end
 
 % make the master figure, and the axes to plot the voltage traces
-handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w','Tag','crabsort_main_window','ResizeFcn',@self.resize);
+handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w','Tag','crabsort_main_window','ResizeFcn',@self.resize,'KeyPressFcn',@self.keyPressCallback);
 temp =  findall(handles.main_fig,'Type','uitoggletool','-or','Type','uipushtool');
 
 %delete(temp([2:5 7:8 11:15]))
@@ -123,10 +123,10 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 
 
 % neural network panel
-handles.nn_panel = uipanel('Title','Neural Network','Position',[.61 .92 .19 .07],'BackgroundColor',[1 1 1],'Visible','on','FontSize',self.pref.fs);
+handles.nn_panel = uipanel('Title','Neural Network','Position',[.61 .92 .19 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 handles.nn_accuracy = uicontrol(handles.nn_panel,'Style','text','String','N/A','units','normalized','Position',[.01 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*2,'FontWeight','bold','BackgroundColor','w');
 
-handles.nn_iter = uicontrol(handles.nn_panel,'Style','text','String','0','units','normalized','Position',[.31 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*2,'FontWeight','bold','BackgroundColor','w');
+handles.nn_status = uicontrol(handles.nn_panel,'Style','text','String','NO NET','units','normalized','Position',[.31 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs,'FontWeight','bold','BackgroundColor','w');
 
 handles.nn_predict_control = uicontrol(handles.nn_panel,'Style','pushbutton','String','Predict','units','normalized','Position',[.61 .3 .3 .5],'Callback',@self.NNpredict,'FontSize',self.pref.fs);
 
@@ -145,7 +145,7 @@ handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Positi
 
 
 % create a timer to read the progress of the parallel worker
-self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',.5);
+self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',.2);
 start(self.timer_handle);
 
 

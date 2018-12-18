@@ -34,14 +34,20 @@ for i = 1:length(self.handles.ax.ax)
     self.handles.ax.recording(i).Visible = 'off';
 
 end
-self.handles.ax.ax(value).YColor = 'r';
-self.handles.ax.channel_label_chooser(value).ForegroundColor = [1 0 0];
-self.handles.ax.ax(value).GridColor = [.15 .15 .15];
+
+if ~isempty(value)
+
+    self.handles.ax.ax(value).YColor = 'r';
+    self.handles.ax.channel_label_chooser(value).ForegroundColor = [1 0 0];
+    self.handles.ax.ax(value).GridColor = [.15 .15 .15];
+end
+
+c = lines;
 
 if isempty(value)
     % no channel chosen, show all channels
     for i = 1:length(self.handles.ax.ax)
-        self.handles.ax.data(i).Color = self.handles.ax.data(i).Color(1:3);
+        self.handles.ax.data(i).Color = c(i,:);
     end
 else
     % make all other channels desaturated
@@ -57,6 +63,10 @@ disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this cha
 
 % if the name for this channel is unset, disable
 % everything
+if isempty(value)
+    return
+end
+
 if length(self.common.data_channel_names) < self.channel_to_work_with || strcmp(self.common.data_channel_names{self.channel_to_work_with},'???') || isempty(self.common.data_channel_names{self.channel_to_work_with})
 
     if self.verbosity > 5
@@ -124,4 +134,20 @@ if self.channel_stage(self.channel_to_work_with) > 2
     
 else
     disable(self.handles.manual_panel)
+end
+
+% if this channel has a neural network associated with it, show it
+self.NNmakeCheckpointDirs()
+
+network_loc = [self.path_name 'network' filesep self.common.data_channel_names{self.channel_to_work_with} filesep 'trained_network.mat'];
+
+
+if exist(network_loc,'file') == 2
+    load(network_loc,'info');
+    ValidationAccuracy = info.ValidationAccuracy(end);
+    self.handles.nn_accuracy.String = oval(ValidationAccuracy,3);
+    self.handles.nn_status.String = 'IDLE';
+else
+    self.handles.nn_accuracy.String = 'N/A';
+    self.handles.nn_status.String = 'NO NET';
 end

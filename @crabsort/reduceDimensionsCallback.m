@@ -19,11 +19,11 @@ temp = get(self.handles.method_control,'String');
 method = temp{method};
 method = str2func(method);
 
-if ~self.automatic
-	self.handles.popup.Visible = 'on';
-	self.handles.popup.String = {'','','','Reducing Dimensions...'};
-	drawnow;
-end
+
+self.handles.popup.Visible = 'on';
+self.handles.popup.String = {'','','','Reducing Dimensions...'};
+drawnow;
+
 
 % make sure putative spikes is populated
 if ~any(self.putative_spikes(:,self.channel_to_work_with))

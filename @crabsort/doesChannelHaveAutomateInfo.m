@@ -40,15 +40,24 @@ if isempty(self.common.automate_info)
 	return
 end 
 
-
-fn = fieldnames(self.common.automate_info(channel));
-
-for i = 1:length(fn)
-	if isempty(self.common.automate_info(channel).(fn{i}))
-		return
-	end
-
+if length(self.common.automate_info) < channel
+	return
 end
-tf = true;
-return
 
+
+if isempty(self.common.automate_info(channel).spike_prom)
+	return
+end
+
+
+if isempty(self.common.automate_info(channel).spike_sign)
+	return
+end
+
+
+if isempty(self.common.automate_info(channel).other_nerves_control)
+	return
+end
+
+
+tf = true;

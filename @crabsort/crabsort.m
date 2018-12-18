@@ -99,6 +99,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % parallel workers
         workers@parallel.FevalFuture
 
+        timer_handle
+
     end
 
     properties (Access = protected)
@@ -108,7 +110,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         req_toolboxes = {'srinivas.gs_mtools','crabsort','puppeteer'};
 
 
-        timer_handle
+        
 
 
     end % end protected props
@@ -124,17 +126,16 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             % check for dependencies
             self.version_name = 'crabsort';
 
-            if make_gui
 
-                if verLessThan('matlab', '8.0.1')
-                    error('Need MATLAB 2014b or better to run')
-                end
-
-                % check the signal processing toolbox version
-                if verLessThan('signal','6.22')
-                    error('Need Signal Processing toolbox version 6.22 or higher')
-                end
+            if verLessThan('matlab', '8.0.1')
+                error('Need MATLAB 2014b or better to run')
             end
+
+            % check the signal processing toolbox version
+            if verLessThan('signal','6.22')
+                error('Need Signal Processing toolbox version 6.22 or higher')
+            end
+
 
 
             % load preferences
@@ -156,7 +157,21 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
             self.version_name = ['crabsort (' self.build_number ')'];
             
             if make_gui 
+
+
+                % destroy old timers
+                t = timerfindall;
+                for i = 1:length(t)
+                    if any(strfind(func2str(t(i).TimerFcn),'NNtimer'))
+                        stop(t(i));
+                        delete(t(i));
+                    end
+                end
+
                 self.makeGUI;
+
+
+
             end
 
             if ~nargout
@@ -170,11 +185,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         function self = set.channel_to_work_with(self,value)
             self.channel_to_work_with = value;
 
+        
+            self.updateControlsOnChannelChange;
+
             if isempty(value)
                 return
             end
-
-            self.updateControlsOnChannelChange;
 
             % force a channel_stage update
             self.channel_stage = self.channel_stage;

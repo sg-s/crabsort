@@ -90,6 +90,8 @@ self.putative_spikes(logical(s),channel) = 0;
 self.getDataToReduce;
 X2 = self.data_to_reduce;
 
+self.putative_spikes(:,channel) = 0;
+
 % we're going to label noise with 0
 X = [X X2];
 Y = [Y(:); zeros(size(X2,2),1)];
