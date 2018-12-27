@@ -86,3 +86,6 @@ elseif self.handles.mode_delete_spike.Value == 1
 end
 
 self.showSpikes;
+
+% update the NNdata
+keyboard
