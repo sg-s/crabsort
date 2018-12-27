@@ -23,12 +23,17 @@ end
 handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w','Tag','crabsort_main_window','ResizeFcn',@self.resize,'KeyPressFcn',@self.keyPressCallback);
 temp =  findall(handles.main_fig,'Type','uitoggletool','-or','Type','uipushtool');
 
+pool = gcp('nocreate');
+if isempty(pool)
+	parpool('local');
+end
+
 %delete(temp([2:5 7:8 11:15]))
 
 % make a scrollbar at the bottom to quickly scroll
 % through the traces
 
-handles.scroll_bar = uicontrol(handles.main_fig,'units','normalized','Position',[.1 0 .89 .02],'Style', 'slider','callback',@self.scroll,'Visible','off');
+handles.scroll_bar = uicontrol(handles.main_fig,'units','normalized','Position',[.12 0 .85 .02],'Style', 'slider','callback',@self.scroll,'Visible','off');
 
 addlistener(handles.scroll_bar,'ContinuousValueChange',@self.scroll);
 
@@ -51,7 +56,7 @@ uimenu(handles.menu_name(3),'Label','Reset zoom','Callback',@self.resetZoom);
 uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,'Enable','off');
 
 handles.menu_name(3) = uimenu('Label','Automate');
-uimenu(handles.menu_name(3),'Label','Watch me','Checked','off','Callback',@self.updateWatchMe);
+
 uimenu(handles.menu_name(3),'Label','Run on this channel','Callback',@self.automate,'Separator','on');
 uimenu(handles.menu_name(3),'Label','Run on this file','Callback',@self.automate,'Separator','off');
 uimenu(handles.menu_name(3),'Label','Run on all files...','Callback',@self.automate);
@@ -146,7 +151,5 @@ handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Positi
 
 % create a timer to read the progress of the parallel worker
 self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',.2);
-start(self.timer_handle);
-
 
 self.handles = handles;

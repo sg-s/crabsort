@@ -41,10 +41,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         nerve2neuron
 
 
-        % for use by automate()
-        automatic = false; % when true, crabsort is running automatically 
-        current_operation
-
         % UI
         handles % a structure that handles everything else
 
@@ -87,7 +83,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         data_to_reduce
 
         % common data to all files in this folder
-        common
+        common@crabsortCommon
 
         % this propoerty mirrors the checked state of 
         % the "watch me" menu item
@@ -302,8 +298,5 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
     end % end general methods
 
-    methods (Static)
-        [accuracy, nsteps] = parseTFOutput(output_string);
-    end % end static methods
 
 end % end classdef

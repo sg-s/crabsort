@@ -18,10 +18,12 @@ C.NNgenerateTrainingData()
 **Description**
 
 generates training data for a channel, assuming  that
-there is some annotations on that channel 
+there is some annotations on that channel. this is typically
+called after clustering occurs, and will generate
++ve and -ve training data from this channel
 
 %}
-function [X, Y] = NNgenerateTrainingData(self)
+function NNgenerateTrainingData(self)
 
 d = dbstack;
 if self.verbosity > 3
@@ -52,6 +54,7 @@ self.updateSettingsFromAutomateInfo()
 % create the +ve training data
 self.putative_spikes(:,channel) = s;
 self.getDataToReduce;
+all_spiketimes = find(self.putative_spikes(:,channel));
 X = self.data_to_reduce;
 
 
@@ -88,6 +91,7 @@ self.putative_spikes(random_fake_spikes,channel) = 1;
 self.putative_spikes(logical(s),channel) = 0;
 
 self.getDataToReduce;
+all_spiketimes = [all_spiketimes(:); find(self.putative_spikes(:,channel))];
 X2 = self.data_to_reduce;
 
 self.putative_spikes(:,channel) = 0;
@@ -111,10 +115,21 @@ if iscell(default_neuron_name)
 else
 	default_names = {default_neuron_name, 'Noise'};
 end
-if ~isfield(self.common,'tf')
-	self.common.tf.labels = {};
+
+% now append it to NNdata as needed
+NNdata = self.common.NNdata(self.channel_to_work_with);
+
+if isempty(NNdata.raw_data)
+
+
+	NNdata.raw_data = X;
+	NNdata.label_idx = Y(:);
+	NNdata.spiketimes =  all_spiketimes;
+	NNdata.file_idx = 0*NNdata.spiketimes + self.getFileSequence;
+
+else
+	% some data already exists
+	keyboard
 end
-if isempty(self.common.tf.labels)
-	self.common.tf.labels = {};
-end
-self.common.tf.labels{channel} = default_names;
+
+self.common.NNdata(self.channel_to_work_with) = NNdata;

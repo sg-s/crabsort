@@ -2,80 +2,56 @@
 
 function NNtimer(self,~,~)
 
-if isempty(self.channel_to_work_with)
-	return
-end
 
+for i = 1:self.n_channels
+	if isempty(self.common.NNdata(i).label_idx)
+		continue
+	end
 
-% can we spin up a worker? 
-this_nerve = self.common.data_channel_names{self.channel_to_work_with};
-
-if isfield(self.spikes,this_nerve)
 	if isempty(self.workers)
-		% empty workers, have spikes, so let's train!
-		self.NNtrain;
-		return
-	else
-		if length(self.workers) < self.channel_to_work_with
-			self.NNtrain;
-			return
-		else
-			if isvalid(self.workers(self.channel_to_work_with))
+		% absolutely nothing, so let's train
+		self.NNtrain(i);
+	elseif length(self.workers) < i
+		% no worker working on this channel, so let's train!
+		self.NNtrain(i);
+	elseif strcmp(self.workers(i).State,'finished')
+		% retrain!
+		self.NNtrain(i);
+	elseif strcmp(self.workers(i).State,'running')
+		% update display
+		self.handles.ax.NN_status(i).String = 'TRAINING';
 
-				% valid worker
-				if strcmp(self.workers(self.channel_to_work_with).State,'finished')
-					% retrain!
-					self.NNtrain;
-					return
-				elseif strcmp(self.workers(self.channel_to_work_with).State,'running')
-				end
 
-			else
-				% invalid object
-				% retrain!
-				self.NNtrain;
-				return
+		D = self.workers(i).Diary;
 
+
+		if length(D) < 5
+			continue
+		end
+
+		D = strsplit(D,'\n');
+
+
+		ValidationAccuracy = [];
+		for j = length(D):-1:1
+			if strcmp(strtrim(D{j}),'ValidationAccuracy=')
+				ValidationAccuracy = strtrim(D{j+1});
+				break
 			end
 		end
-	end
-end
 
-
-if isempty(self.workers)
-	self.handles.nn_status.String = 'NO NET';
-	return
-end
-
-
-try
-	D = self.workers(self.channel_to_work_with).Diary;
-	D = strsplit(D,'\n');
-catch
-	return
-end
-
-
-try
-	ValidationAccuracy = [];
-	for i = length(D):-1:1
-		if strcmp(strtrim(D{i}),'ValidationAccuracy=')
-			ValidationAccuracy = strtrim(D{i+1});
-			break
+		if ~isempty(ValidationAccuracy)
+			self.handles.ax.NN_accuracy(i).String = oval(str2double(ValidationAccuracy),3);
 		end
+
+
+
+
+
 	end
-	if ~isempty(ValidationAccuracy)
-		self.handles.nn_accuracy.String = oval(str2double(ValidationAccuracy),3);
-	end
-catch
+
+
 end
 
 
-if strcmp(self.workers(self.channel_to_work_with).State,'finished')
-	self.handles.nn_status.String = 'IDLE';
-elseif strcmp(self.workers(self.channel_to_work_with).State,'running')
-	self.handles.nn_status.String = 'TRAINING';
-elseif ~isempty(self.workers.Error)
-	self.handles.nn_status.String = 'ERROR';
-end
 

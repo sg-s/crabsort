@@ -83,18 +83,23 @@ end
 % it. It works. Don't touch it.
 
 
+% make ui panels
+c = lines(100);
+for i = 1:self.n_channels
+	self.handles.ax.panel(i) = uipanel('Parent',self.handles.main_fig,'BackgroundColor',[1 1 1],'Title',self.builtin_channel_names{i},'ForegroundColor',c(i,:),'FontWeight','bold');
+	self.handles.ax.panel(i).Position = [.01 bottom_plot + spacing*(i-1) .1 .95*spacing];
+end
+
 for i = 1:self.n_channels
 
 	% make things a little more flush
-	self.handles.ax.ax(i).Position(1) = .1;
+	self.handles.ax.ax(i).Position(1) = .13;
 	self.handles.ax.ax(i).Position(2) = bottom_plot + spacing*(i-1);
-	self.handles.ax.ax(i).Position(3) = .89;
+	self.handles.ax.ax(i).Position(3) = .84;
 	self.handles.ax.ax(i).Position(4) = .95*spacing;
 
 
 	y = (self.handles.ax.ax(i).Position(4))/2 + self.handles.ax.ax(i).Position(2);
-
-	self.handles.ax.channel_names(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y .06 .02],'Style', 'text', 'String', self.builtin_channel_names{i},'BackgroundColor',[1 1 1],'FontSize',self.pref.fs);
 
 
 	% make the channel labels 
@@ -103,7 +108,7 @@ for i = 1:self.n_channels
 	else
 		V = 1;
 	end
-	self.handles.ax.channel_label_chooser(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y-.06 .05 .06],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel,'FontSize',self.pref.fs,'Value',V);
+	self.handles.ax.channel_label_chooser(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .9 .9 .1],'Style', 'popupmenu', 'String', self.channel_names,'callback',@self.updateChannel,'FontSize',self.pref.fs,'Value',V);
 
 	% disable the channel_label_chooser if need be
 	if isfield(self.common,'channel_name_lock')
@@ -112,10 +117,16 @@ for i = 1:self.n_channels
 		end
 	end
 
-	self.handles.ax.recording(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.01 y+.02 .03 .02],'Style', 'text', 'String', 'REC','BackgroundColor',[1 0 0],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','off');
+	% make an indicator of recording status
+	self.handles.ax.recording(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .05 .3 .15],'Style', 'text', 'String', 'REC','BackgroundColor',[.9 .9 .9],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','on','ButtonDownFcn',@self.updateWatchMe,'Enable','Inactive');
 
 	% show indicator of automate status
-	self.handles.ax.has_automate(i) = uicontrol(self.handles.main_fig,'units','normalized','Position',[.05 y+.02 .01 .02],'Style', 'text', 'String', 'A','BackgroundColor',[0 0.5 0],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','off');
+	self.handles.ax.has_automate(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.41 .05 .1 .15],'Style', 'text', 'String', 'A','BackgroundColor',[.9 .9 .9],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','on');
+
+	% make indicators for neural network status 
+	self.handles.ax.NN_accuracy(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .21 .4 .2],'Style', 'text', 'String', '00.0%','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*2,'FontWeight','bold','Visible','on');
+	self.handles.ax.NN_status(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .41 .8 .2],'Style', 'text', 'String', 'No data','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*2,'FontWeight','bold','Visible','on','HorizontalAlignment','left');
+
 
 
 end
@@ -123,7 +134,7 @@ end
 % now make some global things that aren't channel dependent
 
 % make a slider to futz with the YLims for each channel 
-self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.06 bottom_plot .02 spacing*self.n_channels],'Style', 'slider', 'Max',1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
+self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.1 bottom_plot .02 spacing*self.n_channels],'Style', 'slider', 'Max',1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
 
 try    % R2013b and older
    addlistener(self.handles.ylim_slider,'ActionEvent',@self.resetYLims);
@@ -139,3 +150,4 @@ self.handles.zoom_handles.Motion = 'horizontal';
 self.handles.zoom_handles.ActionPostCallback = @self.zoomCallback;
 self.handles.scroll_bar.Visible = 'on';
 drawnow
+

@@ -14,6 +14,7 @@ if self.verbosity > 5
     cprintf('text',[mfilename ' called by ' d(2).name])
 end
 
+
 method = (get(self.handles.method_control,'Value'));
 temp = get(self.handles.method_control,'String');
 method = temp{method};
@@ -38,11 +39,13 @@ end
 % get the data to reduce
 self.getDataToReduce; 
 
+
 % create an operation manifest BEFORE calling the method so that
 % the method can modify, or add onto the operation. 
-if self.watch_me && ~self.automatic
+if self.watch_me 
 
 	% create a description of the operations we just did 
+
 
 	this_channel = self.channel_to_work_with;
 
@@ -50,12 +53,16 @@ if self.watch_me && ~self.automatic
 	self.common.automate_info(this_channel).other_nerves_control = self.handles.multi_channel_control.Value;
 
 
+
 end
+
 
 
 method(self);
 
 self.handles.popup.Visible = 'off';
+disp('5')
+toc
 
 % change the marker on the identified spikes
 idx = self.channel_to_work_with;

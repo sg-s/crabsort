@@ -31,7 +31,6 @@ for i = 1:length(self.handles.ax.ax)
 
     self.handles.ax.ax(i).YColor = 'k';
     self.handles.ax.channel_label_chooser(i).ForegroundColor = [0 0 0];
-    self.handles.ax.recording(i).Visible = 'off';
 
 end
 

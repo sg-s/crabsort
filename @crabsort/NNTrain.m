@@ -21,19 +21,14 @@ Trains a neural network using labelled data on the current channel
 
 %}
 
-function NNtrain(self,~,~)
+function NNtrain(self,channel)
 
 d = dbstack;
 if self.verbosity > 3
 	disp(['[' mfilename '] called by ' d(2).name])
 end
 
-channel = self.channel_to_work_with;
 
-if isempty(channel)
-	disp('No channel selected')
-	return
-end
 
 % check if there's automate data on this channel
 if ~self.doesChannelHaveAutomateInfo(channel)
@@ -43,7 +38,9 @@ end
 
 
 % gather the training data and test data
-[X, Y] = self.NNgenerateTrainingData;
+NNdata = self.common.NNdata(channel);
+X = NNdata.raw_data;
+Y = NNdata.label_idx;
 
 % split into training and validation
 R = rand(size(X,2),1)>.5;
@@ -64,6 +61,7 @@ SZ = size(X_train,1);
 self.NNmakeCheckpointDirs;
 
 checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
+
 
 
 saved_files = dir([checkpoint_path filesep '*.mat']);

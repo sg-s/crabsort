@@ -26,26 +26,33 @@ end
 
 % check if there is a .crabsort file already
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
-
+common_name = joinPath(self.path_name, 'common.crabsort');
 
 crabsort_obj = self;
 
 % remove some stuff that shouldn't be saved
-ignore_these = {'common','handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','automatic','data_to_reduce','watch_me','time','verbosity','timer_handle'};
+ignore_these = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','watch_me','time','verbosity','timer_handle','workers'};
 
 ignored_values = {};
 
 for i = length(ignore_these):-1:1
 	ignored_values{i} = self.(ignore_these{i});
-	crabsort_obj.(ignore_these{i}) = [];
+	empty_obj = eval([class(crabsort_obj.(ignore_these{i})) '.empty()']);
+	crabsort_obj.(ignore_these{i}) = empty_obj;
 end
 
 
+% now save the common items
+common = self.common;
+save(common_name,'common','-v7.3')
+
+crabsort_obj.common = crabsortCommon(self.n_channels);
+
 try 
 	if exist(file_name,'file') == 2
-	    savefast(file_name,'crabsort_obj')
+	    save(file_name,'crabsort_obj','-v7.3')
 	else
-	    savefast(file_name,'crabsort_obj')
+	    save(file_name,'crabsort_obj','-v7.3')
 	end
 catch err
 	if strcmp(err.identifier,'MATLAB:save:permissionDenied')
@@ -57,8 +64,4 @@ for i = 1:length(ignore_these)
 	 self.(ignore_these{i}) = ignored_values{i};
 end
 
-
-% now save the common items
-common = self.common;
-file_name = joinPath(self.path_name, 'common.crabsort');
-savefast(file_name,'common')
+self.common = common;

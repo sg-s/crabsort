@@ -110,9 +110,7 @@ if ~isa(Npeaks,'double')
 
 end
 
-if self.automatic
-    return
-end
+
 
 % don't overwrite automate_info when called with Npeaks
 % that's because train is using this to create a -ve dataset
@@ -122,14 +120,10 @@ end
 
 
 
-if self.watch_me && ~self.automatic
-
+if self.watch_me 
 
     this_channel = self.channel_to_work_with;
 
-    if isempty(self.common.automate_info)
-        self.makeAutomateInfoPlaceholders;
-    end
 
     self.common.automate_info(this_channel).spike_prom = mpp;
     self.common.automate_info(this_channel).spike_sign = self.handles.spike_sign_control.Value;

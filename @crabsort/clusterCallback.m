@@ -37,9 +37,9 @@ self.putative_spikes(:,channel) = temp;
 self.handles.ax.found_spikes(channel).XData = NaN;
 self.handles.ax.found_spikes(channel).YData = NaN;
 
-if self.watch_me && ~self.automatic
+if self.watch_me 
 	% show that we have automate info, if we do
-	self.handles.ax.has_automate(channel).Visible = 'on';
+	self.handles.ax.has_automate(channel).BackgroundColor = [0 .5 0];
 end
 
 % show the modify controls
@@ -48,9 +48,10 @@ enable(self.handles.manual_panel)
 self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_method_handle)]
 
 % now lock the channel names on this channel and prevent the user from ever renaming it
-if ~isfield(self.common,'channel_name_lock')
-    self.common.channel_name_lock = zeros(self.n_channels,1);
-end
-self.common.channel_name_lock(self.channel_to_work_with) = 1;
+self.common.channel_name_lock(self.channel_to_work_with) = true;
 
 self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
+
+if self.doesChannelHaveAutomateInfo(channel)
+	self.NNgenerateTrainingData;
+end

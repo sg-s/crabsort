@@ -22,7 +22,7 @@ case 'Delete ALL automate info'
 
 	% delete all markers
 	for i = 1:self.n_channels
-		self.handles.ax.has_automate(i).Visible = 'off';
+		self.handles.ax.has_automate(i).BackgroundColor = [.9 .9 .9];
 	end
 
 case 'Delete automate info for this channel'

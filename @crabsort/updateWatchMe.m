@@ -8,12 +8,23 @@ end
 
 channel = self.channel_to_work_with;
 
-if strcmp(src.Checked,'on')
-	src.Checked = 'off';
-	self.watch_me = false;
-	self.handles.ax.recording(channel).Visible = 'off';
-else
-	src.Checked = 'on';
+
+if src.Value == 0
 	self.watch_me = true;
-	self.handles.ax.recording(channel).Visible = 'on';
+	src.BackgroundColor = [1 0 0];
+	src.Value = 1;
+
+	% make sure every other recording is off
+	for i = 1:self.n_channels
+		if i == channel
+			continue
+		end
+		self.handles.ax.recording(i).BackgroundColor = [.9 .9 .9];
+		self.handles.ax.recording(i).Value = 0;
+	end
+else
+	self.watch_me = false;
+	src.BackgroundColor = [.9 .9 .9];
+	src.Value = 0;
+	
 end

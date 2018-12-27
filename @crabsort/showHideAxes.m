@@ -16,6 +16,9 @@ if self.verbosity > 3
 end
 
 
+% stop timer
+stop(self.timer_handle)
+
 assert(isfield(self.handles,'ax'),'No axes found in self.handles. showHideAxes was called, but there is nothing to do because the there are no axes handles. it looks like createNewAxes needed to be called, but was not.')
 
 n_channels_to_show = sum(self.common.show_hide_channels);
@@ -40,6 +43,8 @@ for i = 1:self.n_channels
 	self.handles.ax.ax(i).XAxisLocation = 'top';
 
 
+
+
 	if self.common.show_hide_channels(i)
 		% show the plot in the correct place
 
@@ -50,43 +55,20 @@ for i = 1:self.n_channels
 
 
 
-		% do the same for the associated controls
+		% do the same for the associated panel
 		y = (self.handles.ax.ax(i).Position(4))/2 + self.handles.ax.ax(i).Position(2);
 
-		self.handles.ax.channel_label_chooser(i).Position(2) = y - .06;
-		self.handles.ax.recording(i).Position(2) = y + .02;
-		self.handles.ax.has_automate(i).Position(2) = y + .02;
-		self.handles.ax.channel_names(i).Position(2) = y;
 
-		% show the plot and associated controls
-		% except the recording and has_automate controls,
-		% which we treat specially 
-		for j = 1:length(fn)
-			if strcmp(fn{j},'recording') 
-				if ~isempty(self.channel_to_work_with)
-					if self.watch_me && self.channel_to_work_with == i
-						self.handles.ax.(fn{j})(i).Visible = 'on';
-					else
-						self.handles.ax.(fn{j})(i).Visible = 'off';
-					end
-				else
-					self.handles.ax.(fn{j})(i).Visible = 'off';
-				end
-			elseif strcmp(fn{j},'has_automate')
-				if self.doesChannelHaveAutomateInfo(i)
-					self.handles.ax.(fn{j})(i).Visible = 'on';
-				else
-					self.handles.ax.(fn{j})(i).Visible = 'off';
-				end
-			elseif strcmp(fn{j},'sorted_spikes')
-				for k = 1:length(self.handles.ax.sorted_spikes(i).unit)
-					self.handles.ax.sorted_spikes(i).unit(k).Visible = 'on';
-				end
-			else
-			
-				set(self.handles.ax.(fn{j})(i),'Visible','on');
+		self.handles.ax.panel(i).Visible = 'on';
+		self.handles.ax.panel(i).Position = [.01 bottom_plot + spacing*(plot_idx-1) .1 .95*spacing];
+		
 
-			end
+
+		% to do: show/hide automate and rec controls
+		if self.doesChannelHaveAutomateInfo(i)
+			self.handles.ax.has_automate(i).BackgroundColor = [0 .5 0];
+		else
+			self.handles.ax.has_automate(i).BackgroundColor = [.9 .9 .9];
 		end
 
 		% show all children of plot
@@ -97,22 +79,18 @@ for i = 1:self.n_channels
 
 
 	else
-		% hide the plot and associated controls
-		for j = 1:length(fn)
-			if strcmp(fn{j},'sorted_spikes')
-				for k = 1:length(self.handles.ax.sorted_spikes(i).unit)
-					set(self.handles.ax.sorted_spikes(i).unit(k),'Visible','on');
-				end
-			else
-				set(self.handles.ax.(fn{j})(i),'Visible','off');
-			end
-		end
+		% hide the plot 
+		self.handles.ax.ax(i).Visible = 'off';
 
 		% hide all children of the plot
 		ax = self.handles.ax.ax(i);
 		for j = 1:length(ax.Children)
 			set(ax.Children(j),'Visible','off');
 		end
+
+		% hide the panel
+		self.handles.ax.panel(i).Visible = 'off';
+		
 
 	end
 
@@ -131,3 +109,6 @@ self.handles.ax.ax(first_ax).XTickMode = 'auto';
 self.handles.ax.ax(last_ax).XColor = 'k';
 self.handles.ax.ax(last_ax).XAxisLocation = 'top';
 self.handles.ax.ax(last_ax).XTickMode = 'auto';
+
+
+start(self.timer_handle)

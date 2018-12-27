@@ -30,15 +30,18 @@ if exist([self.path_name 'network'],'dir')  ~= 7
 
 	mkdir([self.path_name 'network'])
 
-	for i = 1:self.n_channels
-		this_nerve = self.common.data_channel_names{i};
-		if isempty(this_nerve)
-			continue
-		end
 
-		mkdir([self.path_name 'network' filesep this_nerve])
+end
 
-
+for i = 1:self.n_channels
+	this_nerve = self.common.data_channel_names{i};
+	if isempty(this_nerve)
+		continue
 	end
+
+	if exist([self.path_name 'network' filesep this_nerve]) ~= 7
+		mkdir([self.path_name 'network' filesep this_nerve])
+	end
+
 
 end

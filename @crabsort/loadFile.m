@@ -174,15 +174,14 @@ catch err
 end
 
 % reset common
-self.common = [];
+self.common = crabsortCommon(self.n_channels);
 
 
 % set the channel_stages
-self.channel_stage = zeros(size(self.raw_data,2),1);
-self.channel_ylims = zeros(size(self.raw_data,2),1);
+self.channel_stage = zeros(self.n_channels,1);
+self.channel_ylims = zeros(self.n_channels,1);
 
-% make placeholders for data_channel_names
-self.common.data_channel_names = cell(self.n_channels,1);
+
 
 % check if there is a .crabsort file already
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
@@ -233,13 +232,6 @@ end
 self.estimateDelay;
 
 
-% populate fields in common 
-req_fields = {'data_channel_names','tf_model_name','tf_data','tf_labels','tf_folder','automate_info','automate_channel_order'};
-for i = 1:length(req_fields)
-    if ~isfield(self.common,req_fields{i})
-        self.common.(req_fields{i}) = [];
-    end
-end
 
 if self.verbosity > 5
     disp(['[loadFile] remove mean for all channels that have names'])
@@ -305,15 +297,6 @@ disable(self.handles.manual_panel);
 delete(self.handles.menu_name(5).Children)
 
 % do we already have some preference for which channels to hide?
-try
-    show_hide_channels = self.common.show_hide_channels;
-catch err
-    for ei = 1:length(err)
-        err.stack(ei)
-    end
-    self.common.show_hide_channels = true(self.n_channels,1);
-end
-
 for i = 1:self.n_channels
 
     if self.common.show_hide_channels(i) 
@@ -374,7 +357,7 @@ end
 
 
 % check if we have the scales set 
-if ~isfield(self.common,'y_scales')
+if any(isnan(self.common.y_scales))
     disp('Computing y_scales...')
     for i = 1:self.n_channels
         self.common.y_scales(i) = prctile(abs(self.raw_data(:,i)),99);

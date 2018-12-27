@@ -13,7 +13,7 @@
 
 function estimateDelay(self)
 
-if isfield(self.common,'delays')
+if ~any(isnan(self.common.delays(:)))
 	% assume delays already computed, exit
 	return
 end
