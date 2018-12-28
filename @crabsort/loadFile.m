@@ -346,13 +346,13 @@ catch err
 end
 
 
-% logging for debugging 
-try
-    if ~isempty(self.file_name)
-        debuglog('crabsort',self.file_name)
-    end
-catch
-end
+% % logging for debugging 
+% try
+%     if ~isempty(self.file_name)
+%         debuglog('crabsort',self.file_name)
+%     end
+% catch
+% end
 
 
 
