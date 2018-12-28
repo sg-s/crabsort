@@ -32,6 +32,8 @@ spacing = (top_plot - bottom_plot)/self.n_channels;
 
 M = self.pref.spike_markers;
 
+sz = get(0,'ScreenSize');
+
 for i = self.n_channels:-1:1
 
 	self.handles.ax.ax(i) = subplot(self.n_channels,1,self.n_channels - i + 1); hold on
@@ -124,8 +126,8 @@ for i = 1:self.n_channels
 	self.handles.ax.has_automate(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.41 .05 .1 .15],'Style', 'text', 'String', 'A','BackgroundColor',[.9 .9 .9],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','on');
 
 	% make indicators for neural network status 
-	self.handles.ax.NN_accuracy(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .21 .4 .2],'Style', 'text', 'String', '00.0%','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*2,'FontWeight','bold','Visible','on');
-	self.handles.ax.NN_status(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .41 .8 .2],'Style', 'text', 'String', 'No data','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*2,'FontWeight','bold','Visible','on','HorizontalAlignment','left');
+	self.handles.ax.NN_accuracy(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .21 .4 .2],'Style', 'text', 'String', '00.0%','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*(sz(4)/1e3),'FontWeight','bold','Visible','on');
+	self.handles.ax.NN_status(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .41 .8 .2],'Style', 'text', 'String', 'No data','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*(sz(4)/1e3),'FontWeight','bold','Visible','on','HorizontalAlignment','left');
 
 
 

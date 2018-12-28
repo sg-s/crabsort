@@ -31,7 +31,7 @@ end
 
 
 % check if there's automate data on this channel
-if ~self.doesChannelHaveAutomateInfo(channel)
+if ~isvalid(self.common.NNdata(channel))
 	disp('there is no automate info, cannot train')
 	return
 end
@@ -41,6 +41,12 @@ end
 NNdata = self.common.NNdata(channel);
 X = NNdata.raw_data;
 Y = NNdata.label_idx;
+H = NNdata.hash();
+
+if strcmp(H,'00000000000000000000000000000000')
+    disp('Missing info, cannot train')
+    return
+end
 
 % split into training and validation
 R = rand(size(X,2),1)>.5;
@@ -57,24 +63,24 @@ Y_validate = Y(~R);
 SZ = size(X_train,1);
 
 
-% is there a previously saved network? 
+
 self.NNmakeCheckpointDirs;
 
+
+% is there a previously saved network? 
 checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
 
 
+saved_network = dir([checkpoint_path filesep H '.mat']);
 
-saved_files = dir([checkpoint_path filesep '*.mat']);
 
-
-if length(saved_files) == 0
+if length(saved_network) == 0
     disp('Making new network...')
 	layers = self.NNmake(SZ,length(unique(Y_train)));
 else
-
-	% load
-	net = self.NNload(channel);
-    layers = net.Layers;
+    % load
+    load([saved_network.folder filesep saved_network.name])
+    layers = trainedNet.Layers;
 end
 
 
@@ -97,11 +103,10 @@ options = trainingOptions('sgdm',...
     'ValidationFrequency',5,...
     'Plots','none',...
     'Verbose',0,...
-    'CheckpointPath',checkpoint_path,...
     'ExecutionEnvironment','cpu',...
     'OutputFcn',@self.NNshowResult);
 
 
-self.workers(channel) = parfeval(gcp,@self.NNtrainAndSave,0,X_train,Y_train,layers,options, channel);
+self.workers(channel) = parfeval(gcp,@self.NNtrainAndSave,0,X_train,Y_train,layers,options, channel, H);
 
 

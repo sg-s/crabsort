@@ -64,8 +64,7 @@ for i = 1:self.n_channels
 		
 
 
-		% to do: show/hide automate and rec controls
-		if self.doesChannelHaveAutomateInfo(i)
+		if isvalid(self.common.NNdata(i))
 			self.handles.ax.has_automate(i).BackgroundColor = [0 .5 0];
 		else
 			self.handles.ax.has_automate(i).BackgroundColor = [.9 .9 .9];
@@ -111,4 +110,4 @@ self.handles.ax.ax(last_ax).XAxisLocation = 'top';
 self.handles.ax.ax(last_ax).XTickMode = 'auto';
 
 
-start(self.timer_handle)
+%start(self.timer_handle)

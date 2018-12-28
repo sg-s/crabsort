@@ -49,8 +49,8 @@ if self.watch_me
 
 	this_channel = self.channel_to_work_with;
 
-	self.common.automate_info(this_channel).other_nerves = self.handles.multi_channel_control_text.String;
-	self.common.automate_info(this_channel).other_nerves_control = self.handles.multi_channel_control.Value;
+	self.common.NNdata(this_channel).other_nerves = self.handles.multi_channel_control_text.String;
+	self.common.NNdata(this_channel).other_nerves_control = logical(self.handles.multi_channel_control.Value);
 
 
 
@@ -61,8 +61,7 @@ end
 method(self);
 
 self.handles.popup.Visible = 'off';
-disp('5')
-toc
+
 
 % change the marker on the identified spikes
 idx = self.channel_to_work_with;

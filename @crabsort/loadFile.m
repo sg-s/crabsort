@@ -15,6 +15,8 @@ if self.verbosity > 3
 end
 
 
+try
+
 if nargin == 1
     src.String = '';
 end
@@ -43,9 +45,8 @@ if strcmp(src.String,'Load File')
     try
         [file_name,path_name,filter_index] = uigetfile(allowed_file_extensions);
     catch err
-        for ei = 1:length(err)
-                        err.stack(ei)
-                    end
+        keyboard
+        
     end
     if ~file_name
         return
@@ -129,12 +130,7 @@ end
 
 self.reset(false);
 
-if ~isempty(self.handles)
-    uistack(self.handles.popup,'top')
-    self.handles.popup.Visible = 'on';
-    self.handles.popup.String = {'','','','','','','','Loading file...'};
-    drawnow;
-end
+self.displayStatus('Loading...',true)
 
 
 % OK, user has made some selection. let's figure out which plugin to use to load the data
@@ -346,16 +342,6 @@ catch err
 end
 
 
-% % logging for debugging 
-% try
-%     if ~isempty(self.file_name)
-%         debuglog('crabsort',self.file_name)
-%     end
-% catch
-% end
-
-
-
 % check if we have the scales set 
 if any(isnan(self.common.y_scales))
     disp('Computing y_scales...')
@@ -364,4 +350,11 @@ if any(isnan(self.common.y_scales))
     end
 end
 
-self.handles.nn_panel.Visible = 'on';
+
+
+catch err
+
+    self.displayStatus(err, true)
+    error('FATAL error')
+
+end

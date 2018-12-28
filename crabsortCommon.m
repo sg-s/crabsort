@@ -11,8 +11,7 @@ properties
 	delays
 	
 	data_channel_names@cell
-	
-	automate_info@crabsortAutomateInfo
+
 
 	show_hide_channels@logical
 	channel_name_lock@logical
@@ -44,7 +43,6 @@ methods
 
 		common.data_channel_names = cell(n_channels,1);
 
-		common.automate_info = crabsortAutomateInfo(n_channels);
 		common.NNdata = crabsortNNdata(n_channels);
 
 

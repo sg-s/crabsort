@@ -124,9 +124,8 @@ if self.watch_me
 
     this_channel = self.channel_to_work_with;
 
-
-    self.common.automate_info(this_channel).spike_prom = mpp;
-    self.common.automate_info(this_channel).spike_sign = self.handles.spike_sign_control.Value;
+    self.common.NNdata(this_channel).spike_prom = mpp;
+    self.common.NNdata(this_channel).spike_sign = logical(self.handles.spike_sign_control.Value);
                    
 end
 

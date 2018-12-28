@@ -66,9 +66,10 @@ uimenu(handles.menu_name(3),'Label','Delete automate info for this channel','Cal
 
 uimenu(handles.menu_name(3),'Label','Show automate info','Callback',@self.showAutomateInfo,'Separator','on');
 
-% tensorflow 
-handles.menu_name(4) = uimenu('Label','Tensorflow');
-uimenu(handles.menu_name(4),'Label','Open tensorflow...','Callback',@self.makeTensorFlowGUI);
+% neural network 
+handles.menu_name(4) = uimenu('Label','Neural Network');
+uimenu(handles.menu_name(4),'Label','Pause','Callback',@self.NNupdateStatus);
+uimenu(handles.menu_name(4),'Label','Resume','Callback',@self.NNupdateStatus);
 
 % channels (show and hide)
 handles.menu_name(5) = uimenu('Label','Channels');
@@ -127,15 +128,6 @@ cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_ty
 handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'FontSize',self.pref.fs);
 
 
-% neural network panel
-handles.nn_panel = uipanel('Title','Neural Network','Position',[.61 .92 .19 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
-handles.nn_accuracy = uicontrol(handles.nn_panel,'Style','text','String','N/A','units','normalized','Position',[.01 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs*2,'FontWeight','bold','BackgroundColor','w');
-
-handles.nn_status = uicontrol(handles.nn_panel,'Style','text','String','NO NET','units','normalized','Position',[.31 .01 .3 .8],'Callback',@self.clusterCallback,'FontSize',self.pref.fs,'FontWeight','bold','BackgroundColor','w');
-
-handles.nn_predict_control = uicontrol(handles.nn_panel,'Style','pushbutton','String','Predict','units','normalized','Position',[.61 .3 .3 .5],'Callback',@self.NNpredict,'FontSize',self.pref.fs);
-
-
 % manual override panel
 handles.manual_panel = uibuttongroup(handles.main_fig,'Title','Manual Override','Position',[.8 .92 .195 .07],'FontSize',self.pref.fs,'Visible','off','BackgroundColor',[ 1 1 1]);
 
@@ -150,6 +142,6 @@ handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Positi
 
 
 % create a timer to read the progress of the parallel worker
-self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',.2);
+self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',1);
 
 self.handles = handles;

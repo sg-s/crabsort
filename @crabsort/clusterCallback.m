@@ -52,6 +52,6 @@ self.common.channel_name_lock(self.channel_to_work_with) = true;
 
 self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
 
-if self.doesChannelHaveAutomateInfo(channel)
+if isvalid(self.common.NNdata(channel))
 	self.NNgenerateTrainingData;
 end
