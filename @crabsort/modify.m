@@ -67,6 +67,9 @@ if self.handles.mode_new_spike.Value == 1
 
     self.spikes.(this_nerve).(S) = sort([self.spikes.(this_nerve).(S); new_spike]);
 
+     % update the NNdata
+    keyboard
+    
 elseif self.handles.mode_delete_spike.Value == 1
 
     % get all spikes on this nerve
@@ -83,9 +86,14 @@ elseif self.handles.mode_delete_spike.Value == 1
         self.spikes.(this_nerve).(fn{i}) = setdiff(self.spikes.(this_nerve).(fn{i}),spiketimes(idx));
     end
 
+    % update the NNdata
+    keyboard
+
+elseif self.handles.mode_off.Value == 1
+    % don't do anything
+
+
 end
 
 self.showSpikes;
 
-% update the NNdata
-keyboard

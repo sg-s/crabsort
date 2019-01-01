@@ -55,7 +55,8 @@ methods
 
 
 	% compute hash based on spike detection
-	% parameters 
+	% parameters. this hash is used to identify the
+	% NN that is to be used
 	function H = hash(self)
 		if isempty(self.spike_prom)
 			H = repmat('0',1,32);
@@ -70,6 +71,26 @@ methods
 			return
 		end
 		H = GetMD5([GetMD5([self.spike_prom self.spike_sign self.other_nerves_control]); self.other_nerves]);
+	end
+
+
+	function TF = isMoreTrainingNeeded(self)
+
+		if ~strcmp(self.fullHash,self.accuracy_hash)
+			% accuracy hash does not match data, so something has changed,
+			% so must retrain
+			TF = true;
+			return
+		end
+
+		if self.accuracy > 98
+			TF = false;
+			return
+		else
+			TF = true;
+			return
+		end
+
 	end
 
 end % methods

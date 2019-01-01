@@ -1,7 +1,7 @@
-function NNshowResult(self,info)
+function NNshowResult(info)
 
-disp('iteration= ')
-disp(info.Iteration)
+% disp('iteration= ')
+% disp(info.Iteration)
 
 if ~isempty(info.ValidationAccuracy)
 	disp('ValidationAccuracy=')

@@ -23,7 +23,7 @@ if isempty(self.pref)
     return
 end
 
-value = self.channel_to_work_with;
+channel = self.channel_to_work_with;
 
 
 % highlight the currently chosen channel
@@ -34,16 +34,16 @@ for i = 1:length(self.handles.ax.ax)
 
 end
 
-if ~isempty(value)
-
-    self.handles.ax.ax(value).YColor = 'r';
-    self.handles.ax.channel_label_chooser(value).ForegroundColor = [1 0 0];
-    self.handles.ax.ax(value).GridColor = [.15 .15 .15];
+if ~isempty(channel)
+    % some channel selected
+    self.handles.ax.ax(channel).YColor = 'r';
+    self.handles.ax.channel_label_chooser(channel).ForegroundColor = [1 0 0];
+    self.handles.ax.ax(channel).GridColor = [.15 .15 .15];
 end
 
 c = lines;
 
-if isempty(value)
+if isempty(channel)
     % no channel chosen, show all channels
     for i = 1:length(self.handles.ax.ax)
         self.handles.ax.data(i).Color = c(i,:);
@@ -54,7 +54,7 @@ else
     for i = 1:length(self.handles.ax.ax)
         self.handles.ax.data(i).Color = [.5 .5 .5];
     end
-    self.handles.ax.data(value).Color = c(value,:);
+    self.handles.ax.data(channel).Color = c(channel,:);
 end
 
 % disable allowing automation on this channel
@@ -62,11 +62,11 @@ disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this cha
 
 % if the name for this channel is unset, disable
 % everything
-if isempty(value)
+if isempty(channel)
     return
 end
 
-if length(self.common.data_channel_names) < self.channel_to_work_with || strcmp(self.common.data_channel_names{self.channel_to_work_with},'???') || isempty(self.common.data_channel_names{self.channel_to_work_with})
+if length(self.common.data_channel_names) < channel || strcmp(self.common.data_channel_names{channel},'???') || isempty(self.common.data_channel_names{channel})
 
     if self.verbosity > 5
         cprintf('green','\n[INFO] ')
@@ -96,9 +96,9 @@ else
     enable(self.handles.cluster_panel);
 
     % if it's intracellular
-    temp = isstrprop(self.common.data_channel_names{value},'upper');
+    temp = isstrprop(self.common.data_channel_names{channel},'upper');
     if any(temp)
-        new_max = diff(self.handles.ax.ax(value).YLim)/2;
+        new_max = diff(self.handles.ax.ax(channel).YLim)/2;
         self.handles.prom_ub_control.String = mat2str(new_max);
         self.handles.spike_prom_slider.Max = new_max;
         self.handles.spike_prom_slider.Value = new_max;
@@ -106,9 +106,9 @@ else
         % use custom Y-lims if we have it --
         % unless it's an intracellular channel, in which case
         % we ignore it
-        if ~isempty(self.channel_ylims) && ~isempty(self.channel_ylims(value)) && self.channel_ylims(value) > 0
-            yl = self.channel_ylims(value);
-            self.handles.ax.ax(value).YLim = [-yl yl];
+        if ~isempty(self.channel_ylims) && ~isempty(self.channel_ylims(channel)) && self.channel_ylims(channel) > 0
+            yl = self.channel_ylims(channel);
+            self.handles.ax.ax(channel).YLim = [-yl yl];
         end
     end
 
@@ -119,16 +119,16 @@ end
 self.handles.mode_off.Value = 1;
 
 % if this channel has sorted spike, enable the manual override 
-if self.channel_stage(self.channel_to_work_with) > 2
+if self.channel_stage(channel) > 2
     enable(self.handles.manual_panel)
 
     % update the neuron names if extracellular
-    temp = isstrprop(self.common.data_channel_names{self.channel_to_work_with},'upper');
+    temp = isstrprop(self.common.data_channel_names{channel},'upper');
     if ~any(temp)
-        neuron_names = self.nerve2neuron.(self.common.data_channel_names{self.channel_to_work_with});
+        neuron_names = self.nerve2neuron.(self.common.data_channel_names{channel});
         self.handles.new_spike_type.String = neuron_names;
     else
-        self.handles.new_spike_type.String = self.common.data_channel_names{self.channel_to_work_with};
+        self.handles.new_spike_type.String = self.common.data_channel_names{channel};
     end
     
 else
@@ -138,7 +138,7 @@ end
 % if this channel has a neural network associated with it, show it
 self.NNmakeCheckpointDirs()
 
-network_loc = [self.path_name 'network' filesep self.common.data_channel_names{self.channel_to_work_with} filesep 'trained_network.mat'];
+network_loc = [self.path_name 'network' filesep self.common.data_channel_names{channel} filesep 'trained_network.mat'];
 
 
 if exist(network_loc,'file') == 2
@@ -149,4 +149,17 @@ if exist(network_loc,'file') == 2
 else
     self.handles.nn_accuracy.String = 'N/A';
     self.handles.nn_status.String = 'NO NET';
+end
+
+% automatically enable "watch me" on this channel
+if self.handles.ax.recording(channel).Value == 0 & isempty(self.common.NNdata(channel).spike_prom)
+    self.updateWatchMe(self.handles.ax.recording(channel))
+else
+    % disable "rec" on all channels
+    for i = 1:self.n_channels
+        if self.handles.ax.recording(i).Value == 1
+            self.updateWatchMe(self.handles.ax.recording(i))
+        end
+    end
+    self.watch_me = false;
 end

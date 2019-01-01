@@ -1,4 +1,28 @@
-function layers = NNmake(self, input_size, n_classes)
+%{ 
+                _                    _   
+  ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+ / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+| (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+ \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+                                         
+
+
+# NNmake
+
+**Syntax**
+
+```
+crabsort.NNmake(input_size,n_classes)
+```
+
+**Description**
+
+a static method of crabsort that
+makes a convolutional neural network
+
+%}
+
+function layers = NNmake(input_size, n_classes)
 
 
 layers = [
