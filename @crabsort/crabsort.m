@@ -97,6 +97,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         timer_handle
 
+        auto_predict = true;
+
     end
 
     properties (Access = protected)
@@ -113,6 +115,21 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
 
     methods
+
+
+        % trying a global error catch
+
+        % function varargout = subsref(obj, S)
+        %     try
+        %        varargout = builtin('subsref', obj, S);                
+        %     catch err
+        %         keyboard
+        %        errordlg(err.message, err.identifier);
+        %     end   
+
+        % end
+
+
         function self = crabsort(make_gui)
 
             if nargin == 0 

@@ -67,8 +67,19 @@ if self.handles.mode_new_spike.Value == 1
 
     self.spikes.(this_nerve).(S) = sort([self.spikes.(this_nerve).(S); new_spike]);
 
-     % update the NNdata
-    keyboard
+     % update the NNdata by appending this to the NNdata
+    NNdata = self.common.NNdata(channel);
+
+    self.putative_spikes(:,channel) = 0;
+    self.putative_spikes(new_spike,channel) = 1;
+    self.getDataToReduce;
+    NNdata.raw_data = [NNdata.raw_data self.data_to_reduce];
+    NNdata.file_idx(end+1) = self.getFileSequence;
+    NNdata.spiketimes(end+1) = new_spike;
+    NNdata.label_idx(end+1) = 0; 
+    self.putative_spikes(:,channel) = 0;
+
+    self.common.NNdata(channel) = NNdata;
     
 elseif self.handles.mode_delete_spike.Value == 1
 
@@ -86,8 +97,28 @@ elseif self.handles.mode_delete_spike.Value == 1
         self.spikes.(this_nerve).(fn{i}) = setdiff(self.spikes.(this_nerve).(fn{i}),spiketimes(idx));
     end
 
-    % update the NNdata
-    keyboard
+    % update the NNdata by updating the labels of these to noise
+    NNdata = self.common.NNdata(channel);
+    rm_this = NNdata.spiketimes == (spiketimes(idx)) & NNdata.file_idx == self.getFileSequence;
+    if any(rm_this)
+        NNdata.label_idx(rm_this) = 0;
+    else
+        % the deleted spike does not exist in the training
+        % data, so it needs to be added and marked as noise 
+
+        self.putative_spikes(:,channel) = 0;
+        self.putative_spikes(spiketimes(idx),channel) = 1;
+        self.getDataToReduce;
+        NNdata.raw_data = [NNdata.raw_data self.data_to_reduce];
+        NNdata.file_idx(end+1) = self.getFileSequence;
+        NNdata.spiketimes(end+1) = spiketimes(idx);
+        NNdata.label_idx(end+1) = 0; 
+
+        self.putative_spikes(:,channel) = 0;
+    end
+
+    self.common.NNdata(channel) = NNdata;
+
 
 elseif self.handles.mode_off.Value == 1
     % don't do anything

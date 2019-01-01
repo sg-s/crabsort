@@ -110,4 +110,4 @@ self.handles.ax.ax(last_ax).XAxisLocation = 'top';
 self.handles.ax.ax(last_ax).XTickMode = 'auto';
 
 
-%start(self.timer_handle)
+start(self.timer_handle)

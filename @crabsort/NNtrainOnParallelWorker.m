@@ -29,7 +29,7 @@ NN_dump_file = [checkpoint_path filesep H '.mat'];
 
 if exist(NN_dump_file,'file') == 7
     % load
-    load(NN_dump_file,'layers')
+    load(NN_dump_file)
     layers = trainedNet.Layers;
     
 else

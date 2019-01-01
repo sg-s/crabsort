@@ -70,7 +70,7 @@ methods
 			H = repmat('0',1,32);
 			return
 		end
-		H = GetMD5([GetMD5([self.spike_prom self.spike_sign self.other_nerves_control]); self.other_nerves]);
+		H = GetMD5([GetMD5([self.spike_prom self.spike_sign self.other_nerves_control]) self.other_nerves]);
 	end
 
 

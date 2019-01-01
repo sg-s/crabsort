@@ -124,12 +124,24 @@ if isempty(NNdata.raw_data)
 
 	NNdata.raw_data = X;
 	NNdata.label_idx = Y(:);
-	NNdata.spiketimes =  all_spiketimes;
+	NNdata.spiketimes =  all_spiketimes(:);
 	NNdata.file_idx = 0*NNdata.spiketimes + self.getFileSequence;
 
 else
 	% some data already exists
-	keyboard
+	% nuke all previous data with the same sequence 
+	rm_this = NNdata.file_idx == self.getFileSequence;
+	NNdata.raw_data(:,rm_this) = [];
+	NNdata.label_idx(rm_this) = [];
+	NNdata.spiketimes(rm_this) = [];
+	NNdata.file_idx(rm_this) = [];
+
+	% append new data
+	NNdata.raw_data = [NNdata.raw_data X];
+	NNdata.label_idx = [NNdata.label_idx; Y(:)];
+	NNdata.spiketimes = [NNdata.spiketimes; all_spiketimes(:)];
+	NNdata.file_idx = [NNdata.file_idx; 0*all_spiketimes(:) + self.getFileSequence];
+
 end
 
 self.common.NNdata(self.channel_to_work_with) = NNdata;

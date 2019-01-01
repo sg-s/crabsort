@@ -36,11 +36,27 @@ for i = 1:self.n_channels
 
 	if isempty(self.workers)
 		% absolutely nothing, so let's train
-		self.NNtrain(i);
+		if self.common.NNdata(i).isMoreTrainingNeeded
+			self.NNtrain(i);
+		else
+			self.handles.ax.NN_status(i).String = 'IDLE';
+			self.handles.ax.NN_accuracy(i).String = oval(self.common.NNdata(i).accuracy,3);
+			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
+				% let's make some predictions
+				self.NNpredict;
+			end
+		end
 	elseif length(self.workers) < i
 		% no worker working on this channel, so let's train!
 		if self.common.NNdata(i).isMoreTrainingNeeded
 			self.NNtrain(i);
+		else
+			self.handles.ax.NN_status(i).String = 'IDLE';
+			self.handles.ax.NN_accuracy(i).String = oval(self.common.NNdata(i).accuracy,3);
+			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
+				% let's make some predictions
+				self.NNpredict;
+			end
 		end
 	elseif strcmp(self.workers(i).State,'finished')
 		% retrain!
@@ -48,6 +64,12 @@ for i = 1:self.n_channels
 			self.NNtrain(i);
 		else
 			self.handles.ax.NN_status(i).String = 'IDLE';
+			self.handles.ax.NN_accuracy(i).String = oval(self.common.NNdata(i).accuracy,3);
+
+			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
+				% let's make some predictions
+				self.NNpredict;
+			end
 		end
 	elseif strcmp(self.workers(i).State,'running')
 		% update display

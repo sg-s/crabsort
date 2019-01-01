@@ -68,8 +68,12 @@ uimenu(handles.menu_name(3),'Label','Show automate info','Callback',@self.showAu
 
 % neural network 
 handles.menu_name(4) = uimenu('Label','Neural Network');
-uimenu(handles.menu_name(4),'Label','Pause','Callback',@self.NNupdateStatus);
-uimenu(handles.menu_name(4),'Label','Resume','Callback',@self.NNupdateStatus);
+uimenu(handles.menu_name(4),'Label','Delete NN data on this channel','Callback',@self.NNdelete);
+uimenu(handles.menu_name(4),'Label','Delete all NN data','Callback',@self.NNdelete);
+uimenu(handles.menu_name(4),'Label','Delete this channels NN','Callback',@self.NNdelete,'Separator','on');
+uimenu(handles.menu_name(4),'Label','Delete all nets','Callback',@self.NNdelete);
+
+uimenu(handles.menu_name(4),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
 
 % channels (show and hide)
 handles.menu_name(5) = uimenu('Label','Channels');
