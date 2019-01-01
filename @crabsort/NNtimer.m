@@ -28,6 +28,18 @@ it does the following things:
 
 function NNtimer(self,~,~)
 
+if isempty(self.handles)
+	return
+
+end
+
+if ~isfield(self.handles,'ax')
+	return
+end
+
+if isempty(self.handles.ax)
+	return
+end
 
 for i = 1:self.n_channels
 	if isempty(self.common.NNdata(i).label_idx)
@@ -39,6 +51,7 @@ for i = 1:self.n_channels
 		if self.common.NNdata(i).isMoreTrainingNeeded
 			self.NNtrain(i);
 		else
+			% no more training needed
 			self.handles.ax.NN_status(i).String = 'IDLE';
 			self.handles.ax.NN_accuracy(i).String = oval(self.common.NNdata(i).accuracy,3);
 			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i

@@ -146,6 +146,6 @@ handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Positi
 
 
 % create a timer to read the progress of the parallel worker
-self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',1);
+self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',.5,'ErrorFcn',@self.NNerror);
 
 self.handles = handles;

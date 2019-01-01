@@ -26,9 +26,8 @@ SZ = size(X_train,1);
 H = NNdata.hash;
 NN_dump_file = [checkpoint_path filesep H '.mat'];
 
-
-if exist(NN_dump_file,'file') == 7
-    % load
+if exist(NN_dump_file,'file') == 2
+    disp('Loading existing file...')
     load(NN_dump_file)
     layers = trainedNet.Layers;
     
@@ -67,4 +66,6 @@ disp('hash of data training on = ')
 disp(NNdata.fullHash)
 
 [trainedNet, info] = trainNetwork(X_train,Y_train,layers,options);
+
+disp(['Saving to: ' NN_dump_file])
 save(NN_dump_file,'trainedNet','info')
