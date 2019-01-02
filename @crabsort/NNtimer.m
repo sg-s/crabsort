@@ -110,7 +110,10 @@ for i = 1:self.n_channels
 				break
 			end
 		end
-
+		
+		if isempty(ValidationAccuracy)
+			continue
+		end
 		
 
 		% read hash of data training on
