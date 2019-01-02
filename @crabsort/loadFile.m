@@ -343,6 +343,8 @@ if any(isnan(self.common.y_scales))
     end
 end
 
+% create a mask
+self.mask = self.raw_data*0 + 1;
 
 catch err
 

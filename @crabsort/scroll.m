@@ -63,22 +63,31 @@ for i = 1:length(self.handles.ax.data)
     if self.common.show_hide_channels(i)
         self.handles.ax.ax(i).XLim = newlim;
         self.handles.ax.data(i).XData = self.time(a:z);
-        self.handles.ax.data(i).YData = self.raw_data(a:z,i);
+        self.handles.ax.data(i).YData = self.raw_data(a:z,i).*self.mask(a:z,i);
     end
 end
 
 % if the current channel is intracellular, futz with the YLims to keep things in view
 if isempty(self.channel_to_work_with)
     return
+else
+    channel = self.channel_to_work_with;
 end
 
-is_intracellular = any(isstrprop(self.common.data_channel_names{self.channel_to_work_with},'upper'));
+is_intracellular = any(isstrprop(self.common.data_channel_names{channel},'upper'));
 
 if is_intracellular
-    a = find(self.time > self.handles.ax.ax(self.channel_to_work_with).XLim(1),1,'first');
-    z = find(self.time > self.handles.ax.ax(self.channel_to_work_with).XLim(2),1,'first');
-    m = mean(self.raw_data(a:z,self.channel_to_work_with));
+    a = find(self.time > self.handles.ax.ax(channel).XLim(1),1,'first');
+    z = find(self.time > self.handles.ax.ax(channel).XLim(2),1,'first');
+    m = mean(self.raw_data(a:z,channel));
     yl = (self.handles.ylim_slider.Value)*100;
-    self.handles.ax.ax(self.channel_to_work_with).YLim = [m-yl m+yl];
+    self.handles.ax.ax(channel).YLim = [m-yl m+yl];
 
+end
+
+% update the mask if needed
+if self.handles.maskmode_mask.Value == 1
+    self.mask(a:z,channel) = 0;
+elseif self.handles.maskmode_unmask.Value == 1
+    self.mask(a:z,channel) = 1;
 end

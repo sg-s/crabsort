@@ -31,10 +31,12 @@ end
 
 if isempty(self.channel_to_work_with)
     return
+else
+    channel = self.channel_to_work_with;
 end
 
 % figure out which channel to work with
-V = self.raw_data(:,self.channel_to_work_with);
+V = self.raw_data(:,channel).*self.mask(:,channel);
 
 
 if any(isnan(V))
@@ -53,7 +55,7 @@ mpw = ceil(self.pref.minimum_peak_width/(self.dt*1e3));
 
 % first, find spikes in current window
 if ~isa(Npeaks,'double')
-    xlim = self.handles.ax.ax(self.channel_to_work_with).XLim;
+    xlim = self.handles.ax.ax(channel).XLim;
     a = find(self.time >= xlim(1), 1, 'first');
     z = find(self.time <= xlim(2), 1, 'last');
     V2 = V(a:z);
@@ -64,7 +66,7 @@ if ~isa(Npeaks,'double')
     end
     self.handles.main_fig.Name = [self.file_name ' -- found ' oval(length(loc)) ' spikes in current view'];
     self.putative_spikes(:,self.channel_to_work_with) = 0;
-    self.putative_spikes(loc+a-1,self.channel_to_work_with) = 1;
+    self.putative_spikes(loc+a-1,channel) = 1;
     drawnow
     if nargin > 2 && strcmp(event.EventName,'ContinuousValueChange')
         return
@@ -97,8 +99,8 @@ end
 self.handles.main_fig.Name = [self.file_name ' -- found ' oval(length(loc)) ' spikes'];
 
 
-self.putative_spikes(:,self.channel_to_work_with) = 0;
-self.putative_spikes(loc,self.channel_to_work_with) = 1;
+self.putative_spikes(:,channel) = 0;
+self.putative_spikes(loc,channel) = 1;
 
 if ~isa(Npeaks,'double')
     % after finding spikes, we should update the channel_stage
@@ -122,10 +124,8 @@ end
 
 if self.watch_me 
 
-    this_channel = self.channel_to_work_with;
-
-    self.common.NNdata(this_channel).spike_prom = mpp;
-    self.common.NNdata(this_channel).spike_sign = logical(self.handles.spike_sign_control.Value);
+    self.common.NNdata(channel).spike_prom = mpp;
+    self.common.NNdata(channel).spike_sign = logical(self.handles.spike_sign_control.Value);
                    
 end
 

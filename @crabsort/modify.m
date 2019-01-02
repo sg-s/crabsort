@@ -35,21 +35,8 @@ this_nerve = self.common.data_channel_names{channel};
 if self.handles.mode_new_spike.Value == 1
     % snip out a small waveform around the point
 
-    % need to update the spike sign control to match automate info, if it exists 
-    try
-        self.common.automate_info(self.channel_to_work_with).operation(1);
-        operation = self.common.automate_info(self.channel_to_work_with).operation(1);
-        for i = 1:length(operation.property)
-            if strcmp(strjoin(operation.property{i},'.'),'handles.spike_sign_control.Value')
-                self.handles.spike_sign_control.Value = operation.value{i};
-            end
-        end
-    catch err
-        for ei = 1:length(err)
-            err.stack(ei)
-        end
-        
-    end
+    % need to update the spike sign control to match automate info, if it exists
+    self.updateSettingsFromNNdata(); 
 
     if ~self.handles.spike_sign_control.Value
         [~,loc] = min(V(floor(p(1)-search_width:p(1)+search_width)));
@@ -57,7 +44,7 @@ if self.handles.mode_new_spike.Value == 1
         [~,loc] = max(V(floor(p(1)-search_width:p(1)+search_width)));
     end
 
-    new_spike = floor(loc + p(1) - search_width);
+    new_spike = floor(loc + p(1) - search_width) - 1;
 
     % which neuron are we adding to
     S = self.handles.new_spike_type.String;
@@ -76,8 +63,10 @@ if self.handles.mode_new_spike.Value == 1
     NNdata.raw_data = [NNdata.raw_data self.data_to_reduce];
     NNdata.file_idx(end+1) = self.getFileSequence;
     NNdata.spiketimes(end+1) = new_spike;
-    NNdata.label_idx(end+1) = 0; 
+    NNdata.label_idx(end+1) = find(strcmp(self.handles.new_spike_type.String,S)); 
+    NNdata.check()
     self.putative_spikes(:,channel) = 0;
+   
 
     self.common.NNdata(channel) = NNdata;
     
@@ -113,6 +102,7 @@ elseif self.handles.mode_delete_spike.Value == 1
         NNdata.file_idx(end+1) = self.getFileSequence;
         NNdata.spiketimes(end+1) = spiketimes(idx);
         NNdata.label_idx(end+1) = 0; 
+        NNdata.check()
 
         self.putative_spikes(:,channel) = 0;
     end

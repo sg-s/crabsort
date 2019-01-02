@@ -64,9 +64,10 @@ if size(s_by_unit,2) > 1
 
 else
 	% only one unit
-	Y = zeros(1,length(X)) + max(nonzeros(s_by_unit));
+	Y = zeros(size(X,2),1) + max(nonzeros(s_by_unit));
 end
 Y = Y(:);
+assert(length(Y) == size(X,2),'Size mismatch')
 
 
 % now create some -ve training data
@@ -99,6 +100,7 @@ self.putative_spikes(:,channel) = 0;
 % we're going to label noise with 0
 X = [X X2];
 Y = [Y(:); zeros(size(X2,2),1)];
+assert(length(Y) == size(X,2),'Size mismatch')
 
 % if it's intracellular
 temp = isstrprop(self.common.data_channel_names{channel},'upper');
@@ -125,7 +127,8 @@ if isempty(NNdata.raw_data)
 	NNdata.raw_data = X;
 	NNdata.label_idx = Y(:);
 	NNdata.spiketimes =  all_spiketimes(:);
-	NNdata.file_idx = 0*NNdata.spiketimes + self.getFileSequence;
+	NNdata.file_idx = 0*all_spiketimes(:) + self.getFileSequence;
+	NNdata.check()
 
 else
 	% some data already exists
@@ -135,13 +138,14 @@ else
 	NNdata.label_idx(rm_this) = [];
 	NNdata.spiketimes(rm_this) = [];
 	NNdata.file_idx(rm_this) = [];
+	NNdata.check()
 
 	% append new data
 	NNdata.raw_data = [NNdata.raw_data X];
 	NNdata.label_idx = [NNdata.label_idx; Y(:)];
 	NNdata.spiketimes = [NNdata.spiketimes; all_spiketimes(:)];
 	NNdata.file_idx = [NNdata.file_idx; 0*all_spiketimes(:) + self.getFileSequence];
-
+	NNdata.check()
 end
 
 self.common.NNdata(self.channel_to_work_with) = NNdata;

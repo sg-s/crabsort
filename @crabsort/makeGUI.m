@@ -129,6 +129,15 @@ cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_ty
 handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'FontSize',self.pref.fs);
 
 
+% mask panel
+handles.mask_panel = uibuttongroup(handles.main_fig,'Title','Masking','Position',[.61 .92 .19 .07],'FontSize',self.pref.fs,'Visible','on','BackgroundColor',[ 1 1 1]);
+handles.maskmode_mask = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Mask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
+handles.maskmode_unmask = uicontrol(handles.mask_panel,'units','normalized','Position',[.31 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Unmask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
+handles.maskmode_off = uicontrol(handles.mask_panel,'units','normalized','Position',[.71 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
+handles.mask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .01 .3 .5], 'Style', 'pushbutton', 'String', 'Mask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+handles.unmask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.51 .01 .3 .5], 'Style', 'pushbutton', 'String', 'Unmask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+handles.maskmode_off.Value = 1;
+
 % manual override panel
 handles.manual_panel = uibuttongroup(handles.main_fig,'Title','Manual Override','Position',[.8 .92 .195 .07],'FontSize',self.pref.fs,'Visible','off','BackgroundColor',[ 1 1 1]);
 

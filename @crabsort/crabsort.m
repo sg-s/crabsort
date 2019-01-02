@@ -99,7 +99,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         auto_predict@logical = true;
 
-        automate_action@crabsort.automateAction = crabsort.automateAction.none;
+        automate_action@crabsort.automateAction = crabsort.automateAction.none
+
+        mask
 
     end
 
