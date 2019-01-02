@@ -9,54 +9,36 @@
 
 function automate(self,src,~)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+if strcmp(src.Text,'Stop')
+	self.automate_action = crabsort.automateAction.none;
+
+
 end
 
-% early exit
-if isempty(self.common.automate_info)
-	disp('No automate info, nothing to do')
-	return
-end
 
-self.saveData;
+% OK, something is being started. so let's stop the timer
 
-self.automatic = true;
+% cancel all workers, because we're going to run
+% some automate action
+cancel(self.workers)
+stop(self.timer_handle)
+self.auto_predict = false;
 
-% figure out what to do based on the src
 
 switch src.Text
-case 'Run on this channel'
-	self.runAutomateOnCurrentChannel;
-case 'Run on this file'
+case 'All channels/All files'
+	self.automate_action = crabsort.automateAction.all_channels_all_files;
+case 'This channel/All files'
+	self.automate_action = crabsort.automateAction.this_channel_all_files;
 
-	% make sure that every channel that 
-	% automate is going to run on is visible
-	if any(~self.common.show_hide_channels(self.common.automate_channel_order))
-		for i = self.common.automate_channel_order
-			self.common.show_hide_channels(i) = true;
-		end
-		self.showHideAxes;
-		self.showSpikes;
-	end
-	self.runAutomateOnCurrentFile;
-case 'Run on all files...'
-	% make sure that every channel that 
-	% automate is going to run on is visible
-	if any(~self.common.show_hide_channels(self.common.automate_channel_order))
-		for i = self.common.automate_channel_order
-			self.common.show_hide_channels(i) = true;
-		end
-		self.showHideAxes;
-		self.showSpikes;
-	end
-	self.runAutomateOnAllFiles;
+case 'All channels/This file'
+	self.automate_action = crabsort.automateAction.all_channels_this_file;
+case 'Stop'
+	
 otherwise
-	self.automatic = false;
-	error('[001] Unknown src for automate')
+	error('Unknown caller to automate')
 end
 
-self.automatic = false;
 
-self.handles.main_fig.Name = [self.file_name '  -- Automate has finished running.']
+self.runAutomateAction();
+

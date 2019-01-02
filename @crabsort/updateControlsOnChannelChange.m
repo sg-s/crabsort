@@ -57,8 +57,6 @@ else
     self.handles.ax.data(channel).Color = c(channel,:);
 end
 
-% disable allowing automation on this channel
-disableMenuItem(vertcat(self.handles.menu_name.Children),'Text','Run on this channel');
 
 % if the name for this channel is unset, disable
 % everything

@@ -42,12 +42,9 @@ if strcmp(src.String,'Load File')
 
 
     self.saveData;
-    try
-        [file_name,path_name,filter_index] = uigetfile(allowed_file_extensions);
-    catch err
-        keyboard
-        
-    end
+
+    [file_name,path_name,filter_index] = uigetfile(allowed_file_extensions);
+
     if ~file_name
         return
     else
@@ -59,6 +56,7 @@ if strcmp(src.String,'Load File')
     if strcmpi(self.file_name(end-2:end),'ABF') && ~self.pref.skip_abf_check
         self.checkABFFiles;
     end
+
 
     
 
@@ -170,7 +168,7 @@ catch err
 end
 
 % reset common
-self.common = crabsortCommon(self.n_channels);
+self.common = crabsort.common(self.n_channels);
 
 
 % set the channel_stages
@@ -196,12 +194,7 @@ if exist(file_name,'file') == 2
     fn = fieldnames(crabsort_obj);
     for i = 1:length(fn)
         if ~isempty(crabsort_obj.(fn{i}))
-            % ignore channel_names
-            % this is a hack because channel_names was erroneously
-            % saved in some .crabsort files
-            if ~strcmp(fn{i},'channel_names')
-                self.(fn{i}) = crabsort_obj.(fn{i});
-            end
+            self.(fn{i}) = crabsort_obj.(fn{i});
         end
     end
 
@@ -351,8 +344,8 @@ if any(isnan(self.common.y_scales))
 end
 
 
-
 catch err
+
 
     self.displayStatus(err, true)
     error('FATAL error')

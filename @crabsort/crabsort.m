@@ -13,23 +13,23 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
     properties
        
-        pref % stores the preferences
+        pref@struct % stores the preferences
 
         % file handling 
         file_name
         path_name
 
         % debug
-        verbosity = 0;
+        verbosity@double = 0;
 
-        channel_to_work_with
+        channel_to_work_with@double
 
     end % end properties 
 
     properties (SetAccess = protected)
 
         % these channel names exist in the raw data
-        builtin_channel_names
+        builtin_channel_names@cell
 
         R  % this holds the dimensionality reduced data
 
@@ -54,7 +54,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % for reasons revolving around the crappiness of the ABF 
         % file format, dt will be stored after being rounded off to
         % the nearest microsecond
-        dt
+        dt@double
         channel_ylims
 
         spikes
@@ -69,10 +69,10 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % 1 == spikes found (need to reduce dimensions)
         % 2 == dimensions reduced (need to cluster)
         % 3 == done (spikes assigned to neurons)
-        channel_stage
+        channel_stage@double
 
-        version_name = 'crabsort';
-        build_number = 'automatically-generated';
+        version_name@char = 'crabsort';
+        build_number@char = 'automatically-generated';
 
 
         % this is passed to the dimensional reduction callback
@@ -83,11 +83,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         data_to_reduce
 
         % common data to all files in this folder
-        common@crabsortCommon
+        common@crabsort.common
 
         % this propoerty mirrors the checked state of 
         % the "watch me" menu item
-        watch_me = false;
+        watch_me@logical = false;
 
         % ignores this section
         ignore_section
@@ -95,9 +95,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % parallel workers
         workers@parallel.FevalFuture
 
-        timer_handle
+        timer_handle@timer
 
-        auto_predict = true;
+        auto_predict@logical = true;
+
+        automate_action@crabsort.automateAction = crabsort.automateAction.none;
 
     end
 

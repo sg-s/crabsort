@@ -23,7 +23,7 @@ makes predictions using a trained neural network
 
 function NNpredict(self)
 
-if ~self.auto_predict
+if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
 	disp('auto_predict off, aborting')
 	return
 end

@@ -41,6 +41,10 @@ if isempty(self.handles.ax)
 	return
 end
 
+if self.automate_action ~= crabsort.automateAction.none
+	return
+end
+
 for i = 1:self.n_channels
 	if isempty(self.common.NNdata(i).label_idx)
 		continue

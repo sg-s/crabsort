@@ -1,4 +1,4 @@
-classdef  crabsortNNdata < VectorObject
+classdef  NNdata < VectorObject
 
 
 properties
@@ -24,7 +24,7 @@ end
 
 methods
 
-	function NNdata = crabsortNNdata(N)
+	function self = NNdata(N)
 
 
 		% matlab stupidity, see
@@ -34,7 +34,7 @@ methods
 			N = 1;
 		end
 
-		NNdata = NNdata@VectorObject(N);
+		self = self@VectorObject(N);
 
 
 	end

@@ -8,10 +8,10 @@ case 'Delete NN data on this channel'
 	if isempty(channel)
 		return
 	end
-	self.common.NNdata(channel) = crabsortNNdata(1);
+	self.common.NNdata(channel) = crabsort.NNdata(1);
 
 case 'Delete all NN data'
-	self.common.NNdata = crabsortNNdata(self.n_channels);
+	self.common.NNdata = crabsort.NNdata(self.n_channels);
 case 'Delete this channels NN'
 	if isempty(channel)
 		return

@@ -57,14 +57,11 @@ uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,
 
 handles.menu_name(3) = uimenu('Label','Automate');
 
-uimenu(handles.menu_name(3),'Label','Run on this channel','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(3),'Label','Run on this file','Callback',@self.automate,'Separator','off');
-uimenu(handles.menu_name(3),'Label','Run on all files...','Callback',@self.automate);
+uimenu(handles.menu_name(3),'Label','All channels/All files','Callback',@self.automate,'Separator','off');
+uimenu(handles.menu_name(3),'Label','This channel/All files','Callback',@self.automate,'Separator','on');
+uimenu(handles.menu_name(3),'Label','All channels/This file','Callback',@self.automate,'Separator','on');
+uimenu(handles.menu_name(3),'Label','Stop','Callback',@self.automate,'Separator','on');
 
-uimenu(handles.menu_name(3),'Label','Delete ALL automate info','Callback',@self.deleteAllAutomateInfo,'Separator','on');
-uimenu(handles.menu_name(3),'Label','Delete automate info for this channel','Callback',@self.deleteAllAutomateInfo);
-
-uimenu(handles.menu_name(3),'Label','Show automate info','Callback',@self.showAutomateInfo,'Separator','on');
 
 % neural network 
 handles.menu_name(4) = uimenu('Label','Neural Network');
