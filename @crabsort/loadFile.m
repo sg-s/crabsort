@@ -40,6 +40,7 @@ if strcmp(src.String,'Load File')
         disp(['[loadFile] load_file_button is src'])
     end
 
+    cancel(self.workers)
 
     self.saveData;
 

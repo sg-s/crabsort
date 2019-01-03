@@ -107,12 +107,6 @@ handles.spike_shape_control = uicontrol(handles.dim_red_panel,'Style','checkbox'
 handles.multi_channel_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','on','units','normalized','Position',[.01 0 .18 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',0);
 handles.multi_channel_control_text = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.1 .0 .15 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 
-handles.time_after_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','Time after','units','normalized','Position',[.25 .0 .2 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-handles.time_after_nerves = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.45 .0 .2 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-
-handles.time_before_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','Time before','units','normalized','Position',[.25 .5 .2 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-handles.time_before_nerves = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.45 .5 .2 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-
 all_plugin_names = {self.installed_plugins.name};
 dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));
 

@@ -76,54 +76,5 @@ if self.handles.multi_channel_control.Value
 
 end
 
-if self.handles.time_before_control.Value
-
-
-	if self.verbosity > 5
-		disp(['[' mfilename '] Using time before information...'])
-	end
-
-	% first, we need to figure out what nerves to compare to
-	if isempty(self.handles.time_before_nerves.String)
-		nerves = fieldnames(self.spikes);
-	else
-		nerves = self.handles.time_before_nerves.String;
-	end  
-
-	if ~iscell(nerves)
-		nerves = {nerves};
-	end
-
-
-	% get times to closest spikes on other nerves in the past
-	relative_times = self.measureTimesToIdentifiedSpikes(nerves,'future');
-
-	data_to_reduce = [data_to_reduce; relative_times];
-end
-
-if self.handles.time_after_control.Value
-
-	if self.verbosity > 5
-		disp(['[' mfilename '] Using time after information...'])
-	end
-
-	% first, we need to figure out what nerves to compare to
-	if isempty(self.handles.time_after_nerves.String)
-		nerves = fieldnames(self.spikes);
-	else
-		nerves = self.handles.time_after_nerves.String;
-	end 
-
-	if ~iscell(nerves)
-		nerves = {nerves};
-	end
-
-
-	% get times to closest spikes on other nerves in the past
-	relative_times = self.measureTimesToIdentifiedSpikes(nerves,'past');
-
-	data_to_reduce = [data_to_reduce; relative_times];
-
-end
 
 self.data_to_reduce = data_to_reduce;
