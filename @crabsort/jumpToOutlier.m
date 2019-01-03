@@ -12,8 +12,9 @@ if isempty(spiketimes)
 	return
 end
 V = self.getSnippets(channel,spiketimes);
-E = zscore(sum(abs(V - mean(V,2))));
+E = abs(zscore(sum(abs(V - mean(V,2)))));
 outliers = E > 5;
+
 if ~any(outliers)
 	self.handles.main_fig.Name = [self.file_name ' -- No outliers'];
 	return
@@ -29,6 +30,7 @@ outliers = outliers*self.dt;
 
 xx = self.handles.ax.ax(channel).XLim;
 xrange = diff(self.handles.ax.ax(channel).XLim);
+
 
 
 switch direction

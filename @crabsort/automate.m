@@ -22,6 +22,7 @@ end
 % some automate action
 cancel(self.workers)
 stop(self.timer_handle)
+
 self.auto_predict = false;
 
 

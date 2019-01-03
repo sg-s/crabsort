@@ -60,7 +60,7 @@ if exist(NN_dump_file,'file') ~= 2
 	return
 end
 
-self.updateSettingsFromNNdata()
+self.updateSettingsFromNNdata(.5)
 
 self.findSpikes()
 

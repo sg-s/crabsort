@@ -11,6 +11,7 @@ properties
 	% neural network performance 
 	accuracy
 	accuracy_hash
+	acceptable_accuracy@double = 98
 
 
 	% spike detection parameters
@@ -83,7 +84,7 @@ methods
 			return
 		end
 
-		if self.accuracy > 98
+		if self.accuracy > self.acceptable_accuracy
 			TF = false;
 			return
 		else

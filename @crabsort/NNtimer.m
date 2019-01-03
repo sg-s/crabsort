@@ -46,6 +46,7 @@ if self.automate_action ~= crabsort.automateAction.none
 end
 
 for i = 1:self.n_channels
+	%disp(i)
 	if isempty(self.common.NNdata(i).label_idx)
 		continue
 	end
@@ -75,8 +76,9 @@ for i = 1:self.n_channels
 				self.NNpredict;
 			end
 		end
-	elseif strcmp(self.workers(i).State,'finished')
+	elseif strcmp(self.workers(i).State,'finished') || strcmp(self.workers(i).State,'unavailable')
 		% retrain!
+		%disp('worker finished or unavailable')
 		if self.common.NNdata(i).isMoreTrainingNeeded
 			self.NNtrain(i);
 		else

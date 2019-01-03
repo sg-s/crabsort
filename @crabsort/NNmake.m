@@ -28,16 +28,16 @@ function layers = NNmake(input_size, n_classes)
 layers = [
     imageInputLayer([input_size 1 1],'Normalization','none')
     
-    convolution2dLayer([10, 1],40,'NumChannels',1)
+    convolution2dLayer([20, 1],50,'NumChannels',1)
 
     batchNormalizationLayer
     reluLayer
 
-    dropoutLayer(.2)
+    dropoutLayer(.5)
     
     maxPooling2dLayer([2 1],'Stride',2)
     
-    convolution2dLayer([10 1],10,'NumChannels',1)
+    convolution2dLayer([10 1],30,'NumChannels',1)
     %batchNormalizationLayer
     reluLayer
     

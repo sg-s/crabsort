@@ -164,6 +164,8 @@ end
 
 % update the neuron names in manual override panel
 if ~isempty(self.common.data_channel_names{channel})
-    self.handles.new_spike_type.String = self.nerve2neuron.(self.common.data_channel_names{channel});
+    if isfield(self.nerve2neuron,self.common.data_channel_names{channel})
+        self.handles.new_spike_type.String = self.nerve2neuron.(self.common.data_channel_names{channel});
+    end
 end
 

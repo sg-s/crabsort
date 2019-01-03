@@ -70,7 +70,7 @@ uimenu(handles.menu_name(4),'Label','Delete all NN data','Callback',@self.NNdele
 uimenu(handles.menu_name(4),'Label','Delete this channels NN','Callback',@self.NNdelete,'Separator','on');
 uimenu(handles.menu_name(4),'Label','Delete all nets','Callback',@self.NNdelete);
 
-uimenu(handles.menu_name(4),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
+handles.auto_predict_handle = uimenu(handles.menu_name(4),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
 
 % channels (show and hide)
 handles.menu_name(5) = uimenu('Label','Channels');

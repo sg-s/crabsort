@@ -79,14 +79,16 @@ self.handles.spike_prom_slider.Value = new_spike_prom;
 self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 
 % also pick some points at random, far from actual spikes so that we can augment the -ve training dataset
-random_fake_spikes = find(circshift(s,floor(length(s)/3)));
-dist_to_real_spikes = abs(random_fake_spikes - find(s));
-too_close = dist_to_real_spikes < size(X,1)*2;
+random_fake_spikes = shuffle(find(self.mask(:,channel)));
+random_fake_spikes = random_fake_spikes(1:sum(s));
+
+dist_to_real_spikes = min(pdist2(random_fake_spikes,find(s)));
+
+too_close = dist_to_real_spikes < size(X,1);
 random_fake_spikes(too_close) = [];
-if length(random_fake_spikes) >  size(X,2)/2
-	random_fake_spikes = random_fake_spikes(1:floor(size(X,2)/2));
+if ~isempty(random_fake_spikes)
+	self.putative_spikes(random_fake_spikes,channel) = 1;
 end
-self.putative_spikes(random_fake_spikes,channel) = 1;
 
 % remove the actual spikes
 self.putative_spikes(logical(s),channel) = 0;

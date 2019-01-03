@@ -26,6 +26,7 @@ try
 	all_files = dir([self.path_name '*.abf']);
 
 	channel_names = readABFChannelNames(all_files(1).name);
+	hash = GetMD5(channel_names);
 
 	for i = 2:length(all_files)
 		this_channel_names = readABFChannelNames(all_files(i).name);
@@ -34,9 +35,8 @@ try
 
 		assert(length(this_channel_names) == length(channel_names),'At least one file in your folder has an ABF structure that is different from the rest. ');
 
-		for j = 1:length(this_channel_names)
-			assert(strcmp(this_channel_names{j},channel_names{j}),'At least one file in your folder has an ABF structure that is different from the rest. ');
-		end
+		assert(strcmp(GetMD5(this_channel_names),hash),'At least one file in your folder has an ABF structure that is different from the rest. ')
+
 	end
 catch err
 	errordlg(err.message,'Your ABF files are inconsistent')

@@ -317,6 +317,20 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         end % end set loc
 
 
+        function self = set.auto_predict(self,value)
+            self.auto_predict = value;
+            d = dbstack;
+            if any(strcmp({d.name},'NNupdateAutoPredict'))
+                return
+            end
+            if value
+                self.handles.auto_predict_handle.Checked = 'on';
+            else
+                self.handles.auto_predict_handle.Checked = 'on';
+            end
+        end
+
+
     end % end general methods
 
 

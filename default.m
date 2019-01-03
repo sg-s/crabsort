@@ -105,49 +105,6 @@ V_cutoff = -Inf;
 % for spikes in other channels
 max_relative_time = 1; % seconds
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  _                             __ _               
-% | |_ ___ _ __  ___  ___  _ __ / _| | _____      __
-% | __/ _ \ '_ \/ __|/ _ \| '__| |_| |/ _ \ \ /\ / /
-% | ||  __/ | | \__ \ (_) | |  |  _| | (_) \ V  V / 
-%  \__\___|_| |_|___/\___/|_|  |_| |_|\___/ \_/\_/  
-%   
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%       
-
-% You installed tensorflow in a conda environment:
-% what's the environment called?
-% (If you didn't, Tensorflow + crabsort won't work 
-% -- reinstall in its own environment)
-tf_env_name = 'tensorflow';
-
-% how many neurons in the first convolutional layer?
-tf_conv1_N = 32;
-
-%size of kernel in 1st conv layer
-tf_conv1_K = 15;
-
-%pool size of 1st pool layer
-tf_pool1_N = 2;
-
-% stride step of pool1 
-tf_pool1_S = 2;
-
-% number of neurons in dense layer
-tf_dense_N = 100;
-tf_dropout_rate = 0.4;
-
-% how many steps? how many epochs
-tf_nsteps = 1000;
-tf_nepochs = 2;
-
-% when should training stop? at what
-% level of accuracy? 
-tf_stop_accuracy = 0.95;
-
-% how accurate should a tensorflow model
-% be so that automate uses it instead of 
-% whatever program is has memorized? 
-tf_predict_accuracy = 0.95;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     _                       
@@ -159,17 +116,5 @@ tf_predict_accuracy = 0.95;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
 % use MATLAB's built in t-SNE?
-use_matlab_tsne = false;
+use_matlab_tsne = true;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                _                        _       
-%     __ _ _   _| |_ ___  _ __ ___   __ _| |_ ___ 
-%    / _` | | | | __/ _ \| '_ ` _ \ / _` | __/ _ \
-%   | (_| | |_| | || (_) | | | | | | (_| | ||  __/
-%    \__,_|\__,_|\__\___/|_| |_| |_|\__,_|\__\___|
-%                                                 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% this channel will be skipped if crabsort finds fewer than
-% these many spikes
-min_n_spikes_to_process_channel = 50;
