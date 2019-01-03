@@ -44,6 +44,18 @@ if strcmp(src.String,'Load File')
 
     self.saveData;
 
+    % reorder allowed_file_extensions
+    try
+        last_ext = getpref('crabsort','last_ext');
+        exists_in_list = find(strcmp(allowed_file_extensions,last_ext));
+        if ~isempty(exists_in_list)
+            exists_in_list = exists_in_list(1);
+            allowed_file_extensions(exists_in_list) = [];
+            allowed_file_extensions = [last_ext ;allowed_file_extensions];
+        end
+    catch
+    end
+
     [file_name,path_name,filter_index] = uigetfile(allowed_file_extensions);
 
     if ~file_name
@@ -57,6 +69,9 @@ if strcmp(src.String,'Load File')
     if strcmpi(self.file_name(end-2:end),'ABF') && ~self.pref.skip_abf_check
         self.checkABFFiles;
     end
+
+    % make a note of the file format chosen
+    setpref('crabsort','last_ext',allowed_file_extensions{filter_index})
 
 
     
