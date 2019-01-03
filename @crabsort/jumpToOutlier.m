@@ -12,27 +12,35 @@ if isempty(spiketimes)
 	return
 end
 V = self.getSnippets(channel,spiketimes);
-P = pca(V);
-E = (P(:,1) - median(P(:,1))).^2 + (P(:,2) - median(P(:,2))).^2;
-outliers = (E>(median(E*10)));
+E = zscore(sum(abs(V - mean(V,2))));
+outliers = E > 5;
 if ~any(outliers)
+	self.handles.main_fig.Name = [self.file_name ' -- No outliers'];
+	return
+elseif mean(outliers) > .1
 	self.handles.main_fig.Name = [self.file_name ' -- No outliers'];
 	return
 end
 outliers = spiketimes(outliers);
 
-xrange = diff(self.handles.ax.ax(channel).XLim);
 
 
 outliers = outliers*self.dt;
 
+xx = self.handles.ax.ax(channel).XLim;
+xrange = diff(self.handles.ax.ax(channel).XLim);
+
+
 switch direction
+
 case 'right'
-	xx = self.handles.ax.ax(channel).XLim(1);
+	xx = xx(2);
 	outliers(outliers<xx) = [];
+	
 case 'left'
-	xx = self.handles.ax.ax(channel).XLim(2);
+	xx = xx(1);
 	outliers(outliers>xx) = [];
+
 otherwise
 	error('unknown argument')
 end
@@ -48,10 +56,16 @@ case 'right'
 case 'left'
 	outliers = outliers(end);
 end
+
+
+
+self.handles.ax.spike_marker(channel).XData  = [outliers outliers];
+self.handles.ax.spike_marker(channel).YData = self.handles.ax.ax(channel).YLim;
+
 self.handles.ax.ax(channel).XLim = [outliers - xrange/2 outliers + xrange/2];
-% fake a scroll
-event = struct;
-event.VerticalScrollCount = 0;
-self.scroll([],event)
+
+
+self.scroll([outliers - xrange/2 outliers + xrange/2])
+
 
 self.handles.main_fig.Name = [self.file_name ' -- Possible outlier detected'];

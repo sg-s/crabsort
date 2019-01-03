@@ -23,35 +23,44 @@ this_ax_definitely_visible = find(strcmp({self.handles.ax.ax.Visible},'on'),1,'f
 xlimits = self.handles.ax.ax(this_ax_definitely_visible).XLim;
 xrange = (xlimits(2) - xlimits(1));
 
-if self.handles.scroll_bar == src
+if nargin == 3
+    if self.handles.scroll_bar == src
 
-    newlim(1) = max(self.time)*src.Value;
-    newlim(2) = newlim(1) + xrange;
+        newlim(1) = max(self.time)*src.Value;
+        newlim(2) = newlim(1) + xrange;
 
-else
-
-
-    scroll_amount = event.VerticalScrollCount;
-
-
-    if scroll_amount < 0
-        if xlimits(1) <= min(self.time)
-            return
-        else
-            newlim(1) = max([min(self.time) (xlimits(1)-.2*xrange)]);
-            newlim(2) = newlim(1)+xrange;
-        end
     else
-        if xlimits(2) >= max(self.time)
-            return
-        else
-            newlim(2) = min([max(self.time) (xlimits(2)+.2*xrange)]);
-            newlim(1) = newlim(2)-xrange;
-        end
-    end
 
+
+        scroll_amount = event.VerticalScrollCount;
+
+
+        if scroll_amount < 0
+            if xlimits(1) <= min(self.time)
+                return
+            else
+                newlim(1) = max([min(self.time) (xlimits(1)-.2*xrange)]);
+                newlim(2) = newlim(1)+xrange;
+            end
+        else
+            if xlimits(2) >= max(self.time)
+                return
+            else
+                newlim(2) = min([max(self.time) (xlimits(2)+.2*xrange)]);
+                newlim(1) = newlim(2)-xrange;
+            end
+        end
+
+        % update the scrollbar
+        self.handles.scroll_bar.Value = newlim(1)/max(self.time);
+    end
+elseif nargin == 2
+    % treat the second argument as newlim
+    newlim = src;
     % update the scrollbar
     self.handles.scroll_bar.Value = newlim(1)/max(self.time);
+else
+    error('unknown argument #')
 end
 
 

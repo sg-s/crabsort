@@ -70,7 +70,12 @@ if self.handles.mode_new_spike.Value == 1
 
     self.common.NNdata(channel) = NNdata;
     
+
+    self.showSpikes;
+    
 elseif self.handles.mode_delete_spike.Value == 1
+
+    self.updateSettingsFromNNdata(); 
 
     % get all spikes on this nerve
     [spiketimes, st_by_unit] = self.getSpikesOnThisNerve;
@@ -109,6 +114,7 @@ elseif self.handles.mode_delete_spike.Value == 1
 
     self.common.NNdata(channel) = NNdata;
 
+    self.showSpikes;
 
 elseif self.handles.mode_off.Value == 1
     % don't do anything
@@ -116,5 +122,5 @@ elseif self.handles.mode_off.Value == 1
 
 end
 
-self.showSpikes;
+
 

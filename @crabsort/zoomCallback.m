@@ -28,3 +28,4 @@ for i = 1:length(self.handles.ax.ax)
 	end
 
 end 
+self.scroll(self.handles.ax.ax(idx).XLim)

@@ -92,44 +92,14 @@ for i = 1:self.n_channels
 		% update display
 		self.handles.ax.NN_status(i).String = 'TRAINING';
 
-
-		D = self.workers(i).Diary;
-
-
-		if length(D) < 5
-			continue
-		end
-
-		D = strsplit(D,'\n');
+		[accuracy, hash] = self.NNgetCurrentAccuracy(i);
 
 
-		ValidationAccuracy = [];
-		for j = length(D):-1:1
-			if strcmp(strtrim(D{j}),'ValidationAccuracy=')
-				ValidationAccuracy = strtrim(D{j+1});
-				break
-			end
-		end
-		
-		if isempty(ValidationAccuracy)
-			continue
-		end
-		
+		if ~isempty(accuracy)
+			self.handles.ax.NN_accuracy(i).String = oval(str2double(accuracy),3);
 
-		% read hash of data training on
-		data_hash = '';
-		for j = length(D):-1:1
-			if strcmp(strtrim(D{j}),'hash of data training on =')
-				data_hash = strtrim(D{j+1});
-				break
-			end
-		end
-
-		if ~isempty(ValidationAccuracy)
-			self.handles.ax.NN_accuracy(i).String = oval(str2double(ValidationAccuracy),3);
-
-			self.common.NNdata(i).accuracy_hash = data_hash;
-			self.common.NNdata(i).accuracy = str2double(ValidationAccuracy);
+			self.common.NNdata(i).accuracy_hash = hash;
+			self.common.NNdata(i).accuracy = str2double(accuracy);
 		end
 
 
