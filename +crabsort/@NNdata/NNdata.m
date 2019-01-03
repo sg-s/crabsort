@@ -38,6 +38,12 @@ methods
 		self = self@VectorObject(N);
 
 
+		for i = 1:length(self)
+			self(i).acceptable_accuracy = 98;
+		end
+
+
+
 	end
 
 

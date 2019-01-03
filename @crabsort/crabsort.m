@@ -24,6 +24,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
         channel_to_work_with@double
 
+        % common data to all files in this folder
+        common@crabsort.common
+
     end % end properties 
 
     properties (SetAccess = protected)
@@ -82,8 +85,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % selected for spike shape, timing, etc.)
         data_to_reduce
 
-        % common data to all files in this folder
-        common@crabsort.common
 
         % this propoerty mirrors the checked state of 
         % the "watch me" menu item

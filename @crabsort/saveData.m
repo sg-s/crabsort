@@ -22,11 +22,11 @@ end
 % saveData saves data to two different locations:
 % local data that pertains to this file in a .crabsort file
 % and common data that eprtains to all files in this folder
-% to a file called common.crabsort in that folder 
+% to a file called crabsort.common in that folder 
 
 % check if there is a .crabsort file already
 file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
-common_name = joinPath(self.path_name, 'common.crabsort');
+common_name = joinPath(self.path_name, 'crabsort.common');
 
 crabsort_obj = self;
 

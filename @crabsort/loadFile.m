@@ -217,19 +217,19 @@ if exist(file_name,'file') == 2
 end
 
 
-% check that there is a common.crabsort file already
-file_name = joinPath(self.path_name, 'common.crabsort');
+% check that there is a crabsort.common file already
+file_name = joinPath(self.path_name, 'crabsort.common');
 
 if exist(file_name,'file') == 2
     if self.verbosity > 5
-        disp(['[loadFile] common.crabsort exists.'])
+        disp(['[loadFile] crabsort.common exists.'])
     end
 
     load(file_name,'common','-mat');
     self.common = common;
 else
     if self.verbosity > 5
-        disp(['[loadFile] No common.crabsort!'])
+        disp(['[loadFile] No crabsort.common!'])
     end
 end
 
@@ -302,6 +302,7 @@ disable(self.handles.manual_panel);
 delete(self.handles.menu_name(5).Children)
 
 % do we already have some preference for which channels to hide?
+
 for i = 1:self.n_channels
 
     if self.common.show_hide_channels(i) 
@@ -364,8 +365,9 @@ self.mask = self.raw_data*0 + 1;
 
 catch err
 
-
+    keyboard
     self.displayStatus(err, true)
+    save([GetMD5(now) '.error'],'err')
     error('FATAL error')
 
 end
