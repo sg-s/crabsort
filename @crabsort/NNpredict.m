@@ -76,7 +76,8 @@ X = reshape(X,SZ,1,1,N);
 Y_pred = predict(trainedNet,X);
 
 prediction_confidence = (max(Y_pred,[],2) -  min(Y_pred,[],2));
-uncertain_spikes = (prediction_confidence<1/size(Y_pred,2));
+
+uncertain_spikes = (prediction_confidence<.2);
 
 [~,Y_pred] = max(Y_pred,[],2);
 Y_pred = Y_pred - 1;

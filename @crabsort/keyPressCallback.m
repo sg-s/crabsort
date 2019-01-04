@@ -10,6 +10,8 @@ elseif strcmp(value.Key ,'leftarrow') & any(strcmp(value.Modifier,'shift'))
 elseif strcmp(value.Key,'p')
 	self.redo;
 	self.NNpredict;
+elseif strcmp(value.Key,'space')
+	self.jumpToNextUncertainSpike();
 else
 	% do nothing
 end
