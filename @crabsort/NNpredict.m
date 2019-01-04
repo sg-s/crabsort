@@ -23,10 +23,9 @@ makes predictions using a trained neural network
 
 function NNpredict(self)
 
-if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
-	disp('auto_predict off, aborting')
-	return
-end
+% if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
+% 	return
+% end
 channel = self.channel_to_work_with;
 
 if isempty(channel)

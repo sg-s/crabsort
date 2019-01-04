@@ -3,10 +3,12 @@ classdef  NNdata < VectorObject
 
 properties
 
+
 	raw_data
 	file_idx
 	spiketimes
 	label_idx
+
 
 	% neural network performance 
 	accuracy@double
