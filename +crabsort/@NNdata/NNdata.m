@@ -9,16 +9,16 @@ properties
 	label_idx
 
 	% neural network performance 
-	accuracy
-	accuracy_hash
+	accuracy@double
+	accuracy_hash@char
 	acceptable_accuracy@double = 98
 
 
 	% spike detection parameters
 	spike_prom@double = []
-	spike_sign@logical = logical.empty()
+	spike_sign@logical 
 	other_nerves@char = ''
-	other_nerves_control@logical = logical.empty()
+	other_nerves_control@logical
 
 end
 
@@ -30,25 +30,19 @@ methods
 
 		% matlab stupidity, see
 		% https://www.mathworks.com/help/matlab/matlab_oop/initialize-object-arrays.html
-
 		if nargin == 0
 			N = 1;
 		end
 
 		self = self@VectorObject(N);
-
-
-		for i = 1:length(self)
-			self(i).acceptable_accuracy = 98;
-		end
-
-
-
 	end
 
 
 	function self = set.accuracy(self,value)
 		self.accuracy = value;
+		if isempty(value)
+			return
+		end
 		self.accuracy_hash = self.fullHash;
 	end
 
