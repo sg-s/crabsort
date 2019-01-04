@@ -57,6 +57,9 @@ for i = self.n_channels:-1:1
 	% make plots for found spikes (putative spikes)
 	self.handles.ax.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none','Color',self.pref.putative_spike_colour);
 
+	% make plots for uncertain spikes as indicated by NN
+	self.handles.ax.uncertain_spikes(i) = plot(NaN,NaN,'v','LineStyle','none','Color','k')
+
 	% support up to 10 units on each 
 	% this weird syntax is so that the primary unit on each 
 	% nerve is labeled with the same color as the color

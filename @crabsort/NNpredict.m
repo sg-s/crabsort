@@ -76,6 +76,9 @@ X = reshape(X,SZ,1,1,N);
 
 Y_pred = predict(trainedNet,X);
 
+prediction_confidence = (max(Y_pred,[],2) -  min(Y_pred,[],2));
+uncertain_spikes = (prediction_confidence<1/size(Y_pred,2));
+
 [~,Y_pred] = max(Y_pred,[],2);
 Y_pred = Y_pred - 1;
 
@@ -87,13 +90,18 @@ end
 
 putative_spikes = find(self.putative_spikes(:,channel));
 
+uncertain_spikes = putative_spikes(uncertain_spikes);
+self.handles.ax.uncertain_spikes(channel).XData = uncertain_spikes*self.dt;
+yrange = diff(self.handles.ax.ax(channel).YLim);
+self.handles.ax.uncertain_spikes(channel).YData = self.raw_data(uncertain_spikes,channel)+yrange*.07;
+
 for i = 1:length(unit_names)
 	self.spikes.(this_nerve).(unit_names{i}) = putative_spikes(Y_pred==i);
 end
 
 
 
-self.channel_stage(self.channel_to_work_with) = 3;
+self.channel_stage(channel) = 3;
 
 enable(self.handles.manual_panel)
 
