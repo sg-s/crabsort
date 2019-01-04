@@ -67,10 +67,23 @@ if isempty(spiketimes)
 end
 
 
+% now lock the channel names on this channel and prevent the user from ever renaming it
+self.common.channel_name_lock(self.channel_to_work_with) = true;
+self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
+
 self.updateSettingsFromNNdata(); 
 self.putative_spikes(:,channel) = 0;
 self.putative_spikes(new_spike,channel) = 1;
 self.getDataToReduce;
+
+
+% check that the spikes structure is OK
+if ~isfield(self.spikes,this_nerve)
+	self.spikes.(this_nerve) = [];
+end
+if ~isfield(self.spikes.(this_nerve),S)
+	self.spikes.(this_nerve).(S) = [];
+end
 
 if any(spiketimes==new_spike) & any(uncertain_spikes == new_spike)
 	% clicked point is an identified spike that is uncertain

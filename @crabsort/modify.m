@@ -14,9 +14,8 @@ end
 
 
 channel = self.channel_to_work_with;
-if self.channel_stage(channel) < 3
-    return
-end
+
+
 
 
 
@@ -25,6 +24,9 @@ switch self.handles.main_fig.SelectionType
 case 'normal'
     self.leftClickCallback(p);
 case 'alt'
+	if self.channel_stage(channel) < 3
+		return
+	end
     self.rightClickCallback(p);
 otherwise
     error('Unknown mouse action')

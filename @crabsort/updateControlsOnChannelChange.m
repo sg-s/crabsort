@@ -116,22 +116,18 @@ end
 % reset the manual_override to off
 self.handles.mode_off.Value = 1;
 
-% if this channel has sorted spike, enable the manual override 
-if self.channel_stage(channel) > 2
-    enable(self.handles.manual_panel)
-
-    % update the neuron names if extracellular
-    temp = isstrprop(self.common.data_channel_names{channel},'upper');
-    if ~any(temp)
-        neuron_names = self.nerve2neuron.(self.common.data_channel_names{channel});
-        self.handles.new_spike_type.String = neuron_names;
-    else
-        self.handles.new_spike_type.String = self.common.data_channel_names{channel};
-    end
-    
+% update the neuron names if extracellular
+temp = isstrprop(self.common.data_channel_names{channel},'upper');
+if ~any(temp)
+    neuron_names = self.nerve2neuron.(self.common.data_channel_names{channel});
+    self.handles.new_spike_type.String = neuron_names;
+    self.handles.mark_all_control.String = [neuron_names 'Noise'];
 else
-    disable(self.handles.manual_panel)
+    self.handles.new_spike_type.String = self.common.data_channel_names{channel};
 end
+enable(self.handles.manual_panel)
+
+
 
 % if this channel has a neural network associated with it, show it
 self.NNmakeCheckpointDirs()

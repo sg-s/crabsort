@@ -42,14 +42,11 @@ if self.watch_me
 	self.handles.ax.has_automate(channel).BackgroundColor = [0 .5 0];
 end
 
-% show the modify controls
-enable(self.handles.manual_panel)
 
 self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_method_handle)]
 
 % now lock the channel names on this channel and prevent the user from ever renaming it
 self.common.channel_name_lock(self.channel_to_work_with) = true;
-
 self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
 
 if isvalid(self.common.NNdata(channel))

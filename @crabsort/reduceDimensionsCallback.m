@@ -45,8 +45,6 @@ self.getDataToReduce;
 if self.watch_me 
 
 	% create a description of the operations we just did 
-
-
 	this_channel = self.channel_to_work_with;
 
 	self.common.NNdata(this_channel).other_nerves = self.handles.multi_channel_control_text.String;

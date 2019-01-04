@@ -10,7 +10,11 @@ assert(isvector(raw_data),'raw_data must be a vector')
 
 if isempty(self.raw_data)
 	% all empty
-	keyboard
+	self.raw_data = raw_data;
+	self.file_idx = file_idx(:);
+	self.spiketimes = spiketimes(:);
+	self.label_idx = label_idx(:);
+
 else
 	data_frame_size = size(self.raw_data,1);
 
@@ -28,8 +32,8 @@ if ~isempty(existing_data_frame)
 else
 	% new data frame, just add it
 	self.raw_data(:,end+1) = raw_data;
-	self.file_idx(end+1) = file_idx;
-	self.spiketimes(end+1) = spiketimes;
-	self.label_idx(end+1) = label_idx;
+	self.file_idx = [self.file_idx; file_idx];
+	self.spiketimes = [self.spiketimes; spiketimes];
+	self.label_idx = [self.label_idx; label_idx];
 end
 

@@ -35,10 +35,30 @@ end
 
 % check if there's automate data on this channel
 if ~isvalid(self.common.NNdata(channel))
-	disp('there is no automate info, cannot train')
+	
 	return
 end
 
+% check if there's enough data to train on, with at least two
+% categories
+label_idx = self.common.NNdata(channel).label_idx;
+if isempty(label_idx)
+	return
+end
+
+if length(label_idx) < 10
+	return
+end
+
+unique_labels = unique(label_idx);
+if length(unique_labels) < 2
+	return
+end
+for i = 1:length(unique_labels)
+	if sum(label_idx == unique_labels(i)) < 10
+		return
+	end
+end
 
 % gather the training data and test data
 H =  self.common.NNdata(channel).hash();

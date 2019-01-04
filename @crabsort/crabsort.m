@@ -256,17 +256,14 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 
                 disable(self.handles.dim_red_panel)
                 disable(self.handles.cluster_panel)
-                disable(self.handles.manual_panel)
             case 1
                 enable(self.handles.spike_detection_panel)
                 enable(self.handles.dim_red_panel)
                 disable(self.handles.cluster_panel)
-                disable(self.handles.manual_panel)
             case 2
                 enable(self.handles.spike_detection_panel)
                 enable(self.handles.dim_red_panel)
                 enable(self.handles.cluster_panel)
-                disable(self.handles.manual_panel)
             case 3
                 disable(self.handles.spike_detection_panel)
                 enable(self.handles.dim_red_panel)

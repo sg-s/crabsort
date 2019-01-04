@@ -133,8 +133,8 @@ handles.unmask_all_control = uicontrol(handles.mask_panel,'units','normalized','
 handles.maskmode_off.Value = 1;
 
 % manual override panel
-handles.manual_panel = uibuttongroup(handles.main_fig,'Title','Manual Override','Position',[.8 .92 .195 .07],'FontSize',self.pref.fs,'Visible','off','BackgroundColor',[ 1 1 1]);
-
+handles.manual_panel = uibuttongroup(handles.main_fig,'Title','Manual Override','Position',[.8 .92 .195 .07],'FontSize',self.pref.fs,'Visible','on','BackgroundColor',[ 1 1 1]);
+handles.mark_all_control = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 .01 .4 .5], 'Style', 'popupmenu', 'String', {'Mark all in view as...'},'FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Callback',@self.markAllInViewAs);
 handles.mode_new_spike = uicontrol(handles.manual_panel,'units','normalized','Position',[.01 .5 .2 .5], 'Style', 'radiobutton', 'String', 'add to','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 handles.new_spike_type = uicontrol(handles.manual_panel,'units','normalized','Position',[.2 .5 .3 .5], 'Style', 'popupmenu', 'String', {'Choose'},'FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Callback',@self.activateAddNewNeuronMode);
 handles.mode_off = uicontrol(handles.manual_panel,'units','normalized','Position',[.71 .25 .3 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',1);
