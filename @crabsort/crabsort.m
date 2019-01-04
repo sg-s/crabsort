@@ -53,6 +53,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         n_channels
         raw_data
         time
+        raw_data_size
 
         % for reasons revolving around the crappiness of the ABF 
         % file format, dt will be stored after being rounded off to

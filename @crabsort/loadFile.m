@@ -272,6 +272,10 @@ self.putative_spikes = 0*self.raw_data;
 % and causing a different frame size when calling getSnippets
 self.dt = round(self.dt*1e6)/1e6;
 
+
+% store the size of the raw_data
+self.raw_data_size = size(self.raw_data);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %              _                           _  __ _      
 %   __ _ _   _(_)      ___ _ __   ___  ___(_)/ _(_) ___ 
