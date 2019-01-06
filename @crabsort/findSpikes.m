@@ -42,10 +42,10 @@ if any(isnan(V))
 end
 
 
-mpp = self.spd.spike_prom;
-mpd = ceil(self.spd.minimum_peak_distance/(self.dt*1e3));
-mpw = ceil(self.spd.minimum_peak_width/(self.dt*1e3));
-v_cutoff = self.spd.V_cutoff;
+mpp = self.sdp.spike_prom;
+mpd = ceil(self.sdp.minimum_peak_distance/(self.dt*1e3));
+mpw = ceil(self.sdp.minimum_peak_width/(self.dt*1e3));
+v_cutoff = self.sdp.V_cutoff;
 
 % find peaks and remove spikes beyond v_cutoff
 if ~isa(Npeaks,'double')

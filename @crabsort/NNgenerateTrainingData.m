@@ -46,7 +46,7 @@ if isempty(channel)
 end
 
 
-self.updateSettingsFromNNdata()
+self.NNsync()
 
 
 % create the training and test data
@@ -72,9 +72,7 @@ assert(length(Y) == size(X,2),'Size mismatch')
 
 % now create some -ve training data
 % halve the spike prominence and find spikes
-new_spike_prom = self.common.NNdata(channel).spike_prom/2;
-self.handles.spike_prom_slider.Max = new_spike_prom;
-self.handles.spike_prom_slider.Value = new_spike_prom;
+self.NNsync(.5);
 
 self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 

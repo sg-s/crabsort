@@ -10,23 +10,10 @@
 
 function getDataToReduce(self)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
 
-
-data_to_reduce = [];
-
-if self.handles.spike_shape_control.Value
-
-	if self.verbosity > 5
-		disp(['[' mfilename '] Using spike shape...'])
-	end
-
-	data_to_reduce = self.getSnippets(self.channel_to_work_with);
-end
-
+% always get the spike shape. this is always included
+% in the data to reduce
+data_to_reduce = self.getSnippets(self.channel_to_work_with);
 original_data = data_to_reduce;
 
 if self.handles.multi_channel_control.Value

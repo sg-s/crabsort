@@ -13,9 +13,9 @@ if self.verbosity > 3
 	disp(['[' mfilename '] called by ' d(2).name])
 end
 
-self.spd = self.handles.spike_sign_control.Value;
+self.sdp.spike_sign = logical(self.handles.spike_sign_control.Value);
 
-if self.spd
+if self.sdp.spike_sign
 	set(self.handles.spike_sign_control,'String','+ve spikes')
 else
 	set(self.handles.spike_sign_control,'String','-ve spikes')

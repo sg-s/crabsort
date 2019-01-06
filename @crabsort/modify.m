@@ -36,7 +36,7 @@ end
 %     % snip out a small waveform around the point
 
 %     % need to update the spike sign control to match automate info, if it exists
-%     self.updateSettingsFromNNdata(); 
+%     self.NNsync(); 
 
 %     if ~self.handles.spike_sign_control.Value
 %         [~,loc] = min(V(floor(p(1)-search_width:p(1)+search_width)));
@@ -75,7 +75,7 @@ end
     
 % % elseif self.handles.mode_delete_spike.Value == 1
 
-% %     self.updateSettingsFromNNdata(); 
+% %     self.NNsync(); 
 
 % %     % get all spikes on this nerve
 % %     [spiketimes, st_by_unit] = self.getSpikesOnThisNerve;

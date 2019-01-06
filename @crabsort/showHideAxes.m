@@ -42,7 +42,11 @@ for i = 1:self.n_channels
 	self.handles.ax.ax(i).XTick = [];
 	self.handles.ax.ax(i).XAxisLocation = 'top';
 
-
+	if self.common.channel_name_lock(i)
+		self.handles.ax.channel_label_chooser(i).Enable = 'off';
+	else
+		self.handles.ax.channel_label_chooser(i).Enable = 'on';
+	end
 
 
 	if self.common.show_hide_channels(i)
@@ -110,4 +114,5 @@ self.handles.ax.ax(last_ax).XAxisLocation = 'top';
 self.handles.ax.ax(last_ax).XTickMode = 'auto';
 
 
+% disp('timer turned off')
 start(self.timer_handle)

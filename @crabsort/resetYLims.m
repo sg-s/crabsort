@@ -53,7 +53,7 @@ elseif is_intracellular
 	self.handles.ax.ax(idx).YTickMode = 'auto';
 end
 
-self.spd.spike_prom = yl;
-self.spd.V_cutoff = 2*yl;
+self.sdp.spike_prom = yl;
+self.sdp.V_cutoff = 2*yl;
 
 self.channel_ylims(idx) = yl;

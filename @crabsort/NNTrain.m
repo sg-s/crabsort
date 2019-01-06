@@ -26,16 +26,10 @@ onto NNtrainOnParallelWorker()
 
 function NNtrain(self,channel)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
-
-
+assert(nargin == 2,'Need to specify the channel')
 
 % check if there's automate data on this channel
-if ~isvalid(self.common.NNdata(channel))
-	
+if ~canDetectSpikes(self.common.NNdata(channel))
 	return
 end
 
@@ -60,13 +54,6 @@ for i = 1:length(unique_labels)
 	end
 end
 
-% gather the training data and test data
-H =  self.common.NNdata(channel).hash();
-
-if strcmp(H,'00000000000000000000000000000000')
-    disp('Missing info, cannot train')
-    return
-end
 
 self.NNmakeCheckpointDirs;
 

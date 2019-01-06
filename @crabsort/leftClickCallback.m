@@ -34,7 +34,7 @@ this_nerve = self.common.data_channel_names{channel};
 % snip out a small waveform around the point
 
 % need to update the spike sign control to match automate info, if it exists
-self.updateSettingsFromNNdata(); 
+self.NNsync(); 
 
 if ~self.handles.spike_sign_control.Value
     [~,loc] = min(V(floor(p(1)-search_width:p(1)+search_width)));
@@ -71,7 +71,7 @@ end
 self.common.channel_name_lock(self.channel_to_work_with) = true;
 self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
 
-self.updateSettingsFromNNdata(); 
+self.NNsync(); 
 self.putative_spikes(:,channel) = 0;
 self.putative_spikes(new_spike,channel) = 1;
 self.getDataToReduce;

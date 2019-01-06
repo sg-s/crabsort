@@ -38,8 +38,8 @@ if isempty(spiketimes)
 end
 
 
-before = ceil(self.pref.t_before/(self.dt*1e3));
-after = ceil(self.pref.t_after/(self.dt*1e3));
+before = ceil(self.sdp.t_before/(self.dt*1e3));
+after = ceil(self.sdp.t_after/(self.dt*1e3));
 
 V_snippets = zeros(before+after,length(spiketimes));
 

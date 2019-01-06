@@ -37,11 +37,6 @@ self.putative_spikes(:,channel) = temp;
 self.handles.ax.found_spikes(channel).XData = NaN;
 self.handles.ax.found_spikes(channel).YData = NaN;
 
-if self.watch_me 
-	% show that we have automate info, if we do
-	self.handles.ax.has_automate(channel).BackgroundColor = [0 .5 0];
-end
-
 
 self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_method_handle)]
 
@@ -49,6 +44,3 @@ self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' f
 self.common.channel_name_lock(self.channel_to_work_with) = true;
 self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
 
-if isvalid(self.common.NNdata(channel))
-	self.NNgenerateTrainingData;
-end

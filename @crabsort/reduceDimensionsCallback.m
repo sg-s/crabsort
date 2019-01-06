@@ -39,23 +39,7 @@ end
 % get the data to reduce
 self.getDataToReduce; 
 
-
-% create an operation manifest BEFORE calling the method so that
-% the method can modify, or add onto the operation. 
-if self.watch_me 
-
-	% create a description of the operations we just did 
-	this_channel = self.channel_to_work_with;
-
-	self.common.NNdata(this_channel).other_nerves = self.handles.multi_channel_control_text.String;
-	self.common.NNdata(this_channel).other_nerves_control = logical(self.handles.multi_channel_control.Value);
-
-
-
-end
-
-
-
+% use the method
 method(self);
 
 self.handles.popup.Visible = 'off';

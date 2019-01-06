@@ -29,7 +29,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
 
         % spike detection parameters
-        spd@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
+        sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
 
 
     end % end properties 
@@ -237,39 +237,55 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
 
             if isempty(self.channel_to_work_with)
                 return
+            else
+                channel = self.channel_to_work_with;
             end
-
-
-            this_channel_stage = self.channel_stage(self.channel_to_work_with);
 
             if isempty(self.handles)
                 return
             end
 
+            this_channel_stage = self.channel_stage(channel);
+
             switch this_channel_stage
             case 0
-                if length(self.common.data_channel_names) < self.channel_to_work_with || strcmp(self.common.data_channel_names{self.channel_to_work_with},'???') || isempty(self.common.data_channel_names{self.channel_to_work_with})
+                disp(0)
+                % new channel. show spike detection panel
+                % if it is named. 
+                if isempty(self.common.data_channel_names{channel})
                     % channel name unset
-                    disable(self.handles.spike_detection_panel)
+                    mtools.ux.disable(self.handles.spike_detection_panel)
                 else
-                    enable(self.handles.spike_detection_panel)
+                    mtools.ux.show(self.handles.spike_detection_panel)
+                    mtools.ux.enable(self.handles.spike_detection_panel)
                 end
                 
-                disable(self.handles.dim_red_panel)
-                disable(self.handles.cluster_panel)
+                % hide other panels
+                mtools.ux.hide(self.handles.dim_red_panel)
+                mtools.ux.hide(self.handles.cluster_panel)
+                mtools.ux.hide(self.handles.manual_panel)
+                mtools.ux.hide(self.handles.mask_panel)
+
             case 1
-                enable(self.handles.spike_detection_panel)
-                enable(self.handles.dim_red_panel)
-                disable(self.handles.cluster_panel)
+                % spikes detected.
+                mtools.ux.enable(self.handles.spike_detection_panel)
+                mtools.ux.show(self.handles.spike_detection_panel)
+                mtools.ux.enable(self.handles.dim_red_panel)
+                mtools.ux.hide(self.handles.cluster_panel)
             case 2
-                enable(self.handles.spike_detection_panel)
-                enable(self.handles.dim_red_panel)
-                enable(self.handles.cluster_panel)
+                % dimensions reduced (need to cluster)
+                mtools.ux.disable(self.handles.spike_detection_panel)
+                mtools.ux.disable(self.handles.dim_red_panel)
+                mtools.ux.enable(self.handles.cluster_panel)
+                mtools.ux.show(self.handles.cluster_panel)
+                mtools.ux.enable(self.handles.cluster_panel)
             case 3
-                disable(self.handles.spike_detection_panel)
-                enable(self.handles.dim_red_panel)
-                enable(self.handles.cluster_panel)
-                enable(self.handles.manual_panel)
+                % all done
+                mtools.ux.disable(self.handles.spike_detection_panel)
+                mtools.ux.enable(self.handles.dim_red_panel)
+                mtools.ux.enable(self.handles.cluster_panel)
+                mtools.ux.enable(self.handles.manual_panel)
+                mtools.ux.show(self.handles.manual_panel)
             otherwise
                 % WTF? ignore this and hope for the best
             end

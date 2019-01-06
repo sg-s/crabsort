@@ -34,32 +34,24 @@ end
 
 NNdata = self.common.NNdata(channel);
 
-if isempty(NNdata.other_nerves_control)
-	disp('other_nerves_control empty, aborting')
-	return
-end
-
-
-if isempty(NNdata.spike_prom)
-	disp('spike_prom empty, aborting')
-	return
-end
-
-if isempty(NNdata.spike_sign)
-	disp('Spike sign empty, aborting')
+if ~NNdata.canDetectSpikes()
 	return
 end
 
 
 checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
-H = NNdata.hash;
+
+h1 = NNdata.sdp.hash;
+h2 = GetMD5([double(NNdata.other_nerves_control) double(NNdata.other_nerves)]);
+H = GetMD5([h1 h2]);
+
 NN_dump_file = [checkpoint_path filesep H '.mat'];
 if exist(NN_dump_file,'file') ~= 2
 	disp('Cannot find network, aborting')
 	return
 end
 
-self.updateSettingsFromNNdata(.5)
+self.NNsync(.5)
 
 self.findSpikes()
 
@@ -103,7 +95,7 @@ end
 
 self.channel_stage(channel) = 3;
 
-enable(self.handles.manual_panel)
+mtools.ux.enable(self.handles.manual_panel)
 
 self.putative_spikes(:,channel) = 0;
 self.showSpikes;

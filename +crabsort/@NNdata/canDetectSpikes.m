@@ -29,9 +29,9 @@ function tf = canDetectSpikes(self)
 
 tf = false;
 
-props = properties(self.spd);
+props = properties(self.sdp);
 for i = 1:length(props)
-	if isempty(self.spd.(props{i}))
+	if isempty(self.sdp.(props{i}))
 		return
 	end
 end

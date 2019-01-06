@@ -22,8 +22,13 @@ try
     % make layers for the neural net
     SZ = size(X_train,1);
 
+    % we're going to name the network using the hash
+    % of the spike detection parameters and 
+    % what channels we're pulling it off of
+    h1 = NNdata.sdp.hash;
+    h2 = GetMD5([double(NNdata.other_nerves_control) double(NNdata.other_nerves)]);
+    H = GetMD5([h1 h2]);
 
-    H = NNdata.hash;
     NN_dump_file = [checkpoint_path filesep H '.mat'];
 
     if exist(NN_dump_file,'file') == 2
@@ -63,7 +68,7 @@ try
 
 
     disp('hash of data training on = ')
-    disp(NNdata.fullHash)
+    disp(NNdata.hash)
 
     [trainedNet, info] = trainNetwork(X_train,Y_train,layers,options);
 

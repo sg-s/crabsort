@@ -170,11 +170,11 @@ catch err
     if ~isempty(self.handles)
         self.handles.popup.Visible = 'off';
 
-        enable(self.handles.data_panel);
-        enable(self.handles.spike_detection_panel);
-        enable(self.handles.dim_red_panel);
-        enable(self.handles.cluster_panel);
-        disable(self.handles.manual_panel);
+        mtools.ux.enable(self.handles.data_panel);
+        mtools.ux.enable(self.handles.spike_detection_panel);
+        mtools.ux.enable(self.handles.dim_red_panel);
+        mtools.ux.enable(self.handles.cluster_panel);
+        mtools.ux.disable(self.handles.manual_panel);
 
         self.handles.main_fig.Name = 'ERROR OPENING FILE';
 
@@ -294,11 +294,12 @@ self.handles.main_fig.Name = self.file_name;
 
 self.handles.popup.Visible = 'off';
 
-enable(self.handles.data_panel);
-enable(self.handles.spike_detection_panel);
-enable(self.handles.dim_red_panel);
-enable(self.handles.cluster_panel);
-disable(self.handles.manual_panel);
+mtools.ux.enable(self.handles.data_panel);
+mtools.ux.show(self.handles.data_panel);
+mtools.ux.enable(self.handles.spike_detection_panel);
+mtools.ux.enable(self.handles.dim_red_panel);
+mtools.ux.enable(self.handles.cluster_panel);
+mtools.ux.disable(self.handles.manual_panel);
 
 % update the channels menu to indicate the channels
 % first nuke all the old names

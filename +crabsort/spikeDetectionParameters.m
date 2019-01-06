@@ -1,14 +1,13 @@
 % this class stores attributes used to
 % detect spikes in a trace 
 
-classdef spikeDetectionParameters
+classdef spikeDetectionParameters < Hashable
 
 
 properties
 
 	spike_prom@double 
 	spike_sign@logical
-	time_bw_spikes@double 
 	t_before@double 
 	t_after@double
 	minimum_peak_width@double 
@@ -32,7 +31,6 @@ methods (Static)
 		self = crabsort.spikeDetectionParameters();
 		self.spike_prom = 1;
 		self.spike_sign = true;
-		self.time_bw_spikes = 0;
 		self.t_before = 4;
 		self.t_after = 5;
 		self.minimum_peak_distance = 0;

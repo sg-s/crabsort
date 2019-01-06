@@ -4,13 +4,13 @@ function makeFindSpikesGUI(self,~,~)
 
 % spin up a puppeteer instance by making a slider
 % for every double property
-props = properties(self.spd);
+props = properties(self.sdp);
 N = {};
 V = [];
 for i = 1:length(props)
-	if isa(self.spd.(props{i}),'double')
+	if isa(self.sdp.(props{i}),'double')
 		N{end+1} = props{i};
-		V(end+1) = self.spd.(props{i});
+		V(end+1) = self.sdp.(props{i});
 	end
 end
 
@@ -25,3 +25,5 @@ puppeteer_handle.callback_function = @self.findSpikes;
 puppeteer_handle.continuous_callback_function = @self.findSpikesInView;
 
 self.handles.puppeteer_handle = puppeteer_handle;
+
+self.findSpikes;

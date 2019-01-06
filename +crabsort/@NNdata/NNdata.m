@@ -1,4 +1,4 @@
-classdef  NNdata < VectorObject
+classdef  NNdata < VectorObject & Hashable
 
 
 properties
@@ -17,7 +17,7 @@ properties
 
 
 	% spike detection parameters
-	spd@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.empty()
+	sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.empty()
 
 	% define what a data frame is
 	other_nerves@char = ''
@@ -46,41 +46,30 @@ methods
 		if isempty(value)
 			return
 		end
-		self.accuracy_hash = self.fullHash;
+
+		d = dbstack;
+		if any(strcmp({d.name},'NNdata.hash'))
+			return
+		end
+		self.accuracy_hash = self.hash;
 	end
 
 
-	function H = fullHash(self)
-		H{1} = GetMD5([self.raw_data' self.file_idx self.spiketimes self.label_idx]);
-		H{2} = self.hash;
-		H =  GetMD5([H{:}]);
-
-	end
-
-
-	% compute hash based on spike detection
-	% parameters. this hash is used to identify the
-	% NN that is to be used
+	% overload the hash method
+	% because we don't want some things to be hashed
 	function H = hash(self)
-		if isempty(self.spike_prom)
-			H = repmat('0',1,32);
-			return
-		end
-		if isempty(self.spike_sign)
-			H = repmat('0',1,32);
-			return
-		end
-		if isempty(self.other_nerves_control)
-			H = repmat('0',1,32);
-			return
-		end
-		H = GetMD5([GetMD5([self.spike_prom self.spike_sign self.other_nerves_control]) self.other_nerves]);
+		self.accuracy_hash = '0';
+		self.accuracy = 0;
+		self.acceptable_accuracy = 0;
+		
+		H = hash@Hashable(self);
 	end
+
 
 
 	function TF = isMoreTrainingNeeded(self)
 
-		if ~strcmp(self.fullHash,self.accuracy_hash)
+		if ~strcmp(self.hash,self.accuracy_hash)
 			% accuracy hash does not match data, so something has changed,
 			% so must retrain
 			TF = true;
