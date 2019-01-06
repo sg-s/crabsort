@@ -27,6 +27,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % common data to all files in this folder
         common@crabsort.common
 
+
+        % spike detection parameters
+        spd@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
+
+
     end % end properties 
 
     properties (SetAccess = protected)
@@ -86,10 +91,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
         % selected for spike shape, timing, etc.)
         data_to_reduce
 
-
-        % this propoerty mirrors the checked state of 
-        % the "watch me" menu item
-        watch_me@logical = false;
 
         % ignores this section
         ignore_section

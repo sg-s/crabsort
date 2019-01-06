@@ -31,7 +31,7 @@ common_name = joinPath(self.path_name, 'crabsort.common');
 crabsort_obj = self;
 
 % remove some stuff that shouldn't be saved
-ignore_these = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','watch_me','time','verbosity','timer_handle','workers','auto_predict','automate_action','mask'};
+ignore_these = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','time','verbosity','timer_handle','workers','auto_predict','automate_action','mask'};
 
 ignored_values = {};
 

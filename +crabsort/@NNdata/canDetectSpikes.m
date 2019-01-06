@@ -7,12 +7,12 @@
                                          
 
 
-# isvalid
+# canDetectSpikes
 
 **Syntax**
 
 ```
-tf = isvalid(self,channel)
+tf = canDetectSpikes(self,channel)
 ```
 
 **Description**
@@ -24,21 +24,16 @@ set?
 %}
 
 
-function tf = isvalid(self)
+function tf = canDetectSpikes(self)
 
 
 tf = false;
 
-if isempty(self.spike_prom)
-	return
-end
-
-if isempty(self.spike_sign)
-	return
-end
-
-if isempty(self.other_nerves_control)
-	return
+props = properties(self.spd);
+for i = 1:length(props)
+	if isempty(self.spd.(props{i}))
+		return
+	end
 end
 
 tf = true;

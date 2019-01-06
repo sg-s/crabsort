@@ -69,42 +69,6 @@ spike_markers = {'o','x','d','p','h','+','s'};
 % transparent. what opacity level do you want? 
 data_opacity = .5; 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                _ _        
-%       ___ _ __ (_) | _____ 
-%      / __| '_ \| | |/ / _ \
-%      \__ \ |_) | |   <  __/
-%      |___/ .__/|_|_|\_\___|
-%          |_|               
-%           _      _            _   _             
-%        __| | ___| |_ ___  ___| |_(_) ___  _ __  
-%       / _` |/ _ \ __/ _ \/ __| __| |/ _ \| '_ \ 
-%      | (_| |  __/ ||  __/ (__| |_| | (_) | | | |
-%       \__,_|\___|\__\___|\___|\__|_|\___/|_| |_|
-% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                                           
-% Spike snippet width
-t_before = 5; 		% in ms
-t_after = 4; 		% in ms
-
-minimum_peak_prominence = 'auto'; 	% minimum peak prominence for peak detection. you can use 'auto' or you can also specify a scalar value
-
-% minimum width of spikes, in ms
-minimum_peak_width = 0; 
-
-% minimum distance b/w spikes, in ms	
-minimum_peak_distance = .5; 
-
-% ignore peaks beyond this limit 
-V_cutoff = -Inf; 						
-
-
-% this setting specifies an upper bound on 
-% how far back in time (or forward) we look 
-% for spikes in other channels
-max_relative_time = 1; % seconds
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     _                       

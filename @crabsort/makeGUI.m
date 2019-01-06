@@ -90,22 +90,17 @@ uicontrol(handles.data_panel,'units','normalized','Position',[.75 .2 .2 .6],'Sty
 % spike detection panel
 handles.spike_detection_panel = uipanel('Title','Spike detection','Position',[0.09 .92 .15 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 
-handles.prom_ub_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.55 .03 .1 .4],'Style','edit','String','1','FontSize',self.pref.fs,'Callback',@self.updateSpikePromSlider,'Enable','off');
-handles.spike_prom_slider = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .63 .95 .25],'Style','Slider','Min',0,'Max',1,'Value',.5,'Callback',@self.findSpikes,'Enable','off');
+handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.03 .03 .4 .7],'Style','togglebutton','String','+ve spikes','Value',1,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign,'Enable','off');
 
-addlistener(handles.spike_prom_slider,'ContinuousValueChange',@self.findSpikes);
-
-
-handles.spike_sign_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.01 .03 .4 .4],'Style','togglebutton','String','Finding +ve spikes','Value',1,'FontSize',self.pref.fs,'Callback',@self.toggleSpikeSign,'Enable','off');
-
+handles.find_spikes_control = uicontrol(handles.spike_detection_panel,'units','normalized','Position',[.53 .03 .4 .7],'Style','pushbutton','String','Find spikes...','Value',1,'FontSize',self.pref.fs,'Callback',@self.makeFindSpikesGUI,'Enable','off');
 
 
 handles.dim_red_panel = uipanel('Title','Dimensionality reduction','Position',[.24 .92 .25 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 
 % controls to configure the data to include in the reduction
-handles.spike_shape_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','Spike shape','units','normalized','Position',[.01 .5 .18 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',1);
-handles.multi_channel_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','on','units','normalized','Position',[.01 0 .18 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',0);
-handles.multi_channel_control_text = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.1 .0 .15 .5],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
+
+handles.multi_channel_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','on','units','normalized','Position',[.01 .3 .18 .7],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',0);
+handles.multi_channel_control_text = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.1 .2 .15 .7],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 
 all_plugin_names = {self.installed_plugins.name};
 dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));

@@ -17,8 +17,9 @@ properties
 
 
 	% spike detection parameters
-	spike_prom@double = []
-	spike_sign@logical 
+	spd@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.empty()
+
+	% define what a data frame is
 	other_nerves@char = ''
 	other_nerves_control@logical
 

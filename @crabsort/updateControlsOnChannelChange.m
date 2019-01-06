@@ -145,18 +145,7 @@ else
     self.handles.nn_status.String = 'NO NET';
 end
 
-% automatically enable "watch me" on this channel
-if self.handles.ax.recording(channel).Value == 0 & isempty(self.common.NNdata(channel).spike_prom)
-    self.updateWatchMe(self.handles.ax.recording(channel))
-else
-    % disable "rec" on all channels
-    for i = 1:self.n_channels
-        if self.handles.ax.recording(i).Value == 1
-            self.updateWatchMe(self.handles.ax.recording(i))
-        end
-    end
-    self.watch_me = false;
-end
+
 
 % update the neuron names in manual override panel
 if ~isempty(self.common.data_channel_names{channel})

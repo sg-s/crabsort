@@ -6,18 +6,19 @@
 %
 % flips b/w finding +ve and -ve spikes
 
-function [] =  toggleSpikeSign(self,~,~)
+function toggleSpikeSign(self,~,~)
 
 d = dbstack;
 if self.verbosity > 3
 	disp(['[' mfilename '] called by ' d(2).name])
 end
 
+self.spd = self.handles.spike_sign_control.Value;
 
-if get(self.handles.spike_sign_control,'Value')
-	set(self.handles.spike_sign_control,'String','Finding +ve spikes')
+if self.spd
+	set(self.handles.spike_sign_control,'String','+ve spikes')
 else
-	set(self.handles.spike_sign_control,'String','Finding -ve spikes')
+	set(self.handles.spike_sign_control,'String','-ve spikes')
 end
 
 self.findSpikes;

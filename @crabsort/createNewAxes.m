@@ -122,8 +122,6 @@ for i = 1:self.n_channels
 		end
 	end
 
-	% make an indicator of recording status
-	self.handles.ax.recording(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .05 .3 .15],'Style', 'text', 'String', 'REC','BackgroundColor',[.9 .9 .9],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','on','ButtonDownFcn',@self.updateWatchMe,'Enable','Inactive');
 
 	% show indicator of automate status
 	self.handles.ax.has_automate(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.41 .05 .1 .15],'Style', 'text', 'String', 'A','BackgroundColor',[.9 .9 .9],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','on');

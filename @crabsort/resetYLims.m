@@ -53,8 +53,7 @@ elseif is_intracellular
 	self.handles.ax.ax(idx).YTickMode = 'auto';
 end
 
-
-self.handles.prom_ub_control.String = mat2str(yl);
-self.updateSpikePromSlider(0);
+self.spd.spike_prom = yl;
+self.spd.V_cutoff = 2*yl;
 
 self.channel_ylims(idx) = yl;
