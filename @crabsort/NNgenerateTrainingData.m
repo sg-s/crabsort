@@ -31,14 +31,19 @@ if self.verbosity > 3
 end
 
 
+if isempty(self.channel_to_work_with)
+	return
+else
+	channel = self.channel_to_work_with;
+end
+
 
 % focus on the correct nerve
-this_nerve = self.common.data_channel_names{self.channel_to_work_with};
+this_nerve = self.common.data_channel_names{channel};
 
 % check that there are spikes on this channel
 [s, s_by_unit] = self.getSpikesOnThisNerve;
 
-channel = self.channel_to_work_with;
 
 if isempty(channel)
 	disp('No channel selected')
@@ -119,7 +124,7 @@ else
 end
 
 % now append it to NNdata as needed
-NNdata = self.common.NNdata(self.channel_to_work_with);
+NNdata = self.common.NNdata(channel);
 
 if isempty(NNdata.raw_data)
 
@@ -148,4 +153,4 @@ else
 	NNdata.check()
 end
 
-self.common.NNdata(self.channel_to_work_with) = NNdata;
+self.common.NNdata(channel) = NNdata;

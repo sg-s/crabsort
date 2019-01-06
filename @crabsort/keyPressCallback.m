@@ -12,6 +12,8 @@ elseif strcmp(value.Key,'p')
 	self.NNpredict;
 elseif strcmp(value.Key,'space')
 	self.jumpToNextUncertainSpike();
+elseif strcmp(value.Key,'g')
+	self.NNgenerateTrainingData;
 else
 	% do nothing
 end

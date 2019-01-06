@@ -40,14 +40,14 @@ if self.handles.multi_channel_control.Value
 
 
 			% get some extra context 
-			old_t_before = self.pref.t_before;
-			old_t_after = self.pref.t_after;
-			self.pref.t_before = self.pref.t_before*3;
-			self.pref.t_after = self.pref.t_after*3;
+			old_t_before = self.sdp.t_before;
+			old_t_after = self.sdp.t_after;
+			self.sdp.t_before = self.sdp.t_before*3;
+			self.sdp.t_after = self.sdp.t_after*3;
 			these_snippets = self.getSnippets(this_channel, spiketimes);
 
-			self.pref.t_before = old_t_before;
-			self.pref.t_after = old_t_after;
+			self.sdp.t_before = old_t_before;
+			self.sdp.t_after = old_t_after;
 
 			% normalize to match scale of original data
 			if ~isempty(original_data)

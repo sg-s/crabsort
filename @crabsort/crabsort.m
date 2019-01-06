@@ -256,7 +256,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                     % channel name unset
                     mtools.ux.disable(self.handles.spike_detection_panel)
                 else
-                    mtools.ux.show(self.handles.spike_detection_panel)
                     mtools.ux.enable(self.handles.spike_detection_panel)
                 end
                 
@@ -264,12 +263,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay
                 mtools.ux.hide(self.handles.dim_red_panel)
                 mtools.ux.hide(self.handles.cluster_panel)
                 mtools.ux.hide(self.handles.manual_panel)
-                mtools.ux.hide(self.handles.mask_panel)
+                mtools.ux.enable(self.handles.mask_panel)
 
             case 1
                 % spikes detected.
                 mtools.ux.enable(self.handles.spike_detection_panel)
-                mtools.ux.show(self.handles.spike_detection_panel)
                 mtools.ux.enable(self.handles.dim_red_panel)
                 mtools.ux.hide(self.handles.cluster_panel)
             case 2

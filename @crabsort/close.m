@@ -37,6 +37,11 @@ end
 
 self.saveData;
 
+try	
+	delete(self.handles.puppeteer_handle)
+catch
+end
 
 delete(self.handles.main_fig)
 delete(self)
+
