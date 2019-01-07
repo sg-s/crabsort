@@ -48,7 +48,7 @@ case 'This channel/All files'
 case 'All channels/This file'
 	self.automate_action = crabsort.automateAction.all_channels_this_file;
 case 'Stop'
-	
+
 otherwise
 	error('Unknown caller to automate')
 end

@@ -44,17 +44,21 @@ dist_to_uncertain_spikes = (((uncertain_spikes-p(1))/(xrange)).^2  + ((uncertain
 
 
 if min(dist_to_uncertain_spikes) < min(dist_to_identified_spikes)
-	self.handles.main_fig.Name = [self.file_name ' -- Marking uncertain spike as noise'];
+	self.say('Marking uncertain spike as noise');
 
 
 	this_spike = uncertain_spikes(dist_to_uncertain_spikes == min(dist_to_uncertain_spikes));
+
+	% remove from uncertain spikes
+	self.handles.ax.uncertain_spikes(channel).XData(dist_to_uncertain_spikes == min(dist_to_uncertain_spikes)) = [];
+	self.handles.ax.uncertain_spikes(channel).YData(dist_to_uncertain_spikes == min(dist_to_uncertain_spikes)) = [];
 
 
 elseif min(dist_to_uncertain_spikes) == min(dist_to_identified_spikes)
 	disp('user is clicking on an uncertain spike that is marked as a spike')
 	keyboard
 elseif min(dist_to_uncertain_spikes) > min(dist_to_identified_spikes)
-	self.handles.main_fig.Name = [self.file_name ' -- Deleting identified spike'];
+	self.say(' Deleting identified spike');
 	this_spike = spiketimes(dist_to_identified_spikes == min(dist_to_identified_spikes));
 
 	% mark this spike as noise
@@ -62,14 +66,14 @@ elseif min(dist_to_uncertain_spikes) > min(dist_to_identified_spikes)
 
 
 elseif isempty(dist_to_uncertain_spikes)
-	self.handles.main_fig.Name = [self.file_name ' -- Deleting identified spike'];
+	self.say('Deleting identified spike');
 	this_spike = spiketimes(dist_to_identified_spikes == min(dist_to_identified_spikes));
 
 	% mark this spike as noise
 	self.markAsNoise(this_nerve,this_spike);
 
 elseif isnan(min(dist_to_uncertain_spikes)) 
-	self.handles.main_fig.Name = [self.file_name ' -- Deleting identified spike'];
+	self.say('Deleting identified spike');
 	this_spike = spiketimes(dist_to_identified_spikes == min(dist_to_identified_spikes));
 
 	% mark this spike as noise

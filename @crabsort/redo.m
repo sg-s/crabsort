@@ -29,4 +29,6 @@ for i = 1:length(N)
 	N(i).XData = NaN;
 end
 
+self.handles.main_fig.Name = [self.file_name ' -- Resetting data'];
+
 self.showSpikes;

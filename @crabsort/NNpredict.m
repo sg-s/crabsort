@@ -50,6 +50,8 @@ if exist(NN_dump_file,'file') ~= 2
 	return
 end
 
+self.say('Using NN to predict spikes...')
+
 self.NNsync(.5)
 
 self.findSpikes()
@@ -105,3 +107,6 @@ mtools.ux.enable(self.handles.manual_panel)
 
 self.putative_spikes(:,channel) = 0;
 self.showSpikes;
+
+self.say('DONE. Spikes classified using NN')
+

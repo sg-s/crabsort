@@ -15,5 +15,9 @@ end
 
 nerve_name =  self.common.data_channel_names{channel};
 
+if ~isfield(self.nerve2neuron,nerve_name)
+	return
+end
+
 N = self.nerve2neuron.(nerve_name);
 

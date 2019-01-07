@@ -87,16 +87,16 @@ end
 
 if any(spiketimes==new_spike) & any(uncertain_spikes == new_spike)
 	% clicked point is an identified spike that is uncertain
-	self.handles.main_fig.Name = [self.file_name ' -- Adding this spike to training data'];
+	self.say('Adding this spike to training data');
 	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);
 elseif any(spiketimes==new_spike) & ~any(uncertain_spikes == new_spike)
 	% clicked point is an identified, certain spike
-	self.handles.main_fig.Name = [self.file_name ' -- This spike has already been identified'];
+	self.say('This spike has already been identified');
 	beep
 	return
 elseif ~any(spiketimes==new_spike) & any(uncertain_spikes == new_spike)
 	% clicked point is an unidentified spike, but it's uncertain
-	self.handles.main_fig.Name = [self.file_name ' -- Adding new spike'];
+	self.say('Adding new spike');
 	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);
 
 	% add
@@ -104,7 +104,7 @@ elseif ~any(spiketimes==new_spike) & any(uncertain_spikes == new_spike)
 
 else 
 	% clicked point is a unidentified spike
-	self.handles.main_fig.Name = [self.file_name ' -- Adding new spike'];
+	self.say('Adding new spike');
 	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);
 
 	% add

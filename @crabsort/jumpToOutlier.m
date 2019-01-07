@@ -8,7 +8,8 @@ else
 end
 spiketimes = find(self.getSpikesOnThisNerve);
 if isempty(spiketimes)
-	self.handles.main_fig.Name = [self.file_name ' -- No identified spikes'];
+	self.say('No identified spikes');
+	beep
 	return
 end
 V = self.getSnippets(channel,spiketimes);
@@ -16,10 +17,12 @@ E = abs(zscore(sum(abs(V - mean(V,2)))));
 outliers = E > 5;
 
 if ~any(outliers)
-	self.handles.main_fig.Name = [self.file_name ' -- No outliers'];
+	self.say('No outliers');
+	beep
 	return
 elseif mean(outliers) > .1
-	self.handles.main_fig.Name = [self.file_name ' -- No outliers'];
+	self.say('No outliers');
+	beep
 	return
 end
 outliers = spiketimes(outliers);
@@ -49,7 +52,8 @@ end
 	
 
 if isempty(outliers)
-	self.handles.main_fig.Name = [self.file_name ' -- No outliers'];
+	self.say('No outliers');
+	beep
 	return
 end
 switch direction
@@ -70,4 +74,4 @@ self.handles.ax.ax(channel).XLim = [outliers - xrange/2 outliers + xrange/2];
 self.scroll([outliers - xrange/2 outliers + xrange/2])
 
 
-self.handles.main_fig.Name = [self.file_name ' -- Possible outlier detected'];
+self.say('Possible outlier detected');

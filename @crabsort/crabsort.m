@@ -249,7 +249,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
             switch this_channel_stage
             case 0
-                disp(0)
                 % new channel. show spike detection panel
                 % if it is named. 
                 if isempty(self.common.data_channel_names{channel})

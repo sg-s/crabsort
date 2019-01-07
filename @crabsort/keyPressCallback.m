@@ -14,6 +14,14 @@ elseif strcmp(value.Key,'space')
 	self.jumpToNextUncertainSpike();
 elseif strcmp(value.Key,'g')
 	self.NNgenerateTrainingData;
+elseif strcmp(value.Key,'a')
+	% to to first section
+	xrange = diff(self.handles.ax.ax(1).XLim);
+	self.scroll([0 xrange]);
+elseif strcmp(value.Key,'z')
+	% go to end
+	xrange = diff(self.handles.ax.ax(1).XLim);
+	self.scroll([self.time(end) - xrange self.time(end)])
 else
 	% do nothing
 end

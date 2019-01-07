@@ -45,6 +45,11 @@ if self.automate_action ~= crabsort.automateAction.none
 	return
 end
 
+% clear old messages if need be
+if (now - self.handles.main_fig.UserData)*86400 > 5
+	self.handles.main_fig.Name = [self.file_name];
+end
+
 for i = 1:self.n_channels
 	%disp(i)
 	if isempty(self.common.NNdata(i).label_idx)
