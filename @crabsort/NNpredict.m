@@ -41,13 +41,12 @@ end
 
 checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
 
-h1 = NNdata.sdp.hash;
-h2 = GetMD5([double(NNdata.other_nerves_control) double(NNdata.other_nerves)]);
-H = GetMD5([h1 h2]);
+H = NNdata.networkHash();
+
 
 NN_dump_file = [checkpoint_path filesep H '.mat'];
 if exist(NN_dump_file,'file') ~= 2
-	disp('Cannot find network, aborting')
+	%disp('Cannot find network, aborting')
 	return
 end
 
@@ -85,7 +84,14 @@ putative_spikes = find(self.putative_spikes(:,channel));
 uncertain_spikes = putative_spikes(uncertain_spikes);
 self.handles.ax.uncertain_spikes(channel).XData = uncertain_spikes*self.dt;
 yrange = diff(self.handles.ax.ax(channel).YLim);
-self.handles.ax.uncertain_spikes(channel).YData = self.raw_data(uncertain_spikes,channel)+yrange*.07;
+
+if self.sdp.spike_sign
+	self.handles.ax.uncertain_spikes(channel).YData = self.raw_data(uncertain_spikes,channel)+yrange*.07;
+	self.handles.ax.uncertain_spikes(channel).Marker = 'v';
+else
+	self.handles.ax.uncertain_spikes(channel).YData = self.raw_data(uncertain_spikes,channel)-yrange*.07;
+	self.handles.ax.uncertain_spikes(channel).Marker = '^';
+end
 
 for i = 1:length(unit_names)
 	self.spikes.(this_nerve).(unit_names{i}) = putative_spikes(Y_pred==i);

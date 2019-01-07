@@ -49,7 +49,7 @@ v_cutoff = self.sdp.V_cutoff;
 
 % find peaks and remove spikes beyond v_cutoff
 if ~isa(Npeaks,'double')
-    if ~self.handles.spike_sign_control.Value
+    if ~self.sdp.spike_sign
         [~,loc] = findpeaks(-V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
         loc(V(loc) < -abs(v_cutoff)) = [];
     else
@@ -58,7 +58,7 @@ if ~isa(Npeaks,'double')
     end
 else
     % being called by train
-    if ~self.handles.spike_sign_control.Value
+    if ~self.sdp.spike_sign
         [~,loc] = findpeaks(-V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw,'NPeaks',Npeaks);
     else
         [~,loc] = findpeaks(V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw,'NPeaks',Npeaks);

@@ -25,9 +25,7 @@ try
     % we're going to name the network using the hash
     % of the spike detection parameters and 
     % what channels we're pulling it off of
-    h1 = NNdata.sdp.hash;
-    h2 = GetMD5([double(NNdata.other_nerves_control) double(NNdata.other_nerves)]);
-    H = GetMD5([h1 h2]);
+    H = NNdata.networkHash();
 
     NN_dump_file = [checkpoint_path filesep H '.mat'];
 

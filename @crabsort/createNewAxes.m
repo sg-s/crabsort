@@ -58,7 +58,7 @@ for i = self.n_channels:-1:1
 	self.handles.ax.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none','Color',self.pref.putative_spike_colour);
 
 	% make plots for uncertain spikes as indicated by NN
-	self.handles.ax.uncertain_spikes(i) = plot(NaN,NaN,'v','LineStyle','none','Color','k')
+	self.handles.ax.uncertain_spikes(i) = plot(NaN,NaN,'v','LineStyle','none','Color','k','MarkerFaceColor','k')
 
 	% support up to 10 units on each 
 	% this weird syntax is so that the primary unit on each 
