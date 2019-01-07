@@ -9,7 +9,7 @@
 % https://github.com/sg-s/crabsort
 % Srinivas Gorur-Shandilya
 
-classdef crabsort < handle & matlab.mixin.CustomDisplay
+classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
     properties
        
