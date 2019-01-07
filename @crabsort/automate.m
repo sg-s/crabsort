@@ -1,18 +1,31 @@
-%                 _                    _   
-%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
-%  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
-% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
-%  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
-%
-% attempts to go through all files and run through
-% the process that was done earlier manually 
+%{ 
+                _                    _   
+  ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+ / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
+| (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+ \___|_|  \__,_|_.__/|___/\___/|_|   \__|
+                                         
 
+
+# automate
+
+**Syntax**
+
+```
+automate(self,~,~)
+```
+
+**Description**
+
+This method is a callback function of new_spike_type
+and activates the new spike mode in manual override
+
+%}
 function automate(self,src,~)
 
 if strcmp(src.Text,'Stop')
 	self.automate_action = crabsort.automateAction.none;
-
-
+	return
 end
 
 

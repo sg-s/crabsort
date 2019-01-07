@@ -9,11 +9,6 @@
 % 
 function varargout = plugins(s)
 
-if s.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
-end
-
 p.name = '';
 p.plugin_type = '';
 p.plugin_dimension = [];
