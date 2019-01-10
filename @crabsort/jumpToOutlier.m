@@ -14,13 +14,15 @@ if isempty(spiketimes)
 end
 V = self.getSnippets(channel,spiketimes);
 E = abs(zscore(sum(abs(V - mean(V,2)))));
-outliers = E > 5;
+outliers = E > 3;
+
 
 if ~any(outliers)
 	self.say('No outliers');
 	beep
 	return
 elseif mean(outliers) > .1
+	keyboard
 	self.say('No outliers');
 	beep
 	return

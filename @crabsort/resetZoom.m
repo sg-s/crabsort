@@ -6,7 +6,7 @@
 %
 % Srinivas Gorur-Shandilya
 
-function [] = resetZoom(self,~,~)
+function resetZoom(self,~,~)
 
 d = dbstack;
 if self.verbosity > 3

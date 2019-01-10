@@ -37,6 +37,7 @@ else
 	channel = self.channel_to_work_with;
 end
 
+self.say('Generating training data for NN...')
 
 % focus on the correct nerve
 this_nerve = self.common.data_channel_names{channel};

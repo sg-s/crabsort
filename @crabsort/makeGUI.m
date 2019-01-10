@@ -53,7 +53,7 @@ uimenu(handles.menu_name(2),'Label','Update crabsort...','Callback',@self.update
 % view
 handles.menu_name(3) = uimenu('Label','View');
 uimenu(handles.menu_name(3),'Label','Reset zoom','Callback',@self.resetZoom);
-uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,'Enable','off');
+uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,'Enable','on');
 
 handles.menu_name(3) = uimenu('Label','Automate');
 

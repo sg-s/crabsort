@@ -9,10 +9,12 @@ else
     channel = self.channel_to_work_with;
 end
 
-if nargin == 3
-	parameter = parameter{1};
-	self.sdp.(parameter) = value;
+values = self.handles.puppeteer_handle.parameter_values;
+parameters = self.handles.puppeteer_handle.parameter_names;
+for i = 1:length(parameters)
+    self.sdp.(parameters{i}) = values(i);
 end
+
 
 % figure out which channel to work with
 V = self.raw_data(:,channel).*self.mask(:,channel);

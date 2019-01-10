@@ -25,11 +25,14 @@ end
 if isfield(self.handles,'NNdata_inspector') && isvalid(self.handles.NNdata_inspector)
 else
 	% make figure
+	fn = {'NNdata_inspector','NNdata_inspector_tsne','NNdata_inspector_ax','NNdata_inspector_tsne_noise'};
+	for i = 1:length(fn)
+		if isfield(self.handles,fn{i})
+			self.handles = rmfield(self.handles,fn{i});
+		end
+	
+	end
 
-	self.handles = rmfield(self.handles,'NNdata_inspector');
-	self.handles = rmfield(self.handles,'NNdata_inspector_tsne');
-	self.handles = rmfield(self.handles,'NNdata_inspector_ax');
-	self.handles = rmfield(self.handles,'NNdata_inspector_tsne_noise');
 
 	self.handles.NNdata_inspector = figure('position',[10 10 800 800], 'Toolbar','figure','Menubar','none','Name','Inspecting training data...','NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.NNintrospect,'CloseRequestFcn',@self.NNintrospect,'Color','w','Tag','NNdata_inspector','KeyPressFcn',@self.NNintrospect);
 
