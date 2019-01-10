@@ -28,7 +28,8 @@ case 'Delete this channels NN'
 	if isempty(channel)
 		return
 	end
-	allfiles = dir([self.path_name 'network' filesep self.common.data_channel_names{channel},'*.mat']);
+	allfiles = dir([self.path_name 'network' filesep self.common.data_channel_names{channel},filesep,'*.mat']);
+
 	for i = 1:length(allfiles)
 		delete([allfiles(i).folder filesep allfiles(i).name])
 	end

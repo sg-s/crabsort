@@ -50,11 +50,19 @@ if exist(NN_dump_file,'file') ~= 2
 	return
 end
 
-self.say('Using NN to predict spikes...')
+
 
 self.NNsync(.5)
 
 self.findSpikes()
+
+n_spikes = sum(self.putative_spikes(:,channel));
+
+if n_spikes == 0
+	self.say('No spikes detected, nothing to do.')
+else
+	self.say([oval(n_spikes) ' spikes detected; using NN to sort...'])
+end
 
 self.getDataToReduce()
 
