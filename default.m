@@ -31,7 +31,9 @@ channel_names = sort({'dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperatu
 
 
 % specify which units exist on which nerves
-
+nerve2neuron.PY = 'PY';
+nerve2neuron.LP = 'LP';
+nerve2neuron.PD = 'PD';
 nerve2neuron.lpn = 'LP';
 nerve2neuron.pdn = 'PD';
 nerve2neuron.pyn = {'PY', 'LPG'};

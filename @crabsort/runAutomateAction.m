@@ -22,6 +22,7 @@ case crabsort.automateAction.all_channels_all_files
 		% simulate a next file button press
 		temp = struct();
 		temp.String = '>';
+		temp.Style = 'none';
 		self.scroll([0 5])
 		self.loadFile(temp)
 
@@ -134,6 +135,7 @@ case crabsort.automateAction.this_channel_all_files
 		% simulate a next file button press
 		temp = struct();
 		temp.String = '>';
+		temp.Style = 'none';
 		self.scroll([0 5])
 		self.loadFile(temp)
 

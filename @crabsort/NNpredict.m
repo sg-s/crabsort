@@ -23,9 +23,9 @@ makes predictions using a trained neural network
 
 function NNpredict(self)
 
-% if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
-% 	return
-% end
+if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
+	return
+end
 channel = self.channel_to_work_with;
 
 if isempty(channel)
@@ -46,7 +46,7 @@ H = NNdata.networkHash();
 
 NN_dump_file = [checkpoint_path filesep H '.mat'];
 if exist(NN_dump_file,'file') ~= 2
-	%disp('Cannot find network, aborting')
+	self.say('Cannot find network, aborting')
 	return
 end
 
@@ -90,8 +90,29 @@ if ~iscell(unit_names)
 end
 
 putative_spikes = find(self.putative_spikes(:,channel));
-
 uncertain_spikes = putative_spikes(uncertain_spikes);
+
+
+% overwrite any predictions from the NN using manual annotations
+% stored in NNdata
+if any(NNdata.file_idx == self.getFileSequence)
+	manually_labelled_spikes = NNdata.spiketimes(NNdata.file_idx == self.getFileSequence);
+	manual_labels = NNdata.label_idx(NNdata.file_idx == self.getFileSequence);
+
+	% first mark  noise as noise
+	mark_as_noise = ismember(putative_spikes,manually_labelled_spikes(manual_labels==0));
+	Y_pred(mark_as_noise) = 0;
+
+	uncertain_spikes = setdiff(uncertain_spikes,manually_labelled_spikes);
+
+	if any(manual_labels)
+		for i = 1:length(unit_names)
+			mark_as_spike = ismember(putative_spikes,manually_labelled_spikes(manual_labels==i));
+			Y_pred(mark_as_spike) = i;
+		end
+	end
+end
+
 self.handles.ax.uncertain_spikes(channel).XData = uncertain_spikes*self.dt;
 yrange = diff(self.handles.ax.ax(channel).YLim);
 
@@ -102,6 +123,9 @@ else
 	self.handles.ax.uncertain_spikes(channel).YData = self.raw_data(uncertain_spikes,channel)-yrange*.07;
 	self.handles.ax.uncertain_spikes(channel).Marker = '^';
 end
+
+
+
 
 for i = 1:length(unit_names)
 	self.spikes.(this_nerve).(unit_names{i}) = putative_spikes(Y_pred==i);

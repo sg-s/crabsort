@@ -19,6 +19,7 @@ try
 
 if nargin == 1
     src.String = '';
+    src.Style = 'none';
 end
 
 % figure out what file types we can work with
@@ -73,8 +74,20 @@ if strcmp(src.String,'Load File')
     % make a note of the file format chosen
     setpref('crabsort','last_ext',allowed_file_extensions{filter_index})
 
+    % conver the load file button to a file picker
+    src.Style = 'popupmenu';
+    allfiles = dir([self.path_name filesep allowed_file_extensions{filter_index}]);
+    src.String = {allfiles.name};
 
-    
+elseif strcmp(src.Style,'popupmenu')
+
+    self.saveData;
+
+    % jump to file
+    self.file_name = src.String{src.Value};
+
+    [~,~,ext]=fileparts(self.file_name);
+    filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 
 elseif strcmp(src.String,'<')
 
@@ -367,6 +380,12 @@ end
 
 % create a mask
 self.mask = self.raw_data*0 + 1;
+
+% reset all uncertain spikes
+for i = 1:length(self.handles.ax.uncertain_spikes)
+    self.handles.ax.uncertain_spikes(i).XData = NaN;
+    self.handles.ax.uncertain_spikes(i).YData = NaN;
+end
 
 catch err
 
