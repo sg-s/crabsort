@@ -38,9 +38,12 @@ for i = self.n_channels:-1:1
 
 	self.handles.ax.ax(i) = subplot(self.n_channels,1,self.n_channels - i + 1); hold on
 
+
 	if i > 1 && i < self.n_channels
 		self.handles.ax.ax(i).XColor = 'w';
 		self.handles.ax.ax(i).XTick = [];
+	else
+		self.handles.ax.ax(i).XMinorTick = 'on';
 	end
 
 	if i == self.n_channels && i > 1
