@@ -55,10 +55,11 @@ for i = length(allfiles):-1:1
 	for j = 1:length(options.neurons)
 		data(i).(options.neurons{j}) = [];
 	end
+	data(i).time_offset = 0;
 end
 
 
-for i = length(allfiles):-1:1
+for i = 1:length(allfiles)
 	load([allfiles(i).folder filesep allfiles(i).name],'-mat')
 
 	self = crabsort_obj;
@@ -77,6 +78,11 @@ for i = length(allfiles):-1:1
 			end
 		end
 
+	end
+
+	T = self.raw_data_size(1)*self.dt;
+	if i > 1
+		data(i).time_offset = data(i-1).time_offset + T;
 	end
 
 
