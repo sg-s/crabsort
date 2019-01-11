@@ -6,13 +6,21 @@ classdef spikeDetectionParameters < Hashable
 
 properties
 
-	spike_prom@double 
+
+	% these go directly into findpeaks
+	MinPeakHeight@double
+	MinPeakProminence@double
+	Threshold@double
+	MinPeakDistance@double
+	MinPeakWidth@double 
+	MaxPeakWidth@double
+
+	% some extra parameters
+	MaxPeakHeight@double
 	spike_sign@logical
 	t_before@double 
 	t_after@double
-	minimum_peak_width@double 
-	minimum_peak_distance@double 
-	V_cutoff@double
+	
 
 end
 
@@ -28,17 +36,24 @@ methods (Static)
 	end
 
 	function self = default()
+
 		self = crabsort.spikeDetectionParameters();
-		self.spike_prom = 1;
+		
+		self.MinPeakHeight = 0;
+		self.MaxPeakHeight = Inf;
+		self.MinPeakProminence = 1;
+		self.Threshold = 0;		
+		self.MinPeakDistance = 0;
+		self.MinPeakWidth = 0;
+		self.MaxPeakWidth = 1e3;
 		self.spike_sign = true;
 		self.t_before = 4;
 		self.t_after = 5;
-		self.minimum_peak_distance = 0;
-		self.minimum_peak_width = 0;
-		self.V_cutoff = NaN;
+
 	end
 
 end
+
 
 
 end % classdef

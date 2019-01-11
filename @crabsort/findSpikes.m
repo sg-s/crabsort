@@ -41,35 +41,31 @@ if any(isnan(V))
 end
 
 
-mpp = self.sdp.spike_prom;
-mpd = ceil(self.sdp.minimum_peak_distance/(self.dt*1e3));
-mpw = ceil(self.sdp.minimum_peak_width/(self.dt*1e3));
-v_cutoff = self.sdp.V_cutoff;
+MinPeakHeight = self.sdp.MinPeakHeight;
+MinPeakProminence = self.sdp.MinPeakProminence;
+Threshold = self.sdp.Threshold;
+MinPeakDistance = ceil(self.sdp.MinPeakDistance/(self.dt*1e3));
+MinPeakWidth = ceil(self.sdp.MinPeakWidth/(self.dt*1e3));
+MaxPeakWidth = ceil(self.sdp.MaxPeakWidth/(self.dt*1e3));
+MaxPeakHeight = self.sdp.MaxPeakHeight;
 
 % find peaks and remove spikes beyond v_cutoff
 if ~isa(Npeaks,'double')
     if ~self.sdp.spike_sign
-        [~,loc] = findpeaks(-V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
-        loc(V(loc) < -abs(v_cutoff)) = [];
-    else
-        [~,loc] = findpeaks(V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw);
-        loc(V(loc) > abs(v_cutoff)) = [];
+        V = -V;
     end
+    [~,loc] = findpeaks(V,'MinPeakHeight',MinPeakHeight,'MinPeakProminence',MinPeakProminence,'Threshold',Threshold,'MinPeakDistance',MinPeakDistance,'MinPeakWidth',MinPeakWidth,'MaxPeakWidth',MaxPeakWidth);
+    loc(V(loc) > MaxPeakHeight) = [];
 else
     % being called by train
     if ~self.sdp.spike_sign
-        [~,loc] = findpeaks(-V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw,'NPeaks',Npeaks);
-    else
-        [~,loc] = findpeaks(V,'MinPeakProminence',mpp,'MinPeakDistance',mpd,'MinPeakWidth',mpw,'NPeaks',Npeaks);
+        V = -V;
     end
+    [~,loc] = findpeaks(V,'MinPeakHeight',MinPeakHeight,'MinPeakProminence',MinPeakProminence,'Threshold',Threshold,'MinPeakDistance',MinPeakDistance,'MinPeakWidth',MinPeakWidth,'MaxPeakWidth',MaxPeakWidth,'Npeaks',Npeaks);
 end
 
-if self.verbosity
-	cprintf('green','\n[INFO]')
-    cprintf('text',[' found ' oval(length(loc)) ' spikes'])
-end
 
-self.handles.main_fig.Name = [self.file_name ' -- found ' oval(length(loc)) ' spikes'];
+self.say(['found ' oval(length(loc)) ' spikes']);
 
 
 self.putative_spikes(:,channel) = 0;
