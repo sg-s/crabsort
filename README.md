@@ -3,6 +3,17 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/sg-s/crabsort.svg)]()
 
 
+# Keyboard actions
+
+| Key | Action |
+| ======= | ====== |
+| `a` | Scroll to beginning of file |
+| `Spacebar` | Jump to next uncertain spike (as predicted by Neural Network) |
+| `g` | generate data for Neural network | 
+| `⇧ + →` | jump to next outlier (on right) |
+| `⇧ + ←` | jump to next outlier (on left) |
+| `p` | Predict spikes using Neural network |
+
 [being rewritten. stay tuned]
 
 # License 
