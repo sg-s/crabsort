@@ -37,6 +37,9 @@ if isempty(allfiles)
 	error('No data found')
 end
 
+assert(~isempty(options.nerves),'nerves must be specified')
+assert(~isempty(options.neurons),'neurons must be specified')
+
 % load the common data
 load([allfiles(1).folder filesep 'crabsort.common'],'-mat')
 
@@ -50,12 +53,18 @@ for i = length(options.nerves):-1:1
 
 end
 
+% figure out the experiment idx from the folder name
+[~,exp_dir]=fileparts(options.data_dir);
+exp_dir = str2double(strrep(exp_dir,'_',''));
+assert(~isnan(exp_dir),'Could not determine experiment idx')
+
 data = struct;
 for i = length(allfiles):-1:1
 	for j = 1:length(options.neurons)
 		data(i).(options.neurons{j}) = [];
 	end
 	data(i).time_offset = 0;
+	data(i).experiment_idx = exp_dir;
 end
 
 
@@ -88,3 +97,25 @@ for i = 1:length(allfiles)
 
 end
 
+
+
+m = [options.data_dir filesep 'metadata.txt'];
+if exist(m,'file') == 2
+	metadata = crabsort.parseMetadata(m,allfiles);
+	fn = fieldnames(metadata);
+
+	for j = 1:length(fn)
+		if ~isfield(data(1),fn{j})
+			data(1).(fn{j}) = [];
+		end
+			
+	end
+
+	for i = 1:length(allfiles)
+		for j = 1:length(fn)
+			data(i).(fn{j}) = metadata.(fn{j})(i);
+		end
+	end
+else
+	return
+end
