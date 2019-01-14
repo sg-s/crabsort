@@ -175,9 +175,7 @@ self.builtin_channel_names = {};
 try
     load_file_handle(self);
 catch err
-    for ei = 1:length(err)
-        err.stack(ei)
-    end
+
     warning('Error opening file')
     disp(self.file_name)
     if ~isempty(self.handles)
@@ -247,13 +245,10 @@ else
 end
 
 % make sure we have computed the delays
-self.estimateDelay;
-
-
-
-if self.verbosity > 5
-    disp(['[loadFile] remove mean for all channels that have names'])
+if ~isempty(self.handles)
+    self.estimateDelay;
 end
+
 
 
 for i = 1:length(self.common.data_channel_names)
@@ -356,18 +351,14 @@ end
 
 
 % try to rescale the temperature channel correctly
-try
-    for i = 1:self.n_channels
-        if strcmp(self.common.data_channel_names{i},'temperature')
-            self.handles.ax.ax(i).YLim = [5 35];
-            self.handles.ax.ax(i).YTickMode = 'auto';
-        end
-    end
-catch err
-    for ei = 1:length(err)
-        err.stack(ei)
+
+for i = 1:self.n_channels
+    if strcmp(self.common.data_channel_names{i},'temperature')
+        self.handles.ax.ax(i).YLim = [5 35];
+        self.handles.ax.ax(i).YTickMode = 'auto';
     end
 end
+
 
 
 % check if we have the scales set 
@@ -388,10 +379,9 @@ for i = 1:length(self.handles.ax.uncertain_spikes)
 end
 
 catch err
-
-    keyboard
+    self.raw_data = [];
     self.displayStatus(err, true)
     save([GetMD5(now) '.error'],'err')
-    error('FATAL error')
+    warning('FATAL error')
 
 end

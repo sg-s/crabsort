@@ -19,7 +19,7 @@ end
 
 
 % read the file
-[self.raw_data,dt,self.metadata] = abfload(joinPath(self.path_name,self.file_name));
+[self.raw_data,dt,self.metadata] = abfload(joinPath(self.path_name,self.file_name),'doDispInfo',false);
 
 % populate builtin_channel_names
 self.builtin_channel_names = self.metadata.recChNames;
