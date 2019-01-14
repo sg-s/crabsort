@@ -6,7 +6,7 @@
 # Keyboard actions
 
 | Key | Action |
-| ======= | ====== |
+| ---------- | ---------- |
 | `a` | Scroll to beginning of file |
 | `Spacebar` | Jump to next uncertain spike (as predicted by Neural Network) |
 | `g` | generate data for Neural network | 
