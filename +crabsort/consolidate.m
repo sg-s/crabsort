@@ -64,6 +64,7 @@ for i = length(allfiles):-1:1
 		data(i).(options.neurons{j}) = [];
 	end
 	data(i).time_offset = 0;
+	data(i).T = NaN;
 	data(i).experiment_idx = exp_dir;
 end
 
@@ -89,9 +90,13 @@ for i = 1:length(allfiles)
 
 	end
 
-	T = self.raw_data_size(1)*self.dt;
+	
+	
+
+	data(i).T = self.raw_data_size(1)*self.dt;
+
 	if i > 1
-		data(i).time_offset = data(i-1).time_offset + T;
+		data(i).time_offset = data(i-1).time_offset + data(i-1).T;
 	end
 
 
