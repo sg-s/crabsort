@@ -41,6 +41,7 @@ nerve2neuron.lvn = {'LP','PD','PY'};
 nerve2neuron.lgn = {'LG','MG'};
 nerve2neuron.mvn = {'VD','IC','PY'};
 nerve2neuron.dgn = {'DG','MG','AGR'};
+nerve2neuron.dvn = {'DG','MG','AGR'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                 _ _           _             

@@ -9,11 +9,15 @@
 
 function loadFile(self,src,~)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+% are we showing a full trace view?
+full_trace_view = false;
+if ~isempty(self.handles)
+    if isfield(self.handles,'ax')
+        if self.handles.ax.ax(1).XLim(2) == self.raw_data_size(1)*self.dt
+            full_trace_view = true;
+        end
+    end
 end
-
 
 try
 
@@ -316,7 +320,11 @@ for i = 1:self.n_channels
 
 end
 
+
+
 self.redrawAxes;
+
+
 
 % force an update of built-in channel names
 for i = 1:self.n_channels
@@ -365,6 +373,11 @@ self.mask = self.raw_data*0 + 1;
 for i = 1:length(self.handles.ax.uncertain_spikes)
     self.handles.ax.uncertain_spikes(i).XData = NaN;
     self.handles.ax.uncertain_spikes(i).YData = NaN;
+end
+
+% should we attempt to maintain the full-trace view?
+if full_trace_view
+    self.showFullTrace;
 end
 
 catch err
