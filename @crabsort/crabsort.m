@@ -336,10 +336,13 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
             if any(strcmp({d.name},'NNupdateAutoPredict'))
                 return
             end
+            if isempty(self.handles)
+                return
+            end
             if value
                 self.handles.auto_predict_handle.Checked = 'on';
             else
-                self.handles.auto_predict_handle.Checked = 'on';
+                self.handles.auto_predict_handle.Checked = 'off';
             end
         end
 

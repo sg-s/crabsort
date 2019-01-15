@@ -142,21 +142,13 @@ elseif strcmp(src.String,'>')
     end
 else
 
-    if self.verbosity > 5
-        disp(['[loadFile] no src.'])
-    end
 
     % do nothing, assuming that file_name is correctly set
     [~,~,ext] = fileparts(self.file_name);
     filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 end
 
-if self.verbosity > 5
-    disp(['[loadFile] calling reset'])
-end
-
 self.reset(false);
-
 self.displayStatus('Loading...',true)
 
 
@@ -211,9 +203,6 @@ file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
 
 if exist(file_name,'file') == 2
 
-    if self.verbosity > 5
-        disp('[loadFile] .crabsort  file exists. Loading...');
-    end
 
     load(file_name,'crabsort_obj','-mat')
     

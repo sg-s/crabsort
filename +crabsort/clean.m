@@ -22,8 +22,8 @@ for i = 1:length(allowed_file_extensions)
 
 		disp(['Checking: ' self.file_name])
 
-
 		self.loadFile;
+	
 
 		if isempty(self.raw_data)
 			if ~exist('corrupted','dir')
