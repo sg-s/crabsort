@@ -30,8 +30,8 @@ xrange = diff(self.handles.ax.ax(channel).XLim);
 
 
 
-xx = xx(1)+xrange;
-uncertain_spikes(uncertain_spikes<xx) = [];
+xx = xx(1)+xrange/2;
+uncertain_spikes(uncertain_spikes<=xx) = [];
 	
 
 
