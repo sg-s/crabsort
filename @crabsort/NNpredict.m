@@ -21,7 +21,11 @@ makes predictions using a trained neural network
 
 %}
 
-function NNpredict(self)
+function NNpredict(self, futz_factor)
+
+if nargin == 1
+	futz_factor = .5;
+end
 
 if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
 	return
@@ -52,7 +56,7 @@ end
 
 
 
-self.NNsync(.5)
+self.NNsync(futz_factor)
 
 self.findSpikes()
 
