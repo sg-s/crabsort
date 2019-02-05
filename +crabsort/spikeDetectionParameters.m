@@ -54,6 +54,20 @@ methods (Static)
 
 end
 
+methods
+
+	function H = hash(self)
+
+		self2 = self;
+		self2.MinPeakProminence = 0;
+		self2.Threshold = 0;
+		self2.MinPeakHeight = 0;
+		self2.MaxPeakHeight = 0;
+		H = hash@Hashable(self2);
+
+	end
+
+end
 
 
 end % classdef
