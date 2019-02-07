@@ -61,7 +61,7 @@ for i = self.n_channels:-1:1
 	self.handles.ax.found_spikes(i) = plot(NaN,NaN,'o','LineStyle','none','Color',self.pref.putative_spike_colour);
 
 	% make plots for uncertain spikes as indicated by NN
-	self.handles.ax.uncertain_spikes(i) = plot(NaN,NaN,'v','LineStyle','none','Color','k','MarkerFaceColor','k')
+	self.handles.ax.uncertain_spikes(i) = plot(NaN,NaN,'v','LineStyle','none','Color','k','MarkerFaceColor','k');
 
 	% support up to 10 units on each 
 	% this weird syntax is so that the primary unit on each 
@@ -107,7 +107,7 @@ for i = 1:self.n_channels
 	self.handles.ax.ax(i).Position(4) = .95*spacing;
 
 
-	y = (self.handles.ax.ax(i).Position(4))/2 + self.handles.ax.ax(i).Position(2);
+	%y = (self.handles.ax.ax(i).Position(4))/2 + self.handles.ax.ax(i).Position(2);
 
 
 	% make the channel labels 
@@ -144,7 +144,7 @@ self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized',
 
 try    % R2013b and older
    addlistener(self.handles.ylim_slider,'ActionEvent',@self.resetYLims);
-catch err % R2014a and newer
+catch  % R2014a and newer
    addlistener(self.handles.ylim_slider,'ContinuousValueChange',@self.resetYLims);
 end
 

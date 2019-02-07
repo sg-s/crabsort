@@ -37,11 +37,38 @@ if isempty(allfiles)
 	error('No data found')
 end
 
-assert(~isempty(options.nerves),'nerves must be specified')
+% load the common data
+load([allfiles(1).folder filesep 'crabsort.common'],'-mat','common')
+
+
 assert(~isempty(options.neurons),'neurons must be specified')
 
-% load the common data
-load([allfiles(1).folder filesep 'crabsort.common'],'-mat')
+if isempty(options.nerves)
+	% load the first crabsort file
+	load([allfiles(1).folder filesep allfiles(1).name],'-mat','crabsort_obj')
+	spikes = crabsort_obj.spikes;
+	options.nerves = {};
+	available_nerve_names = common.data_channel_names;
+	pref = readPref(fileparts(fileparts(which('crabsort'))));
+	nerve_names = fieldnames(pref.nerve2neuron);
+	for i = 1:length(options.neurons)
+		req_neuron = options.neurons{i};
+		for j = 1:length(nerve_names)
+			if ~any(strcmp(available_nerve_names,nerve_names{j}))
+				continue
+			end
+			if any(strcmp(pref.nerve2neuron.(nerve_names{j}),req_neuron))
+				if any(strcmp(fieldnames(spikes),nerve_names{j}))
+					options.nerves{i} = nerve_names{j};
+				end
+				
+			end
+		end
+	end
+end
+
+
+
 
 req_nerve_idx = [];
 for i = length(options.nerves):-1:1
@@ -70,7 +97,7 @@ end
 
 
 for i = 1:length(allfiles)
-	load([allfiles(i).folder filesep allfiles(i).name],'-mat')
+	load([allfiles(i).folder filesep allfiles(i).name],'-mat','crabsort_obj')
 
 	self = crabsort_obj;
 
@@ -101,7 +128,6 @@ for i = 1:length(allfiles)
 
 
 end
-
 
 
 m = [options.data_dir filesep 'metadata.txt'];

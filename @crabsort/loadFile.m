@@ -42,7 +42,7 @@ end
 if strcmp(src.String,'Load File')
 
     if self.verbosity > 5
-        disp(['[loadFile] load_file_button is src'])
+        disp('[loadFile] load_file_button is src')
     end
 
     cancel(self.workers)
@@ -96,7 +96,7 @@ elseif strcmp(src.Style,'popupmenu')
 elseif strcmp(src.String,'<')
 
     if self.verbosity > 5
-        disp(['[loadFile] < is src]'])
+        disp('[loadFile] < is src]')
     end
 
     self.saveData;
@@ -121,7 +121,7 @@ elseif strcmp(src.String,'<')
 elseif strcmp(src.String,'>')
 
     if self.verbosity > 5
-        disp(['[loadFile] > is src'])
+        disp('[loadFile] > is src')
     end
 
     self.saveData;
@@ -153,7 +153,7 @@ else
 end
 
 self.reset(false);
-self.displayStatus('Loading...',true)
+self.displayStatus('Loading...',true);
 
 
 % OK, user has made some selection. let's figure out which plugin to use to load the data
@@ -170,7 +170,7 @@ self.builtin_channel_names = {};
 
 try
     load_file_handle(self);
-catch err
+catch 
 
     warning('Error opening file')
     disp(self.file_name)
@@ -226,14 +226,14 @@ file_name = joinPath(self.path_name, 'crabsort.common');
 
 if exist(file_name,'file') == 2
     if self.verbosity > 5
-        disp(['[loadFile] crabsort.common exists.'])
+        disp('[loadFile] crabsort.common exists.')
     end
 
     load(file_name,'common','-mat');
     self.common = common;
 else
     if self.verbosity > 5
-        disp(['[loadFile] No crabsort.common!'])
+        disp('[loadFile] No crabsort.common!')
     end
 end
 

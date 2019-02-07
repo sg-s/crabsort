@@ -39,8 +39,6 @@ end
 
 self.say('Generating training data for NN...')
 
-% focus on the correct nerve
-this_nerve = self.common.data_channel_names{channel};
 
 % check that there are spikes on this channel
 [s, s_by_unit] = self.getSpikesOnThisNerve;
@@ -109,20 +107,20 @@ Y = [Y(:); zeros(size(X2,2),1)];
 assert(length(Y) == size(X,2),'Size mismatch')
 
 % if it's intracellular
-temp = isstrprop(self.common.data_channel_names{channel},'upper');
-if any(temp)
+% temp = isstrprop(self.common.data_channel_names{channel},'upper');
+% if any(temp)
 
-	% intracellular 
-	default_neuron_name = self.common.data_channel_names{channel};
-else
-	default_neuron_name =  self.nerve2neuron.(self.common.data_channel_names{channel});
-end
+% 	% intracellular 
+% 	default_neuron_name = self.common.data_channel_names{channel};
+% else
+% 	default_neuron_name =  self.nerve2neuron.(self.common.data_channel_names{channel});
+% end
 
-if iscell(default_neuron_name)
-	default_names = [default_neuron_name, 'Noise'];
-else
-	default_names = {default_neuron_name, 'Noise'};
-end
+% if iscell(default_neuron_name)
+% 	default_names = [default_neuron_name, 'Noise'];
+% else
+% 	default_names = {default_neuron_name, 'Noise'};
+% end
 
 % now append it to NNdata as needed
 NNdata = self.common.NNdata(channel);
