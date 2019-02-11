@@ -47,28 +47,23 @@ if isempty(options.nerves)
 	% load the first crabsort file
 	load([allfiles(1).folder filesep allfiles(1).name],'-mat','crabsort_obj')
 	spikes = crabsort_obj.spikes;
-	options.nerves = {};
-	available_nerve_names = common.data_channel_names;
-	pref = readPref(fileparts(fileparts(which('crabsort'))));
-	nerve_names = fieldnames(pref.nerve2neuron);
-	for i = 1:length(options.neurons)
-		req_neuron = options.neurons{i};
-		for j = 1:length(nerve_names)
-			if ~any(strcmp(available_nerve_names,nerve_names{j}))
-				continue
-			end
-			if any(strcmp(pref.nerve2neuron.(nerve_names{j}),req_neuron))
-				if any(strcmp(fieldnames(spikes),nerve_names{j}))
-					options.nerves{i} = nerve_names{j};
-				end
-				
+
+	% look for these neurons in all fields of spikes
+	nerve_names = fieldnames(spikes);
+
+	for i = 1:length(nerve_names)
+		neurons = fieldnames(spikes.(nerve_names{i}));
+		for j = 1:length(options.neurons)
+			if any(strcmp(neurons,options.neurons{j}))
+				options.nerves{j} = nerve_names{i};
 			end
 		end
 	end
 end
 
-
-
+for i = 1:length(options.neurons)
+	assert(~isempty(options.nerves{i}),'Could not resolve nerve')
+end
 
 req_nerve_idx = [];
 for i = length(options.nerves):-1:1
