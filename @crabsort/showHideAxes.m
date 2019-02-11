@@ -52,6 +52,9 @@ for i = 1:self.n_channels
 	if self.common.show_hide_channels(i)
 		% show the plot in the correct place
 
+		self.handles.ax.ax(i).Visible = 'on';
+		self.handles.ax.ax(i).HitTest = 'on';
+
 		plot_idx = plot_idx + 1;
 
 		self.handles.ax.ax(i).Position(2) = bottom_plot + spacing*(plot_idx-1);
@@ -84,6 +87,7 @@ for i = 1:self.n_channels
 	else
 		% hide the plot 
 		self.handles.ax.ax(i).Visible = 'off';
+		self.handles.ax.ax(i).HitTest = 'off';
 
 		% hide all children of the plot
 		ax = self.handles.ax.ax(i);

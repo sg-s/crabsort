@@ -32,7 +32,6 @@ end
 
 idx = find(self.handles.ax.ax == event.Axes);
 
-
 % change the XLim of all the other axes to match this
 for i = 1:length(self.handles.ax.ax)
 	if i == idx
