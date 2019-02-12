@@ -13,13 +13,9 @@ end
 channel = self.channel_to_work_with;
 
 
-
-
-ylimits = self.handles.ax.ax(channel).YLim;
 xlimits = self.handles.ax.ax(channel).XLim;
 
 xrange = (xlimits(2) - xlimits(1))/self.dt;
-yrange = ylimits(2) - ylimits(1);
 
 p(1) = p(1)/self.dt;
 
@@ -53,8 +49,7 @@ end
 label_idx = self.handles.new_spike_type.Value;
 
 % find closest identified point 
-[spiketimes, st_by_unit] = self.getSpikesOnThisNerve;
-spiketimes = find(spiketimes);
+spiketimes = find(self.getSpikesOnThisNerve);
 
 uncertain_spikes = round(self.handles.ax.uncertain_spikes(channel).XData/self.dt);
 
@@ -85,16 +80,16 @@ if ~isfield(self.spikes.(this_nerve),S)
 	self.spikes.(this_nerve).(S) = [];
 end
 
-if any(spiketimes==new_spike) & any(uncertain_spikes == new_spike)
+if any(spiketimes==new_spike) && any(uncertain_spikes == new_spike)
 	% clicked point is an identified spike that is uncertain
 	self.say('Adding this spike to training data');
 	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);
-elseif any(spiketimes==new_spike) & ~any(uncertain_spikes == new_spike)
+elseif any(spiketimes==new_spike) && ~any(uncertain_spikes == new_spike)
 	% clicked point is an identified, certain spike
 	self.say('This spike has already been identified');
 	beep
 	return
-elseif ~any(spiketimes==new_spike) & any(uncertain_spikes == new_spike)
+elseif ~any(spiketimes==new_spike) && any(uncertain_spikes == new_spike)
 	% clicked point is an unidentified spike, but it's uncertain
 	self.say('Adding new spike');
 	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);

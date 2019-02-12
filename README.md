@@ -10,8 +10,8 @@
 | `a` | Scroll to beginning of file |
 | `Spacebar` | Jump to next uncertain spike (as predicted by Neural Network) |
 | `g` | generate data for Neural network | 
-| `⇧ + →` | jump to next outlier (on right) |
-| `⇧ + ←` | jump to next outlier (on left) |
+| `⇧ + ↑` | jump to the weirdest spike |
+| `⇧ + ↓` | jump to a next less weird spike |
 | `p` | Predict spikes using Neural network |
 
 [being rewritten. stay tuned]

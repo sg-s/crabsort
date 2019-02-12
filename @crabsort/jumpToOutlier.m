@@ -14,56 +14,41 @@ if isempty(spiketimes)
 end
 V = self.getSnippets(channel,spiketimes);
 E = abs(zscore(sum(abs(V - mean(V,2)))));
-outliers = E > 3;
 
 
-if ~any(outliers)
-	self.say('No outliers');
-	beep
-	return
-elseif mean(outliers) > .1
-	keyboard
-	self.say('No outliers');
-	beep
-	return
-end
-outliers = spiketimes(outliers);
-
-
-
-outliers = outliers*self.dt;
+spiketimes = spiketimes*self.dt;
 
 xx = self.handles.ax.ax(channel).XLim;
 xrange = diff(self.handles.ax.ax(channel).XLim);
 
+weirdness_in_view = max(E(spiketimes <= xx(2) & spiketimes >= xx(1)));
 
 
 switch direction
 
-case 'right'
-	xx = xx(2);
-	outliers(outliers<xx) = [];
+case 'up'
+	% go to the weirdest spike
+
+	[~,outliers] = max(E);
+	outliers = outliers(1);
+
+	outliers = spiketimes(outliers);
 	
-case 'left'
-	xx = xx(1);
-	outliers(outliers>xx) = [];
+case 'down'
+	% got to a less weird spike
+
+	sE = sort(E,'descend');
+	outliers = find(sE<weirdness_in_view,1,'first');
+	if isempty(outliers)
+		beep
+		return
+	end
+	outliers = spiketimes(E == sE(outliers));
 
 otherwise
 	error('unknown argument')
 end
 	
-
-if isempty(outliers)
-	self.say('No outliers');
-	beep
-	return
-end
-switch direction
-case 'right'
-	outliers = outliers(1);
-case 'left'
-	outliers = outliers(end);
-end
 
 
 
