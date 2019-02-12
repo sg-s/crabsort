@@ -21,7 +21,7 @@ spiketimes = spiketimes*self.dt;
 xx = self.handles.ax.ax(channel).XLim;
 xrange = diff(self.handles.ax.ax(channel).XLim);
 
-weirdness_in_view = max(E(spiketimes <= xx(2) & spiketimes >= xx(1)));
+weirdness_in_view = min(E(spiketimes <= xx(2) & spiketimes >= xx(1)));
 
 
 switch direction
