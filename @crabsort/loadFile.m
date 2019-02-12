@@ -381,6 +381,7 @@ if full_trace_view
 end
 
 catch err
+
     self.raw_data = [];
     self.displayStatus(err, true)
     save([GetMD5(now) '.error'],'err')
