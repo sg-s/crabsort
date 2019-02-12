@@ -18,8 +18,15 @@ if ~any(isnan(self.common.delays(:)))
 	return
 end
 
+root_msg = 'Estimating delay b/w channels';
+
+self.displayStatus(root_msg,true);
+
 self.common.delays = NaN(self.n_channels);
 for i = 1:self.n_channels
+	root_msg =[root_msg '.'];
+	self.displayStatus(root_msg,true);
+
 	for j = 1:self.n_channels
 		A = zscore(self.raw_data(:,i));
 		B = zscore(self.raw_data(:,j));
