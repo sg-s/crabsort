@@ -8,11 +8,13 @@
 | Key | Action |
 | ---------- | ---------- |
 | `a` | Scroll to beginning of file |
+| `z` | Scroll to end of file |
 | `Spacebar` | Jump to next uncertain spike (as predicted by Neural Network) |
 | `g` | generate data for Neural network | 
 | `⇧ + ↑` | jump to the weirdest spike |
 | `⇧ + ↓` | jump to a next less weird spike |
 | `p` | Predict spikes using Neural network |
+| `r` | reset zoom | 
 
 [being rewritten. stay tuned]
 
