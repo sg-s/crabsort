@@ -8,6 +8,7 @@ options.data_dir = pwd;
 options.dt = 1e-3; % 1 ms
 options.nerves = {};
 options.neurons = {};
+options.stack = false;
 
 % validate and accept options
 if iseven(length(varargin))
@@ -123,6 +124,28 @@ for i = 1:length(allfiles)
 
 
 end
+
+
+
+if options.stack
+
+
+	sdata = struct;
+
+	for j = 1:length(neurons)
+		sdata.(neurons{j}) = [];
+	end
+
+	for i = 1:length(data)
+		for j = 1:length(neurons)
+			sdata.(neurons{j}) = [sdata.(neurons{j}); data(i).time_offset+data(i).(neurons{j})];
+		end
+
+	end
+	data = sdata;
+	return
+end
+
 
 
 m = [options.data_dir filesep 'metadata.txt'];
