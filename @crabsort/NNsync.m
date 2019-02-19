@@ -38,8 +38,13 @@ else
 	end
 
 	% futz with some parameters
-	self.sdp.MinPeakProminence = self.sdp.MinPeakProminence*futz_factor;
-	self.sdp.MinPeakHeight = self.sdp.MinPeakHeight*futz_factor;
+	if self.isIntracellular(channel)
+		self.sdp.MinPeakProminence = self.sdp.MinPeakProminence - futz_factor*2;
+		self.sdp.MinPeakHeight = self.sdp.MinPeakHeight - futz_factor*10;
+	else
+		self.sdp.MinPeakProminence = self.sdp.MinPeakProminence*futz_factor;
+		self.sdp.MinPeakHeight = self.sdp.MinPeakHeight*futz_factor;
+	end
 
 
 	self.handles.multi_channel_control.Value = self.common.NNdata(channel).other_nerves_control;
