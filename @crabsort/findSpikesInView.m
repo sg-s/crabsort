@@ -46,7 +46,7 @@ end
 [~,loc] = findpeaks(V,'MinPeakHeight',MinPeakHeight,'MinPeakProminence',MinPeakProminence,'Threshold',Threshold,'MinPeakDistance',MinPeakDistance,'MinPeakWidth',MinPeakWidth,'MaxPeakWidth',MaxPeakWidth);
 loc(V(loc) > MaxPeakHeight) = [];
 
-self.say(['found ' oval(length(loc)) ' spikes in current view']);
+self.say(['found ' mtools.string.oval(length(loc)) ' spikes in current view']);
 self.putative_spikes(:,self.channel_to_work_with) = 0;
 self.putative_spikes(loc+a-1,channel) = 1;
 drawnow

@@ -65,7 +65,7 @@ else
 end
 
 
-self.say(['found ' oval(length(loc)) ' spikes']);
+self.say(['found ' mtools.string.oval(length(loc)) ' spikes']);
 
 
 self.putative_spikes(:,channel) = 0;

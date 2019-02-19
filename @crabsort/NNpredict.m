@@ -65,7 +65,7 @@ n_spikes = sum(self.putative_spikes(:,channel));
 if n_spikes == 0
 	self.say('No spikes detected, nothing to do.')
 else
-	self.say([oval(n_spikes) ' spikes detected; using NN to sort...'])
+	self.say([mtools.string.oval(n_spikes) ' spikes detected; using NN to sort...'])
 end
 
 self.getDataToReduce()

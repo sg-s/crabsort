@@ -56,7 +56,7 @@ if ~nargout
         fprintf(repmat(' ',1,16 - length(p(i).name)));
         fprintf(p(i).plugin_type)
         fprintf(repmat(' ',1,16 - length(p(i).plugin_type)));
-        fprintf(oval(p(i).plugin_dimension))
+        fprintf(mtools.string.oval(p(i).plugin_dimension))
         fprintf('\n')
     end
 else
