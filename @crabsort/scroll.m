@@ -86,8 +86,8 @@ end
 is_intracellular = any(isstrprop(self.common.data_channel_names{channel},'upper'));
 
 if is_intracellular
-    a = find(self.time > self.handles.ax.ax(channel).XLim(1),1,'first');
-    z = find(self.time > self.handles.ax.ax(channel).XLim(2),1,'first');
+    a = find(self.time >= self.handles.ax.ax(channel).XLim(1),1,'first');
+    z = find(self.time >= self.handles.ax.ax(channel).XLim(2),1,'first');
     m = mean(self.raw_data(a:z,channel));
     yl = (self.handles.ylim_slider.Value)*100;
     self.handles.ax.ax(channel).YLim = [m-yl m+yl];

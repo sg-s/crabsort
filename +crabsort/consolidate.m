@@ -102,7 +102,14 @@ for i = 1:length(allfiles)
 	assert(all(self.channel_stage(req_nerve_idx)>=3),['At least one nerve not sorted in this file: ' allfiles(i).name])
 
 	for j = 1:length(options.nerves)
+
+		if isempty(self.spikes)
+			warning(['this file had an empty spikes variable: ' allfiles(i).name])
+			continue
+		end
+
 		this_nerve = self.spikes.(options.nerves{j});
+
 		for k = 1:length(options.neurons)
 			if isfield(this_nerve,options.neurons{k})
 				spiketimes  = round(this_nerve.(options.neurons{k})*self.dt*(1/options.dt));
