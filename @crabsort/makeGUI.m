@@ -45,6 +45,7 @@ handles.menu_name(2) = uimenu('Label','Tools');
 
 uimenu(handles.menu_name(2),'Label','Reload preferences','Callback',@self.reloadPreferences);
 uimenu(handles.menu_name(2),'Label','Reset current channel','Callback',@self.redo,'Separator','on');
+uimenu(handles.menu_name(2),'Label','Mark channel as having no spikes','Callback',@self.zeroSpikes);
 uimenu(handles.menu_name(2),'Label','Ignore section','Callback',@self.ignoreSection,'Enable','on','Separator','on');
 uimenu(handles.menu_name(2),'Label','UNignore section','Callback',@self.ignoreSection,'Enable','on','Separator','off');
 uimenu(handles.menu_name(2),'Label','Update crabsort...','Callback',@self.update,'Enable','on','Separator','on');

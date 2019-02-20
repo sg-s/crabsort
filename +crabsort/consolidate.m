@@ -52,6 +52,7 @@ if isempty(options.nerves)
 	% look for these neurons in all fields of spikes
 	nerve_names = fieldnames(spikes);
 
+
 	for i = 1:length(nerve_names)
 		neurons = fieldnames(spikes.(nerve_names{i}));
 		for j = 1:length(options.neurons)
