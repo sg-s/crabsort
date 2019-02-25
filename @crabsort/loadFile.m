@@ -172,11 +172,11 @@ catch
     if ~isempty(self.handles)
         self.handles.popup.Visible = 'off';
 
-        mtools.ux.enable(self.handles.data_panel);
-        mtools.ux.enable(self.handles.spike_detection_panel);
-        mtools.ux.enable(self.handles.dim_red_panel);
-        mtools.ux.enable(self.handles.cluster_panel);
-        mtools.ux.disable(self.handles.manual_panel);
+        uxlib.enable(self.handles.data_panel);
+        uxlib.enable(self.handles.spike_detection_panel);
+        uxlib.enable(self.handles.dim_red_panel);
+        uxlib.enable(self.handles.cluster_panel);
+        uxlib.disable(self.handles.manual_panel);
 
         self.handles.main_fig.Name = 'ERROR OPENING FILE';
 
@@ -196,7 +196,7 @@ self.channel_ylims = zeros(self.n_channels,1);
 
 
 % check if there is a .crabsort file already
-file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
+file_name = pathlib.join(self.path_name, [self.file_name '.crabsort']);
 
 
 
@@ -217,7 +217,7 @@ end
 
 
 % check that there is a crabsort.common file already
-file_name = joinPath(self.path_name, 'crabsort.common');
+file_name = pathlib.join(self.path_name, 'crabsort.common');
 
 if exist(file_name,'file') == 2
     if self.verbosity > 5
@@ -290,12 +290,12 @@ self.handles.main_fig.Name = self.file_name;
 
 self.handles.popup.Visible = 'off';
 
-mtools.ux.enable(self.handles.data_panel);
-mtools.ux.show(self.handles.data_panel);
-mtools.ux.enable(self.handles.spike_detection_panel);
-mtools.ux.enable(self.handles.dim_red_panel);
-mtools.ux.enable(self.handles.cluster_panel);
-mtools.ux.disable(self.handles.manual_panel);
+uxlib.enable(self.handles.data_panel);
+uxlib.show(self.handles.data_panel);
+uxlib.enable(self.handles.spike_detection_panel);
+uxlib.enable(self.handles.dim_red_panel);
+uxlib.enable(self.handles.cluster_panel);
+uxlib.disable(self.handles.manual_panel);
 
 % update the channels menu to indicate the channels
 % first nuke all the old names

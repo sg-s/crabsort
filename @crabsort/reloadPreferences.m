@@ -15,5 +15,5 @@ if self.verbosity > 3
 end
 
 
-self.pref = readPref(fileparts(fileparts(which(mfilename))));
+self.pref = corelib.readPref(fileparts(fileparts(which(mfilename))));
     

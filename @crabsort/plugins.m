@@ -24,7 +24,7 @@ m = dir([fileparts(which(mfilename)) filesep '*.m']);
 c = 1;
 for i = 1:length(m)
     % read the file
-    t = lineRead([fileparts(which(mfilename)) filesep m(i).name]);
+    t = filelib.read([fileparts(which(mfilename)) filesep m(i).name]);
 
     if ~any(strfind(t{1},'crabsort plugin'))
         continue
@@ -56,7 +56,7 @@ if ~nargout
         fprintf(repmat(' ',1,16 - length(p(i).name)));
         fprintf(p(i).plugin_type)
         fprintf(repmat(' ',1,16 - length(p(i).plugin_type)));
-        fprintf(mtools.string.oval(p(i).plugin_dimension))
+        fprintf(strlib.oval(p(i).plugin_dimension))
         fprintf('\n')
     end
 else

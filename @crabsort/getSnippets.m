@@ -24,7 +24,7 @@ end
 
 if nargin == 2
 
-	assert(mtools.maths.iswhole(channel),'channel should be a whole number')
+	assert(mathlib.iswhole(channel),'channel should be a whole number')
 	assert(channel>0,'Channel must be +ve integer')
 	assert(channel <= self.n_channels,'Channel must be <= self.n_channels')
 

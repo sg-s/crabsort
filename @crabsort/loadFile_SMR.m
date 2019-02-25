@@ -18,7 +18,7 @@ end
 
 
 % read the file
-[d,h] = loadSMR(joinPath(self.path_name,self.file_name));
+[d,h] = loadSMR(pathlib.join(self.path_name,self.file_name));
 
 self.raw_data = cell2mat(d(~cellfun(@isstruct,d)));
 dt = h{1}.sampleinterval;

@@ -159,7 +159,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
 
             % load preferences
-            self.pref = readPref(fileparts(fileparts(which(mfilename))));
+            self.pref = corelib.readPref(fileparts(fileparts(which(mfilename))));
 
             % for backward compatibility, convert some things
             % into base props
@@ -253,36 +253,36 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
                 % if it is named. 
                 if isempty(self.common.data_channel_names{channel})
                     % channel name unset
-                    mtools.ux.disable(self.handles.spike_detection_panel)
+                    uxlib.disable(self.handles.spike_detection_panel)
                 else
-                    mtools.ux.enable(self.handles.spike_detection_panel)
+                    uxlib.enable(self.handles.spike_detection_panel)
                 end
                 
                 % hide other panels
-                mtools.ux.hide(self.handles.dim_red_panel)
-                mtools.ux.hide(self.handles.cluster_panel)
-                mtools.ux.hide(self.handles.manual_panel)
-                mtools.ux.enable(self.handles.mask_panel)
+                uxlib.hide(self.handles.dim_red_panel)
+                uxlib.hide(self.handles.cluster_panel)
+                uxlib.hide(self.handles.manual_panel)
+                uxlib.enable(self.handles.mask_panel)
 
             case 1
                 % spikes detected.
-                mtools.ux.enable(self.handles.spike_detection_panel)
-                mtools.ux.enable(self.handles.dim_red_panel)
-                mtools.ux.hide(self.handles.cluster_panel)
+                uxlib.enable(self.handles.spike_detection_panel)
+                uxlib.enable(self.handles.dim_red_panel)
+                uxlib.hide(self.handles.cluster_panel)
             case 2
                 % dimensions reduced (need to cluster)
-                mtools.ux.disable(self.handles.spike_detection_panel)
-                mtools.ux.disable(self.handles.dim_red_panel)
-                mtools.ux.enable(self.handles.cluster_panel)
-                mtools.ux.show(self.handles.cluster_panel)
-                mtools.ux.enable(self.handles.cluster_panel)
+                uxlib.disable(self.handles.spike_detection_panel)
+                uxlib.disable(self.handles.dim_red_panel)
+                uxlib.enable(self.handles.cluster_panel)
+                uxlib.show(self.handles.cluster_panel)
+                uxlib.enable(self.handles.cluster_panel)
             case 3
                 % all done
-                mtools.ux.disable(self.handles.spike_detection_panel)
-                mtools.ux.enable(self.handles.dim_red_panel)
-                mtools.ux.enable(self.handles.cluster_panel)
-                mtools.ux.enable(self.handles.manual_panel)
-                mtools.ux.show(self.handles.manual_panel)
+                uxlib.disable(self.handles.spike_detection_panel)
+                uxlib.enable(self.handles.dim_red_panel)
+                uxlib.enable(self.handles.cluster_panel)
+                uxlib.enable(self.handles.manual_panel)
+                uxlib.show(self.handles.manual_panel)
             otherwise
                 % WTF? ignore this and hope for the best
             end

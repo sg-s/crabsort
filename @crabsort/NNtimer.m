@@ -63,7 +63,7 @@ for i = 1:self.n_channels
 		else
 			% no more training needed
 			self.handles.ax.NN_status(i).String = 'IDLE';
-			self.handles.ax.NN_accuracy(i).String = mtools.string.oval(self.common.NNdata(i).accuracy,3);
+			self.handles.ax.NN_accuracy(i).String = strlib.oval(self.common.NNdata(i).accuracy,3);
 			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
 				% let's make some predictions
 				self.NNpredict;
@@ -75,7 +75,7 @@ for i = 1:self.n_channels
 			self.NNtrain(i);
 		else
 			self.handles.ax.NN_status(i).String = 'IDLE';
-			self.handles.ax.NN_accuracy(i).String = mtools.string.oval(self.common.NNdata(i).accuracy,3);
+			self.handles.ax.NN_accuracy(i).String = strlib.oval(self.common.NNdata(i).accuracy,3);
 			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
 				% let's make some predictions
 				self.NNpredict;
@@ -88,7 +88,7 @@ for i = 1:self.n_channels
 			self.NNtrain(i);
 		else
 			self.handles.ax.NN_status(i).String = 'IDLE';
-			self.handles.ax.NN_accuracy(i).String = mtools.string.oval(self.common.NNdata(i).accuracy,3);
+			self.handles.ax.NN_accuracy(i).String = strlib.oval(self.common.NNdata(i).accuracy,3);
 
 			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
 				% let's make some predictions
@@ -103,7 +103,7 @@ for i = 1:self.n_channels
 
 
 		if ~isempty(accuracy)
-			self.handles.ax.NN_accuracy(i).String = mtools.string.oval(str2double(accuracy),3);
+			self.handles.ax.NN_accuracy(i).String = strlib.oval(str2double(accuracy),3);
 
 			self.common.NNdata(i).accuracy_hash = hash;
 			self.common.NNdata(i).accuracy = str2double(accuracy);

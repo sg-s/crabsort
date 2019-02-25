@@ -25,8 +25,8 @@ end
 % to a file called crabsort.common in that folder 
 
 % check if there is a .crabsort file already
-file_name = joinPath(self.path_name, [self.file_name '.crabsort']);
-common_name = joinPath(self.path_name, 'crabsort.common');
+file_name = pathlib.join(self.path_name, [self.file_name '.crabsort']);
+common_name = pathlib.join(self.path_name, 'crabsort.common');
 
 crabsort_obj = self;
 

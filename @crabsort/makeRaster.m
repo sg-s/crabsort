@@ -59,9 +59,9 @@ for i = 1:length(spiketimes)
 end
 
 
-mtools.neuro.raster(spiketimes{:},'deltat',self.dt,'Color',c);
+neurolib.raster(spiketimes{:},'deltat',self.dt,'Color',c);
 
 set(gca,'YTick',(1:length(L)) - .5,'YTickLabel',L)
 xlabel(gca,'Time (s)')
 
-prettyFig();
+figlib.pretty();

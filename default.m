@@ -6,7 +6,7 @@
 %
 % preferences file for crabsort
 % crabsort has many preferences, and, instead of wasting time building more and more UI to handle them, all preferences are in this text file (like in Sublime Text)
-% this is meant to be read by readPref
+% this is meant to be read by corelib.readPref
 % 
 % created by Srinivas Gorur-Shandilya at 4:52 , 16 September 2015. Contact me at http://srinivas.gs/contact/
 % 

@@ -81,7 +81,7 @@ self.NNsync(.5);
 self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 
 % also pick some points at random, far from actual spikes so that we can augment the -ve training dataset
-random_fake_spikes = mtools.vector.shuffle(find(self.mask(:,channel)));
+random_fake_spikes = veclib.shuffle(find(self.mask(:,channel)));
 random_fake_spikes = random_fake_spikes(1:sum(s));
 
 dist_to_real_spikes = min(pdist2(random_fake_spikes,find(s)));

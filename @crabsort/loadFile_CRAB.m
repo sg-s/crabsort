@@ -14,7 +14,7 @@ function loadFile_CRAB(self,~,~)
 
 
 % read the file
-load(joinPath(self.path_name,self.file_name),'-mat');
+load(pathlib.join(self.path_name,self.file_name),'-mat');
 
 % populate builtin_channel_names
 self.builtin_channel_names = builtin_channel_names;

@@ -67,7 +67,7 @@ if n_spikes == 0
 	self.channel_stage(channel) = 3;
 	return
 else
-	self.say([mtools.string.oval(n_spikes) ' spikes detected; using NN to sort...'])
+	self.say([strlib.oval(n_spikes) ' spikes detected; using NN to sort...'])
 end
 
 self.getDataToReduce()
@@ -141,7 +141,7 @@ end
 
 self.channel_stage(channel) = 3;
 
-mtools.ux.enable(self.handles.manual_panel)
+uxlib.enable(self.handles.manual_panel)
 
 self.putative_spikes(:,channel) = 0;
 self.showSpikes;

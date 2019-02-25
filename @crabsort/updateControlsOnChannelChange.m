@@ -53,11 +53,11 @@ self.handles.ax.data(channel).Color = c(channel,:);
 
 if isempty(self.common.data_channel_names{channel})
     % unnamed channel. early exit
-    mtools.ux.disable(self.handles.spike_detection_panel)
-    mtools.ux.disable(self.handles.dim_red_panel)
-    mtools.ux.disable(self.handles.cluster_panel)
-    mtools.ux.disable(self.handles.mask_panel)
-    mtools.ux.disable(self.handles.manual_panel)
+    uxlib.disable(self.handles.spike_detection_panel)
+    uxlib.disable(self.handles.dim_red_panel)
+    uxlib.disable(self.handles.cluster_panel)
+    uxlib.disable(self.handles.mask_panel)
+    uxlib.disable(self.handles.manual_panel)
     return
 end
 

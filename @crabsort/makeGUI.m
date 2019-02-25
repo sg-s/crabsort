@@ -61,7 +61,7 @@ uimenu(handles.menu_name(3),'Label','All channels/All files','Callback',@self.au
 uimenu(handles.menu_name(3),'Label','This channel/All files','Callback',@self.automate,'Separator','on');
 uimenu(handles.menu_name(3),'Label','All channels/This file','Callback',@self.automate,'Separator','on');
 uimenu(handles.menu_name(3),'Label','Stop','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(3),'Label','Stop when uncertain','Callback',@mtools.ux.toggleCheckedMenu,'Separator','on');
+uimenu(handles.menu_name(3),'Label','Stop when uncertain','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
 
 
 % neural network 
