@@ -22,18 +22,25 @@ root_msg = 'Estimating delay b/w channels';
 
 self.displayStatus(root_msg,true);
 
-self.common.delays = NaN(self.n_channels);
+raw_data = self.raw_data;
+
+
+delays = NaN(self.n_channels);
 for i = 1:self.n_channels
 	root_msg =[root_msg '.'];
 	self.displayStatus(root_msg,true);
 
-	for j = 1:self.n_channels
-		A = zscore(self.raw_data(:,i));
-		B = zscore(self.raw_data(:,j));
-		self.common.delays(i,j) = finddelay(A,B);
+
+	A = zscore(raw_data(:,i));
+
+	parfor j = 1:self.n_channels
+		
+		B = zscore(raw_data(:,j));
+		delays(i,j) = finddelay(A,B);
 
 	end
 end
 
 
 
+self.common.delays = delays;

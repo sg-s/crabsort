@@ -36,7 +36,7 @@ for i = 1:length(allowed_file_extensions)
 			fprintf('FATAL: could not load file\n')
 		else
 			fprintf(strlib.fix(mat2str(size(self.raw_data,2)),15))
-			H = GetMD5([self.builtin_channel_names{:}]);
+			H = hashlib.md5hash([self.builtin_channel_names{:}]);
 			fprintf([strlib.fix(H,15) '\n'])
 
 		end

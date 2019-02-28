@@ -27,7 +27,7 @@
 skip_abf_check = false;
 
 % what are the possible names of nerves, units, channels?
-channel_names = sort({'dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'});
+channel_names = sort({'ogn','dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','temperature','pyn','PD','AB','LPG','LP','IC','LG','MG','GM','PY','VD','Int1','DG','AM'});
 
 
 % specify which units exist on which nerves

@@ -27,9 +27,9 @@ try
 
 	channel_names = readABFChannelNames(all_files(1).name);
 	if iscell(channel_names)
-		hash = GetMD5([channel_names{:}]);
+		hash = hashlib.md5hash([channel_names{:}]);
 	else
-		hash = GetMD5(channel_names);
+		hash = hashlib.md5hash(channel_names);
 	end
 
 	for i = 2:length(all_files)
@@ -40,9 +40,9 @@ try
 		assert(length(this_channel_names) == length(channel_names),'At least one file in your folder has an ABF structure that is different from the rest. ');
 
 		if iscell(this_channel_names)
-			assert(strcmp(GetMD5([channel_names{:}]),hash),'At least one file in your folder has an ABF structure that is different from the rest. ')
+			assert(strcmp(hashlib.md5hash([channel_names{:}]),hash),'At least one file in your folder has an ABF structure that is different from the rest. ')
 		else
-			assert(strcmp(GetMD5(this_channel_names),hash),'At least one file in your folder has an ABF structure that is different from the rest. ')
+			assert(strcmp(hashlib.md5hash(this_channel_names),hash),'At least one file in your folder has an ABF structure that is different from the rest. ')
 		end
 	end
 catch err
