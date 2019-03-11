@@ -61,6 +61,7 @@ self.putative_spikes(spiketimes,channel) = 1;
 self.getDataToReduce;
 X = self.data_to_reduce;
 
+
 assert(length(Y) == size(X,2),'Size mismatch')
 
 
@@ -73,7 +74,7 @@ self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 
 % also pick some points at random, far from actual spikes so that we can augment the -ve training dataset
 random_fake_spikes = veclib.shuffle(find(self.mask(:,channel)));
-random_fake_spikes = random_fake_spikes(1:length(spiketimes));
+random_fake_spikes = random_fake_spikes(1:length(spiketimes)/2);
 
 dist_to_real_spikes = min(pdist2(random_fake_spikes,spiketimes));
 

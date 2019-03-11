@@ -25,3 +25,7 @@ for i = 1:length(unit_names)
 	spiketimes = vertcat(spiketimes, self.spikes.(this_nerve).(unit_names{i}));
 	labels = vertcat(labels,categorical(repmat(unit_names(i),length(self.spikes.(this_nerve).(unit_names{i})),1)));
 end
+
+[spiketimes,idx] = sort(spiketimes);
+labels = labels(idx);
+
