@@ -47,8 +47,8 @@ try
     X_train = reshape(X_train,SZ,1,1,N_train);
     X_validate = reshape(X_validate,SZ,1,1,N_validate);
 
-    Y_train = categorical(Y_train(:));
-    Y_validate = categorical(Y_validate(:));
+    Y_train = (Y_train(:));
+    Y_validate = (Y_validate(:));
 
     options = trainingOptions('sgdm',...
         'LearnRateSchedule','piecewise',...

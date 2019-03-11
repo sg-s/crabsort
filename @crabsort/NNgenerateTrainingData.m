@@ -37,17 +37,17 @@ else
 	channel = self.channel_to_work_with;
 end
 
-self.say('Generating training data for NN...')
-
-
-% check that there are spikes on this channel
-[s, s_by_unit] = self.getSpikesOnThisNerve;
-
-
 if isempty(channel)
-	disp('No channel selected')
+	self.say('No channel selected, aborting!')
 	return
 end
+
+
+self.say('Generating training data for NN...')
+
+[spiketimes, Y] = self.getLabelledSpikes;
+all_spiketimes = spiketimes;
+
 
 
 self.NNsync()
@@ -56,22 +56,13 @@ self.NNsync()
 % create the training and test data
 
 % create the +ve training data
-self.putative_spikes(:,channel) = s;
+self.putative_spikes(:,channel) = 0;
+self.putative_spikes(spiketimes,channel) = 1;
 self.getDataToReduce;
-all_spiketimes = find(self.putative_spikes(:,channel));
 X = self.data_to_reduce;
 
-
-if size(s_by_unit,2) > 1
-	s_by_unit = s_by_unit(find(sum(s_by_unit')),:);
-	[~,Y] = max(s_by_unit');
-
-else
-	% only one unit
-	Y = zeros(size(X,2),1) + max(nonzeros(s_by_unit));
-end
-Y = Y(:);
 assert(length(Y) == size(X,2),'Size mismatch')
+
 
 
 % now create some -ve training data
@@ -82,9 +73,9 @@ self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 
 % also pick some points at random, far from actual spikes so that we can augment the -ve training dataset
 random_fake_spikes = veclib.shuffle(find(self.mask(:,channel)));
-random_fake_spikes = random_fake_spikes(1:sum(s));
+random_fake_spikes = random_fake_spikes(1:length(spiketimes));
 
-dist_to_real_spikes = min(pdist2(random_fake_spikes,find(s)));
+dist_to_real_spikes = min(pdist2(random_fake_spikes,spiketimes));
 
 too_close = dist_to_real_spikes < size(X,1);
 random_fake_spikes(too_close) = [];
@@ -93,17 +84,19 @@ if ~isempty(random_fake_spikes)
 end
 
 % remove the actual spikes
-self.putative_spikes(logical(s),channel) = 0;
+self.putative_spikes(spiketimes,channel) = 0;
 
 self.getDataToReduce;
 all_spiketimes = [all_spiketimes(:); find(self.putative_spikes(:,channel))];
 X2 = self.data_to_reduce;
 
+% reset
 self.putative_spikes(:,channel) = 0;
 
-% we're going to label noise with 0
+% we're going to label noise as "Noise"
 X = [X X2];
-Y = [Y(:); zeros(size(X2,2),1)];
+
+Y = [Y(:); categorical(repmat({'Noise'},size(X2,2),1))];
 assert(length(Y) == size(X,2),'Size mismatch')
 
 % if it's intracellular

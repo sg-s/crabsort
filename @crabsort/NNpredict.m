@@ -59,8 +59,9 @@ end
 self.NNsync(futz_factor)
 
 self.findSpikes()
+spiketimes = find(self.putative_spikes(:,channel));
 
-n_spikes = sum(self.putative_spikes(:,channel));
+n_spikes = sum(spiketimes);
 
 if n_spikes == 0
 	self.say('No spikes detected, nothing to do.')
@@ -80,20 +81,18 @@ N = size(X,2);
 SZ = size(X,1);
 X = reshape(X,SZ,1,1,N);
 
-Y_pred = predict(trainedNet,X);
 
-prediction_confidence = (max(Y_pred,[],2) -  min(Y_pred,[],2));
+[Y_pred, scores] = classify(trainedNet,X);
+
+
+prediction_confidence = (max(scores,[],2) -  min(scores,[],2));
 
 uncertain_spikes = (prediction_confidence<.2);
 
-[~,Y_pred] = max(Y_pred,[],2);
-Y_pred = Y_pred - 1;
+
+
 
 this_nerve = self.common.data_channel_names{channel};
-unit_names =  self.nerve2neuron.(this_nerve);
-if ~iscell(unit_names)
-	unit_names = {unit_names};
-end
 
 putative_spikes = find(self.putative_spikes(:,channel));
 uncertain_spikes = putative_spikes(uncertain_spikes);
@@ -101,24 +100,38 @@ uncertain_spikes = putative_spikes(uncertain_spikes);
 
 % overwrite any predictions from the NN using manual annotations
 % stored in NNdata
+manual_labels = NNdata.label_idx(NNdata.file_idx == self.getFileSequence);
+uniq_manual_labels = unique(NNdata.label_idx);
+
+
 if any(NNdata.file_idx == self.getFileSequence)
 	manually_labelled_spikes = NNdata.spiketimes(NNdata.file_idx == self.getFileSequence);
-	manual_labels = NNdata.label_idx(NNdata.file_idx == self.getFileSequence);
 
-	% first mark  noise as noise
-	mark_as_noise = ismember(putative_spikes,manually_labelled_spikes(manual_labels==0));
-	Y_pred(mark_as_noise) = 0;
+
 
 	uncertain_spikes = setdiff(uncertain_spikes,manually_labelled_spikes);
 
-	if any(manual_labels)
-		for i = 1:length(unit_names)
-			mark_as_spike = ismember(putative_spikes,manually_labelled_spikes(manual_labels==i));
-			Y_pred(mark_as_spike) = i;
+	if ~isempty(manual_labels)
+		
+
+
+		for i = 1:length(uniq_manual_labels)
+			mark_as_spike = ismember(putative_spikes,manually_labelled_spikes(manual_labels==uniq_manual_labels(i)));
+			Y_pred(mark_as_spike) = uniq_manual_labels(i);
 		end
 	end
 end
 
+% store in spikes
+for i = 1:length(uniq_manual_labels)
+	if strcmp(char(uniq_manual_labels(i)),'Noise')
+		continue
+	end
+	self.spikes.(this_nerve).(char(uniq_manual_labels(i))) = spiketimes(Y_pred == uniq_manual_labels(i));
+end
+
+
+% show the uncertain spikes
 self.handles.ax.uncertain_spikes(channel).XData = uncertain_spikes*self.dt;
 yrange = diff(self.handles.ax.ax(channel).YLim);
 
@@ -133,9 +146,6 @@ end
 
 
 
-for i = 1:length(unit_names)
-	self.spikes.(this_nerve).(unit_names{i}) = putative_spikes(Y_pred==i);
-end
 
 
 

@@ -52,8 +52,7 @@ this_nerve_name = self.common.data_channel_names{self.channel_to_work_with};
 
 
 % find closest identified point 
-[spiketimes, st_by_unit] = (self.getSpikesOnThisNerve);
-spiketimes = find(spiketimes);
+spiketimes = find(self.getSpikesOnThisNerve);
 
 uncertain_spikes = round(self.handles.ax.uncertain_spikes(channel).XData/self.dt);
 
