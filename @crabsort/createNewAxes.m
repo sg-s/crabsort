@@ -67,7 +67,12 @@ for i = self.n_channels:-1:1
 	% this weird syntax is so that the primary unit on each 
 	% nerve is labeled with the same color as the color
 	% that is used for the channel 
+	c = lines;
 	self.handles.ax.sorted_spikes(i).unit(1) = plot(NaN,NaN,M{1},'LineStyle','none','Color',c(i,:));
+
+
+	c = lines;
+	c(i:8:end,:) = [];
 	for j = 2:length(M)
 		self.handles.ax.sorted_spikes(i).unit(j) = plot(NaN,NaN,M{j},'LineStyle','none','Color',c(j,:));
 	end

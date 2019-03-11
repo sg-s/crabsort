@@ -19,6 +19,8 @@ for i = 1:length(f)
 	assert(~strcmp(f(i).Tag,'crabsort_main_window'),'Crabsort window already exists, refusing to make a new GUI while that is open. Close all existing crabsort windows first.')
 end
 
+assert(logical(license('test','Neural_Network_Toolbox')),'No license found for Neural Network Toolbox')
+
 % make the master figure, and the axes to plot the voltage traces
 handles.main_fig = figure('position',get( groot, 'Screensize' ), 'Toolbar','figure','Menubar','none','Name',self.version_name,'NumberTitle','off','IntegerHandle','off','WindowButtonDownFcn',@self.mouseCallback,'WindowScrollWheelFcn',@self.scroll,'CloseRequestFcn',@self.close,'Color','w','Tag','crabsort_main_window','ResizeFcn',@self.resize,'KeyPressFcn',@self.keyPressCallback);
 
@@ -125,8 +127,9 @@ handles.mask_panel = uibuttongroup(handles.main_fig,'Title','Masking','Position'
 handles.maskmode_mask = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Mask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 handles.maskmode_unmask = uicontrol(handles.mask_panel,'units','normalized','Position',[.31 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Unmask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 handles.maskmode_off = uicontrol(handles.mask_panel,'units','normalized','Position',[.71 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-handles.mask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .01 .3 .5], 'Style', 'pushbutton', 'String', 'Mask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
-handles.unmask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.51 .01 .3 .5], 'Style', 'pushbutton', 'String', 'Unmask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+handles.mask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .01 .2 .5], 'Style', 'pushbutton', 'String', 'Mask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+handles.mask_all_but_view_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.22 .01 .45 .5], 'Style', 'pushbutton', 'String', 'Mask all outside view','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+handles.unmask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.68 .01 .3 .5], 'Style', 'pushbutton', 'String', 'Unmask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
 handles.maskmode_off.Value = 1;
 
 % manual override panel

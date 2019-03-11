@@ -31,16 +31,17 @@ channel_names = sort({'ogn','dgn','gpn','lgn','lpn','lvn','mgn','mvn','pdn','tem
 
 
 % specify which units exist on which nerves
+nerve2neuron.ogn = {'MCN1','OMN'};
 nerve2neuron.PY = 'PY';
 nerve2neuron.LP = 'LP';
 nerve2neuron.PD = 'PD';
 nerve2neuron.lpn = 'LP';
 nerve2neuron.pdn = 'PD';
 nerve2neuron.pyn = {'PY', 'LPG'};
-nerve2neuron.lvn = {'LP','PD','PY'};
+nerve2neuron.lvn = {'LP','PD','GM'};
 nerve2neuron.lgn = {'LG','MG'};
 nerve2neuron.mvn = {'VD','IC','PY'};
-nerve2neuron.dgn = {'DG','MG','AGR'};
+nerve2neuron.dgn = {'DG','GM','AGR'};
 nerve2neuron.dvn = {'DG','MG','AGR'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,7 +67,7 @@ context_width = .2; % seconds.
 
 % what spike markers do you want to use to display
 % sorted spikes? 
-spike_markers = {'o','x','d','p','h','+','s'};
+spike_markers = {'o','x','p','h','+','s','d'};
 
 % to focus on one channel, other channels can be made
 % transparent. what opacity level do you want? 

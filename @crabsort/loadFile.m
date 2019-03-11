@@ -379,7 +379,7 @@ catch err
 
     self.raw_data = [];
     self.displayStatus(err, true)
-    save([GetMD5(now) '.error'],'err')
+    save([hashlib.md5hash(now) '.error'],'err')
     warning('FATAL error')
 
 end

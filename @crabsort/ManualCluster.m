@@ -49,7 +49,7 @@ end
 putative_spikes = find(self.putative_spikes(:,channel));
 this_nerve = self.common.data_channel_names{channel};
 
-[idx, labels] = manualCluster(R,V_snippets,default_names,@self.showSpikeInContext);
+[idx, labels] = clusterlib.manual(R,V_snippets,default_names,@self.showSpikeInContext);
 
 for i = 1:length(labels)
 	if strcmp(labels{i},'Noise')

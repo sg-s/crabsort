@@ -74,5 +74,5 @@ try
     save(NN_dump_file,'trainedNet','info')
 
 catch err
-    save([GetMD5(now) '.error'],'err')
+    save([hashlib.md5hash(now) '.error'],'err')
 end
