@@ -4,12 +4,6 @@ if isempty(self.channel_to_work_with)
 	return
 end
 
-if self.handles.mode_off.Value
-	return
-end
-
-
-
 channel = self.channel_to_work_with;
 
 
@@ -79,12 +73,14 @@ if ~isfield(self.spikes.(this_nerve),new_spike_name)
 	self.spikes.(this_nerve).(new_spike_name) = [];
 end
 
+old_spike_name = char(labels(spiketimes==new_spike));
 
-if any(spiketimes==new_spike) 
+
+if any(spiketimes==new_spike) && self.handles.mode_off.Value ~=1
 	% clicked point is an identified spike that may or may not be uncertain
 	
 
-	old_spike_name = char(labels(spiketimes==new_spike));
+	
 
 	if strcmp(old_spike_name,new_spike_name)
 		% we're trying to mark this spike for what it already is
@@ -105,7 +101,7 @@ if any(spiketimes==new_spike)
 	end
 
 
-else 
+elseif self.handles.mode_off.Value ~= 1
 	% clicked point is a unidentified spike
 	self.say('Adding new spike');
 
@@ -113,6 +109,21 @@ else
 
 	% add
 	self.spikes.(this_nerve).(new_spike_name) = sort([self.spikes.(this_nerve).(new_spike_name); new_spike]);
+elseif self.handles.mode_off.Value == 1
+	% we are affirming this uncertain spike
+
+	if any(uncertain_spikes == new_spike)
+		self.say('Adding this spike to the training data')
+
+		self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({old_spike_name}));
+
+
+		% remove from uncertain spikes
+		self.handles.ax.uncertain_spikes(channel).XData(uncertain_spikes == new_spike) = [];
+		self.handles.ax.uncertain_spikes(channel).YData(uncertain_spikes == new_spike) = [];
+
+
+	end
 
 end
 

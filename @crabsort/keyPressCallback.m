@@ -24,6 +24,8 @@ elseif strcmp(value.Key,'z')
 	self.scroll([self.time(end) - xrange self.time(end)])
 elseif strcmp(value.Key,'r')
 	self.resetZoom;
+elseif strcmp(value.Key,'f')
+	self.scroll([0 self.time(end)])
 else
 	% do nothing
 end

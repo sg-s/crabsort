@@ -85,7 +85,7 @@ X = reshape(X,SZ,1,1,N);
 [Y_pred, scores] = classify(trainedNet,X);
 
 
-uncertain_spikes = (max(scores,[],2) - 1./size(scores,2)).*size(scores,2)<.5;
+uncertain_spikes = (max(scores,[],2) - 1./size(scores,2)) < .5;
 
 
 
