@@ -40,11 +40,6 @@ end
 
 new_spike = floor(loc + p(1) - search_width) - 1;
 
-% which neuron are we adding to
-S = self.handles.new_spike_type.String;
-if iscell(S)
-    S = S{self.handles.new_spike_type.Value};
-end
 
 
 this_nerve_name = self.common.data_channel_names{self.channel_to_work_with};
@@ -80,16 +75,13 @@ self.getDataToReduce;
 if ~isfield(self.spikes,this_nerve)
 	self.spikes.(this_nerve) = [];
 end
-if ~isfield(self.spikes.(this_nerve),S)
-	self.spikes.(this_nerve).(S) = [];
+if ~isfield(self.spikes.(this_nerve),new_spike_name)
+	self.spikes.(this_nerve).(new_spike_name) = [];
 end
 
-if any(spiketimes==new_spike) && any(uncertain_spikes == new_spike)
-	% clicked point is an identified spike that is uncertain
-	self.say('Adding this spike to training data');
-	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
-elseif any(spiketimes==new_spike) && ~any(uncertain_spikes == new_spike)
-	% clicked point is an identified, certain spike
+
+if any(spiketimes==new_spike) 
+	% clicked point is an identified spike that may or may not be uncertain
 	
 
 	old_spike_name = char(labels(spiketimes==new_spike));
@@ -113,17 +105,6 @@ elseif any(spiketimes==new_spike) && ~any(uncertain_spikes == new_spike)
 	end
 
 
-
-
-	
-elseif ~any(spiketimes==new_spike) && any(uncertain_spikes == new_spike)
-	% clicked point is an unidentified spike, but it's uncertain
-	self.say('Adding new spike');
-	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
-
-	% add
-	self.spikes.(this_nerve).(S) = sort([self.spikes.(this_nerve).(S); new_spike]);
-
 else 
 	% clicked point is a unidentified spike
 	self.say('Adding new spike');
@@ -131,7 +112,7 @@ else
 	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
 
 	% add
-	self.spikes.(this_nerve).(S) = sort([self.spikes.(this_nerve).(S); new_spike]);
+	self.spikes.(this_nerve).(new_spike_name) = sort([self.spikes.(this_nerve).(new_spike_name); new_spike]);
 
 end
 

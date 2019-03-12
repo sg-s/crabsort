@@ -68,3 +68,4 @@ self.channel_stage(channel) = self.channel_stage(channel);
 
 % update the manual control add to menu
 self.handles.new_spike_type.String = self.getNeuronsOnThisNerve;
+self.handles.new_spike_type.Value = 1;

@@ -6,14 +6,20 @@ if isempty(self.channel_to_work_with)
 else
 	channel = self.channel_to_work_with;
 end
-spiketimes = find(self.getSpikesOnThisNerve);
+[spiketimes, labels] = self.getLabelledSpikes;
 if isempty(spiketimes)
 	self.say('No identified spikes');
 	beep
 	return
 end
 V = self.getSnippets(channel,spiketimes);
-E = abs(zscore(sum(abs(V - mean(V,2)))));
+
+uniq_labels = unique(labels);
+E = NaN(length(labels),1);
+for i = 1:length(uniq_labels)
+	this_V = V(:,labels == uniq_labels(i));
+	E(labels == uniq_labels(i)) = abs(zscore(sum(abs(this_V - mean(this_V,2)))));
+end
 
 
 spiketimes = spiketimes*self.dt;
