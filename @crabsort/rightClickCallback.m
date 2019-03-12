@@ -19,8 +19,6 @@ yrange = ylimits(2) - ylimits(1);
 
 p(1) = p(1)/self.dt;
 
-% get the width over which to search for spikes dynamically from the zoom factor
-search_width = floor((.005*xrange));
 
 V = self.raw_data(:,channel);
 this_nerve = self.common.data_channel_names{channel};
@@ -29,8 +27,7 @@ this_nerve = self.common.data_channel_names{channel};
 
 
 % find closest identified point 
-[spiketimes, st_by_unit] = self.getSpikesOnThisNerve;
-spiketimes = find(spiketimes);
+spiketimes = find(self.getSpikesOnThisNerve);
 
 uncertain_spikes = round(self.handles.ax.uncertain_spikes(channel).XData/self.dt);
 uncertain_spikes_y = self.handles.ax.uncertain_spikes(channel).YData;
@@ -89,7 +86,7 @@ self.putative_spikes(:,channel) = 0;
 self.putative_spikes(this_spike,channel) = 1;
 self.getDataToReduce;
 
-self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,this_spike,0);
+self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,this_spike,categorical({'Noise'}));
 
 self.putative_spikes(:,channel) = 0;
 self.showSpikes;

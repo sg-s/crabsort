@@ -3,7 +3,7 @@
 function self = addDataFrame(self,raw_data,file_idx,spiketimes,label_idx)
 
 
-assert(isscalar(label_idx),'label_idx must be a scalar')
+assert(iscategorical(label_idx),'label_idx must be a categorical')
 assert(isscalar(spiketimes),'spiketimes must be a scalar')
 assert(isscalar(file_idx),'file_idx must be a scalar')
 assert(isvector(raw_data),'raw_data must be a vector')

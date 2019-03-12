@@ -46,13 +46,14 @@ if iscell(S)
     S = S{self.handles.new_spike_type.Value};
 end
 
-label_idx = self.handles.new_spike_type.Value;
 
 this_nerve_name = self.common.data_channel_names{self.channel_to_work_with};
 
 
 % find closest identified point 
-spiketimes = find(self.getSpikesOnThisNerve);
+[spiketimes, labels] = self.getLabelledSpikes;
+
+new_spike_name = self.handles.new_spike_type.String{self.handles.new_spike_type.Value};
 
 uncertain_spikes = round(self.handles.ax.uncertain_spikes(channel).XData/self.dt);
 
@@ -86,44 +87,39 @@ end
 if any(spiketimes==new_spike) && any(uncertain_spikes == new_spike)
 	% clicked point is an identified spike that is uncertain
 	self.say('Adding this spike to training data');
-	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);
+	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
 elseif any(spiketimes==new_spike) && ~any(uncertain_spikes == new_spike)
 	% clicked point is an identified, certain spike
-	new_spike_name = self.handles.new_spike_type.String{self.handles.new_spike_type.Value};
+	
 
-	remove_spike_from_other_labels = false;
+	old_spike_name = char(labels(spiketimes==new_spike));
 
-	if isfield(self.spikes.(this_nerve_name),new_spike_name)
-		if ismember(new_spike,self.spikes.(this_nerve_name).(new_spike_name))
-			self.say('This spike has already been identified');
-			beep
-			return
-		else
-			self.say(['Marking spike as ' new_spike_name]);
-			self.spikes.(this_nerve_name).(new_spike_name) = [self.spikes.(this_nerve_name).(new_spike_name); new_spike];
-			remove_spike_from_other_labels = true;
-		end
+	if strcmp(old_spike_name,new_spike_name)
+		% we're trying to mark this spike for what it already is
+		beep
+		return
 	else
-		keyboard
+		self.say(['relabelling spike: ' old_spike_name '->' new_spike_name])		
+
+		% remove from the old name
+		self.spikes.(this_nerve).(old_spike_name) = setdiff(self.spikes.(this_nerve).(old_spike_name), new_spike);
+
+
+		% add it to the new name
+		self.spikes.(this_nerve).(new_spike_name) = [self.spikes.(this_nerve).(new_spike_name); new_spike];
+
+		% add this to NNdata
+		self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
 	end
 
-	if remove_spike_from_other_labels
-		fn = fieldnames(self.spikes.(this_nerve_name));
-		for i = 1:length(fn)
-			if strcmp(fn{i},new_spike_name)
-				continue
-			end
-			self.spikes.(this_nerve_name).(fn{i}) = setdiff(self.spikes.(this_nerve_name).(fn{i}), new_spike);
-		end
 
-	end
 
 
 	
 elseif ~any(spiketimes==new_spike) && any(uncertain_spikes == new_spike)
 	% clicked point is an unidentified spike, but it's uncertain
 	self.say('Adding new spike');
-	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);
+	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
 
 	% add
 	self.spikes.(this_nerve).(S) = sort([self.spikes.(this_nerve).(S); new_spike]);
@@ -131,7 +127,8 @@ elseif ~any(spiketimes==new_spike) && any(uncertain_spikes == new_spike)
 else 
 	% clicked point is a unidentified spike
 	self.say('Adding new spike');
-	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,label_idx);
+
+	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
 
 	% add
 	self.spikes.(this_nerve).(S) = sort([self.spikes.(this_nerve).(S); new_spike]);
