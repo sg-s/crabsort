@@ -84,7 +84,16 @@ if any(spiketimes==new_spike) && self.handles.mode_off.Value ~=1
 
 	if strcmp(old_spike_name,new_spike_name)
 		% we're trying to mark this spike for what it already is
-		beep
+		% maybe it's uncertain? 
+		if any(uncertain_spikes == new_spike)
+			self.say('Certifying this uncertain spike')
+			self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({old_spike_name}));
+
+
+			% remove from uncertain spikes
+			self.handles.ax.uncertain_spikes(channel).XData(uncertain_spikes == new_spike) = [];
+			self.handles.ax.uncertain_spikes(channel).YData(uncertain_spikes == new_spike) = [];
+		end
 		return
 	else
 		self.say(['relabelling spike: ' old_spike_name '->' new_spike_name])		
@@ -109,6 +118,21 @@ elseif self.handles.mode_off.Value ~= 1
 
 	% add
 	self.spikes.(this_nerve).(new_spike_name) = sort([self.spikes.(this_nerve).(new_spike_name); new_spike]);
+
+
+	if any(uncertain_spikes == new_spike)
+		self.say('Adding this spike to the training data')
+
+		self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
+
+
+		% remove from uncertain spikes
+		self.handles.ax.uncertain_spikes(channel).XData(uncertain_spikes == new_spike) = [];
+		self.handles.ax.uncertain_spikes(channel).YData(uncertain_spikes == new_spike) = [];
+
+
+	end
+
 elseif self.handles.mode_off.Value == 1
 	% we are affirming this uncertain spike
 

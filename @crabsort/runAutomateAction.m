@@ -23,7 +23,6 @@ case crabsort.automateAction.all_channels_all_files
 		temp = struct();
 		temp.String = '>';
 		temp.Style = 'none';
-		self.scroll([0 5])
 		self.loadFile(temp)
 
 		for channel = 1:self.n_channels
@@ -136,7 +135,6 @@ case crabsort.automateAction.this_channel_all_files
 		temp = struct();
 		temp.String = '>';
 		temp.Style = 'none';
-		self.scroll([0 5])
 		self.loadFile(temp)
 
 		self.channel_to_work_with = channel;

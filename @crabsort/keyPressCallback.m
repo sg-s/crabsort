@@ -15,13 +15,12 @@ elseif strcmp(value.Key,'space')
 elseif strcmp(value.Key,'g')
 	self.NNgenerateTrainingData;
 elseif strcmp(value.Key,'a')
-	% to to first section
+	% to to first five seconds 
 	xrange = diff(self.handles.ax.ax(1).XLim);
-	self.scroll([0 xrange]);
+	self.scroll([0 5]);
 elseif strcmp(value.Key,'z')
 	% go to end
-	xrange = diff(self.handles.ax.ax(1).XLim);
-	self.scroll([self.time(end) - xrange self.time(end)])
+	self.scroll([self.time(end) - 5 self.time(end)])
 elseif strcmp(value.Key,'r')
 	self.resetZoom;
 elseif strcmp(value.Key,'f')

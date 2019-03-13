@@ -8,6 +8,8 @@ assert(isscalar(spiketimes),'spiketimes must be a scalar')
 assert(isscalar(file_idx),'file_idx must be a scalar')
 assert(isvector(raw_data),'raw_data must be a vector')
 
+assert(~isundefined(label_idx),'label_idx should not be undefined')
+
 if isempty(self.raw_data)
 	% all empty
 	self.raw_data = raw_data;
