@@ -8,11 +8,7 @@
 
 function showSpikes(self)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
-
+tic
 
 % first, hide all spikes
 for i = 1:length(self.handles.ax.sorted_spikes)
@@ -51,3 +47,7 @@ for i = 1:length(fn)
 	end
 
 end
+
+
+fprintf('[showSpikes] ')
+toc

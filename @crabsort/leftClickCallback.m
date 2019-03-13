@@ -4,6 +4,8 @@ if isempty(self.channel_to_work_with)
 	return
 end
 
+tic
+
 channel = self.channel_to_work_with;
 
 
@@ -136,6 +138,10 @@ elseif self.handles.mode_off.Value ~= 1
 elseif self.handles.mode_off.Value == 1
 	% we are affirming this uncertain spike
 
+	if isempty(old_spike_name)
+		old_spike_name = 'Noise';
+	end
+
 	if any(uncertain_spikes == new_spike)
 		self.say('Adding this spike to the training data')
 
@@ -151,7 +157,8 @@ elseif self.handles.mode_off.Value == 1
 
 end
 
-
+fprintf('[leftClickCallback] ')
+toc
 
 self.putative_spikes(:,channel) = 0;
 self.showSpikes;

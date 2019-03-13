@@ -25,7 +25,7 @@ for i = 1:length(allowed_file_extensions)
 	for j = 1:length(allfiles)
 		self.file_name = allfiles(j).name;
 
-		fprintf(flstring(self.file_name,20))
+		fprintf(strlib.fix(self.file_name,20))
 
 
 		self.loadFile;
@@ -39,9 +39,9 @@ for i = 1:length(allowed_file_extensions)
 
 			fprintf('FATAL: could not load file\n')
 		else
-			fprintf(flstring(mat2str(size(self.raw_data,2)),15))
+			fprintf(strlib.fix(mat2str(size(self.raw_data,2)),15))
 			H = hashlib.md5hash([self.builtin_channel_names{:}]);
-			fprintf([flstring(H,15) '\n'])
+			fprintf([strlib.fix(H,15) '\n'])
 
 			all_channel_names = unique([all_channel_names; self.builtin_channel_names]);
 
