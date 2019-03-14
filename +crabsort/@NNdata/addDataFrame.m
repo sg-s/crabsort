@@ -2,7 +2,7 @@
 
 function self = addDataFrame(self,raw_data,file_idx,spiketimes,label_idx)
 
-tic
+% tic
 
 assert(iscategorical(label_idx),'label_idx must be a categorical')
 assert(isscalar(spiketimes),'spiketimes must be a scalar')
@@ -40,5 +40,5 @@ else
 	self.label_idx = [self.label_idx; label_idx];
 end
 
-fprintf('[addDataFrame] ')
-toc
+% fprintf('[addDataFrame] ')
+% toc

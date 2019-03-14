@@ -28,7 +28,12 @@ case 'alt'
 		return
 	end
     self.rightClickCallback(p);
+
+case 'open'
+	% doube click, ignore
+	return
 otherwise
+	keyboard
     error('Unknown mouse action')
 end
 

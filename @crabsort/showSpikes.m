@@ -8,7 +8,7 @@
 
 function showSpikes(self)
 
-tic
+
 
 % first, hide all spikes
 for i = 1:length(self.handles.ax.sorted_spikes)
@@ -49,5 +49,4 @@ for i = 1:length(fn)
 end
 
 
-fprintf('[showSpikes] ')
-toc
+drawnow;
