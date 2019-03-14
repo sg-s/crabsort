@@ -73,6 +73,7 @@ uimenu(handles.menu_name(4),'Label','Delete all NN data','Callback',@self.NNdele
 uimenu(handles.menu_name(4),'Label','Delete this channels NN','Callback',@self.NNdelete,'Separator','on');
 uimenu(handles.menu_name(4),'Label','Delete all nets','Callback',@self.NNdelete);
 handles.auto_predict_handle = uimenu(handles.menu_name(4),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
+handles.add_uncertain = uimenu(handles.menu_name(4),'Label','Add all uncertain spikes to training data...','Callback',@self.NNaddAllUncertainSpikes,'Separator','on');
 handles.NN_introspect_handle = uimenu(handles.menu_name(4),'Label','Inspect training data...','Callback',@self.NNintrospect,'Separator','on');
 
 

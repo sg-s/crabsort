@@ -27,7 +27,7 @@ drawnow;
 
 
 % make sure putative spikes is populated
-if ~any(self.putative_spikes(:,self.channel_to_work_with))
+if sum(self.putative_spikes(:,self.channel_to_work_with)) < 2
 
 	already_sorted_spikes = self.getSpikesOnThisNerve;
 	assert(any(already_sorted_spikes),'No putative spikes, no already sorted spikes. crabsort cant reduce dimensions on nothing. Try finding some spikes first.')

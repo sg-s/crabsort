@@ -27,14 +27,18 @@ allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'Unifor
 allowed_file_extensions = allowed_file_extensions(:);
 
 
-% attempt to cancel all workers
-try
-    cancel(self.workers)
-catch
-end
+
 
 
 if strcmp(src.String,'Load File')
+
+
+    % attempt to cancel all workers
+    try
+        cancel(self.workers)
+    catch
+    end
+
 
     if self.verbosity > 5
         disp('[loadFile] load_file_button is src')
