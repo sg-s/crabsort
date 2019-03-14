@@ -19,7 +19,25 @@ add_these_spikes = spiketimes(ismember(spiketimes,uncertain_spikes));
 add_these_labels = labels(ismember(spiketimes,uncertain_spikes));
 
 
+% now use the NN to make predictions so we can figure out which 
+% spikes the NN got wrong
+self.NNpredict()
+
+
+% find closest identified point 
+[~, labels_NN] = self.getLabelledSpikes;
+
+add_these = (labels ~= labels_NN);
+
+add_these_spikes = ([add_these_spikes; spiketimes(add_these)]);
+add_these_labels = ([add_these_labels; labels(add_these)]);
+
+[add_these_spikes, idx] = unique(add_these_spikes);
+add_these_labels = add_these_labels(idx);
+
 self.NNsync()
+
+
 
 self.putative_spikes(:,channel) = 0;
 self.putative_spikes(add_these_spikes,channel) = 1;
@@ -52,5 +70,8 @@ NNdata.check()
 
 
 self.common.NNdata(channel) = NNdata;
+
+
+self.NNpredict();
 
 self.say(['Added ' strlib.oval(length(add_these_spikes)) ' spikes to training data'])

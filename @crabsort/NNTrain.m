@@ -60,7 +60,7 @@ self.NNmakeCheckpointDirs;
 checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
 
 % debug, run in foreground
-%self.NNtrainOnParallelWorker(self.common.NNdata(channel),checkpoint_path)
+% self.NNtrainOnParallelWorker(self.common.NNdata(channel),checkpoint_path)
 
 self.workers(channel) = parfeval(gcp,@self.NNtrainOnParallelWorker,0,self.common.NNdata(channel),checkpoint_path);
 
