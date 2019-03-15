@@ -116,7 +116,7 @@ else
 
 		self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
 
-		self.showSpikes;
+		self.showSpikes(channel);
 
 
 	end

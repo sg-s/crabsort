@@ -44,7 +44,7 @@ case crabsort.automateAction.all_channels_all_files
 				end
 				% put logic here
 				self.NNpredict;
-				self.showSpikes;
+				self.showSpikes(channel);
 
 
 				% check if we should stop if uncertain
@@ -95,7 +95,7 @@ case crabsort.automateAction.all_channels_this_file
 			end
 			% put logic here
 			self.NNpredict;
-			self.showSpikes;
+			self.showSpikes(channel);
 			pause(1)
 		end
 
@@ -142,7 +142,7 @@ case crabsort.automateAction.this_channel_all_files
 		if self.channel_stage(channel) == 0
 			% put logic here
 			self.NNpredict;
-			self.showSpikes;
+			self.showSpikes(channel);
 			
 
 			% check if we should stop if uncertain

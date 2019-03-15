@@ -14,15 +14,17 @@ if isempty(self.channel_to_work_with)
 	return
 end
 
-if isfield(self.spikes,self.common.data_channel_names{self.channel_to_work_with})
+channel = self.channel_to_work_with;
+
+if isfield(self.spikes,self.common.data_channel_names{channel})
 	% remove this
-	self.spikes = rmfield(self.spikes,self.common.data_channel_names{self.channel_to_work_with})
+	self.spikes = rmfield(self.spikes,self.common.data_channel_names{channel})
 else
 end
 
-self.channel_stage(self.channel_to_work_with) = 0;
+self.channel_stage(channel) = 0;
 
-N = self.handles.ax.sorted_spikes(self.channel_to_work_with).unit;
+N = self.handles.ax.sorted_spikes(channel).unit;
 
 for i = 1:length(N)
 	N(i).YData = NaN;
@@ -31,4 +33,4 @@ end
 
 self.handles.main_fig.Name = [self.file_name ' -- Resetting data'];
 
-self.showSpikes;
+self.showSpikes(channel);

@@ -56,5 +56,5 @@ layers = [
 
     fullyConnectedLayer(n_classes)
     softmaxLayer
-    classificationLayer]
+    classificationLayer];
 

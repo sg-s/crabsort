@@ -6,15 +6,22 @@
 %
 % shows all sorted spikes in all channels
 
-function showSpikes(self)
+function showSpikes(self, channels)
+
+
+if nargin == 1
+	channels = 1:self.n_channels;
+end
 
 
 
 % first, hide all spikes
-for i = 1:length(self.handles.ax.sorted_spikes)
-	for j = 1:length(self.handles.ax.sorted_spikes(i).unit)
-		self.handles.ax.sorted_spikes(i).unit(j).XData = NaN;
-		self.handles.ax.sorted_spikes(i).unit(j).YData = NaN;
+for i = 1:length(channels)
+	this_channel = channels(i);
+
+	for j = 1:length(self.handles.ax.sorted_spikes(this_channel).unit)
+		self.handles.ax.sorted_spikes(this_channel).unit(j).XData = NaN;
+		self.handles.ax.sorted_spikes(this_channel).unit(j).YData = NaN;
 	end
 end
 
@@ -23,30 +30,40 @@ if isempty(self.spikes)
 end
 
 
-fn = fieldnames(self.spikes);
 
-for i = 1:length(fn)
+for i = 1:length(channels)
+	this_channel = channels(i);
 
-	this_nerve = fn{i};
+	this_nerve = self.common.data_channel_names{this_channel};
 
-	idx = find(strcmp(self.common.data_channel_names,fn{i}));
-
-	if ~self.common.show_hide_channels(idx)
+	if ~isfield(self.spikes,this_nerve)
 		continue
 	end
 
-
-	fn2 = fieldnames(self.spikes.(fn{i}));
-	for j = 1:length(fn2)
-		this_neuron = fn2{j};
-
-		spiketimes = self.spikes.(fn{i}).(fn2{j});
-		self.handles.ax.sorted_spikes(idx).unit(j).XData = self.time(spiketimes);
-		self.handles.ax.sorted_spikes(idx).unit(j).YData = self.raw_data(spiketimes,idx);
-
+	if isempty(self.spikes.(this_nerve))
+		continue
 	end
+
+	if ~self.common.show_hide_channels(this_channel)
+		continue
+	end
+
+	neuron_names = self.nerve2neuron.(this_nerve);
+
+	for j = 1:length(neuron_names)
+		this_neuron = neuron_names{j};
+
+		spiketimes = self.spikes.(this_nerve).(this_neuron);
+		self.handles.ax.sorted_spikes(this_channel).unit(j).XData = self.time(spiketimes);
+		self.handles.ax.sorted_spikes(this_channel).unit(j).YData = self.raw_data(spiketimes,this_channel);
+	end
+
+
 
 end
 
 
 drawnow;
+
+
+

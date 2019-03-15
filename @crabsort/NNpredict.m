@@ -152,7 +152,7 @@ self.channel_stage(channel) = 3;
 uxlib.enable(self.handles.manual_panel)
 
 self.putative_spikes(:,channel) = 0;
-self.showSpikes;
+self.showSpikes(channel);
 
 self.say('DONE. Spikes classified using NN')
 

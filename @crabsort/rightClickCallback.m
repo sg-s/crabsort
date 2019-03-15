@@ -89,4 +89,4 @@ self.getDataToReduce;
 self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,this_spike,categorical({'Noise'}));
 
 self.putative_spikes(:,channel) = 0;
-self.showSpikes;
+self.showSpikes(channel);

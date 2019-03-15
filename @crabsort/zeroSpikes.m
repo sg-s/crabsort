@@ -22,4 +22,4 @@ end
 
 % set the channel stage too
 self.channel_stage(channel) = 3;
-self.showSpikes;
+self.showSpikes(channel);

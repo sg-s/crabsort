@@ -27,7 +27,7 @@ cluster_method_handle = str2func(cluster_method_handle);
 cluster_method_handle(self);
 self.channel_stage(channel) = 3; 
  
-self.showSpikes;
+self.showSpikes(channel);
 
 temp = self.getSpikesOnThisNerve;
 self.putative_spikes(:,channel) = temp;
@@ -38,7 +38,7 @@ self.handles.ax.found_spikes(channel).XData = NaN;
 self.handles.ax.found_spikes(channel).YData = NaN;
 
 
-self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_method_handle)]
+self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_method_handle)];
 
 % now lock the channel names on this channel and prevent the user from ever renaming it
 self.common.channel_name_lock(self.channel_to_work_with) = true;
