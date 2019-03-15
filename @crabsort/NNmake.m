@@ -29,37 +29,32 @@ function layers = NNmake(input_size, n_classes)
 layers = [
     imageInputLayer([input_size 1 1],'Normalization','none')
     
-    convolution2dLayer([20, 1],60,'NumChannels',1)
-    batchNormalizationLayer
+    % convolution2dLayer([20, 1],60,'NumChannels',1)
+    % batchNormalizationLayer
+    % reluLayer
+
+    % dropoutLayer(.5)
+    
+    % maxPooling2dLayer([2 1],'Stride',2)
+    
+    % convolution2dLayer([10 1],40,'NumChannels',1)
+    % batchNormalizationLayer
+    % reluLayer
+    
+    % maxPooling2dLayer([2 1],'Stride',2)
+
+    % dropoutLayer(.25)
+
+
+    fullyConnectedLayer(200)
     reluLayer
 
-    dropoutLayer(.5)
-    
-    maxPooling2dLayer([2 1],'Stride',2)
-    
-    convolution2dLayer([10 1],40,'NumChannels',1)
-    batchNormalizationLayer
+    fullyConnectedLayer(200)
     reluLayer
-    
-    maxPooling2dLayer([2 1],'Stride',2)
-
-    dropoutLayer(.25)
-
-
-    % fullyConnectedLayer(50)
-    % reluLayer
-    % dropoutLayer(.25)
-
-    % fullyConnectedLayer(25)
-    % reluLayer
-    % dropoutLayer(.25)
-
-    % fullyConnectedLayer(10)
-    % reluLayer
-    % dropoutLayer(.25)
+    dropoutLayer(.1)
 
 
     fullyConnectedLayer(n_classes)
     softmaxLayer
-    classificationLayer];
+    classificationLayer]
 

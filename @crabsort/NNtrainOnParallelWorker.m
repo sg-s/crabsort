@@ -30,7 +30,7 @@ try
     NN_dump_file = [checkpoint_path filesep H '.mat'];
 
     if exist(NN_dump_file,'file') == 2
-        disp('Loading existing file...')
+        disp('Loading existing network...')
         load(NN_dump_file)
         layers = trainedNet.Layers;
         

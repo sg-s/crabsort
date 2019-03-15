@@ -47,8 +47,9 @@ case 'Delete this channels NN'
 
 case 'Delete all nets'
 	for i = 1:self.n_channels
-		allfiles = dir([self.path_name 'network' filesep self.common.data_channel_names{i},'*.mat']);
+		allfiles = dir([self.path_name 'network' filesep self.common.data_channel_names{i} filesep '*.mat']);
 		for j = 1:length(allfiles)
+			disp(['Deleting: ' [allfiles(j).folder filesep allfiles(j).name]])
 			delete([allfiles(j).folder filesep allfiles(j).name])
 		end
 	end
