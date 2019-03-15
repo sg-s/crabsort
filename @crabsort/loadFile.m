@@ -4,6 +4,7 @@
 
 function loadFile(self,src,~)
 
+
 % are we showing a full trace view?
 full_trace_view = false;
 if ~isempty(self.handles)
@@ -167,6 +168,7 @@ load_file_handle = str2func(self.installed_plugins(plugin_to_use).name);
 
 self.builtin_channel_names = {};
 
+
 try
     load_file_handle(self);
 catch 
@@ -188,6 +190,9 @@ catch
 
     return
 end
+
+
+
 
 % reset common
 self.common = crabsort.common(self.n_channels);

@@ -15,8 +15,6 @@ if self.verbosity > 3
 end
 
 
-figure(self.handles.main_fig)
-
 % are there already some axes handles? 
 if isfield(self.handles,'ax') && ~isempty(self.handles.ax) && isfield(self.handles.ax,'ax')
 
@@ -35,3 +33,4 @@ end
 
 % this gets run no matter what
 self.showHideAxes;
+
