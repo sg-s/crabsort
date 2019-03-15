@@ -19,6 +19,8 @@ if isempty(self.pref)
     return
 end
 
+tic
+
 channel = self.channel_to_work_with;
 
 
@@ -37,13 +39,14 @@ if isempty(channel)
     end
     return
 end
-
+toc
 
 % some channel selected
 self.handles.ax.ax(channel).YColor = 'r';
 self.handles.ax.channel_label_chooser(channel).ForegroundColor = [1 0 0];
 self.handles.ax.ax(channel).GridColor = [.15 .15 .15];
 
+toc
 
 % make all other channels desaturated
 for i = 1:length(self.handles.ax.ax)
@@ -61,6 +64,8 @@ if isempty(self.common.data_channel_names{channel})
     return
 end
 
+toc
+
 % OK, we have a named channel
 % trigger the correct mode by resetting channel_stage
 self.channel_stage(channel) = self.channel_stage(channel);
@@ -69,3 +74,10 @@ self.channel_stage(channel) = self.channel_stage(channel);
 % update the manual control add to menu
 self.handles.new_spike_type.String = self.getNeuronsOnThisNerve;
 self.handles.new_spike_type.Value = 1;
+
+toc
+
+drawnow;
+
+
+toc
