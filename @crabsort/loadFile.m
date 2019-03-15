@@ -27,9 +27,11 @@ allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}
 allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
 allowed_file_extensions = allowed_file_extensions(:);
 
+hard_load = false;
 
-
-
+if nargin > 1
+    self.saveData;
+end
 
 if strcmp(src.String,'Load File')
 
@@ -40,6 +42,8 @@ if strcmp(src.String,'Load File')
     catch
     end
 
+    hard_load = true;
+
 
     if self.verbosity > 5
         disp('[loadFile] load_file_button is src')
@@ -47,7 +51,7 @@ if strcmp(src.String,'Load File')
 
     cancel(self.workers)
 
-    self.saveData;
+    
 
     % reorder allowed_file_extensions
     try
@@ -78,14 +82,13 @@ if strcmp(src.String,'Load File')
     % make a note of the file format chosen
     setpref('crabsort','last_ext',allowed_file_extensions{filter_index})
 
-    % conver the load file button to a file picker
+    % convert the load file button to a file picker
     src.Style = 'popupmenu';
     allfiles = dir([self.path_name filesep allowed_file_extensions{filter_index}]);
     src.String = {allfiles.name};
 
 elseif strcmp(src.Style,'popupmenu')
 
-    self.saveData;
 
     % jump to file
     self.file_name = src.String{src.Value};
@@ -99,7 +102,6 @@ elseif strcmp(src.String,'<')
         disp('[loadFile] < is src]')
     end
 
-    self.saveData;
     if isempty(self.file_name)
         return
     else
@@ -124,7 +126,6 @@ elseif strcmp(src.String,'>')
         disp('[loadFile] > is src')
     end
 
-    self.saveData;
     if isempty(self.file_name)
         return
     else
@@ -153,7 +154,9 @@ else
 end
 
 self.reset(false);
-self.displayStatus('Loading...',true);
+if self.automate_action == crabsort.automateAction.none
+    self.displayStatus('Loading...',true);
+end
 
 
 % OK, user has made some selection. let's figure out which plugin to use to load the data
@@ -192,11 +195,11 @@ catch
 end
 
 
-
-
-% reset common
-self.common = crabsort.common(self.n_channels);
-
+if hard_load
+    % reset common
+    disp('resetting common...')
+    self.common = crabsort.common(self.n_channels);
+end
 
 % set the channel_stages
 self.channel_stage = zeros(self.n_channels,1);
@@ -217,6 +220,11 @@ if exist(file_name,'file') == 2
     % copy over properties from crabsort_obj into self
     fn = fieldnames(crabsort_obj);
     for i = 1:length(fn)
+
+        if any(strcmp(self.unsaved_variables,fn{i}))
+            continue
+        end
+
         if ~isempty(crabsort_obj.(fn{i}))
             self.(fn{i}) = crabsort_obj.(fn{i});
         end
@@ -224,29 +232,31 @@ if exist(file_name,'file') == 2
 
 end
 
+if hard_load
 
-% check that there is a crabsort.common file already
-file_name = pathlib.join(self.path_name, 'crabsort.common');
+    % check that there is a crabsort.common file already
+    file_name = pathlib.join(self.path_name, 'crabsort.common');
 
-if exist(file_name,'file') == 2
-    if self.verbosity > 5
-        disp('[loadFile] crabsort.common exists.')
+    if exist(file_name,'file') == 2
+        if self.verbosity > 5
+            disp('[loadFile] crabsort.common exists.')
+        end
+
+        load(file_name,'common','-mat');
+        self.common = common;
+    else
+        if self.verbosity > 5
+            disp('[loadFile] No crabsort.common!')
+        end
     end
 
-    load(file_name,'common','-mat');
-    self.common = common;
-else
-    if self.verbosity > 5
-        disp('[loadFile] No crabsort.common!')
+
+    % make sure we have computed the delays
+    if ~isempty(self.handles)
+        self.estimateDelay;
     end
+
 end
-
-% make sure we have computed the delays
-if ~isempty(self.handles)
-    self.estimateDelay;
-end
-
-
 
 for i = 1:length(self.common.data_channel_names)
     if isempty(self.common.data_channel_names{i})
@@ -309,38 +319,42 @@ uxlib.disable(self.handles.manual_panel);
 % update the channels menu to indicate the channels
 % first nuke all the old names
 
-delete(self.handles.menu_name(5).Children)
 
-% do we already have some preference for which channels to hide?
+if hard_load
 
-for i = 1:self.n_channels
+    delete(self.handles.menu_name(5).Children)
 
-    if self.common.show_hide_channels(i) 
-        V = 'on';
-    else
-        V = 'off';
+    % do we already have some preference for which channels to hide?
+
+    for i = 1:self.n_channels
+
+        if self.common.show_hide_channels(i) 
+            V = 'on';
+        else
+            V = 'off';
+        end
+        uimenu(self.handles.menu_name(5),'Label',self.builtin_channel_names{i},'Callback',@self.showHideChannels,'Checked',V);
+
     end
-    uimenu(self.handles.menu_name(5),'Label',self.builtin_channel_names{i},'Callback',@self.showHideChannels,'Checked',V);
+
+
+
+    self.redrawAxes;
+
+
+
+    % force an update of built-in channel names
+    for i = 1:self.n_channels
+    	self.handles.ax.channel_names(i).String = self.builtin_channel_names{i};
+    	if isempty(self.common.data_channel_names{i})
+    		self.handles.ax.channel_label_chooser(i).Value = 1;
+    	else
+    		self.handles.ax.channel_label_chooser(i).Value = find(strcmp(self.common.data_channel_names{i},self.handles.ax.channel_label_chooser(i).String));
+    	end
+    end
 
 end
 
-
-
-self.redrawAxes;
-
-
-
-% force an update of built-in channel names
-for i = 1:self.n_channels
-	self.handles.ax.channel_names(i).String = self.builtin_channel_names{i};
-	if isempty(self.common.data_channel_names{i})
-		self.handles.ax.channel_label_chooser(i).Value = 1;
-	else
-		self.handles.ax.channel_label_chooser(i).Value = find(strcmp(self.common.data_channel_names{i},self.handles.ax.channel_label_chooser(i).String));
-	end
-end
-
-self.showSpikes;
 
 % show the data
 
@@ -360,14 +374,17 @@ for i = 1:self.n_channels
     end
 end
 
+if hard_load
 
 
-% check if we have the scales set 
-if any(isnan(self.common.y_scales))
-    disp('Computing y_scales...')
-    for i = 1:self.n_channels
-        self.common.y_scales(i) = prctile(abs(self.raw_data(:,i)),99);
+    % check if we have the scales set 
+    if any(isnan(self.common.y_scales))
+        disp('Computing y_scales...')
+        for i = 1:self.n_channels
+            self.common.y_scales(i) = prctile(abs(self.raw_data(:,i)),99);
+        end
     end
+
 end
 
 % create a mask
@@ -384,7 +401,11 @@ if full_trace_view
     self.showFullTrace;
 end
 
+self.showSpikes;
+
 catch err
+
+    keyboard
 
     self.raw_data = [];
     self.displayStatus(err, true)
@@ -392,3 +413,4 @@ catch err
     warning('FATAL error')
 
 end
+

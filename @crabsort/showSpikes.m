@@ -50,8 +50,17 @@ for i = 1:length(channels)
 
 	neuron_names = self.nerve2neuron.(this_nerve);
 
+
+	if ~iscell(neuron_names)
+		neuron_names = {neuron_names};
+	end
+
 	for j = 1:length(neuron_names)
 		this_neuron = neuron_names{j};
+
+		if ~isfield(self.spikes.(this_nerve),this_neuron)
+			continue
+		end
 
 		spiketimes = self.spikes.(this_nerve).(this_neuron);
 		self.handles.ax.sorted_spikes(this_channel).unit(j).XData = self.time(spiketimes);

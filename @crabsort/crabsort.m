@@ -114,7 +114,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         req_update
         req_toolboxes = {'srinivas.gs_mtools','crabsort','puppeteer'};
 
-
+        % these variables will not be saved
+        unsaved_variables = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','time','verbosity','timer_handle','workers','auto_predict','automate_action','mask','common','unsaved_variables'};
         
 
 

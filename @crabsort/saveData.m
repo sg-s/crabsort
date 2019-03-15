@@ -8,11 +8,6 @@
 
 function saveData(self)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
-
 
 % early escape
 if isempty(self.time) 
@@ -24,44 +19,30 @@ end
 % and common data that eprtains to all files in this folder
 % to a file called crabsort.common in that folder 
 
-% check if there is a .crabsort file already
+
 file_name = pathlib.join(self.path_name, [self.file_name '.crabsort']);
 common_name = pathlib.join(self.path_name, 'crabsort.common');
 
-crabsort_obj = self;
+crabsort_obj = crabsort(false);
 
-% remove some stuff that shouldn't be saved
-ignore_these = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','time','verbosity','timer_handle','workers','auto_predict','automate_action','mask'};
+fn = properties(self);
 
-ignored_values = {};
+for i = 1:length(fn)
+	this_prop = fn{i};
+	if any(strcmp(this_prop,self.unsaved_variables))
+		continue
+	end
 
-for i = length(ignore_these):-1:1
-	ignored_values{i} = self.(ignore_these{i});
-	empty_obj = eval([class(crabsort_obj.(ignore_these{i})) '.empty()']);
-	crabsort_obj.(ignore_these{i}) = empty_obj;
+	crabsort_obj.(this_prop) = self.(this_prop);
+
 end
+
+save(file_name,'crabsort_obj','-v7.3')
+
+
 
 
 % now save the common items
 common = self.common;
 save(common_name,'common','-v7.3')
 
-crabsort_obj.common = crabsort.common(self.n_channels);
-
-try 
-	if exist(file_name,'file') == 2
-	    save(file_name,'crabsort_obj','-v7.3')
-	else
-	    save(file_name,'crabsort_obj','-v7.3')
-	end
-catch err
-	if strcmp(err.identifier,'MATLAB:save:permissionDenied')
-		warning('crabsort does not have permission to write to this folder, so cannot save .crabsort files. Make sure you have correct permissions and can write to this folder. ')
-	end
-end
-
-for i = 1:length(ignore_these)
-	 self.(ignore_these{i}) = ignored_values{i};
-end
-
-self.common = common;

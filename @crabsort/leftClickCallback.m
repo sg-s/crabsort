@@ -58,7 +58,7 @@ if self.handles.mode_off.Value == 1
 	old_spike_name = char(labels(spiketimes==closest_uncertain_spike));
 
 	if isempty(old_spike_name)
-		keyboard
+		old_spike_name = 'Noise';
 	end
 
 

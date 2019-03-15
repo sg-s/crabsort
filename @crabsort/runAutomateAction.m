@@ -131,11 +131,25 @@ case crabsort.automateAction.this_channel_all_files
 			break
 		end
 
-		% simulate a next file button press
-		temp = struct();
-		temp.String = '>';
-		temp.Style = 'none';
-		self.loadFile(temp)
+
+		% % check if the next file is already sorted
+		next_file = self.getFileSequence+1;
+		if next_file > length(allfiles)
+			next_file = 1;
+		end
+
+		% if exist([allfiles(next_file).name '.crabsort'],'file') == 2
+		% 	load([allfiles(next_file).name '.crabsort'],'-mat')
+		% 	if  crabsort_obj.channel_stage(channel) == 3
+		% 		self.say(['Skipping ' allfiles(next_file).name])
+		% 		continue
+		% 	end
+
+		% end
+
+
+		self.file_name = allfiles(next_file).name;
+		self.loadFile()
 
 		self.channel_to_work_with = channel;
 
@@ -143,7 +157,7 @@ case crabsort.automateAction.this_channel_all_files
 			% put logic here
 			self.NNpredict;
 			self.showSpikes(channel);
-			
+			self.saveData;
 
 			% check if we should stop if uncertain
 			C = self.handles.menu_name(3).Children;
@@ -158,7 +172,6 @@ case crabsort.automateAction.this_channel_all_files
 				break
 			end
 
-			pause(1)
 
 		end
 	end
