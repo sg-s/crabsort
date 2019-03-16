@@ -109,7 +109,7 @@ else
 
 		% add this to NNdata
 
-		self.NNsync;
+		self.loadSDPFromNNdata;
 		self.putative_spikes(:,channel) = 0;
 		self.putative_spikes(new_spike,channel) = 1;
 		self.getDataToReduce;
@@ -184,7 +184,7 @@ end
 self.common.channel_name_lock(self.channel_to_work_with) = true;
 self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
 
-self.NNsync(); 
+self.loadSDPFromNNdata(); 
 
 
 

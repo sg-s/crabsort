@@ -56,7 +56,7 @@ end
 
 
 
-self.NNsync(futz_factor)
+self.loadSDPFromNNdata(futz_factor)
 
 self.findSpikes()
 spiketimes = find(self.putative_spikes(:,channel));

@@ -35,7 +35,7 @@ add_these_labels = ([add_these_labels; labels(add_these)]);
 [add_these_spikes, idx] = unique(add_these_spikes);
 add_these_labels = add_these_labels(idx);
 
-self.NNsync()
+self.loadSDPFromNNdata()
 
 
 

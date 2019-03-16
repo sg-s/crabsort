@@ -49,13 +49,13 @@ self.say('Generating training data for NN...')
 all_spiketimes = spiketimes;
 
 
-
-self.NNsync()
-
+% if there is nothing in NNdata, stash SDP there
+self.saveSDPToNNdata;
 
 % create the training and test data
 
 % create the +ve training data
+self.loadSDPFromNNdata()
 self.putative_spikes(:,channel) = 0;
 self.putative_spikes(spiketimes,channel) = 1;
 self.getDataToReduce;
@@ -68,7 +68,7 @@ assert(length(Y) == size(X,2),'Size mismatch')
 
 % now create some -ve training data
 % halve the spike prominence and find spikes
-self.NNsync(.5);
+self.loadSDPFromNNdata(.5);
 
 self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 

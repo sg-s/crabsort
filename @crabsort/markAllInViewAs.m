@@ -31,7 +31,7 @@ self.putative_spikes(spiketimes,channel) = 1;
 if strcmp(src.String{src.Value},'Noise')
 
 	% mark as noise, and add to NNdata
-	self.NNsync(); 
+	self.loadSDPFromNNdata(); 
 	self.getDataToReduce;
 
 	for i = 1:length(spiketimes)

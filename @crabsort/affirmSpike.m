@@ -4,7 +4,7 @@ function affirmSpike(self, channel, spike_position, spike_name)
 self.say('affirmSpike called')
 
 
-self.NNsync;
+self.loadSDPFromNNdata;
 self.putative_spikes(:,channel) = 0;
 self.putative_spikes(spike_position,channel) = 1;
 self.getDataToReduce;

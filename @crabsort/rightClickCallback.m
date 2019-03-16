@@ -81,7 +81,7 @@ else
 	keyboard
 end
 
-self.NNsync(); 
+self.loadSDPFromNNdata(); 
 self.putative_spikes(:,channel) = 0;
 self.putative_spikes(this_spike,channel) = 1;
 self.getDataToReduce;
