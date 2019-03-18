@@ -4,7 +4,6 @@ if isempty(self.channel_to_work_with)
 	return
 end
 
-
 channel = self.channel_to_work_with;
 xlimits = self.handles.ax.ax(channel).XLim;
 xrange = (xlimits(2) - xlimits(1))/self.dt;
@@ -49,7 +48,7 @@ if self.handles.mode_off.Value == 1
 	closest_uncertain_spike = uncertain_spikes(corelib.closest(uncertain_spikes,p(1)));
 
 	if abs(closest_uncertain_spike - p(1)) > search_width
-		disp('out of bounds')
+		% disp('out of bounds')
 		return
 	end
 
@@ -116,6 +115,7 @@ else
 
 		self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
 
+		set(self.handles.ax.found_spikes(channel),'XData',NaN,'YData',NaN);
 		self.showSpikes(channel);
 
 
@@ -132,12 +132,6 @@ else
 
 
 end
-
-
-
-
-
-
 
 
 

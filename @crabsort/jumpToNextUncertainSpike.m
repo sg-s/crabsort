@@ -46,5 +46,3 @@ uncertain_spikes = uncertain_spikes(1);
 
 self.scroll([uncertain_spikes - xrange/2 uncertain_spikes + xrange/2])
 
-
-self.say('Resolve this ambiguous spike');

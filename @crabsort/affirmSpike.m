@@ -17,3 +17,6 @@ uncertain_spikes = round(self.handles.ax.uncertain_spikes(channel).XData/self.dt
 
 self.handles.ax.uncertain_spikes(channel).XData(uncertain_spikes == spike_position) = [];
 self.handles.ax.uncertain_spikes(channel).YData(uncertain_spikes == spike_position) = [];
+
+% hide pointless spike markers
+set(self.handles.ax.found_spikes(channel),'XData',NaN,'YData',NaN);
