@@ -1,12 +1,48 @@
 % this function does the actual heavy lifting in
 % training the NN. meant to be run on a b/g worker
 
-function NNtrainOnParallelWorker(NNdata,checkpoint_path)
+function NNtrainOnParallelWorker(job_file_location, worker_idx)
 
-try
 
-    X = NNdata.raw_data;
-    Y = NNdata.label_idx;
+
+
+while true
+
+    pause(2)
+
+    % check the job_file_location
+    allfiles = dir([job_file_location filesep  mat2str(worker_idx) '*.job']);
+
+    if isempty(allfiles)
+        disp('No jobs, aborting...')
+        continue
+    end
+
+    use_this = 1;
+    us = strfind(allfiles(1).name,'_');
+    most_recent_ts = datenum(strrep(allfiles(1).name(us(1)+1:end-4),'_',':'));
+
+    if length(allfiles) > 1
+        
+
+        for i = 2:length(allfiles)
+            us = strfind(allfiles(i).name,'_');
+            this_ts = datenum(strrep(allfiles(i).name(us(1)+1:end-4),'_',':'));
+            if this_ts > most_recent_ts
+                most_recent_ts = this_ts;
+                use_this = i;
+            end
+
+        end
+    end
+
+    load([allfiles(use_this).folder filesep allfiles(use_this).name],'-mat')
+
+
+
+
+    X = network_data.X;
+    Y = network_data.Y;
 
     % split into training and validation
     R = rand(size(X,2),1)>.5;
@@ -19,14 +55,16 @@ try
     Y_validate = Y(~R);
 
 
+
     % make layers for the neural net
     SZ = size(X_train,1);
 
     % we're going to name the network using the hash
     % of the spike detection parameters and 
     % what channels we're pulling it off of
-    H = NNdata.networkHash();
-
+    
+    checkpoint_path = network_data.checkpoint_path;
+    H = network_data.hash;
     NN_dump_file = [checkpoint_path filesep H '.mat'];
 
     if exist(NN_dump_file,'file') == 2
@@ -66,13 +104,18 @@ try
 
 
     disp('timestamp of data training on = ')
-    disp(NNdata.timestamp_last_modified)
+    disp(datestr(most_recent_ts))
 
-    [trainedNet, info] = trainNetwork(X_train,Y_train,layers,options);
+    trainedNet = trainNetwork(X_train,Y_train,layers,options);
 
     disp(['Saving to: ' NN_dump_file])
     save(NN_dump_file,'trainedNet','info')
+    
 
-catch err
-    save([hashlib.md5hash(now) '.error'],'err')
+
 end
+
+
+
+
+

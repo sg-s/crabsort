@@ -28,14 +28,17 @@ function NNtrain(self,channel)
 
 assert(nargin == 2,'Need to specify the channel')
 
+
+NNdata = self.common.NNdata(channel);
+
 % check if there's automate data on this channel
-if ~canDetectSpikes(self.common.NNdata(channel))
+if ~canDetectSpikes(NNdata)
 	return
 end
 
 % check if there's enough data to train on, with at least two
 % categories
-label_idx = self.common.NNdata(channel).label_idx;
+label_idx = NNdata.label_idx;
 if isempty(label_idx)
 	return
 end
@@ -59,9 +62,19 @@ self.NNmakeCheckpointDirs;
 
 checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
 
-% debug, run in foreground
-% self.NNtrainOnParallelWorker(self.common.NNdata(channel),checkpoint_path)
 
-self.workers(channel) = parfeval(gcp,@self.NNtrainOnParallelWorker,0,self.common.NNdata(channel),checkpoint_path);
 
+% save all of this
+network_data.hash = NNdata.networkHash();
+network_data.X =  NNdata.raw_data;
+network_data.Y = NNdata.label_idx;
+network_data.checkpoint_path = checkpoint_path;
+
+
+ts = strrep(NNdata.timestamp_last_modified,':','_');
+
+save_name = [self.path_name 'network' filesep  mat2str(channel) '_' ts '.job'];
+
+
+save(save_name,'network_data','-nocompression')
 
