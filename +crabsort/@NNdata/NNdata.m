@@ -1,5 +1,4 @@
-classdef  NNdata < VectorObject & Hashable
-
+classdef  NNdata < VectorObject 
 
 properties
 
@@ -10,9 +9,13 @@ properties
 	label_idx
 
 
+	% timestamps to determine if more training is needed
+	timestamp_last_modified@char = datestr(now)
+	timestamp_last_trained@char = datestr(now)
+
+
 	% neural network performance 
 	accuracy@double
-	accuracy_hash@char
 	acceptable_accuracy@double = 98
 
 
@@ -51,30 +54,22 @@ methods
 		if any(strcmp({d.name},'NNdata.hash'))
 			return
 		end
-		self.accuracy_hash = self.hash;
 	end
 
 
-	% overload the hash method
-	% because we don't want some things to be hashed
-	function H = hash(self)
-		self.accuracy_hash = '0';
-		self.accuracy = 0;
-		self.acceptable_accuracy = 0;
-		
-		H = hash@Hashable(self);
-	end
 
 
 
 	function TF = isMoreTrainingNeeded(self)
 
-		if ~strcmp(self.hash,self.accuracy_hash)
-			% accuracy hash does not match data, so something has changed,
-			% so must retrain
+
+		if datenum(self.timestamp_last_trained) < datenum(self.timestamp_last_modified)
+			% NNData modified after last trained, so train more
 			TF = true;
 			return
 		end
+
+
 
 		if self.accuracy > self.acceptable_accuracy
 			TF = false;

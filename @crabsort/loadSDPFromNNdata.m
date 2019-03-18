@@ -19,6 +19,8 @@ end
 
 % update settings from NNdata
 self.sdp = self.common.NNdata(channel).sdp;
+
+
 if self.sdp.spike_sign
 	set(self.handles.spike_sign_control,'String','+ve spikes')
 	self.handles.spike_sign_control.Value = 1;

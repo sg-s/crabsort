@@ -40,5 +40,7 @@ else
 	self.label_idx = [self.label_idx; label_idx];
 end
 
+self.timestamp_last_modified = datestr(now);
+
 % fprintf('[addDataFrame] ')
 % toc

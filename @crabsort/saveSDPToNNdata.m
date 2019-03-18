@@ -13,7 +13,8 @@ if isempty(channel)
 end
 
 
-if isempty(self.common.NNdata(channel).sdp.MinPeakProminence)
+
+if any(isnan(corelib.vectorise(self.common.NNdata(channel).sdp)))
 
 	% we write to NNdata only if empty. this guarantees
 	% that we cannot overwrite it
@@ -21,6 +22,9 @@ if isempty(self.common.NNdata(channel).sdp.MinPeakProminence)
 	self.common.NNdata(channel).sdp = self.sdp;
 	self.common.NNdata(channel).other_nerves_control = logical(self.handles.multi_channel_control.Value);
 	self.common.NNdata(channel).other_nerves = self.handles.multi_channel_control_text.String;
+
+else
+	warning('Not writing to NNdata to avoid overwriring')
 
 
 end

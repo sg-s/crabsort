@@ -1,11 +1,11 @@
 
 
-function [accuracy, hash] = NNgetCurrentAccuracy(self, channel)
+function [accuracy, timestamp_last_trained] = NNgetCurrentAccuracy(self, channel)
 
 D = self.workers(channel).Diary;
 
 accuracy = [];
-hash = '';
+timestamp_last_trained = '';
 
 if length(D) < 5
 	return
@@ -25,12 +25,11 @@ if isempty(accuracy)
 	return
 end
 
-
-% read hash of data training on
-hash = '';
+% read timestamp_last_trained of data training on
+timestamp_last_trained = '';
 for j = length(D)-1:-1:1
-	if strcmp(strtrim(D{j}),'hash of data training on =')
-		hash = strtrim(D{j+1});
+	if strcmp((D{j}),'timestamp of data training on = ')
+		timestamp_last_trained = strtrim(D{j+1});
 		break
 	end
 end

@@ -28,6 +28,7 @@ it does the following things:
 
 function NNtimer(self,~,~)
 
+
 if isempty(self.handles)
 	return
 
@@ -99,13 +100,12 @@ for i = 1:self.n_channels
 		% update display
 		self.handles.ax.NN_status(i).String = 'TRAINING';
 
-		[accuracy, hash] = self.NNgetCurrentAccuracy(i);
-
+		[accuracy, timestamp_last_trained] = self.NNgetCurrentAccuracy(i);
 
 		if ~isempty(accuracy)
 			self.handles.ax.NN_accuracy(i).String = strlib.oval(str2double(accuracy),3);
 
-			self.common.NNdata(i).accuracy_hash = hash;
+			self.common.NNdata(i).timestamp_last_trained = timestamp_last_trained;
 			self.common.NNdata(i).accuracy = str2double(accuracy);
 		end
 
@@ -114,6 +114,3 @@ for i = 1:self.n_channels
 
 
 end
-
-
-

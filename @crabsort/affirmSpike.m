@@ -1,7 +1,7 @@
+% affirms a spike to be something
+% and adds it to NNdata
+
 function affirmSpike(self, channel, spike_position, spike_name)
-
-
-self.say('affirmSpike called')
 
 
 self.loadSDPFromNNdata;

@@ -65,8 +65,8 @@ try
         'OutputFcn',@crabsort.NNshowResult);
 
 
-    disp('hash of data training on = ')
-    disp(NNdata.hash)
+    disp('timestamp of data training on = ')
+    disp(NNdata.timestamp_last_modified)
 
     [trainedNet, info] = trainNetwork(X_train,Y_train,layers,options);
 

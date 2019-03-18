@@ -4,16 +4,16 @@ function makeFindSpikesGUI(self,~,~)
 
 % spin up a puppeteer instance by making a slider
 % for every double property
-props = properties(self.sdp);
-N = {};
-V = [];
-for i = 1:length(props)
-	if isa(self.sdp.(props{i}),'double')
-		N{end+1} = props{i};
-		V(end+1) = self.sdp.(props{i});
-	end
+
+if any(isnan(corelib.vectorise(self.sdp)))
+	self.sdp = self.sdp.default;
 end
 
+[V, N] = corelib.vectorise(self.sdp);
+
+rm_this = strcmp(N,'spike_sign');
+N(rm_this) = [];
+V(rm_this) = [];
 
 lb = 0*V;
 ub = 2*V + 1;
