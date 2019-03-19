@@ -9,6 +9,7 @@ options.dt = 1e-3; % 1 ms
 options.nerves = {};
 options.neurons = {};
 options.stack = false;
+options.data_fun = {};
 
 % validate and accept options
 if mathlib.iseven(length(varargin))
@@ -36,6 +37,10 @@ allfiles = dir([options.data_dir filesep '*.crabsort']);
 
 if isempty(allfiles)
 	error('No data found')
+end
+
+if ~iscell(options.data_fun)
+	error('data_fun must be a cell array of function handles')
 end
 
 % load the common data
@@ -111,6 +116,8 @@ end
 
 if fatal
 	error('Some files are not sorted')
+else
+	corelib.cprintf('green','All files sorted')
 end
 
 for i = 1:length(allfiles)
@@ -149,6 +156,26 @@ for i = 1:length(allfiles)
 		data(i).time_offset = data(i-1).time_offset + data(i-1).T;
 	end
 
+
+	if ~isempty(options.data_fun)
+		self.file_name = strrep(allfiles(i).name,'.crabsort','');
+		self.path_name = allfiles(i).folder;
+		self.loadFile;
+		for j = 1:length(options.data_fun)
+			
+			
+			variable_names = corelib.argOutNames(char(options.data_fun{j}));
+			outputs = cell(1,length(variable_names));
+			[outputs{:}] = options.data_fun{j}(self, options);
+
+			for k = 1:length(variable_names)
+				data(i).(strtrim(variable_names{k})) = outputs{k};
+			end
+
+		end
+	end
+
+	clear self outputs 
 
 end
 

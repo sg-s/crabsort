@@ -17,9 +17,12 @@ end
 
 try
 
+hard_load = false;
+
 if nargin == 1
     src.String = '';
     src.Style = 'none';
+    hard_load = true;
 end
 
 % figure out what file types we can work with
@@ -27,7 +30,7 @@ allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}
 allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
 allowed_file_extensions = allowed_file_extensions(:);
 
-hard_load = false;
+
 
 if nargin > 1
     self.saveData;
