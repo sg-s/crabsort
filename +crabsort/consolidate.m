@@ -93,13 +93,32 @@ for i = length(allfiles):-1:1
 end
 
 
+% check that all files are sorted
+fatal = false;
 for i = 1:length(allfiles)
 	load([allfiles(i).folder filesep allfiles(i).name],'-mat','crabsort_obj')
 
 	self = crabsort_obj;
 
 	% check that the channel_stages for req nerves are OK
-	assert(all(self.channel_stage(req_nerve_idx)>=3),['At least one nerve not sorted in this file: ' allfiles(i).name])
+	if (all(self.channel_stage(req_nerve_idx)>=3))
+	else
+		corelib.cprintf('red',['Some channels not sorted on ' allfiles(i).name '\n'])
+		fatal = true;
+	end
+end
+
+
+if fatal
+	error('Some files are not sorted')
+end
+
+for i = 1:length(allfiles)
+	load([allfiles(i).folder filesep allfiles(i).name],'-mat','crabsort_obj')
+
+	self = crabsort_obj;
+
+	
 
 	for j = 1:length(options.nerves)
 
