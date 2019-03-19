@@ -28,6 +28,7 @@ it does the following things:
 
 function NNtimer(self,~,~)
 
+try
 
 if isempty(self.handles)
 	return
@@ -86,7 +87,9 @@ for i = 1:self.n_channels
 	% figure out what the worker is doing
 
 	D = strsplit(self.workers(i).Diary,'\n');
-	if strcmp(D{end-1},'No jobs, aborting...')
+
+
+	if length(D) > 2 && strcmp(D{end-1},'No jobs, aborting...')
 		% worker is idle
 		self.handles.ax.NN_status(i).String = 'IDLE';
 
@@ -122,4 +125,10 @@ for i = 1:self.n_channels
 	end
 
 
+end
+
+
+catch err
+
+	keyboard
 end

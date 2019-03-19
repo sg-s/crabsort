@@ -65,10 +65,16 @@ checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_nam
 
 
 % save all of this
+% prioritize this file
+focus_here = NNdata.file_idx == self.getFileSequence;
+focus_here(rand(length(focus_here),1)>.5) = true;
+
+
 network_data.hash = NNdata.networkHash();
-network_data.X =  NNdata.raw_data;
-network_data.Y = NNdata.label_idx;
+network_data.X =  NNdata.raw_data(:,focus_here);
+network_data.Y = NNdata.label_idx(focus_here);
 network_data.checkpoint_path = checkpoint_path;
+
 
 
 ts = strrep(NNdata.timestamp_last_modified,':','_');

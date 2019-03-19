@@ -74,6 +74,7 @@ uimenu(handles.menu_name(4),'Label','Delete this channels NN','Callback',@self.N
 uimenu(handles.menu_name(4),'Label','Delete all nets','Callback',@self.NNdelete);
 handles.auto_predict_handle = uimenu(handles.menu_name(4),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
 handles.add_uncertain = uimenu(handles.menu_name(4),'Label','Add uncertain and relabelled spikes to training data...','Callback',@self.NNaddAllUncertainSpikes,'Separator','on');
+handles.purge_uncertain_spikes = uimenu(handles.menu_name(4),'Label','Purge uncertain spikes...','Callback',@self.purgeUncertainSpikes,'Separator','on');
 handles.NN_introspect_handle = uimenu(handles.menu_name(4),'Label','Inspect training data...','Callback',@self.NNintrospect,'Separator','on');
 
 
@@ -146,6 +147,6 @@ handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Positi
 
 
 % create a timer to read the progress of the parallel worker
-self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',1,'ErrorFcn',@self.NNerror);
+self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',1);
 
 self.handles = handles;
