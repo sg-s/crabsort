@@ -28,6 +28,7 @@ it does the following things:
 
 function NNtimer(self,~,~)
 
+try
 
 if isempty(self.handles)
 	return
@@ -51,54 +52,67 @@ if (now - self.handles.main_fig.UserData)*86400 > 5
 	self.handles.main_fig.Name = [self.file_name];
 end
 
+% make sure there is a worker running on everything
+if isempty(self.n_channels) || self.n_channels == 0 
+	return
+end
+
+% start parallel workers on all channels
+if isempty(self.workers)
+	for i = 1:self.n_channels
+	    self.workers(i) = parfeval(gcp,@crabsort.NNtrainOnParallelWorker,0,[self.path_name 'network'],i);
+	end
+end
+
+for i = 1:self.n_channels
+	if length(self.workers) < i
+		self.workers(i) = parfeval(gcp,@crabsort.NNtrainOnParallelWorker,0,[self.path_name 'network'],i);
+	elseif strcmp(self.workers(i).State,'finished') || strcmp(self.workers(i).State,'unavailable')
+		self.workers(i) = parfeval(gcp,@crabsort.NNtrainOnParallelWorker,0,[self.path_name 'network'],i);
+	end
+		
+end
+
+
+% at this point we can assume that workers are running
+
+
 for i = 1:self.n_channels
 	%disp(i)
 	if isempty(self.common.NNdata(i).label_idx)
 		continue
 	end
 
-	if isempty(self.workers)
-		% absolutely nothing, so let's train
+
+	% figure out what the worker is doing
+
+	D = strsplit(self.workers(i).Diary,'\n');
+
+
+	if length(D) > 2 && strcmp(D{end-1},'No jobs, aborting...')
+		% worker is idle
+		self.handles.ax.NN_status(i).String = 'IDLE';
+
 		if self.common.NNdata(i).isMoreTrainingNeeded
+			% more training needed
 			self.NNtrain(i);
 		else
 			% no more training needed
-			self.handles.ax.NN_status(i).String = 'IDLE';
-			self.handles.ax.NN_accuracy(i).String = strlib.oval(self.common.NNdata(i).accuracy,3);
-			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
-				% let's make some predictions
-				self.NNpredict;
-			end
+			self.destroyAllJobs(i);
 		end
-	elseif length(self.workers) < i
-		% no worker working on this channel, so let's train!
-		if self.common.NNdata(i).isMoreTrainingNeeded
-			self.NNtrain(i);
-		else
-			self.handles.ax.NN_status(i).String = 'IDLE';
-			self.handles.ax.NN_accuracy(i).String = strlib.oval(self.common.NNdata(i).accuracy,3);
-			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
-				% let's make some predictions
-				self.NNpredict;
-			end
-		end
-	elseif strcmp(self.workers(i).State,'finished') || strcmp(self.workers(i).State,'unavailable')
-		% retrain!
-		%disp('worker finished or unavailable')
-		if self.common.NNdata(i).isMoreTrainingNeeded
-			self.NNtrain(i);
-		else
-			self.handles.ax.NN_status(i).String = 'IDLE';
-			self.handles.ax.NN_accuracy(i).String = strlib.oval(self.common.NNdata(i).accuracy,3);
 
-			if self.channel_stage(i) == 0 && ~isempty(self.channel_to_work_with) && self.channel_to_work_with == i
-				% let's make some predictions
-				self.NNpredict;
-			end
-		end
-	elseif strcmp(self.workers(i).State,'running')
+	else
+		% training? 
 		% update display
-		self.handles.ax.NN_status(i).String = 'TRAINING';
+		
+
+		if self.common.NNdata(i).isMoreTrainingNeeded
+			self.handles.ax.NN_status(i).String = 'TRAINING';
+			self.NNtrain(i);
+		else
+			self.handles.ax.NN_status(i).String = 'IDLE';
+			self.destroyAllJobs(i);
+		end
 
 		[accuracy, timestamp_last_trained] = self.NNgetCurrentAccuracy(i);
 
@@ -108,9 +122,13 @@ for i = 1:self.n_channels
 			self.common.NNdata(i).timestamp_last_trained = timestamp_last_trained;
 			self.common.NNdata(i).accuracy = str2double(accuracy);
 		end
-
-
 	end
 
 
+end
+
+
+catch err
+
+	keyboard
 end

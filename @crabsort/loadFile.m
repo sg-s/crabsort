@@ -197,7 +197,6 @@ end
 
 if hard_load
     % reset common
-    disp('resetting common...')
     self.common = crabsort.common(self.n_channels);
 end
 
@@ -321,6 +320,9 @@ uxlib.disable(self.handles.manual_panel);
 
 
 if hard_load
+
+
+    
 
     delete(self.handles.menu_name(5).Children)
 
