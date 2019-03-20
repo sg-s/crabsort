@@ -71,7 +71,17 @@ for i = 1:length(neurons)
 	end
 
 
-	data.([neurons{i} '_burst_durations']) = this_burst_ends - this_burst_starts;
+	burst_durations = this_burst_ends - this_burst_starts;
+
+	% if any(burst_durations>1)
+	% 	keyboard
+	% end
+
+	% if any(burst_durations==1)
+	% 	keyboard
+	% end
+
+	data.([neurons{i} '_burst_durations']) = burst_durations;
 	
 
 end

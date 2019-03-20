@@ -125,25 +125,34 @@ for i = 1:length(allfiles)
 
 	self = crabsort_obj;
 
-	
 
-	for j = 1:length(options.nerves)
 
-		if isempty(self.spikes)
-			warning(['this file had an empty spikes variable: ' allfiles(i).name])
-			continue
-		end
+	for j = 1:length(options.neurons)
+		possible_spiketimes = {};
+		this_neuron = options.neurons{j};
 
-		this_nerve = self.spikes.(options.nerves{j});
-
-		for k = 1:length(options.neurons)
-			if isfield(this_nerve,options.neurons{k})
-				spiketimes  = round(this_nerve.(options.neurons{k})*self.dt*(1/options.dt));
-				spiketimes = spiketimes*options.dt;
-
-				data(i).(options.neurons{k}) = spiketimes;
+		% find all possible places where this neuron could be
+		fn = fieldnames(self.spikes);
+		for k = 1:length(fn)
+			neurons_here = fieldnames(self.spikes.(fn{k}));
+			if any(strcmp(neurons_here,this_neuron))
+				possible_spiketimes{end+1} = self.spikes.(fn{k}).(this_neuron);
 			end
 		end
+
+		% does this neuron occur on multiple nerves?
+		if length(possible_spiketimes) > 1
+			% blindly pick the one with the most spikes
+			[~,pick_me] = max(cellfun(@length,possible_spiketimes));
+			spiketimes = possible_spiketimes{pick_me};
+		else
+			spiketimes = possible_spiketimes{1};
+		end
+
+		spiketimes  = round(spiketimes*self.dt*(1/options.dt));
+		spiketimes = spiketimes*options.dt;
+		data(i).(this_neuron) = spiketimes;
+
 
 	end
 
