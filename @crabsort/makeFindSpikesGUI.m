@@ -6,6 +6,7 @@ function makeFindSpikesGUI(self,~,~)
 % for every double property
 
 if any(isnan(corelib.vectorise(self.sdp)))
+	disp('resetting SDP')
 	self.sdp = self.sdp.default;
 end
 

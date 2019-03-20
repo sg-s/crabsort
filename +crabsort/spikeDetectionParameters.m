@@ -40,7 +40,7 @@ methods (Static)
 		self = crabsort.spikeDetectionParameters();
 		
 		self.MinPeakHeight = 0;
-		self.MaxPeakHeight = Inf;
+		self.MaxPeakHeight = 10;
 		self.MinPeakProminence = 1;
 		self.Threshold = 0;		
 		self.MinPeakDistance = 0;

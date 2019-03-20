@@ -52,6 +52,7 @@ case crabsort.automateAction.all_channels_all_files
 				if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)
 					disp('Stopping because I am uncertain')
 					beep
+					self.jumpToNextUncertainSpike();
 					% action cancelled
 					self.auto_predict = true;
 					if strcmp(self.timer_handle.Running,'off')

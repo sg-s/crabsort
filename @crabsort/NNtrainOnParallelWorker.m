@@ -106,7 +106,7 @@ while true
     disp('timestamp of data training on = ')
     disp(datestr(most_recent_ts))
 
-    trainedNet = trainNetwork(X_train,Y_train,layers,options);
+    [trainedNet, info] = trainNetwork(X_train,Y_train,layers,options);
 
     disp(['Saving to: ' NN_dump_file])
     save(NN_dump_file,'trainedNet','info')
