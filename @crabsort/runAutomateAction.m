@@ -49,10 +49,10 @@ case crabsort.automateAction.all_channels_all_files
 
 				% check if we should stop if uncertain
 				C = self.handles.menu_name(3).Children;
-				if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)
-					disp('Stopping because I am uncertain')
-					beep
+				if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)					
 					self.jumpToNextUncertainSpike();
+					drawnow
+					beep
 					% action cancelled
 					self.auto_predict = true;
 					if strcmp(self.timer_handle.Running,'off')
@@ -163,7 +163,8 @@ case crabsort.automateAction.this_channel_all_files
 			% check if we should stop if uncertain
 			C = self.handles.menu_name(3).Children;
 			if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)
-				disp('Stopping because I am uncertain')
+				self.jumpToNextUncertainSpike();
+				drawnow
 				beep
 				% action cancelled
 				self.auto_predict = true;
