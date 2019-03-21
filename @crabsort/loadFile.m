@@ -26,6 +26,9 @@ if nargin == 1
 end
 
 % figure out what file types we can work with
+if isempty(self.installed_plugins)
+    self = self.plugins;
+end
 allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}),'n/a');
 allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
 allowed_file_extensions = allowed_file_extensions(:);

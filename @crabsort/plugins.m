@@ -46,11 +46,11 @@ for i = 1:length(m)
 end
 
 if ~nargout
-    cprintf('_text','Plugin ')
-    cprintf('text',repmat(' ',1,10))
-    cprintf('_text','Type ')
-    cprintf('text',repmat(' ',1,10))
-    cprintf('_text','Dimension\n')
+    corelib.cprintf('_text','Plugin ')
+    corelib.cprintf('text',repmat(' ',1,10))
+    corelib.cprintf('_text','Type ')
+    corelib.cprintf('text',repmat(' ',1,10))
+    corelib.cprintf('_text','Dimension\n')
     for i = 1:length(p)
         fprintf(p(i).name)
         fprintf(repmat(' ',1,16 - length(p(i).name)));
