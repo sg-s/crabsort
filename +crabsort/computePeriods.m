@@ -35,6 +35,7 @@ for i = 1:length(neurons)
 	data.([neurons{i} '_burst_starts']) = NaN;
 	data.([neurons{i} '_burst_periods']) = NaN;
 	data.([neurons{i} '_burst_durations']) = NaN;
+	data.([neurons{i} '_burst_ends']) = NaN;
 
 	isis = diff(data.(neurons{i}));
 	burst_starts =  circshift(isis > ibis(i),1);
@@ -73,14 +74,8 @@ for i = 1:length(neurons)
 
 	burst_durations = this_burst_ends - this_burst_starts;
 
-	% if any(burst_durations>1)
-	% 	keyboard
-	% end
 
-	% if any(burst_durations==1)
-	% 	keyboard
-	% end
-
+	data.([neurons{i} '_burst_ends']) = this_burst_ends;
 	data.([neurons{i} '_burst_durations']) = burst_durations;
 	
 

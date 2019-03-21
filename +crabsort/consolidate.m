@@ -123,6 +123,8 @@ end
 for i = 1:length(allfiles)
 	load([allfiles(i).folder filesep allfiles(i).name],'-mat','crabsort_obj')
 
+	disp(allfiles(i).name)
+
 	self = crabsort_obj;
 
 
