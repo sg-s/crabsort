@@ -4,6 +4,10 @@
 function affirmSpike(self, channel, spike_position, spike_name)
 
 
+if isempty(self.common.NNdata(channel).spiketimes)
+	return
+end
+
 self.loadSDPFromNNdata;
 self.putative_spikes(:,channel) = 0;
 self.putative_spikes(spike_position,channel) = 1;

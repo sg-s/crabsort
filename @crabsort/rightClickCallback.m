@@ -81,12 +81,16 @@ else
 	keyboard
 end
 
-self.loadSDPFromNNdata(); 
-self.putative_spikes(:,channel) = 0;
-self.putative_spikes(this_spike,channel) = 1;
-self.getDataToReduce;
+if ~isempty(self.common.NNdata(channel).spiketimes)
 
-self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,this_spike,categorical({'Noise'}));
+	self.loadSDPFromNNdata(); 
+	self.putative_spikes(:,channel) = 0;
+	self.putative_spikes(this_spike,channel) = 1;
+	self.getDataToReduce;
 
-self.putative_spikes(:,channel) = 0;
+	self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,this_spike,categorical({'Noise'}));
+
+	self.putative_spikes(:,channel) = 0;
+end
+
 self.showSpikes(channel);

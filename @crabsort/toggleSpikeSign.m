@@ -8,9 +8,9 @@
 
 function toggleSpikeSign(self,~,~)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+
+if any(isnan(corelib.vectorise(self.sdp)))
+	self.sdp = self.sdp.default();
 end
 
 self.sdp.spike_sign = logical(self.handles.spike_sign_control.Value);
@@ -20,5 +20,6 @@ if self.sdp.spike_sign
 else
 	set(self.handles.spike_sign_control,'String','-ve spikes')
 end
+
 
 self.findSpikes;

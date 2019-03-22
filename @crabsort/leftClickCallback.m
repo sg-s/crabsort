@@ -108,14 +108,20 @@ else
 
 		% add this to NNdata
 
-		self.loadSDPFromNNdata;
-		self.putative_spikes(:,channel) = 0;
-		self.putative_spikes(new_spike,channel) = 1;
-		self.getDataToReduce;
+		if ~isempty(self.common.NNdata(channel).spiketimes)
+			self.loadSDPFromNNdata;
+			self.putative_spikes(:,channel) = 0;
+			self.putative_spikes(new_spike,channel) = 1;
+			self.getDataToReduce;
 
-		self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
+			self.common.NNdata(channel) = self.common.NNdata(channel).addDataFrame(self.data_to_reduce,self.getFileSequence,new_spike,categorical({new_spike_name}));
+		end
+
+		
 
 		set(self.handles.ax.found_spikes(channel),'XData',NaN,'YData',NaN);
+
+
 		self.showSpikes(channel);
 
 
