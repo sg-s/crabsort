@@ -48,38 +48,41 @@ handles.menu_name(2) = uimenu('Label','Tools');
 uimenu(handles.menu_name(2),'Label','Reload preferences','Callback',@self.reloadPreferences);
 uimenu(handles.menu_name(2),'Label','Reset current channel','Callback',@self.redo,'Separator','on');
 uimenu(handles.menu_name(2),'Label','Mark channel as having no spikes','Callback',@self.zeroSpikes);
-uimenu(handles.menu_name(2),'Label','Ignore section','Callback',@self.ignoreSection,'Enable','on','Separator','on');
-uimenu(handles.menu_name(2),'Label','UNignore section','Callback',@self.ignoreSection,'Enable','on','Separator','off');
-uimenu(handles.menu_name(2),'Label','Update crabsort...','Callback',@self.update,'Enable','on','Separator','on');
 
 % view
 handles.menu_name(3) = uimenu('Label','View');
 uimenu(handles.menu_name(3),'Label','Reset zoom','Callback',@self.resetZoom);
 uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,'Enable','on');
 
-handles.menu_name(3) = uimenu('Label','Automate');
-
-uimenu(handles.menu_name(3),'Label','All channels/All files','Callback',@self.automate,'Separator','off');
-uimenu(handles.menu_name(3),'Label','This channel/All files','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(3),'Label','All channels/This file','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(3),'Label','Stop','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(3),'Label','Stop when uncertain','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
+% automate
+handles.menu_name(4) = uimenu('Label','Automate');
+uimenu(handles.menu_name(4),'Label','All channels/All files','Callback',@self.automate,'Separator','off');
+uimenu(handles.menu_name(4),'Label','This channel/All files','Callback',@self.automate,'Separator','on');
+uimenu(handles.menu_name(4),'Label','All channels/This file','Callback',@self.automate,'Separator','on');
+uimenu(handles.menu_name(4),'Label','Stop','Callback',@self.automate,'Separator','on');
+uimenu(handles.menu_name(4),'Label','Stop when uncertain','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
 
 
 % neural network 
-handles.menu_name(4) = uimenu('Label','Neural Network');
-uimenu(handles.menu_name(4),'Label','Delete NN data on this channel','Callback',@self.NNdelete);
-uimenu(handles.menu_name(4),'Label','Delete all NN data','Callback',@self.NNdelete);
-uimenu(handles.menu_name(4),'Label','Delete this channels NN','Callback',@self.NNdelete,'Separator','on');
-uimenu(handles.menu_name(4),'Label','Delete all nets','Callback',@self.NNdelete);
-handles.auto_predict_handle = uimenu(handles.menu_name(4),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
-handles.add_uncertain = uimenu(handles.menu_name(4),'Label','Add uncertain and relabelled spikes to training data...','Callback',@self.NNaddAllUncertainSpikes,'Separator','on');
+handles.menu_name(5) = uimenu('Label','Neural Network');
+uimenu(handles.menu_name(5),'Label','Delete NN data on this channel','Callback',@self.NNdelete);
+uimenu(handles.menu_name(5),'Label','Delete all NN data','Callback',@self.NNdelete);
+uimenu(handles.menu_name(5),'Label','Delete this channels NN','Callback',@self.NNdelete,'Separator','on');
+uimenu(handles.menu_name(5),'Label','Delete all nets','Callback',@self.NNdelete);
+handles.auto_predict_handle = uimenu(handles.menu_name(5),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
+handles.add_uncertain = uimenu(handles.menu_name(5),'Label','Add uncertain and relabelled spikes to training data...','Callback',@self.NNaddAllUncertainSpikes,'Separator','on');
 handles.purge_uncertain_spikes = uimenu(handles.menu_name(4),'Label','Purge uncertain spikes...','Callback',@self.purgeUncertainSpikes,'Separator','on');
 handles.NN_introspect_handle = uimenu(handles.menu_name(4),'Label','Inspect training data...','Callback',@self.NNintrospect,'Separator','on');
 
 
 % channels (show and hide)
-handles.menu_name(5) = uimenu('Label','Channels');
+handles.menu_name(6) = uimenu('Label','Channels');
+
+% artifacts
+handles.menu_name(7) = uimenu('Label','Artifacts');
+uimenu(handles.menu_name(7),'Label','Ignore this section','Callback',@self.ignoreSection,'Separator','off');
+uimenu(handles.menu_name(7),'Label','UNignore this section','Callback',@self.ignoreSection,'Separator','off');
+uimenu(handles.menu_name(7),'Label','Ignore sections where data exceeds Y bounds','Callback',@self.ignoreSection,'Separator','on');
 
 
 
@@ -125,7 +128,7 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 
 
 % mask panel
-handles.mask_panel = uibuttongroup(handles.main_fig,'Title','Masking','Position',[.61 .92 .19 .07],'FontSize',self.pref.fs,'Visible','on','BackgroundColor',[ 1 1 1]);
+handles.mask_panel = uibuttongroup(handles.main_fig,'Title','Per-channel Masking','Position',[.61 .92 .19 .07],'FontSize',self.pref.fs,'Visible','on','BackgroundColor',[ 1 1 1]);
 handles.maskmode_mask = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Mask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 handles.maskmode_unmask = uicontrol(handles.mask_panel,'units','normalized','Position',[.31 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Unmask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 handles.maskmode_off = uicontrol(handles.mask_panel,'units','normalized','Position',[.71 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);

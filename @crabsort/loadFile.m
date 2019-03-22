@@ -296,6 +296,11 @@ self.dt = round(self.dt*1e6)/1e6;
 % store the size of the raw_data
 self.raw_data_size = size(self.raw_data);
 
+
+% reconstruct the mask from ignore_section
+self.reconstructMaskFromIgnoreSection;
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %              _                           _  __ _      
 %   __ _ _   _(_)      ___ _ __   ___  ___(_)/ _(_) ___ 
@@ -330,7 +335,7 @@ if hard_load
 
     
 
-    delete(self.handles.menu_name(5).Children)
+    delete(self.handles.menu_name(6).Children)
 
     % do we already have some preference for which channels to hide?
 
@@ -341,7 +346,7 @@ if hard_load
         else
             V = 'off';
         end
-        uimenu(self.handles.menu_name(5),'Label',self.builtin_channel_names{i},'Callback',@self.showHideChannels,'Checked',V);
+        uimenu(self.handles.menu_name(6),'Label',self.builtin_channel_names{i},'Callback',@self.showHideChannels,'Checked',V);
 
     end
 
@@ -395,8 +400,7 @@ if hard_load
 
 end
 
-% create a mask
-self.mask = self.raw_data*0 + 1;
+
 
 % reset all uncertain spikes
 for i = 1:length(self.handles.ax.uncertain_spikes)

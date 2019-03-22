@@ -17,3 +17,6 @@ elseif src == self.handles.mask_all_but_view_control
 	self.mask(1:XLim(1),self.channel_to_work_with) = 0;
 	self.mask(XLim(2):end,self.channel_to_work_with) = 0;
 end
+
+% redraw all the data
+self.scroll(self.handles.ax.ax(1).XLim);

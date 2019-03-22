@@ -23,6 +23,13 @@ end
 file_name = pathlib.join(self.path_name, [self.file_name '.crabsort']);
 common_name = pathlib.join(self.path_name, 'crabsort.common');
 
+
+% generate ignore_section from the mask
+global_mask = max(self.mask,[],2);
+[ons, offs]=veclib.computeOnsOffs(global_mask);
+self.ignore_section.ons = ons;
+self.ignore_section.offs = offs;
+
 crabsort_obj = crabsort(false);
 
 fn = properties(self);
