@@ -210,7 +210,8 @@ end
 self.channel_stage = zeros(self.n_channels,1);
 self.channel_ylims = zeros(self.n_channels,1);
 
-
+% reset ignore section
+self.ignore_section = [];
 
 % check if there is a .crabsort file already
 file_name = pathlib.join(self.path_name, [self.file_name '.crabsort']);

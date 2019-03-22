@@ -158,6 +158,15 @@ for i = 1:length(allfiles)
 
 	end
 
+	% reconstruct mask
+	self.reconstructMaskFromIgnoreSection;
+
+	mask = min(self.mask,[],2);
+
+	S = round(options.dt/self.dt);
+	mask = mask(1:S:end);
+	data(i).mask = mask;
+
 	
 	
 

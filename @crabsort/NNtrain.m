@@ -83,4 +83,3 @@ save_name = [self.path_name 'network' filesep  mat2str(channel) '_' ts '.job'];
 
 
 save(save_name,'network_data','-nocompression')
-
