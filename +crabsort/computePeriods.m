@@ -50,8 +50,7 @@ for i = 1:length(neurons)
 	this_burst_starts(end) = [];
 
 
-	data.([neurons{i} '_burst_starts']) = this_burst_starts;
-	data.([neurons{i} '_burst_periods']) = burst_periods;
+	
 
 
 	if isempty(this_burst_starts) 
@@ -71,10 +70,18 @@ for i = 1:length(neurons)
 		keyboard
 	end
 
+	if any(this_burst_ends == this_burst_starts)
+		% something is wrong, let's fix this
+		rm_this = find(this_burst_starts == this_burst_ends);
+		burst_periods(rm_this) = [];
+		this_burst_ends(rm_this) = [];
+		this_burst_starts(rm_this) = [];
+	end
 
 	burst_durations = this_burst_ends - this_burst_starts;
 
-
+	data.([neurons{i} '_burst_starts']) = this_burst_starts;
+	data.([neurons{i} '_burst_periods']) = burst_periods;
 	data.([neurons{i} '_burst_ends']) = this_burst_ends;
 	data.([neurons{i} '_burst_durations']) = burst_durations;
 	
