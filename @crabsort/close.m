@@ -14,6 +14,7 @@ try
 	cancel(self.workers);
 catch
 end
+
 try
 	delete(self.workers);
 catch

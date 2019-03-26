@@ -21,6 +21,13 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
+% should we bother measuring delays b/w channels?
+skip_delays = false;
+
+% how many seconds around artifacts should we ignore? 
+artifact_buffer = 1; % second
+
+
 % if you're sure that all your ABF files in a single folder
 % have the same format (same #channels, etc), then 
 % set this to true

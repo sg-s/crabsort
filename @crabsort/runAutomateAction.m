@@ -43,12 +43,13 @@ case crabsort.automateAction.all_channels_all_files
 					continue
 				end
 				% put logic here
+				keyboard
 				self.NNpredict;
 				self.showSpikes(channel);
 
 
 				% check if we should stop if uncertain
-				C = self.handles.menu_name(3).Children;
+				C = self.handles.menu_name(4).Children;
 				if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)					
 					self.jumpToNextUncertainSpike();
 					drawnow
@@ -95,6 +96,7 @@ case crabsort.automateAction.all_channels_this_file
 				continue
 			end
 			% put logic here
+			keyboard
 			self.NNpredict;
 			self.showSpikes(channel);
 			pause(1)
@@ -139,14 +141,7 @@ case crabsort.automateAction.this_channel_all_files
 			next_file = 1;
 		end
 
-		% if exist([allfiles(next_file).name '.crabsort'],'file') == 2
-		% 	load([allfiles(next_file).name '.crabsort'],'-mat')
-		% 	if  crabsort_obj.channel_stage(channel) == 3
-		% 		self.say(['Skipping ' allfiles(next_file).name])
-		% 		continue
-		% 	end
 
-		% end
 
 
 		self.file_name = allfiles(next_file).name;
@@ -156,12 +151,18 @@ case crabsort.automateAction.this_channel_all_files
 
 		if self.channel_stage(channel) == 0
 			% put logic here
+			C = self.handles.menu_name(4).Children;
+			if strcmp(C(find(strcmp({C.Text},'Ignore data outside YLim'))).Checked,'on')
+				% need to remove artifacts
+				src.Text = 'Ignore sections where data exceeds Y bounds';
+				self.ignoreSection(src);
+			end
 			self.NNpredict;
 			self.showSpikes(channel);
 			self.saveData;
 
 			% check if we should stop if uncertain
-			C = self.handles.menu_name(3).Children;
+			C = self.handles.menu_name(4).Children;
 			if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)
 				self.jumpToNextUncertainSpike();
 				drawnow

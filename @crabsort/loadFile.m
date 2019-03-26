@@ -200,6 +200,9 @@ catch
     return
 end
 
+% store the size of the raw_data
+self.raw_data_size = size(self.raw_data);
+
 
 if hard_load
     % reset common
@@ -294,8 +297,6 @@ self.putative_spikes = 0*self.raw_data;
 self.dt = round(self.dt*1e6)/1e6;
 
 
-% store the size of the raw_data
-self.raw_data_size = size(self.raw_data);
 
 
 % reconstruct the mask from ignore_section

@@ -60,7 +60,8 @@ uimenu(handles.menu_name(4),'Label','All channels/All files','Callback',@self.au
 uimenu(handles.menu_name(4),'Label','This channel/All files','Callback',@self.automate,'Separator','on');
 uimenu(handles.menu_name(4),'Label','All channels/This file','Callback',@self.automate,'Separator','on');
 uimenu(handles.menu_name(4),'Label','Stop','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(4),'Label','Stop when uncertain','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
+uimenu(handles.menu_name(4),'Label','Stop when uncertain','Callback',@uxlib.toggleCheckedMenu,'Separator','off');
+uimenu(handles.menu_name(4),'Label','Ignore data outside YLim','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
 
 
 % neural network 
@@ -71,8 +72,8 @@ uimenu(handles.menu_name(5),'Label','Delete this channels NN','Callback',@self.N
 uimenu(handles.menu_name(5),'Label','Delete all nets','Callback',@self.NNdelete);
 handles.auto_predict_handle = uimenu(handles.menu_name(5),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
 handles.add_uncertain = uimenu(handles.menu_name(5),'Label','Add uncertain and relabelled spikes to training data...','Callback',@self.NNaddAllUncertainSpikes,'Separator','on');
-handles.purge_uncertain_spikes = uimenu(handles.menu_name(4),'Label','Purge uncertain spikes...','Callback',@self.purgeUncertainSpikes,'Separator','on');
-handles.NN_introspect_handle = uimenu(handles.menu_name(4),'Label','Inspect training data...','Callback',@self.NNintrospect,'Separator','on');
+handles.purge_uncertain_spikes = uimenu(handles.menu_name(5),'Label','Purge uncertain spikes...','Callback',@self.purgeUncertainSpikes,'Separator','on');
+handles.NN_introspect_handle = uimenu(handles.menu_name(5),'Label','Inspect training data...','Callback',@self.NNintrospect,'Separator','on');
 
 
 % channels (show and hide)
@@ -153,3 +154,10 @@ handles.popup = uicontrol('parent',handles.main_fig,'units','normalized','Positi
 self.timer_handle = timer('TimerFcn',@self.NNtimer,'ExecutionMode','fixedDelay','TasksToExecute',Inf,'Period',1);
 
 self.handles = handles;
+
+
+
+% cancel all outstanding futures on parallel pool
+a = gcp;
+cancel(a.FevalQueue.RunningFutures)
+cancel(a.FevalQueue.QueuedFutures)

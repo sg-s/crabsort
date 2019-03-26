@@ -2,13 +2,17 @@ function reconstructMaskFromIgnoreSection(self)
 
 self.mask = zeros(self.raw_data_size);
 
-
 if isempty(self.ignore_section)
 	self.mask = self.mask + 1;
 	return
 end
 
 if  isempty(self.ignore_section.ons)
+	self.mask = self.mask + 1;
+	return
+end
+
+if  isempty(self.ignore_section.offs)
 	self.mask = self.mask + 1;
 	return
 end

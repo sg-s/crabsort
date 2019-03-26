@@ -83,7 +83,7 @@ random_fake_spikes(too_close) = [];
 
 % don't include too many
 if length(random_fake_spikes) > length(Y)/2
-	random_fake_spikes = random_fake_spikes(1:length(Y)/2);
+	random_fake_spikes = random_fake_spikes(ceil(1:length(Y)/2));
 end
 
 if ~isempty(random_fake_spikes)

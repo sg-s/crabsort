@@ -67,7 +67,18 @@ checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_nam
 % save all of this
 % prioritize this file
 focus_here = NNdata.file_idx == self.getFileSequence;
-focus_here(rand(length(focus_here),1)>.5) = true;
+% if possible, get twice as many data_pts
+N = sum(focus_here);
+if N > length(focus_here)
+	focus_here(:) = true;
+elseif N < 10
+	% pick most of the dataset
+	focus_here(1:10:end) = true;
+else
+	S = ceil(length(focus_here)/N);
+	focus_here(1:S:end) = true;
+end
+
 
 
 network_data.hash = NNdata.networkHash();

@@ -18,6 +18,15 @@ if ~any(isnan(self.common.delays(:)))
 	return
 end
 
+if isempty(self.raw_data_size)
+	error('raw_data_size not defined')
+end
+
+if self.pref.skip_delays
+	self.common.delays = zeros(self.n_channels);
+	return
+end
+
 root_msg = 'Estimating delay b/w channels';
 
 self.displayStatus(root_msg,true);

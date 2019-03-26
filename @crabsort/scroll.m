@@ -101,4 +101,4 @@ elseif self.handles.maskmode_unmask.Value == 1
     self.mask(a:z,channel) = 1;
 end
 
-drawnow;
+drawnow limitrate
