@@ -69,6 +69,7 @@ assert(length(Y) == size(X,2),'Size mismatch')
 % now create some -ve training data
 % halve the spike prominence and find spikes
 self.loadSDPFromNNdata(.5);
+self.putative_spikes(:,channel) = 0;
 
 self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 
@@ -76,9 +77,12 @@ self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
 random_fake_spikes = veclib.shuffle(find(self.mask(:,channel)));
 random_fake_spikes = random_fake_spikes(1:length(spiketimes));
 
-dist_to_real_spikes = min(pdist2(random_fake_spikes,spiketimes));
+dist_to_real_spikes = NaN*random_fake_spikes;
+for i = 1:length(dist_to_real_spikes)
+	dist_to_real_spikes(i) = min(abs(random_fake_spikes(i)-spiketimes));
+end
 
-too_close = dist_to_real_spikes < size(X,1);
+too_close = dist_to_real_spikes < 2*size(X,1);
 random_fake_spikes(too_close) = [];
 
 % don't include too many
@@ -102,6 +106,10 @@ self.putative_spikes(:,channel) = 0;
 
 % we're going to label noise as "Noise"
 X = [X X2];
+
+% normalize data
+norm_factor = max(abs(X(:)));
+X = X/norm_factor;
 
 Y = [Y(:); categorical(repmat({'Noise'},size(X2,2),1))];
 assert(length(Y) == size(X,2),'Size mismatch')
@@ -127,7 +135,7 @@ NNdata = self.common.NNdata(channel);
 
 if isempty(NNdata.raw_data)
 
-
+	NNdata.norm_factor = norm_factor;
 	NNdata.raw_data = X;
 	NNdata.label_idx = Y(:);
 	NNdata.spiketimes =  all_spiketimes(:);

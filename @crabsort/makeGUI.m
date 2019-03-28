@@ -56,12 +56,30 @@ uimenu(handles.menu_name(3),'Label','Full trace','Callback',@self.showFullTrace,
 
 % automate
 handles.menu_name(4) = uimenu('Label','Automate');
-uimenu(handles.menu_name(4),'Label','All channels/All files','Callback',@self.automate,'Separator','off');
-uimenu(handles.menu_name(4),'Label','This channel/All files','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(4),'Label','All channels/This file','Callback',@self.automate,'Separator','on');
-uimenu(handles.menu_name(4),'Label','Stop','Callback',@self.automate,'Separator','on');
+uimenu(handles.menu_name(4),'Label','Start','Callback',@self.automate,'Separator','off');
+uimenu(handles.menu_name(4),'Label','Stop','Callback',@self.automate,'Separator','off');
+
+uimenu(handles.menu_name(4),'Label','Stopping condition','Separator','on','Enable','off');
 uimenu(handles.menu_name(4),'Label','Stop when uncertain','Callback',@uxlib.toggleCheckedMenu,'Separator','off');
-uimenu(handles.menu_name(4),'Label','Ignore data outside YLim','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
+uimenu(handles.menu_name(4),'Label','Stop when data exceeds YLim','Callback',@uxlib.toggleCheckedMenu,'Separator','off');
+
+uimenu(handles.menu_name(4),'Label','Automate action','Separator','on','Enable','off');
+% make a menu option for each automateAction
+possible_actions = (enumeration('crabsort.automateAction'));
+for i = 1:length(possible_actions)
+	if strcmp(char(possible_actions(i)),'none')
+		continue
+	end
+	L = strrep(char(possible_actions(i)),'_',' ');
+	uimenu(handles.menu_name(4),'Label',L,'Callback',@self.automate,'Separator','off');
+
+end
+
+
+
+
+uimenu(handles.menu_name(4),'Label','mark data outside YLim as artifacts','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
+
 
 
 % neural network 

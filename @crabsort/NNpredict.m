@@ -81,6 +81,9 @@ N = size(X,2);
 SZ = size(X,1);
 X = reshape(X,SZ,1,1,N);
 
+% rescale
+X = X/NNdata.norm_factor;
+
 
 [Y_pred, scores] = classify(trainedNet,X);
 

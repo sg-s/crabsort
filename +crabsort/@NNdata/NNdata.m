@@ -26,6 +26,8 @@ properties
 	other_nerves@char = ''
 	other_nerves_control@logical
 
+	norm_factor@double = 1
+
 end
 
 

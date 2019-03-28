@@ -17,8 +17,6 @@ automate(self,~,~)
 
 **Description**
 
-This method is a callback function of new_spike_type
-and activates the new spike mode in manual override
 
 %}
 function automate(self,src,~)
@@ -28,31 +26,26 @@ if strcmp(src.Text,'Stop')
 	return
 end
 
-
-% OK, something is being started. so let's stop the timer
-
-% cancel all workers, because we're going to run
-% some automate action
-cancel(self.workers)
-stop(self.timer_handle)
-
-self.auto_predict = false;
-
-
-switch src.Text
-case 'All channels/All files'
-	self.automate_action = crabsort.automateAction.all_channels_all_files;
-case 'This channel/All files'
-	self.automate_action = crabsort.automateAction.this_channel_all_files;
-
-case 'All channels/This file'
-	self.automate_action = crabsort.automateAction.all_channels_this_file;
-case 'Stop'
-
-otherwise
-	error('Unknown caller to automate')
+if strcmp(src.Text,'Start')
+	% OK, something is being started. so let's stop the timer
+	stop(self.timer_handle)
+	self.runAutomateAction();
+	return
 end
 
 
-self.runAutomateAction();
+
+
+self.auto_predict = false;
+
+% set the automate action
+possible_actions = (enumeration('crabsort.automateAction'));
+possible_actions_str = {};
+for i = 1:length(possible_actions)
+	possible_actions_str{i} = strrep(char(possible_actions(i)),'_',' ');
+end
+self.automate_action = possible_actions(strcmp(src.Text,possible_actions_str));
+
+
+
 
