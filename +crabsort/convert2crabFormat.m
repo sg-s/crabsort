@@ -69,7 +69,7 @@ for i = 1:length(allowed_file_extensions)
 
 		allfiles = dir('*.crab');
 		for j = 1:length(allfiles)
-			textbar(j,length(allfiles))
+			corelib.textbar(j,length(allfiles))
 
 			load(allfiles(j).name,'-mat')
 

@@ -75,7 +75,17 @@ elseif isnan(min(dist_to_uncertain_spikes))
 
 	% mark this spike as noise
 	self.markAsNoise(this_nerve,this_spike);
+elseif isempty(dist_to_identified_spikes) && ~isnan(dist_to_uncertain_spikes)
+	% this is an uncertain non-spike. mark as noise
+	this_spike = uncertain_spikes(dist_to_uncertain_spikes == min(dist_to_uncertain_spikes));
+	self.markAsNoise(this_nerve,this_spike);
+
+	% remove from uncertain spikes
+	self.handles.ax.uncertain_spikes(channel).XData(dist_to_uncertain_spikes == min(dist_to_uncertain_spikes)) = [];
+	self.handles.ax.uncertain_spikes(channel).YData(dist_to_uncertain_spikes == min(dist_to_uncertain_spikes)) = [];
+
 else
+
 
 	disp('what')
 	keyboard
