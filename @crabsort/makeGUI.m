@@ -62,6 +62,7 @@ uimenu(handles.menu_name(4),'Label','Stop','Callback',@self.automate,'Separator'
 uimenu(handles.menu_name(4),'Label','Stopping condition','Separator','on','Enable','off');
 uimenu(handles.menu_name(4),'Label','Stop when uncertain','Callback',@uxlib.toggleCheckedMenu,'Separator','off');
 uimenu(handles.menu_name(4),'Label','Stop when data exceeds YLim','Callback',@uxlib.toggleCheckedMenu,'Separator','off');
+uimenu(handles.menu_name(4),'Label','Stop if artifacts are marked','Callback',@uxlib.toggleCheckedMenu,'Separator','off');
 
 uimenu(handles.menu_name(4),'Label','Automate action','Separator','on','Enable','off');
 % make a menu option for each automateAction

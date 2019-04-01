@@ -49,38 +49,8 @@ load([allfiles(1).folder filesep 'crabsort.common'],'-mat','common')
 
 assert(~isempty(options.neurons),'neurons must be specified')
 
-if isempty(options.nerves)
-	% load the first crabsort file
-	load([allfiles(1).folder filesep allfiles(1).name],'-mat','crabsort_obj')
-	spikes = crabsort_obj.spikes;
-
-	% look for these neurons in all fields of spikes
-	nerve_names = fieldnames(spikes);
 
 
-	for i = 1:length(nerve_names)
-		neurons = fieldnames(spikes.(nerve_names{i}));
-		for j = 1:length(options.neurons)
-			if any(strcmp(neurons,options.neurons{j}))
-				options.nerves{j} = nerve_names{i};
-			end
-		end
-	end
-end
-
-for i = 1:length(options.neurons)
-	assert(~isempty(options.nerves{i}),'Could not resolve nerve')
-end
-
-req_nerve_idx = [];
-for i = length(options.nerves):-1:1
-	if ~any(strcmp(common.data_channel_names,options.nerves{i}))
-		error('Could not find required nerve in common data')
-	end
-
-	req_nerve_idx(i) = find(strcmp(common.data_channel_names,options.nerves{i}));
-
-end
 
 % figure out the experiment idx from the folder name
 [~,exp_dir]=fileparts(options.data_dir);
@@ -98,6 +68,7 @@ for i = length(allfiles):-1:1
 end
 
 
+
 % check that all files are sorted
 fatal = false;
 for i = 1:length(allfiles)
@@ -105,8 +76,9 @@ for i = 1:length(allfiles)
 
 	self = crabsort_obj;
 
+
 	% check that the channel_stages for req nerves are OK
-	if (all(self.channel_stage(req_nerve_idx)>=3))
+	if sum(self.channel_stage == 3) >= length(options.neurons)
 	else
 		corelib.cprintf('red',['Some channels not sorted on ' allfiles(i).name '\n'])
 		fatal = true;

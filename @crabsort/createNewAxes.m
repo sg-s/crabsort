@@ -145,7 +145,7 @@ end
 % now make some global things that aren't channel dependent
 
 % make a slider to futz with the YLims for each channel 
-self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.1 bottom_plot .02 spacing*self.n_channels],'Style', 'slider', 'Max',1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
+self.handles.ylim_slider = uicontrol(self.handles.main_fig,'units','normalized','Position',[.1 bottom_plot .02 spacing*self.n_channels],'Style', 'slider', 'Max',1.1,'Min',0,'Callback',@self.resetYLims,'Value',.1);
 
 try    % R2013b and older
    addlistener(self.handles.ylim_slider,'ActionEvent',@self.resetYLims);

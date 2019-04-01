@@ -7,27 +7,17 @@ switch self.automate_action
 
 case crabsort.automateAction.view_only
 		
-	if isempty(self.channel_to_work_with)
-		% nothing to do, so restart the timer
-		self.automate_action = crabsort.automateAction.none;
-		self.auto_predict = true;
-		start(self.timer_handle)
-		return
-	else
-		channel = self.channel_to_work_with;
-	end
+
+	channel = self.channel_to_work_with;
 
 	% go over all the files and load them
 	[~,~,ext]=fileparts(self.file_name);
 	allfiles = (dir([self.path_name '*' ext]));
 	for i = 1:length(allfiles)
 
-		if self.automate_action == crabsort.automateAction.none
-			% action cancelled
+		if self.shouldAutomateStop(channel)
+			beep
 			self.auto_predict = true;
-			if strcmp(self.timer_handle.Running,'off')
-				start(self.timer_handle)
-			end
 			break
 		end
 
@@ -39,31 +29,8 @@ case crabsort.automateAction.view_only
 		end
 
 
-
 		self.file_name = allfiles(next_file).name;
 		self.loadFile()
-
-		self.channel_to_work_with = channel;
-
-
-		% check if we should stop if uncertain
-		C = self.handles.menu_name(4).Children;
-		if strcmp(C(strcmp({C.Text},'Stop when data exceeds YLim')).Checked,'on') 
-
-			YLim = self.handles.ax.ax(channel).YLim;
-
-			if abs(min(self.raw_data(:,channel))) > 2*abs(YLim(1)) || max(self.raw_data(:,channel)) > 2*(YLim(2))
-
-				beep
-				% action cancelled
-				self.auto_predict = true;
-				if strcmp(self.timer_handle.Running,'off')
-					start(self.timer_handle)
-				end
-				break
-			end
-		end
-
 
 
 	end
@@ -82,12 +49,9 @@ case crabsort.automateAction.all_channels_all_files
 	allfiles = (dir([self.path_name '*' ext]));
 	for i = 1:length(allfiles)
 
-		if self.automate_action == crabsort.automateAction.none
-			% action cancelled
+		if self.shouldAutomateStop
+			beep
 			self.auto_predict = true;
-			if strcmp(self.timer_handle.Running,'off')
-				start(self.timer_handle)
-			end
 			break
 		end
 
@@ -98,8 +62,9 @@ case crabsort.automateAction.all_channels_all_files
 		self.loadFile(temp)
 
 		for channel = 1:self.n_channels
-			if self.automate_action == crabsort.automateAction.none
-				% action cancelled
+
+			if self.shouldAutomateStop
+				beep
 				self.auto_predict = true;
 				if strcmp(self.timer_handle.Running,'off')
 					start(self.timer_handle)
@@ -151,12 +116,10 @@ case crabsort.automateAction.all_channels_all_files
 
 case crabsort.automateAction.all_channels_this_file
 	for channel = 1:self.n_channels
-		if self.automate_action == crabsort.automateAction.none
-			% action cancelled
+		
+		if self.shouldAutomateStop
+			beep
 			self.auto_predict = true;
-			if strcmp(self.timer_handle.Running,'off')
-				start(self.timer_handle)
-			end
 			break
 		end
 
@@ -197,12 +160,9 @@ case crabsort.automateAction.this_channel_all_files
 	allfiles = (dir([self.path_name '*' ext]));
 	for i = 1:length(allfiles)
 
-		if self.automate_action == crabsort.automateAction.none
-			% action cancelled
+		if self.shouldAutomateStop
+			beep
 			self.auto_predict = true;
-			if strcmp(self.timer_handle.Running,'off')
-				start(self.timer_handle)
-			end
 			break
 		end
 
@@ -212,7 +172,6 @@ case crabsort.automateAction.this_channel_all_files
 		if next_file > length(allfiles)
 			next_file = 1;
 		end
-
 
 
 
@@ -233,19 +192,13 @@ case crabsort.automateAction.this_channel_all_files
 			self.showSpikes(channel);
 			self.saveData;
 
-			% check if we should stop if uncertain
-			C = self.handles.menu_name(4).Children;
-			if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)
-				self.jumpToNextUncertainSpike();
-				drawnow
+			if self.shouldAutomateStop
 				beep
-				% action cancelled
 				self.auto_predict = true;
-				if strcmp(self.timer_handle.Running,'off')
-					start(self.timer_handle)
-				end
 				break
 			end
+
+			
 
 
 		end
