@@ -199,24 +199,31 @@ if options.stack
 end
 
 
+% parse metadata
 
-m = [options.data_dir filesep 'metadata.txt'];
-if exist(m,'file') == 2
-	metadata = crabsort.parseMetadata(m,allfiles);
-	fn = fieldnames(metadata);
-
-	for j = 1:length(fn)
-		if ~isfield(data(1),fn{j})
-			data(1).(fn{j}) = [];
-		end
-			
-	end
-
-	for i = 1:length(allfiles)
-		for j = 1:length(fn)
-			data(i).(fn{j}) = metadata.(fn{j})(i);
-		end
-	end
+m1 = [options.data_dir filesep 'metadata.txt'];
+[~,folder_name]=fileparts(options.data_dir);
+m2 = [options.data_dir filesep folder_name '.txt'];
+if exist(m1,'file') == 2
+	metadata = crabsort.parseMetadata(m1,allfiles);
+elseif exist(m2,'file') == 2
+	metadata = crabsort.parseMetadata(m2,allfiles);
 else
 	return
+end
+
+	
+fn = fieldnames(metadata);
+
+for j = 1:length(fn)
+	if ~isfield(data(1),fn{j})
+		data(1).(fn{j}) = [];
+	end
+		
+end
+
+for i = 1:length(allfiles)
+	for j = 1:length(fn)
+		data(i).(fn{j}) = metadata.(fn{j})(i);
+	end
 end
