@@ -134,6 +134,9 @@ for i = 1:length(allfiles)
 		this_neuron = options.neurons{j};
 
 		% find all possible places where this neuron could be
+		if ~isstruct(self.spikes)
+			keyboard
+		end
 		fn = fieldnames(self.spikes);
 		for k = 1:length(fn)
 			neurons_here = fieldnames(self.spikes.(fn{k}));
@@ -143,12 +146,15 @@ for i = 1:length(allfiles)
 		end
 
 		% does this neuron occur on multiple nerves?
+
 		if length(possible_spiketimes) > 1
 			% blindly pick the one with the most spikes
 			[~,pick_me] = max(cellfun(@length,possible_spiketimes));
 			spiketimes = possible_spiketimes{pick_me};
-		else
+		elseif length(possible_spiketimes) == 1
 			spiketimes = possible_spiketimes{1};
+		else
+			spiketimes = [];
 		end
 
 		spiketimes  = round(spiketimes*self.dt*(1/options.dt));

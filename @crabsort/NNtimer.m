@@ -78,7 +78,7 @@ end
 
 
 for i = 1:self.n_channels
-	%disp(i)
+
 	if isempty(self.common.NNdata(i).label_idx)
 		continue
 	end

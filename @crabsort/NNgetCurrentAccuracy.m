@@ -14,7 +14,7 @@ end
 D = strsplit(D,'\n');
 
 accuracy = [];
-for j = length(D):-1:1
+for j = length(D)-1:-1:1
 	if strcmp(strtrim(D{j}),'ValidationAccuracy=')
 		accuracy = strtrim(D{j+1});
 		break

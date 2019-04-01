@@ -1,9 +1,14 @@
 function ignoreSection(self,src,~)
 
+if isempty(self.channel_to_work_with)
+	xlim = vertcat(self.handles.ax.ax.XLim);
+	xlim = xlim(strcmp({self.handles.ax.ax.Visible},'on'),:);
+	xlim = round(xlim(1,:)/self.dt);
+else
+	xlim = round(self.handles.ax.ax(self.channel_to_work_with).XLim/self.dt);
+end
 
-xlim = round(self.handles.ax.ax(self.channel_to_work_with).XLim/self.dt);
-
-if xlim(1) == 0
+if xlim(1) < 1
 	xlim(1) = 1;
 end
 
