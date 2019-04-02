@@ -26,7 +26,13 @@ common_name = pathlib.join(self.path_name, 'crabsort.common');
 
 % generate ignore_section from the mask
 global_mask = 1-max(self.mask,[],2);
-[ons, offs]=veclib.computeOnsOffs(global_mask);
+offs = find(diff(global_mask)<0);
+ons = find(diff(global_mask)>0);
+if ~isempty(ons) && ~isempty(offs)
+	if offs(1) < ons(1)
+		ons = [1; ons];
+	end
+end
 if length(offs) < length(ons)
 	offs = [offs self.raw_data_size(1)];
 end
