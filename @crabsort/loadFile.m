@@ -9,7 +9,7 @@ function loadFile(self,src,~)
 full_trace_view = false;
 if ~isempty(self.handles)
     if isfield(self.handles,'ax')
-        if max([self.handles.ax.ax.XLim]) == self.raw_data_size(1)*self.dt
+        if round(max([self.handles.ax.ax.XLim])) == round(self.raw_data_size(1)*self.dt)
             full_trace_view = true;
         end
     end
@@ -412,7 +412,6 @@ end
 
 % should we attempt to maintain the full-trace view?
 if full_trace_view
-
     self.showFullTrace;
 end
 
