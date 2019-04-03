@@ -34,7 +34,7 @@ if ~isempty(ons) && ~isempty(offs)
 	end
 end
 if length(offs) < length(ons)
-	offs = [offs self.raw_data_size(1)];
+	offs = [offs; self.raw_data_size(1)];
 end
 self.ignore_section.ons = ons;
 self.ignore_section.offs = offs;
