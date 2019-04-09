@@ -4,12 +4,13 @@ function data = consolidate(varargin)
 
 
 % options and defaults
-options.data_dir = pwd;
+options.DataDir = pwd;
 options.dt = 1e-3; % 1 ms
 options.nerves = {};
 options.neurons = {};
 options.stack = false;
-options.data_fun = {};
+options.DataFun = {};
+options.ChunkSize = NaN; % seconds 
 
 % validate and accept options
 if mathlib.iseven(length(varargin))
@@ -33,14 +34,14 @@ else
 	error('Inputs need to be name value pairs')
 end
 
-allfiles = dir([options.data_dir filesep '*.crabsort']);
+allfiles = dir([options.DataDir filesep '*.crabsort']);
 
 if isempty(allfiles)
 	error('No data found')
 end
 
-if ~iscell(options.data_fun)
-	error('data_fun must be a cell array of function handles')
+if ~iscell(options.DataFun)
+	error('DataFun must be a cell array of function handles')
 end
 
 % load the common data
@@ -53,7 +54,7 @@ assert(~isempty(options.neurons),'neurons must be specified')
 
 
 % figure out the experiment idx from the folder name
-[~,exp_dir]=fileparts(options.data_dir);
+[~,exp_dir]=fileparts(options.DataDir);
 exp_dir = str2double(strrep(exp_dir,'_',''));
 assert(~isnan(exp_dir),'Could not determine experiment idx')
 
@@ -155,16 +156,16 @@ for i = 1:length(allfiles)
 	end
 
 
-	if ~isempty(options.data_fun)
+	if ~isempty(options.DataFun)
 		self.file_name = strrep(allfiles(i).name,'.crabsort','');
 		self.path_name = allfiles(i).folder;
 		self.loadFile;
-		for j = 1:length(options.data_fun)
+		for j = 1:length(options.DataFun)
 			
 			
-			variable_names = corelib.argOutNames(char(options.data_fun{j}));
+			variable_names = corelib.argOutNames(char(options.DataFun{j}));
 			outputs = cell(1,length(variable_names));
-			[outputs{:}] = options.data_fun{j}(self, options);
+			[outputs{:}] = options.DataFun{j}(self, options);
 
 			for k = 1:length(variable_names)
 				data(i).(strtrim(variable_names{k})) = outputs{k};
@@ -179,51 +180,135 @@ end
 
 
 
-if options.stack
-
-
-	sdata = struct;
-
-	for j = 1:length(neurons)
-		sdata.(neurons{j}) = [];
-	end
-
-	for i = 1:length(data)
-		for j = 1:length(neurons)
-			sdata.(neurons{j}) = [sdata.(neurons{j}); data(i).time_offset+data(i).(neurons{j})];
-		end
-
-	end
-	data = sdata;
-	return
-end
 
 
 % parse metadata
 
-m1 = [options.data_dir filesep 'metadata.txt'];
-[~,folder_name]=fileparts(options.data_dir);
-m2 = [options.data_dir filesep folder_name '.txt'];
+m1 = [options.DataDir filesep 'metadata.txt'];
+[~,folder_name]=fileparts(options.DataDir);
+m2 = [options.DataDir filesep folder_name '.txt'];
 if exist(m1,'file') == 2
 	metadata = crabsort.parseMetadata(m1,allfiles);
 elseif exist(m2,'file') == 2
 	metadata = crabsort.parseMetadata(m2,allfiles);
 else
-	return
+
 end
 
 	
-fn = fieldnames(metadata);
+metadata_names = fieldnames(metadata);
 
-for j = 1:length(fn)
-	if ~isfield(data(1),fn{j})
-		data(1).(fn{j}) = [];
+for j = 1:length(metadata_names)
+	if ~isfield(data(1),metadata_names{j})
+		data(1).(metadata_names{j}) = [];
 	end
 		
 end
 
 for i = 1:length(allfiles)
-	for j = 1:length(fn)
-		data(i).(fn{j}) = metadata.(fn{j})(i);
+	for j = 1:length(metadata_names)
+		data(i).(metadata_names{j}) = metadata.(metadata_names{j})(i);
 	end
 end
+
+fn = fieldnames(data);
+
+
+if options.stack
+
+	sdata = struct;
+
+	for j = 1:length(fn)
+		sdata.(fn{j}) = [];
+	end
+
+
+
+	for i = 1:length(data)
+
+
+		for j = 1:length(fn)
+			if any(strcmp(fn{j},options.neurons))
+				sdata.(fn{j}) = [sdata.(fn{j}); data(i).time_offset+data(i).(fn{j})];
+			elseif strcmp(fn{j},'T')
+			elseif strcmp(fn{j},'time_offset')
+			elseif strcmp(fn{j},'experiment_idx')
+				sdata.experiment_idx = data(i).experiment_idx;
+			else
+
+				% check size
+				this_variable = data(i).(fn{j});
+				if length(this_variable) ~= length(data(i).mask)
+					this_variable = this_variable*(data(i).mask*0 + 1);
+				end
+				sdata.(fn{j}) = [sdata.(fn{j}); this_variable];
+				
+			end
+
+		end
+
+
+
+	end
+	
+	
+
+
+
+	data = sdata;
+
+
+
+	if ~isnan(options.ChunkSize)
+		disp('Chunking data...')
+
+
+		n_rows = ceil(length(data.mask)*options.dt/options.ChunkSize);
+
+
+		cdata = struct;
+
+		% make matrices for every neuron 
+		for i = 1:length(options.neurons)
+			cdata.(options.neurons{i}) = NaN(1e3,n_rows);
+		end
+
+
+
+		for i = 1:n_rows
+			a = (i-1)*options.ChunkSize;
+			z = a + options.ChunkSize;
+
+
+			for j = 1:length(options.neurons)
+				these_spikes = data.(options.neurons{j});
+				these_spikes = these_spikes(these_spikes >= a & these_spikes <= z);
+				if length(these_spikes) > 1e3
+					these_spikes = these_spikes(1:1e3);
+				end
+				cdata.(options.neurons{j})(1:length(these_spikes),i) = these_spikes;
+
+			end
+		end
+
+		for j = 1:length(fn)
+			if any(strcmp(fn{j},options.neurons))
+			elseif strcmp(fn{j},'T')
+			elseif strcmp(fn{j},'time_offset')
+			elseif strcmp(fn{j},'experiment_idx')
+				cdata.(fn{j})=  repmat(data.experiment_idx,n_rows,1);
+			else
+
+				cdata.(fn{j}) = data.(fn{j})(1:options.ChunkSize/options.dt:end);
+				
+			end
+
+		end
+	end
+
+	data = cdata;
+
+
+end
+
+
