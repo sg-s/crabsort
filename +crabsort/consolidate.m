@@ -183,31 +183,34 @@ end
 
 
 % parse metadata
-
+metadata_exists = false;
 m1 = [options.DataDir filesep 'metadata.txt'];
 [~,folder_name]=fileparts(options.DataDir);
 m2 = [options.DataDir filesep folder_name '.txt'];
 if exist(m1,'file') == 2
 	metadata = crabsort.parseMetadata(m1,allfiles);
+	metadata_exists = true;
 elseif exist(m2,'file') == 2
 	metadata = crabsort.parseMetadata(m2,allfiles);
+	metadata_exists = true;
 else
 
 end
 
-	
-metadata_names = fieldnames(metadata);
+if metadata_exists
+	metadata_names = fieldnames(metadata);
 
-for j = 1:length(metadata_names)
-	if ~isfield(data(1),metadata_names{j})
-		data(1).(metadata_names{j}) = [];
-	end
-		
-end
-
-for i = 1:length(allfiles)
 	for j = 1:length(metadata_names)
-		data(i).(metadata_names{j}) = metadata.(metadata_names{j})(i);
+		if ~isfield(data(1),metadata_names{j})
+			data(1).(metadata_names{j}) = [];
+		end
+			
+	end
+
+	for i = 1:length(allfiles)
+		for j = 1:length(metadata_names)
+			data(i).(metadata_names{j}) = metadata.(metadata_names{j})(i);
+		end
 	end
 end
 
