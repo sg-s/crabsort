@@ -267,7 +267,7 @@ if hard_load
 
 end
 
-for i = 1:length(self.common.data_channel_names)
+for i = 1:self.raw_data_size(2)
     if isempty(self.common.data_channel_names{i})
         continue
     end

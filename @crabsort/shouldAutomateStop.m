@@ -49,7 +49,13 @@ if strcmp(Checked{strcmp({M.Text},'Stop when uncertain')},'on')
 	if ~isempty(self.channel_to_work_with)
 		channel = self.channel_to_work_with;
 
-		keyboard
+		if ~isempty(self.handles.ax.uncertain_spikes(channel).XData) 
+			beep
+			TF = true;
+			return
+		end
+
+
 
 	end
 
