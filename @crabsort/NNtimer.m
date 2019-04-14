@@ -84,6 +84,13 @@ for i = 1:self.n_channels
 	end
 
 
+	checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{i}];
+
+	H = self.common.NNdata(i).networkHash();
+	NN_dump_file = [checkpoint_path filesep H '.mat'];
+
+
+
 	% figure out what the worker is doing
 
 	D = strsplit(self.workers(i).Diary,'\n');
@@ -91,7 +98,11 @@ for i = 1:self.n_channels
 
 	if length(D) > 2 && strcmp(D{end-1},'No jobs, aborting...')
 		% worker is idle
-		self.handles.ax.NN_status(i).String = 'IDLE';
+		if exist(NN_dump_file,'file') == 2
+			self.handles.ax.NN_status(i).String = 'IDLE';
+		else
+			self.handles.ax.NN_status(i).String = 'NO NETWORK';
+		end
 
 		if self.common.NNdata(i).isMoreTrainingNeeded
 			% more training needed
@@ -110,7 +121,11 @@ for i = 1:self.n_channels
 			self.handles.ax.NN_status(i).String = 'TRAINING';
 			self.NNtrain(i);
 		else
-			self.handles.ax.NN_status(i).String = 'IDLE';
+			if exist(NN_dump_file,'file') == 2
+				self.handles.ax.NN_status(i).String = 'IDLE';
+			else
+				self.handles.ax.NN_status(i).String = 'SAVING...';
+			end
 			self.destroyAllJobs(i);
 		end
 

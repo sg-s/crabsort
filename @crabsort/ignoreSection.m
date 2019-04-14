@@ -12,6 +12,10 @@ if xlim(1) < 1
 	xlim(1) = 1;
 end
 
+if xlim(2) > self.raw_data_size(1)
+	xlim(2) = self.raw_data_size(1);
+end
+
 switch src.Text
 
 case 'Ignore this section'

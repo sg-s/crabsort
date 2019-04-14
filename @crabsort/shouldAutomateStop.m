@@ -49,8 +49,9 @@ if strcmp(Checked{strcmp({M.Text},'Stop when uncertain')},'on')
 	if ~isempty(self.channel_to_work_with)
 		channel = self.channel_to_work_with;
 
-		if ~isempty(self.handles.ax.uncertain_spikes(channel).XData) 
-			beep
+		if ~isempty(self.handles.ax.uncertain_spikes(channel).XData) && ~any(isnan(self.handles.ax.uncertain_spikes(channel).XData))
+
+			disp('Stopping because some uncertain spikes exist')
 			TF = true;
 			return
 		end

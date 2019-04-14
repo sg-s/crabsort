@@ -24,8 +24,10 @@ makes predictions using a trained neural network
 function NNpredict(self, futz_factor)
 
 if nargin == 1
-	futz_factor = .5;
+	futz_factor = self.futz_factor;
 end
+
+
 
 if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
 	return
@@ -54,12 +56,57 @@ if exist(NN_dump_file,'file') ~= 2
 	return
 end
 
+% iteratively mess with the futz_factor till we are sure
+% we should be getting all spikes
+if NNdata.sdp.spike_sign
+	goon = true;
+	while goon
+
+		self.loadSDPFromNNdata(futz_factor)
+
+		self.findSpikes()
+		spiketimes = find(self.putative_spikes(:,channel));
+
+		V_snippets = self.getSnippets(channel,spiketimes);
 
 
-self.loadSDPFromNNdata(futz_factor)
+		smallest_spike = min(max(NNdata.raw_data(:,NNdata.label_idx~='Noise')));
 
-self.findSpikes()
-spiketimes = find(self.putative_spikes(:,channel));
+		if futz_factor < .3
+			goon = false;
+		end
+
+		if min(max(V_snippets)) < smallest_spike 
+			futz_factor = futz_factor*.85;
+		else
+			goon=false;
+		end
+	end
+else
+	goon = true;
+	while goon
+
+		self.loadSDPFromNNdata(futz_factor)
+
+		self.findSpikes()
+		spiketimes = find(self.putative_spikes(:,channel));
+
+		V_snippets = self.getSnippets(channel,spiketimes);
+
+
+		smallest_spike = max(min(NNdata.raw_data(:,NNdata.label_idx~='Noise')));
+
+		if futz_factor < .3
+			goon = false;
+		end
+
+		if max(min(V_snippets)) < smallest_spike 
+			futz_factor = futz_factor*.85;
+		else
+			goon=false;
+		end
+	end
+end
 
 n_spikes = sum(spiketimes);
 

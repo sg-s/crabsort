@@ -28,6 +28,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         common@crabsort.common
 
 
+        % futz factor to pick up spikes and classify
+        % using NN
+        futz_factor@double = .5
+
+
         % spike detection parameters
         sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
 
