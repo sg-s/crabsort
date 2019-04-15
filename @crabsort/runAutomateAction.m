@@ -80,30 +80,19 @@ case crabsort.automateAction.all_channels_all_files
 					continue
 				end
 				% put logic here
-				keyboard
+				
 				self.NNpredict;
 				self.showSpikes(channel);
 
-
-				% check if we should stop if uncertain
-				C = self.handles.menu_name(4).Children;
-				if strcmp(C(strcmp({C.Text},'Stop when uncertain')).Checked,'on') & ~isempty(self.handles.ax.uncertain_spikes(channel).XData)					
-					self.jumpToNextUncertainSpike();
-					drawnow
+				if self.shouldAutomateStop
 					beep
-					% action cancelled
 					self.auto_predict = true;
-					if strcmp(self.timer_handle.Running,'off')
-						start(self.timer_handle)
-					end
 					break
 				end
 					
 			end
 
 		end
-		pause(1)
-
 	end
 
 	self.automate_action = crabsort.automateAction.none;
