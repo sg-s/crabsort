@@ -65,5 +65,10 @@ otherwise
 end
 
 
+% update the mean removal
+for i = 1:self.n_channels
+	self.removeMean(i);
+end
+
 % redraw 
 self.scroll(self.handles.ax.ax(1).XLim);

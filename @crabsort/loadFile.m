@@ -267,6 +267,10 @@ if hard_load
 
 end
 
+
+% reconstruct the mask from ignore_section
+self.reconstructMaskFromIgnoreSection;
+
 for i = 1:self.raw_data_size(2)
     if isempty(self.common.data_channel_names{i})
         continue
@@ -299,8 +303,7 @@ self.dt = round(self.dt*1e6)/1e6;
 
 
 
-% reconstruct the mask from ignore_section
-self.reconstructMaskFromIgnoreSection;
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

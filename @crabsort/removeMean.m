@@ -18,8 +18,13 @@ if strcmp(self.common.data_channel_names{channel},'temperature')
 	return
 end
 
+only_here = logical(self.mask(:,channel));
 
-self.raw_data(:,channel) = self.raw_data(:,channel) - mean(self.raw_data(:,channel));
+try
+	self.raw_data(only_here,channel) = self.raw_data(only_here,channel) - mean(self.raw_data(only_here,channel));
+catch
+	keyboard
+end
 
 if ~isfield(self.handles,'ax')
 	return
