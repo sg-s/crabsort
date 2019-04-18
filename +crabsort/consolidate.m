@@ -315,3 +315,103 @@ if options.stack
 end
 
 
+if ~isnan(options.ChunkSize)
+	disp('Chunking data...')
+
+	n_rows = ceil(length(vertcat(data.mask))*options.dt/options.ChunkSize);
+	n_cols = ceil(options.ChunkSize/options.dt);
+
+	cdata = struct;
+
+	% make matrices for every neuron 
+	for i = 1:length(options.neurons)
+		cdata.(options.neurons{i}) = NaN(1e3,n_rows);
+	end
+
+	% make vectors for the metadata
+	for j = 1:length(fn)
+		if any(strcmp(fn{j},options.neurons))
+		elseif strcmp(fn{j},'T')
+		elseif strcmp(fn{j},'time_offset')
+		elseif strcmp(fn{j},'experiment_idx')
+			cdata.(fn{j}) = NaN(1,n_rows);
+		else
+			cdata.(fn{j}) = NaN(1,n_rows);
+		end
+	end
+
+
+	row_idx = 1;
+	for i = 1:length(data)
+		data_idx = 1;
+
+		goon = true;
+		a = 0;
+		z = a + options.ChunkSize;
+
+		while goon
+			for j = 1:length(options.neurons)
+				these_spikes = data(i).(options.neurons{j});
+
+				these_spikes = these_spikes(these_spikes >= a & these_spikes <= z);
+				if length(these_spikes) > 1e3
+					these_spikes = these_spikes(1:1e3);
+				end
+
+				these_spikes = these_spikes - a;
+
+				cdata.(options.neurons{j})(1:length(these_spikes),row_idx) = these_spikes;
+
+			end
+
+			% also glom on the metadata
+			data_dt = data(i).T/length(data(i).mask);
+			aa = ceil(a/data_dt);
+			if aa < 1; aa = 1; end
+			zz = ceil(z/data_dt);
+			if zz > length(data(i).mask);  zz = length(data(i).mask); end
+
+
+
+			for j = 1:length(fn)
+				if any(strcmp(fn{j},options.neurons))
+				elseif strcmp(fn{j},'T')
+				elseif strcmp(fn{j},'time_offset')
+				elseif strcmp(fn{j},'experiment_idx')
+					cdata.(fn{j})(row_idx) = data(i).experiment_idx;
+				else
+					if length(data(i).(fn{j})) == length(data(i).mask)
+						cdata.(fn{j})(row_idx) = mean(data(i).(fn{j})(aa:zz));
+					else
+						cdata.(fn{j})(row_idx) = data(i).(fn{j});
+					end
+				end
+			end
+
+			a = z;
+			z = a + options.ChunkSize;
+
+			row_idx = row_idx + 1;
+
+			if z > data(i).T
+				goon = false;
+			end
+
+		end
+
+
+
+
+	end
+
+	% trim
+	if row_idx < n_rows
+		fn = fieldnames(cdata);
+		for i = 1:length(fn)
+			cdata.(fn{i}) = cdata.(fn{i})(:,1:row_idx);
+		end
+	end
+
+	data = cdata;
+
+end
