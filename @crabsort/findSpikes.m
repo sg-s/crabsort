@@ -31,8 +31,8 @@ V = self.raw_data(:,channel).*self.mask(:,channel);
 
 
 if any(isnan(V))
-    cprintf('red','\n[WARN] ')
-    cprintf('NaNs found in voltage trace. Cannot continue.' )
+    corelib.cprintf('red','\n[WARN] ')
+    corelib.cprintf('NaNs found in voltage trace. Cannot continue.' )
     return
 end
 

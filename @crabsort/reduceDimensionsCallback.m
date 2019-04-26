@@ -9,9 +9,9 @@
 function reduceDimensionsCallback(self,~,~)
 
 if self.verbosity > 5
-    cprintf('green','\n[INFO] ')
+    corelib.cprintf('green','\n[INFO] ')
     d = dbstack;
-    cprintf('text',[mfilename ' called by ' d(2).name])
+    corelib.cprintf('text',[mfilename ' called by ' d(2).name])
 end
 
 

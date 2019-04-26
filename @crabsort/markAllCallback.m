@@ -3,8 +3,8 @@
 function [] = markAllCallback(s,~,~)
 
 if s.verbosity > 5
-    cprintf('green','\n[INFO] ')
-    cprintf('text',[mfilename ' called'])
+    corelib.cprintf('green','\n[INFO] ')
+    corelib.cprintf('text',[mfilename ' called'])
 end
 
 
@@ -16,14 +16,14 @@ xlimits = get(s.handles.ax1,'XLim');
 % get all spikes in viewport 
 if get(s.handles.mode_new_A,'Value') == 1
     % ignore this case 
-	cprintf('red','\n[WARN] ')
-	cprintf('text','You cannot mark all spikes if this mode is chosen.')
+	corelib.cprintf('red','\n[WARN] ')
+	corelib.cprintf('text','You cannot mark all spikes if this mode is chosen.')
 	return
 
 elseif get(s.handles.mode_new_B,'Value')==1
     % ignore this case 
-	cprintf('red','\n[WARN] ')
-	cprintf('text','You cannot mark all spikes if this mode is chosen.')
+	corelib.cprintf('red','\n[WARN] ')
+	corelib.cprintf('text','You cannot mark all spikes if this mode is chosen.')
 	return
 
 elseif get(s.handles.mode_delete,'Value') == 1

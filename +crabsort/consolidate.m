@@ -227,6 +227,7 @@ if options.stack
 			else
 
 				% check size
+				keyboard
 				this_variable = data(i).(fn{j});
 				if length(this_variable) ~= length(data(i).mask)
 					this_variable = this_variable*(data(i).mask*0 + 1);
