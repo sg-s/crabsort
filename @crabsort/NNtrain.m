@@ -93,4 +93,4 @@ ts = strrep(NNdata.timestamp_last_modified,':','_');
 save_name = [self.path_name 'network' filesep  mat2str(channel) '_' ts '.job'];
 
 
-save(save_name,'network_data','-nocompression')
+save(save_name,'network_data','-nocompression','-v7.3')
