@@ -361,6 +361,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         NNtrainOnParallelWorker(NNdata,checkpoint_path)
         NNshowResult(info)
         layers = NNmake(input_size, n_classes)
+        run_all_tests()
 
     end % static methods
 
