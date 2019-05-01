@@ -1,12 +1,24 @@
-% merges all .crabsort files and returns spike time info
+% crabsort.consolidate
+% 
+% Once you have sorted spikes, use this method to combine 
+% all data from all files into a single variable
+%
+% **Syntax**
+%
+% ```
+% crabsort.consolidate('neurons',{'PD','LP'})
+% crabsort.consolidate(...'DataDir',/path/to/data)
+% crabsort.consolidate(...'DataFun',{@function1, @function2,...})
+% crabsort.consolidate(...'dt',1e-3)
+% crabsort.consolidate(...'stack',true)
+% ```
+
 
 function data = consolidate(varargin)
-
 
 % options and defaults
 options.DataDir = pwd;
 options.dt = 1e-3; % 1 ms
-options.nerves = {};
 options.neurons = {};
 options.stack = false;
 options.DataFun = {};
