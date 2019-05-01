@@ -9,3 +9,5 @@ tensorflow/models/*
 *.SMR
 *.ABF
 *.s2r
+*.mltbx
+*.prj
