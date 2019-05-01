@@ -362,6 +362,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         NNshowResult(info)
         layers = NNmake(input_size, n_classes)
         [passed,total] = run_all_tests()
+        update()
+        uninstall()
 
     end % static methods
 
