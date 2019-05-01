@@ -12,3 +12,4 @@ tensorflow/models/*
 *.mltbx
 *.prj
 .github_token.json
+*.kapalin
