@@ -1,5 +1,6 @@
 {
   "name": "crabsort",
+  "deps": ["srinivas.gs_mtools","puppeteer"],
   "stable-branch": "master",
   "author": "Srinivas Gorur-Shandilya",
   "author-url": "https://srinivas.gs",
