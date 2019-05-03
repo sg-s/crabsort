@@ -4,7 +4,13 @@ if isempty(self.channel_to_work_with)
 	return
 end
 
+
 channel = self.channel_to_work_with;
+
+if self.channel_stage(channel) == 0
+	return
+end
+
 xlimits = self.handles.ax.ax(channel).XLim;
 xrange = (xlimits(2) - xlimits(1))/self.dt;
 p(1) = p(1)/self.dt;

@@ -18,7 +18,7 @@ channel = self.channel_to_work_with;
 
 if isfield(self.spikes,self.common.data_channel_names{channel})
 	% remove this
-	self.spikes = rmfield(self.spikes,self.common.data_channel_names{channel})
+	self.spikes = rmfield(self.spikes,self.common.data_channel_names{channel});
 else
 end
 
@@ -34,3 +34,10 @@ end
 self.handles.main_fig.Name = [self.file_name ' -- Resetting data'];
 
 self.showSpikes(channel);
+
+% hide markers for uncertain spikes
+self.handles.ax.uncertain_spikes(channel).XData = NaN;
+self.handles.ax.uncertain_spikes(channel).YData = NaN;
+
+self.handles.ax.found_spikes(channel).XData = NaN;
+self.handles.ax.found_spikes(channel).YData = NaN;
