@@ -2,4 +2,4 @@
 
 function update()
 
-update@UpdateableHandle('https://github.com/sg-s/crabsort')
+update@UpdateableHandle('https://github.com/sg-s/crabsort','crabsort')
