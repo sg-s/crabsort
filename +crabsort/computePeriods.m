@@ -6,9 +6,6 @@ function data_out = computePeriods(data, varargin)
 
 
 
-
-
-
 if length(data) > 1
 	for i = 1:length(data)
 		data_out(i) = crabsort.computePeriods(data(i), varargin{:});
@@ -86,17 +83,6 @@ for i = 1:length(neurons)
 	burst_starts = spiketimes(burst_starts);
 	burst_ends = spiketimes(burst_ends);
 	burst_periods = [diff(burst_starts); NaN];
-
-
-
-
-	% if any(burst_ends == burst_starts)
-	% 	% something is wrong, let's fix this
-	% 	rm_this = find(burst_starts == burst_ends);
-	% 	burst_periods(rm_this) = [];
-	% 	burst_ends(rm_this) = [];
-	% 	burst_starts(rm_this) = [];
-	% end
 
 
 	burst_durations = burst_ends - burst_starts;

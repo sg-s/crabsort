@@ -129,20 +129,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
     methods
 
-
-        % trying a global error catch
-
-        % function varargout = subsref(obj, S)
-        %     try
-        %        varargout = builtin('subsref', obj, S);                
-        %     catch err
-        %         keyboard
-        %        errordlg(err.message, err.identifier);
-        %     end   
-
-        % end
-
-
         function self = crabsort(make_gui)
 
             if nargin == 0 
@@ -201,8 +187,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
             end
 
             if ~nargout
-                cprintf('red','[WARN] ')
-                cprintf('text','crabsort called without assigning to a object. crabsort will create an object called "C" in the workspace\n')
+                corelib.cprintf('red','[WARN] ')
+                corelib.cprintf('text','crabsort called without assigning to a object. crabsort will create an object called "C" in the workspace\n')
                 assignin('base','C',self);
             end
 

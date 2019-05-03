@@ -1,4 +1,5 @@
 
+% enumerate class that defines possible automate actions
 
 classdef automateAction
    enumeration

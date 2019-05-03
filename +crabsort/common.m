@@ -1,5 +1,11 @@
+% crabsort.common
 % class that defines the common
 % object type
+%
+% the common object stores information
+% that is common to all files in a given data set
+% for example, the names of the channels
+% 
 
 classdef common
 
