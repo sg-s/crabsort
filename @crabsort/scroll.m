@@ -94,11 +94,4 @@ if is_intracellular
 
 end
 
-% update the mask if needed
-if self.handles.maskmode_mask.Value == 1
-    self.mask(a:z,channel) = 0;
-elseif self.handles.maskmode_unmask.Value == 1
-    self.mask(a:z,channel) = 1;
-end
-
 drawnow limitrate

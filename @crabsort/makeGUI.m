@@ -149,13 +149,11 @@ handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','S
 
 % mask panel
 handles.mask_panel = uibuttongroup(handles.main_fig,'Title','Per-channel Masking','Position',[.61 .92 .19 .07],'FontSize',self.pref.fs,'Visible','on','BackgroundColor',[ 1 1 1]);
-handles.maskmode_mask = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Mask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-handles.maskmode_unmask = uicontrol(handles.mask_panel,'units','normalized','Position',[.31 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Unmask','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-handles.maskmode_off = uicontrol(handles.mask_panel,'units','normalized','Position',[.71 .5 .2 .5], 'Style', 'radiobutton', 'String', 'Off','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
-handles.mask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .01 .2 .5], 'Style', 'pushbutton', 'String', 'Mask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
-handles.mask_all_but_view_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.22 .01 .45 .5], 'Style', 'pushbutton', 'String', 'Mask all outside view','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
-handles.unmask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.68 .01 .3 .5], 'Style', 'pushbutton', 'String', 'Unmask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
-handles.maskmode_off.Value = 1;
+
+handles.mask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.01 .1 .2 .8], 'Style', 'pushbutton', 'String', 'Mask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+handles.mask_all_but_view_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.22 .1 .45 .8], 'Style', 'pushbutton', 'String', 'Mask all outside view','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+handles.unmask_all_control = uicontrol(handles.mask_panel,'units','normalized','Position',[.68 .1 .3 .8], 'Style', 'pushbutton', 'String', 'Unmask all','FontSize',self.pref.fs,'Callback',@self.maskUnmask);
+
 
 % manual override panel
 handles.manual_panel = uibuttongroup(handles.main_fig,'Title','Manual Override','Position',[.8 .92 .195 .07],'FontSize',self.pref.fs,'Visible','on','BackgroundColor',[ 1 1 1]);
