@@ -145,5 +145,6 @@ end
 
 catch err
 
-	keyboard
+	errordlg(err.message,'NNtimer failed with an error')
+	disp(err)
 end

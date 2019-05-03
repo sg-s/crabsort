@@ -23,7 +23,7 @@ only_here = logical(self.mask(:,channel));
 try
 	self.raw_data(only_here,channel) = self.raw_data(only_here,channel) - mean(self.raw_data(only_here,channel));
 catch
-	keyboard
+	errordlg(err.message,'This case has not been coded yet.')
 end
 
 if ~isfield(self.handles,'ax')

@@ -16,9 +16,6 @@ end
 channel = self.channel_to_work_with;
 
 
-
-
-
 % figure out wheter we are right or left clicking
 switch self.handles.main_fig.SelectionType
 case 'normal'
@@ -30,7 +27,7 @@ case 'alt'
     self.rightClickCallback(p);
 
 case 'open'
-	% doube click, ignore
+	% double click, ignore
 	return
 otherwise
 	keyboard

@@ -53,7 +53,7 @@ if min(dist_to_uncertain_spikes) < min(dist_to_identified_spikes)
 
 elseif min(dist_to_uncertain_spikes) == min(dist_to_identified_spikes)
 	disp('user is clicking on an uncertain spike that is marked as a spike')
-	keyboard
+	errordlg(err.message,'This case has not been coded yet.')
 elseif min(dist_to_uncertain_spikes) > min(dist_to_identified_spikes)
 	self.say(' Deleting identified spike');
 	this_spike = spiketimes(dist_to_identified_spikes == min(dist_to_identified_spikes));
@@ -88,7 +88,7 @@ else
 
 
 	disp('what')
-	keyboard
+	errordlg(err.message,'This case has not been coded yet.')
 end
 
 if ~isempty(self.common.NNdata(channel).spiketimes)

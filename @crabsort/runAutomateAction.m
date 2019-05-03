@@ -120,10 +120,9 @@ case crabsort.automateAction.all_channels_this_file
 				continue
 			end
 			% put logic here
-			keyboard
 			self.NNpredict;
 			self.showSpikes(channel);
-			pause(1)
+			pause(.1)
 		end
 
 	end
