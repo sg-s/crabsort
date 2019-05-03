@@ -28,7 +28,7 @@ if size(self.data_to_reduce,1) <= 2
 	self.R{self.channel_to_work_with} = self.data_to_reduce;
 else
 	V = self.getSnippets(self.channel_to_work_with);
-	idx =  floor(self.pref.t_before/self.dt*1e-3);
+	idx =  floor(self.sdp.t_before/self.dt*1e-3);
 	self.R{self.channel_to_work_with} = max(V - V(idx,:));
 end
 
