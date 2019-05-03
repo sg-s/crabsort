@@ -48,8 +48,8 @@ assert(~isempty(options.neurons),'neurons must be specified')
 
 % figure out the experiment idx from the folder name
 [~,exp_dir]=fileparts(options.DataDir);
-exp_dir = str2double(strrep(exp_dir,'_',''));
-assert(~isnan(exp_dir),'Could not determine experiment idx. Experiment_idx should be a number, and the folder that contains the data should have a name which is a number.')
+exp_dir = categorical(cellstr(exp_dir));
+
 
 data = struct;
 for i = length(allfiles):-1:1
