@@ -31,7 +31,14 @@ xrange = diff(self.handles.ax.ax(channel).XLim);
 
 
 xx = xx(1)+xrange/2;
-uncertain_spikes(uncertain_spikes<=xx) = [];
+
+if max(uncertain_spikes) <= xx
+	% last uncertain spike, let's wrap around
+	uncertain_spikes = uncertain_spikes(1);
+else
+
+	uncertain_spikes(uncertain_spikes<=xx) = [];
+end
 	
 
 
