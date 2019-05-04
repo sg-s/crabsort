@@ -1,3 +1,5 @@
+% this is called internally by crabsort.consolidate 
+
 function data = readData(thisfile, options, data)
 
 

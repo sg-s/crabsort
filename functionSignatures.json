@@ -1,0 +1,13 @@
+{
+    "crabsort.consolidate":
+    {
+        "inputs":
+        [
+   
+            {"name":"DataDir", "kind":"namevalue", "type":["char", "choices={pwd}"]},
+            {"name":"dt", "kind":"namevalue", "type":["scalar"]},
+            {"name":"stack", "kind":"namevalue", "type":["logical","scalar","choices={true,false}"]},
+            {"name":"neurons", "kind":"namevalue", "type":["char", "choices=crabsort.findNeuronsInPrefFile()"]}
+        ]
+    }
+}
