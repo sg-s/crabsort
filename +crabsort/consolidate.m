@@ -11,6 +11,7 @@
 % crabsort.consolidate(...'DataFun',{@function1, @function2,...})
 % crabsort.consolidate(...'dt',1e-3)
 % crabsort.consolidate(...'stack',true)
+% crabsort.consolidate(...,'ChunkSize',20)
 % ```
 %
 % Chunking may throw away data at the end if it doesn't fit into
@@ -160,10 +161,23 @@ if ~isnan(options.ChunkSize)
 	else
 		% data hasn't been stacked. Still need to chunk
 		cdata =  crabsort.analysis.chunk(data(1),options);
+		fn = fieldnames(cdata);
+
+
 		for i = 2:length(data)
 
 			temp = crabsort.analysis.chunk(data(i),options);
-			cdata = [cdata; temp];
+			% glom them all together
+			N2 = size(temp.experiment_idx,1);
+			
+			for j = 1:length(fn)
+				if size(temp.(fn{j}),1) == N2
+					cdata.(fn{j}) = [cdata.(fn{j}); temp.(fn{j})];
+				else
+					cdata.(fn{j}) = [cdata.(fn{j}) temp.(fn{j})];
+				end
+
+			end
 		end
 
 		

@@ -1,30 +1,48 @@
 function cdata = chunk(data,options)
 
-% TODO: chunk data too
-
-time = (1:length(data.mask))*options.dt;
-n_chunks = ceil(max(time)/options.ChunkSize);
-cdata = repmat(data,n_chunks,1);
 
 
-for i = 1:n_chunks
+
+n_rows = ceil(length(data.mask)*options.dt/options.ChunkSize);
 
 
+cdata = struct;
+
+% make matrices for every neuron 
+for i = 1:length(options.neurons)
+	cdata.(options.neurons{i}) = NaN(1e3,n_rows);
+end
+
+
+
+for i = 1:n_rows
 	a = (i-1)*options.ChunkSize;
-	z = (i)*options.ChunkSize;
+	z = a + options.ChunkSize;
 
-	cdata(i).mask = cdata(i).mask(time >= a & time < z);
 
 	for j = 1:length(options.neurons)
-		spiketimes = cdata(i).(options.neurons{j});
-		spiketimes(spiketimes < a | spiketimes > z) = [];
-		cdata(i).(options.neurons{j}) = spiketimes;
+		these_spikes = data.(options.neurons{j});
+		these_spikes = these_spikes(these_spikes >= a & these_spikes <= z);
+		if length(these_spikes) > 1e3
+			these_spikes = these_spikes(1:1e3);
+		end
+		cdata.(options.neurons{j})(1:length(these_spikes),i) = these_spikes;
 
 	end
+end
 
-	cdata(i).time_offset = a;
-	cdata(i).T = options.ChunkSize;
+fn = fieldnames(data);
 
+for j = 1:length(fn)
+	if any(strcmp(fn{j},options.neurons))
+	elseif strcmp(fn{j},'T')
+	elseif strcmp(fn{j},'time_offset')
+	elseif strcmp(fn{j},'experiment_idx')
+		cdata.(fn{j})=  repmat(data.experiment_idx,n_rows,1);
+	else
 
+		cdata.(fn{j}) = data.(fn{j})(1:options.ChunkSize/options.dt:end);
+		
+	end
 
 end
