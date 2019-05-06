@@ -172,7 +172,7 @@ if ~isnan(options.ChunkSize)
 
 	corelib.cprintf('green','[DONE]\n')
 
-	
+	data = cdata;	
 
 
 end
