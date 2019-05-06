@@ -12,6 +12,9 @@
 % crabsort.consolidate(...'dt',1e-3)
 % crabsort.consolidate(...'stack',true)
 % ```
+%
+% Chunking may throw away data at the end if it doesn't fit into
+% a full chunk
 
 
 function data = consolidate(varargin)
@@ -103,7 +106,7 @@ end
 
 if options.stack
 
-	disp('Stacking data...')
+	fprintf('Stacking data...')
 
 	fn = fieldnames(data);
 	sdata = struct;
@@ -135,6 +138,41 @@ if options.stack
 
 
 	data = sdata;
+	corelib.cprintf('green','[DONE]\n')
+
+end
+
+
+
+% chunk
+if ~isnan(options.ChunkSize)
+	fprintf('Chunking data...')
+	if length(data) == 1
+		% assume data has been stacked, and now we need to chunk
+
+		
+
+		data = crabsort.analysis.chunk(data,options);
+
+
+
+		
+	else
+		% data hasn't been stacked. Still need to chunk
+		cdata =  crabsort.analysis.chunk(data(1),options);
+		for i = 2:length(data)
+
+			temp = crabsort.analysis.chunk(data(i),options);
+			cdata = [cdata; temp];
+		end
+
+		
+	end
+
+
+	corelib.cprintf('green','[DONE]\n')
+
+	
 
 
 end
