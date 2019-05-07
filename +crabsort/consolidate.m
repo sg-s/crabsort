@@ -16,6 +16,9 @@
 %
 % Chunking may throw away data at the end if it doesn't fit into
 % a full chunk
+%
+% the 'nerves' option is not used by anything in consolidate,
+% but may affect the behaviour of functions in DataFun
 
 
 function data = consolidate(varargin)
@@ -27,6 +30,8 @@ options.neurons = {};
 options.stack = false;
 options.DataFun = {};
 options.ChunkSize = NaN; % seconds 
+options.nerves = {};
+options.UseParallel = true;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
@@ -46,6 +51,7 @@ load([allfiles(1).folder filesep 'crabsort.common'],'-mat','common')
 
 
 assert(~isempty(options.neurons),'neurons must be specified')
+assert(iscell(options.nerves),'Expected nerves to be a cell array')
 
 
 
@@ -94,8 +100,14 @@ end
 
 % load all the data into the data structure
 % in parallel
-parfor i = 1:length(data)
-	data(i) = crabsort.analysis.readData(allfiles(i), options,data(i));
+if options.UseParallel
+	parfor i = 1:length(data)
+		data(i) = crabsort.analysis.readData(allfiles(i), options,data(i));
+	end
+else
+	for i = length(data):-1:1
+		data(i) = crabsort.analysis.readData(allfiles(i), options,data(i));
+	end
 end
 
 
