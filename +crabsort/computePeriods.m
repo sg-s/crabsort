@@ -69,6 +69,8 @@ for i = 1:length(neurons)
 
 	burst_starts(n_spikes_per_burst<min_spikes_per_burst) = [];
 	burst_ends(n_spikes_per_burst<min_spikes_per_burst) = [];
+	n_spikes_per_burst(n_spikes_per_burst<min_spikes_per_burst) = [];
+	
 
 	if isempty(burst_starts)
 		continue
