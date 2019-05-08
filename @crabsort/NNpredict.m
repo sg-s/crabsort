@@ -67,6 +67,12 @@ if NNdata.sdp.spike_sign
 		self.findSpikes()
 		spiketimes = find(self.putative_spikes(:,channel));
 
+
+		if isempty(spiketimes)
+			futz_factor = futz_factor*.85;
+			continue
+		end
+
 		V_snippets = self.getSnippets(channel,spiketimes);
 
 
@@ -90,6 +96,12 @@ else
 
 		self.findSpikes()
 		spiketimes = find(self.putative_spikes(:,channel));
+
+		if isempty(spiketimes)
+			futz_factor = futz_factor*.85;
+			continue
+		end
+
 
 		V_snippets = self.getSnippets(channel,spiketimes);
 
