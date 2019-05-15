@@ -121,6 +121,8 @@ if options.stack
 
 	fprintf('Stacking data...')
 
+	crabsort.checkConsecutive(allfiles);
+
 	fn = fieldnames(data);
 	sdata = struct;
 
