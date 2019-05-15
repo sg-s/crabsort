@@ -129,6 +129,7 @@ if options.stack
 	end
 
 	for i = 1:length(data)
+		corelib.textbar(i,length(data))
 		for j = 1:length(fn)
 			if any(strcmp(fn{j},options.neurons))
 				sdata.(fn{j}) = [sdata.(fn{j}); data(i).time_offset+data(i).(fn{j})];
@@ -162,14 +163,8 @@ if ~isnan(options.ChunkSize)
 	fprintf('Chunking data...')
 	if length(data) == 1
 		% assume data has been stacked, and now we need to chunk
+		cdata = crabsort.analysis.chunk(data,options);
 
-		
-
-		data = crabsort.analysis.chunk(data,options);
-
-
-
-		
 	else
 		% data hasn't been stacked. Still need to chunk
 		cdata =  crabsort.analysis.chunk(data(1),options);
