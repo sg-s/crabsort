@@ -121,6 +121,26 @@ for i = 2:length(data)
 end
 
 
+
+
+% parse metadata if exists
+metadata_file = dir([options.DataDir filesep '*.txt']);
+if ~isempty(metadata_file)
+	metadata = crabsort.parseMetadata([metadata_file.folder filesep metadata_file.name],allfiles);
+
+
+	% add this to data
+	mfn = fieldnames(metadata);
+
+
+	for i = 1:length(data)
+		for j = 1:length(mfn)
+			data(i).(mfn{j}) = metadata.(mfn{j})(i);
+		end
+	end
+
+end
+
 if options.stack
 
 	fprintf('Stacking data...')
@@ -203,3 +223,5 @@ if ~isnan(options.ChunkSize)
 
 
 end
+
+
