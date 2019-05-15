@@ -1,5 +1,9 @@
 % check if all files are sorted
-function fatal = checkSorted(allfiles, neurons)
+function fatal = checkSorted(allfiles, neurons, early_exit)
+
+if nargin < 3
+	early_exit = false;
+end
 
 fatal = false;
 for i = 1:length(allfiles)
@@ -13,5 +17,10 @@ for i = 1:length(allfiles)
 	else
 		corelib.cprintf('red',['Some channels not sorted on ' allfiles(i).name '\n'])
 		fatal = true;
+
+		if early_exit
+			return
+		end
+
 	end
 end
