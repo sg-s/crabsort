@@ -37,8 +37,9 @@ for j = 1:length(fn)
 	if any(strcmp(fn{j},options.neurons))
 	elseif strcmp(fn{j},'T')
 	elseif strcmp(fn{j},'time_offset')
-	elseif strcmp(fn{j},'experiment_idx')
-		cdata.(fn{j})=  repmat(data.experiment_idx,n_rows,1);
+	elseif strcmp(fn{j},'experiment_idx') || strcmp(fn{j},'filename')
+		cdata.(fn{j})=  repmat(data.(fn{j}),n_rows,1);
+		
 	else
 
 		cdata.(fn{j}) = data.(fn{j})(1:options.ChunkSize/options.dt:end);

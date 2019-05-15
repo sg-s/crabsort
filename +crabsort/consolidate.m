@@ -70,6 +70,7 @@ for i = length(allfiles):-1:1
 	data(i).T = NaN;
 	data(i).experiment_idx = exp_dir;
 	data(i).mask = [];
+	data(i).filename = '';
 
 
 	% make variables for the DataFun
@@ -110,6 +111,9 @@ else
 	end
 end
 
+for i = 1:length(data)
+	data(i).filename = categorical({allfiles(i).name(1:min(strfind(allfiles(i).name,'.'))-1)});
+end
 
 % set the time_offsets for all the data
 for i = 2:length(data)
