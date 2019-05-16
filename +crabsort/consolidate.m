@@ -168,7 +168,11 @@ if options.stack
 				% check size
 				this_variable = data(i).(fn{j});
 				if length(this_variable) ~= length(data(i).mask)
-					this_variable = this_variable*(data(i).mask*0 + 1);
+					if isa(this_variable,'categorical')
+						this_variable = repmat(this_variable,length(data(i).mask),1);
+					else
+						this_variable = this_variable*(data(i).mask*0 + 1);
+					end
 				end
 				sdata.(fn{j}) = [sdata.(fn{j}); this_variable];
 				
