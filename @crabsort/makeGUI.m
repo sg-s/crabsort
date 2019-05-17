@@ -80,7 +80,7 @@ end
 
 
 uimenu(handles.menu_name(4),'Label','mark data outside YLim as artifacts','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
-
+uimenu(handles.menu_name(4),'Label','Overwrite previous predictions','Callback',@uxlib.toggleCheckedMenu,'Separator','on');
 
 
 % neural network 

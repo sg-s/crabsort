@@ -1,7 +1,7 @@
 
 function runAutomateAction(self)
 
-
+menu_items = self.handles.menu_name(4).Children;
 
 switch self.automate_action
 
@@ -75,6 +75,10 @@ case crabsort.automateAction.all_channels_all_files
 
 			self.channel_to_work_with = channel;
 
+			if strcmp(menu_items(find(strcmp({menu_items.Text},'Overwrite previous predictions'))).Checked,'on')
+				self.redo;
+			end
+
 			if self.channel_stage(channel) == 0
 				if isempty(self.common.NNdata(channel).other_nerves_control)
 					continue
@@ -115,7 +119,11 @@ case crabsort.automateAction.all_channels_this_file
 
 		self.channel_to_work_with = channel;
 
-		if self.channel_stage(channel) == 0
+		if strcmp(menu_items(find(strcmp({menu_items.Text},'Overwrite previous predictions'))).Checked,'on')
+			self.redo;
+		end
+
+		if self.channel_stage(channel) == 0 
 			if isempty(self.common.NNdata(channel).other_nerves_control)
 				continue
 			end
@@ -168,10 +176,17 @@ case crabsort.automateAction.this_channel_all_files
 
 		self.channel_to_work_with = channel;
 
-		if self.channel_stage(channel) == 0
+
+		if strcmp(menu_items(find(strcmp({menu_items.Text},'Overwrite previous predictions'))).Checked,'on')
+			self.redo;
+
+		end
+
+
+		if self.channel_stage(channel) == 0 
 			% put logic here
-			C = self.handles.menu_name(4).Children;
-			if strcmp(C(find(strcmp({C.Text},'mark data outside YLim as artifacts'))).Checked,'on')
+
+			if strcmp(menu_items(find(strcmp({menu_items.Text},'mark data outside YLim as artifacts'))).Checked,'on')
 				% need to remove artifacts
 				src.Text = 'Ignore sections where data exceeds Y bounds';
 				self.ignoreSection(src);
