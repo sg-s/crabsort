@@ -67,14 +67,15 @@ end
 
 % remove all spikes when mask is false
 global_mask = max(self.mask,[],2);
-nerves = fieldnames(self.spikes);
-for i = 1:length(nerves)
-	neurons = fieldnames(self.spikes.(nerves{i}));
-	for j = 1:length(neurons)
-		self.spikes.(nerves{i}).(neurons{j})(global_mask(self.spikes.(nerves{i}).(neurons{j})) == 0) = [];
+if ~isempty(self.spikes)
+	nerves = fieldnames(self.spikes);
+	for i = 1:length(nerves)
+		neurons = fieldnames(self.spikes.(nerves{i}));
+		for j = 1:length(neurons)
+			self.spikes.(nerves{i}).(neurons{j})(global_mask(self.spikes.(nerves{i}).(neurons{j})) == 0) = [];
+		end
 	end
 end
-
 
 
 
