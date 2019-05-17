@@ -65,10 +65,26 @@ otherwise
 end
 
 
+% remove all spikes when mask is false
+global_mask = max(self.mask,[],2);
+nerves = fieldnames(self.spikes);
+for i = 1:length(nerves)
+	neurons = fieldnames(self.spikes.(nerves{i}));
+	for j = 1:length(neurons)
+		self.spikes.(nerves{i}).(neurons{j})(global_mask(self.spikes.(nerves{i}).(neurons{j})) == 0) = [];
+	end
+end
+
+
+
+
+
 % update the mean removal
 for i = 1:self.n_channels
 	self.removeMean(i);
 end
+
+self.showSpikes;
 
 % redraw 
 self.scroll(self.handles.ax.ax(1).XLim);
