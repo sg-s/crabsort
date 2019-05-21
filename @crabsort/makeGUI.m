@@ -28,6 +28,8 @@ pool = gcp('nocreate');
 if isempty(pool)
 	parpool('local');
 end
+pool = gcp('nocreate');
+self.NumWorkers = pool.NumWorkers;
 
 %delete(temp([2:5 7:8 11:15]))
 

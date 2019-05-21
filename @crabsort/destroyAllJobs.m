@@ -1,8 +1,9 @@
-function destroyAllJobs(self,channel)
+% destroys all job files
+function destroyAllJobs(self)
 
 job_file_location = [self.path_name 'network'];
 
-allfiles = dir([job_file_location filesep  mat2str(channel) '*.job']);
+allfiles = dir([job_file_location filesep  '*.job']);
 
 if isempty(allfiles)
 	return

@@ -12,7 +12,7 @@
 **Syntax**
 
 ```
-C.NNtrain(channel)
+C.NNtrain(channel, worker)
 ```
 
 **Description**
@@ -24,9 +24,9 @@ onto NNtrainOnParallelWorker()
 
 %}
 
-function NNtrain(self,channel)
+function NNtrain(self,channel, worker)
 
-assert(nargin == 2,'Need to specify the channel')
+assert(nargin == 3,'Need to specify the channel and worker')
 
 
 NNdata = self.common.NNdata(channel);
@@ -90,7 +90,7 @@ network_data.checkpoint_path = checkpoint_path;
 
 ts = strrep(NNdata.timestamp_last_modified,':','_');
 
-save_name = [self.path_name 'network' filesep  mat2str(channel) '_' ts '.job'];
+save_name = [self.path_name 'network' filesep  mat2str(worker) '_' ts '.job'];
 
 
 save(save_name,'network_data','-nocompression','-v7.3')

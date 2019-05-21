@@ -1,8 +1,8 @@
 
 
-function [accuracy, timestamp_last_trained] = NNgetCurrentAccuracy(self, channel)
+function [accuracy, timestamp_last_trained] = NNgetCurrentAccuracy(self, worker)
 
-D = self.workers(channel).Diary;
+D = self.workers(worker).Diary;
 
 accuracy = [];
 timestamp_last_trained = '';

@@ -207,7 +207,10 @@ self.raw_data_size = size(self.raw_data);
 if hard_load
     % reset common
     self.common = crabsort.common(self.n_channels);
+    self.training_on = NaN(self.n_channels,1);
 end
+
+
 
 % set the channel_stages
 self.channel_stage = zeros(self.n_channels,1);

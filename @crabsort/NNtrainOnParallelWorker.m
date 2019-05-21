@@ -11,7 +11,7 @@ while true
     pause(2)
 
     % check the job_file_location
-    allfiles = dir([job_file_location filesep  mat2str(worker_idx) '*.job']);
+    allfiles = dir([job_file_location filesep  mat2str(worker_idx) '_*.job']);
 
     if isempty(allfiles)
         disp('No jobs, aborting...')
@@ -67,9 +67,17 @@ while true
     H = network_data.hash;
     NN_dump_file = [checkpoint_path filesep H '.mat'];
 
+
     if exist(NN_dump_file,'file') == 2
         disp('Loading existing network...')
-        load(NN_dump_file)
+        try
+            load(NN_dump_file)
+        catch
+            % for whatever reason, the file exists, but we can't load it
+            % in this case the best thing to do is nuke this file and abort
+            delete(NN_dump_file)
+            return
+        end
         layers = trainedNet.Layers;
         
     else
