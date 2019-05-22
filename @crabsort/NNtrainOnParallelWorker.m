@@ -38,7 +38,11 @@ while true
 
     load([allfiles(use_this).folder filesep allfiles(use_this).name],'-mat')
 
-
+    % delete all job files since we don't want to run on old ones
+    for i = 1:length(allfiles)
+        delete([allfiles(i).folder filesep allfiles(i).name])
+    end
+    
 
 
     X = network_data.X;

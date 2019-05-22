@@ -89,6 +89,13 @@ end
 
 
 
+if self.verbosity > 0
+	clc
+	disp(['[NNtimer] ' mat2str(length(free_workers)) ' free workers'])
+end
+
+
+
 for i = 1:self.n_channels
 
 	if isempty(self.common.NNdata(i).label_idx)
@@ -106,11 +113,19 @@ for i = 1:self.n_channels
 		D = {};
 	end
 
+	if self.verbosity > 0
+		disp(['[NNtimer] channel ' mat2str(i)])
+	end
+
 
 	if length(D) > 2 && strcmp(D{end-1},'No jobs, aborting...')
 		% worker is idle
 		self.training_on(i) = NaN;
 		self.handles.ax.NN_status(i).String = 'IDLE';
+
+		if self.verbosity > 0
+			disp('[NNtimer] worker idle')
+		end
 
 	elseif length(D) > 2
 		% actively training? update display
@@ -122,6 +137,10 @@ for i = 1:self.n_channels
 
 			self.common.NNdata(i).timestamp_last_trained = timestamp_last_trained;
 			self.common.NNdata(i).accuracy = str2double(accuracy);
+		else
+			if self.verbosity > 0
+				disp('[NNtimer] Could not determine accuracy') 
+			end
 		end
 
 	end
@@ -129,35 +148,28 @@ for i = 1:self.n_channels
 
 	if self.common.NNdata(i).isMoreTrainingNeeded
 		% more training needed
+
+		if isempty(free_workers)
+			% no workers, so can't do anything
+			self.handles.ax.NN_status(i).String = 'NO WORKERS';
+			continue
+		end
+
 		self.handles.ax.NN_status(i).String = 'TRAINING';
-		if isnan(self.training_on(i))
+		if isnan(self.training_on(i)) 
 			train_on_this = free_workers(1);
 			free_workers(1) = [];
 			self.training_on(i) = train_on_this;
 		end
 		
+		if self.verbosity > 0
+			disp(['[NNtimer] Training channel ' mat2str(i) ' on worker ' mat2str(self.training_on(i)) ]) 
+		end
+
 		self.NNtrain(i, self.training_on(i));
 
-	else
-		% no more training needed
-		self.destroyAllJobs();
 
 	end
-
-
-
-
-
-
-
-
-	% checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{i}];
-
-	% H = self.common.NNdata(i).networkHash();
-	% NN_dump_file = [checkpoint_path filesep H '.mat'];
-
-
-
 
 
 
