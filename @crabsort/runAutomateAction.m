@@ -21,16 +21,15 @@ case crabsort.automateAction.view_only
 			break
 		end
 
-
-		% % check if the next file is already sorted
 		next_file = self.getFileSequence+1;
 		if next_file > length(allfiles)
 			next_file = 1;
 		end
 
-
 		self.file_name = allfiles(next_file).name;
 		self.loadFile()
+
+		drawnow;
 
 
 	end
