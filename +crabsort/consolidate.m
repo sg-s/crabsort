@@ -32,6 +32,7 @@ options.DataFun = {};
 options.ChunkSize = NaN; % seconds 
 options.nerves = {};
 options.UseParallel = true;
+options.ForceStack = false;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
@@ -145,7 +146,10 @@ if options.stack
 
 	fprintf('Stacking data...')
 
-	crabsort.checkConsecutive(allfiles);
+
+	if ~options.ForceStack
+		crabsort.checkConsecutive(allfiles);
+	end
 
 	fn = fieldnames(data);
 	sdata = struct;
