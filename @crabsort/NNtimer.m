@@ -87,7 +87,7 @@ for i = 1:self.NumWorkers
 
 end
 
-
+spinner_symbols = {'.','..','...','+'};
 
 if self.verbosity > 0
 	clc
@@ -129,7 +129,9 @@ for i = 1:self.n_channels
 
 	elseif length(D) > 2
 		% actively training? update display
-		self.handles.ax.NN_status(i).String = 'TRAINING';
+		spinner = spinner_symbols{randi(4)};
+		self.handles.ax.NN_status(i).String = ['TRAINING' spinner];
+		
 		[accuracy, timestamp_last_trained] = self.NNgetCurrentAccuracy(self.training_on(i));
 
 		if ~isempty(accuracy)
@@ -155,7 +157,9 @@ for i = 1:self.n_channels
 			continue
 		end
 
-		self.handles.ax.NN_status(i).String = 'TRAINING';
+		spinner = spinner_symbols{randi(4)};
+		self.handles.ax.NN_status(i).String = ['TRAINING' spinner];
+
 		if isnan(self.training_on(i)) 
 			train_on_this = free_workers(1);
 			free_workers(1) = [];
