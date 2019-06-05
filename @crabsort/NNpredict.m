@@ -79,13 +79,13 @@ if NNdata.sdp.spike_sign
 		end
 
 		V_snippets = self.getSnippets(channel,spiketimes);
-		
+		V_snippets(:,(sum(V_snippets) == 0)) = NaN;
 
 		if futz_factor < .3
 			goon = false;
 		end
 
-		if min(max(V_snippets)) > smallest_spike 
+		if nanmin(nanmax(V_snippets)) > smallest_spike 
 			futz_factor = futz_factor*.85;
 		else
 			goon = false;
@@ -109,13 +109,13 @@ else
 
 
 		V_snippets = self.getSnippets(channel,spiketimes);
-
+		V_snippets(:,(sum(V_snippets) == 0)) = NaN;
 
 		if futz_factor < .3
 			goon = false;
 		end
 
-		if max(min(V_snippets)) > smallest_spike 
+		if nanmax(nanmin(V_snippets)) > smallest_spike 
 			futz_factor = futz_factor*.85;
 		else
 			goon = false;
