@@ -50,6 +50,7 @@ crabsort.uninstall
 | `⇧ + ↓` | jump to a next less weird spike |
 | `p` | Predict spikes using Neural network |
 | `r` | reset zoom | 
+| `0` | Set channel as having no spikes |
 
 
 

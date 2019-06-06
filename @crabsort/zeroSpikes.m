@@ -23,3 +23,5 @@ end
 % set the channel stage too
 self.channel_stage(channel) = 3;
 self.showSpikes(channel);
+
+self.say('Marking this channel as having no spikes!')
