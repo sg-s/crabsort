@@ -115,7 +115,7 @@ else
 			goon = false;
 		end
 
-		if nanmax(nanmin(V_snippets)) > smallest_spike 
+		if nanmax(nanmin(V_snippets)) < smallest_spike 
 			futz_factor = futz_factor*.85;
 		else
 			goon = false;
