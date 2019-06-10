@@ -43,6 +43,7 @@ addlistener(handles.scroll_bar,'ContinuousValueChange',@self.scroll);
 % plots
 handles.menu_name(1) = uimenu('Label','Make Plots...');
 uimenu(handles.menu_name(1),'Label','Raster','Callback',@self.makeRaster);
+uimenu(handles.menu_name(1),'Label','Plot ISIs','Callback',@self.makeISIPlot);
 
 % tools
 handles.menu_name(2) = uimenu('Label','Tools');
