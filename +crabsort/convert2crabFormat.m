@@ -1,13 +1,18 @@
 % this function converts all ABF files into the .crab 
 % format, and then makes sure that the data is consistent 
 
-function convert2crabFormat()
+function convert2crabFormat(varargin)
 
 
 
 self = crabsort(false);
 
-allowed_file_extensions = {'*.abf'};
+
+if nargin == 0
+	allowed_file_extensions = {'*.abf'};
+else
+	allowed_file_extensions = varargin;
+end
 
 self.path_name = pwd;
 
@@ -43,7 +48,7 @@ for i = 1:length(allowed_file_extensions)
 			H = hashlib.md5hash([self.builtin_channel_names{:}]);
 			fprintf([strlib.fix(H,15) '\n'])
 
-			all_channel_names = unique([all_channel_names; self.builtin_channel_names]);
+			all_channel_names = unique([all_channel_names; self.builtin_channel_names(:)]);
 
 
 			n_channels(j) = size(self.raw_data,2);

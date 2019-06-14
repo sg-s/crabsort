@@ -80,6 +80,10 @@ if strcmp(src.String,'Load File')
         self.path_name = path_name;
     end
 
+    if ~filelib.isWriteable(self.path_name)
+        warndlg('The file you are loading is in a read-only directory. You will not be able to sort spikes here','crabsort')
+    end
+
     % check to make sure all .ABF files have the same structure
     if strcmpi(self.file_name(end-2:end),'ABF') && ~self.pref.skip_abf_check
         self.checkABFFiles;
