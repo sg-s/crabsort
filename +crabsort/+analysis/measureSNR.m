@@ -58,7 +58,7 @@ for i = 1:(self.raw_data_size(2))
 		data.file_name = [data.file_name; self.file_name];
 		data.nerve_name = [data.nerve_name; nerve];
 		data.neuron_name = [data.neuron_name; neuron_names{j}];
-		data.SNR = [data.SNR; (mean_spike_ht/noise_sigma)];
+		data.SNR = [data.SNR; (mean_spike_ht/noise_sigma)^2];
 
 	end
 
