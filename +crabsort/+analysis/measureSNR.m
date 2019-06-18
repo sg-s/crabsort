@@ -11,6 +11,10 @@ self.file_name = strrep(file_name.name,'.crabsort','');
 
 self.loadFile;
 
+if isempty(self.raw_data)
+	return
+end
+
 % window size to average over the "noise"
 N = round(.1/self.dt);
 
@@ -39,26 +43,34 @@ for i = 1:(self.raw_data_size(2))
 
 		spike_locations = self.spikes.(nerve).(neuron_names{j});
 
-
-		mean_spike_ht = abs(mean(self.raw_data(spike_locations,i)));
-
-		try
-			temp = reshape(self.raw_data(:,i),N,round(self.raw_data_size(1)/N));
-		catch
+		if isempty(spike_locations)
 			continue
 		end
 
-		rm_this = unique(round(spike_locations*self.dt*10));
-		rm_this(rm_this == 0) = [];
-		temp(:,rm_this) = [];
-		temp(1:round(N/2),:) = [];
-		noise_sigma =  mean(std(temp));
 
-		% save all of this
-		data.file_name = [data.file_name; self.file_name];
-		data.nerve_name = [data.nerve_name; nerve];
-		data.neuron_name = [data.neuron_name; neuron_names{j}];
-		data.SNR = [data.SNR; (mean_spike_ht/noise_sigma)^2];
+		% find minimum absolute spike height
+		min_spike_ht = abs(min(self.raw_data(spike_locations,i)));
+
+
+		% chunbk data
+		temp = veclib.chunk(self.raw_data(:,i),N);
+
+
+		try
+			rm_this = unique(floor(spike_locations*self.dt*10));
+			rm_this(rm_this == 0) = [];
+			temp(:,rm_this) = [];
+
+			noise_sigma =  mean(std(temp));
+
+			% save all of this
+			data.file_name = [data.file_name; self.file_name];
+			data.nerve_name = [data.nerve_name; nerve];
+			data.neuron_name = [data.neuron_name; neuron_names{j}];
+			data.SNR = [data.SNR; (min_spike_ht/noise_sigma)^2];
+		catch
+		end
+
 
 	end
 
