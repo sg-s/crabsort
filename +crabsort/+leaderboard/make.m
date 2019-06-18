@@ -29,8 +29,7 @@ for i = 1:length(data)
 		all_exp_id(i) = categorical({exp_id(1:max(strfind(exp_id,'_'))-1)});
 
 	catch
-		% get the raw data
-		
+
 
 	end
 
@@ -48,14 +47,33 @@ for i = 1:length(data)
 		C.loadFile;
 
 		raw_data = C.raw_data(:,strcmp(C.common.data_channel_names,nerve_name));
-		raw_data = raw_data(1:ceil(window_size/C.dt));
+
+		
+
+		try
+			spiketimes = C.spikes.(nerve_name).(neuron_name);
+			midpt = spiketimes(floor(length(spiketimes)/2));
+			a = midpt - ceil(window_size/(2*C.dt));
+			z = midpt + ceil(window_size/(2*C.dt));
+			if a < 1
+				a = 1;
+			end
+			if z > length(raw_data)
+				z = length(raw_data);
+			end
+
+		catch
+			a = 1;
+			z = ceil(window_size/(C.dt));
+		end
+
 
 		figure('outerposition',[300 300 1200 450],'PaperUnits','points','PaperSize',[1200 450]); hold on
-		plot(C.time(1:ceil(window_size/C.dt)), raw_data,'k')
-		set(gca,'XLim',[0 window_size])
+		plot(C.time(a:z), raw_data(a:z),'k')
 		figlib.pretty('PlotLineWidth',1)
 		axis off
 		figlib.tight;
+
 
 		saveas(gcf,['~/Desktop/traces/' strip(char(all_exp_id(i))) '.png'],'png');
 
