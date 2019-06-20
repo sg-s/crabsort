@@ -12,6 +12,7 @@ self.file_name = strrep(file_name.name,'.crabsort','');
 self.loadFile;
 
 if isempty(self.raw_data)
+	disp('no data')
 	return
 end
 
@@ -21,6 +22,7 @@ N = round(.1/self.dt);
 nerve_names = self.common.data_channel_names;
 
 if isempty(self.spikes)
+	disp('no spikes')
 	return
 end
 
@@ -65,6 +67,7 @@ for i = 1:(self.raw_data_size(2))
 
 			% save all of this
 			data.file_name = [data.file_name; self.file_name];
+			data.path_name = [data.path_name; self.path_name];
 			data.nerve_name = [data.nerve_name; nerve];
 			data.neuron_name = [data.neuron_name; neuron_names{j}];
 			data.SNR = [data.SNR; (min_spike_ht/noise_sigma)^2];

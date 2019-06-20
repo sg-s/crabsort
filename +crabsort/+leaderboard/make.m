@@ -6,8 +6,6 @@ if isempty(look_here)
 	look_here = pwd;
 end
 
-all_files = filelib.getAll(look_here);
-
 data = crabsort.leaderboard.measure(look_here);
 
 
@@ -35,13 +33,12 @@ for i = 1:length(data)
 
 	if ~isnan(all_best_snr(i))
 		this_file = data(i).file_name(find(data(i).SNR == all_best_snr(i)));
+		this_file_path = data(i).path_name(find(data(i).SNR == all_best_snr(i)));
 
-		idx = find(~cellfun(@isempty,cellfun(@(x) strfind(x,char(this_file)), all_files,'UniformOutput',false)));
 
 		C = crabsort(false);
-		this_file_path = all_files{idx(1)};
 
-		C.path_name = fileparts(this_file_path);
+		C.path_name = char(this_file_path);
 		C.file_name = char(this_file);
 
 		C.loadFile;
@@ -65,6 +62,24 @@ for i = 1:length(data)
 		catch
 			a = 1;
 			z = ceil(window_size/(C.dt));
+		end
+
+
+
+		temp.file_name = categorical(repmat(NaN,10,1));
+		temp.nerve_name = categorical(repmat(NaN,10,1));
+		temp.neuron_name = categorical(repmat(NaN,10,1));
+		temp.SNR = (repmat(NaN,10,1));
+
+		try
+			if strcmp(C.path_name(end),filesep)
+				temp = crabsort.analysis.measureSNR(dir([C.path_name C.file_name '.crabsort']),temp);
+			else
+				temp = crabsort.analysis.measureSNR(dir([C.path_name filesep C.file_name '.crabsort']),temp);
+			end
+			
+		catch
+			keyboard
 		end
 
 

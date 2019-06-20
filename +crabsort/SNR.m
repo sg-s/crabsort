@@ -7,6 +7,7 @@ function data = SNR(varargin)
 % options and defaults
 options.DataDir = pwd;
 options.MakePlot = false;
+options.UseCache = true;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
@@ -17,6 +18,7 @@ allfiles = dir([options.DataDir filesep '*.crabsort']);
 if isempty(allfiles)
 	N = 1;
 	data.file_name = categorical(repmat(NaN,10*N,1));
+	data.path_name = categorical(repmat(NaN,10*N,1));
 	data.nerve_name = categorical(repmat(NaN,10*N,1));
 	data.neuron_name = categorical(repmat(NaN,10*N,1));
 	data.SNR = (repmat(NaN,10*N,1));
@@ -29,7 +31,7 @@ for i = length(allfiles):-1:1
 end
 
 H = hashlib.md5hash([H{:}]);
-if exist([allfiles(1).folder filesep H '.snr'],'file') == 2
+if exist([allfiles(1).folder filesep H '.snr'],'file') == 2 && options.UseCache
 	load([allfiles(1).folder filesep H '.snr'],'-mat')
 
 else
@@ -42,6 +44,7 @@ else
 		% common does not exist, abort
 		N = length(allfiles);
 		data.file_name = categorical(repmat(NaN,10*N,1));
+		data.path_name = categorical(repmat(NaN,10*N,1));
 		data.nerve_name = categorical(repmat(NaN,10*N,1));
 		data.neuron_name = categorical(repmat(NaN,10*N,1));
 		data.SNR = (repmat(NaN,10*N,1));
@@ -55,6 +58,7 @@ else
 	data = struct;
 	N = length(allfiles);
 	data.file_name = categorical(repmat(NaN,10*N,1));
+	data.path_name = categorical(repmat(NaN,10*N,1));
 	data.nerve_name = categorical(repmat(NaN,10*N,1));
 	data.neuron_name = categorical(repmat(NaN,10*N,1));
 	data.SNR = (repmat(NaN,10*N,1));
@@ -63,6 +67,7 @@ else
 	temp_data = struct;
 	for i = 1:N
 		temp_data(i).file_name = categorical({''});
+		temp_data(i).path_name = categorical({''});
 		temp_data(i).nerve_name = categorical({''});
 		temp_data(i).neuron_name = categorical({''});
 		temp_data(i).SNR = NaN;
@@ -83,7 +88,7 @@ else
 	data.neuron_name = vertcat(temp_data.neuron_name);
 	data.nerve_name = vertcat(temp_data.nerve_name);
 	data.file_name = vertcat(temp_data.file_name);
-
+	data.path_name = vertcat(temp_data.path_name);
 
 	% clean up
 	rm_this = isnan(data.SNR);
@@ -92,6 +97,7 @@ else
 	data.neuron_name(rm_this) = [];
 	data.nerve_name(rm_this) = [];
 	data.file_name(rm_this) = [];
+	data.path_name(rm_this) = [];
 
 
 	% save it
