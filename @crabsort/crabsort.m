@@ -132,10 +132,13 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
     methods
 
-        function self = crabsort(make_gui)
+        function self = crabsort(make_gui, get_plugins)
 
             if nargin == 0 
                 make_gui = true;
+                get_plugins = true;
+            elseif nargin == 1
+                get_plugins = true;
             end
 
             % check for dependencies
@@ -154,7 +157,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
 
             % load preferences
-            self.pref = corelib.readPref(fileparts(fileparts(which(mfilename))));
+            try
+                self.pref = corelib.readPref(fileparts(fileparts(which(mfilename))));
+            catch
+            end
+
 
             % for backward compatibility, convert some things
             % into base props
@@ -165,7 +172,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
             end
 
             % figure out what plugins are installed, and link them
-            self = self.plugins;
+            if get_plugins
+                self = self.plugins;
+            end
 
             % get the version name and number
             self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) filesep 'build_number']))];

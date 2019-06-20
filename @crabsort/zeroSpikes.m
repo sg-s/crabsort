@@ -9,7 +9,13 @@ end
 
 
 nerve_name = self.common.data_channel_names{channel};
-neurons = self.nerve2neuron.(nerve_name);
+
+if strcmp(upper(nerve_name),nerve_name)
+	% intracellular
+	neurons = {nerve_name};
+else
+	neurons = self.nerve2neuron.(nerve_name);
+end
 
 if ~iscell(neurons)
 	neurons = {neurons};

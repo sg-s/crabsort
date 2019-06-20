@@ -5,6 +5,9 @@
 function loadFile(self,src,~)
 
 
+channel = self.channel_to_work_with;
+
+
 % are we showing a full trace view?
 full_trace_view = false;
 if ~isempty(self.handles)
@@ -203,6 +206,7 @@ catch
 
     return
 end
+
 
 % store the size of the raw_data
 self.raw_data_size = size(self.raw_data);
@@ -420,6 +424,9 @@ for i = 1:length(self.handles.ax.uncertain_spikes)
     self.handles.ax.uncertain_spikes(i).YData = NaN;
 end
 
+
+self.channel_to_work_with = channel;
+
 % should we attempt to maintain the full-trace view?
 if full_trace_view
     self.showFullTrace;
@@ -427,14 +434,18 @@ end
 
 self.showSpikes;
 
+
 catch err
+
+    opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
+    errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort is now in debug mode. You must exit from debug mode before continuting. ','crabsort::LoadFile FATAL ERROR',opts)
 
     keyboard
 
     self.raw_data = [];
     self.displayStatus(err, true)
     save([hashlib.md5hash(now) '.error'],'err')
-    warning('FATAL error')
+
 
 end
 

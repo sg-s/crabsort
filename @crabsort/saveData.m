@@ -39,8 +39,7 @@ end
 self.ignore_section.ons = ons;
 self.ignore_section.offs = offs;
 
-
-crabsort_obj = crabsort(false);
+crabsort_obj = crabsort(false, false);
 
 fn = properties(self);
 
