@@ -8,11 +8,7 @@ function convert2crabFormat(varargin)
 self = crabsort(false);
 
 
-if nargin == 0
-	allowed_file_extensions = {'*.abf'};
-else
-	allowed_file_extensions = varargin;
-end
+allowed_file_extensions = {'*.abf','*.smr'};
 
 self.path_name = pwd;
 
@@ -68,6 +64,7 @@ for i = 1:length(allowed_file_extensions)
 	end
 
 	% now go through all the .crab files and make them consistent 
+
 	if length(unique(channel_name_hash)) > 1
 		disp('Inconsistent files, harmonizing...')
 
