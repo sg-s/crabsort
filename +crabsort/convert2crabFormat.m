@@ -27,7 +27,6 @@ for i = 1:length(allowed_file_extensions)
 
 		crabsort.convertFile2crabFormat(allfiles(j), this_file_ext);
 
-		
 	end
 
 end

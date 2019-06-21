@@ -5,7 +5,8 @@ function convertFile2crabFormat(filename, file_ext)
 
 % first check if it has already been converted
 [~,a] = fileparts(filename.name);
-if exist([a '.crab'],'file') == 2
+if exist([filename.folder filesep a '.crab'],'file') == 2
+	disp('Already converted, skipping...')
 	return
 end
 

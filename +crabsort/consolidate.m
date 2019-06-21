@@ -40,7 +40,7 @@ options = corelib.parseNameValueArguments(options,varargin{:});
 allfiles = dir([options.DataDir filesep '*.crabsort']);
 
 if isempty(allfiles)
-	error('No data found')
+	error(['No data found in this directory: ' options.DataDir])
 end
 
 if ~iscell(options.DataFun)
@@ -89,7 +89,7 @@ end
 
 
 % check that all files are sorted
-fatal = crabsort.checkSorted(allfiles, options.neurons);
+fatal = crabsort.checkSorted(allfiles, options.neurons, true);
 
 
 if fatal
