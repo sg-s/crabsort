@@ -45,10 +45,11 @@ for i = 1:length(data)
 
 		raw_data = C.raw_data(:,strcmp(C.common.data_channel_names,nerve_name));
 
-		
+		spiketimes = C.spikes.(nerve_name).(neuron_name);
+		V_snippets = C.getSnippets(find(strcmp(C.common.data_channel_names,nerve_name)),spiketimes);
 
 		try
-			spiketimes = C.spikes.(nerve_name).(neuron_name);
+			
 			midpt = spiketimes(floor(length(spiketimes)/2));
 			a = midpt - ceil(window_size/(2*C.dt));
 			z = midpt + ceil(window_size/(2*C.dt));
@@ -66,27 +67,17 @@ for i = 1:length(data)
 
 
 
-		temp.file_name = categorical(repmat(NaN,10,1));
-		temp.nerve_name = categorical(repmat(NaN,10,1));
-		temp.neuron_name = categorical(repmat(NaN,10,1));
-		temp.SNR = (repmat(NaN,10,1));
-
-		try
-			if strcmp(C.path_name(end),filesep)
-				temp = crabsort.analysis.measureSNR(dir([C.path_name C.file_name '.crabsort']),temp);
-			else
-				temp = crabsort.analysis.measureSNR(dir([C.path_name filesep C.file_name '.crabsort']),temp);
-			end
-			
-		catch
-			keyboard
-		end
-
-
 		figure('outerposition',[300 300 1200 450],'PaperUnits','points','PaperSize',[1200 450]); hold on
+		subplot(1,4,1:3); hold on
 		plot(C.time(a:z), raw_data(a:z),'k')
 		figlib.pretty('PlotLineWidth',1)
 		axis off
+
+		subplot(1,4,4); hold on
+		plot(V_snippets,'Color',[.8 .8 .8],'LineWidth',5)
+		plot(mean(V_snippets,2),'Color','k','LineWidth',3)
+		axis off
+		axis square
 		figlib.tight;
 
 

@@ -45,7 +45,8 @@ for i = 1:(self.raw_data_size(2))
 
 		spike_locations = self.spikes.(nerve).(neuron_names{j});
 
-		if isempty(spike_locations)
+		if length(spike_locations) < 10
+			% too few spikes, skip
 			continue
 		end
 
