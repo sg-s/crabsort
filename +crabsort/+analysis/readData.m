@@ -18,7 +18,11 @@ for j = 1:length(options.neurons)
 	% find all possible places where this neuron could be
 	if ~isstruct(self.spikes)
 		disp('self.spikes not a struct, WTF?')
-		keyboard
+		if self.debug_mode
+			keyboard
+		else
+			warning('Error reading data')
+		end
 	end
 
 	fn = fieldnames(self.spikes);

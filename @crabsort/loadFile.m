@@ -440,11 +440,18 @@ catch err
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
     errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort is now in debug mode. You must exit from debug mode before continuting. ','crabsort::LoadFile FATAL ERROR',opts)
 
-    keyboard
 
     self.raw_data = [];
     self.displayStatus(err, true)
     save([hashlib.md5hash(now) '.error'],'err')
+
+    if self.debug_mode
+        keyboard
+    else
+        error('Error loading file.')
+    end
+
+    
 
 
 end

@@ -22,6 +22,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % debug
         verbosity@double = 0;
 
+        debug_mode@logical = false;
+
         channel_to_work_with@double
 
         % common data to all files in this folder
