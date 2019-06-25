@@ -156,7 +156,15 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
                 error('Need Signal Processing toolbox version 6.22 or higher')
             end
 
+            % check if Neural network exists
+            v = ver;
+            nn_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Neural Network'), {v.Name},'UniformOutput', false)));
+            dl_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Deep Learning'), {v.Name},'UniformOutput', false)));
 
+            assert(nn_toolbox | dl_toolbox, 'Neural network toolbox not installed!');
+
+            pc_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Parallel Computing'), {v.Name},'UniformOutput', false)));
+            assert(pc_toolbox, 'Parallel computing toolbox not installed!')
 
             % load preferences
             try
