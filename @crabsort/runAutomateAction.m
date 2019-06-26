@@ -27,7 +27,7 @@ case crabsort.automateAction.view_only
 		end
 
 		self.file_name = allfiles(next_file).name;
-		self.loadFile()
+		self.loadFile(self.handles.next_file_control)
 
 		drawnow;
 
@@ -168,7 +168,7 @@ case crabsort.automateAction.this_channel_all_files
 
 
 		self.file_name = allfiles(next_file).name;
-		self.loadFile()
+		self.loadFile(self.handles.next_file_control)
 
 		self.channel_to_work_with = channel;
 
