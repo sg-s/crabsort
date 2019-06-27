@@ -40,7 +40,7 @@ function UMAP(self)
 		self.R{self.channel_to_work_with} = self.data_to_reduce;
 	else
 		u = umap;
-		R = umap.fit(self.data_to_reduce);
+		R = u.fit(self.data_to_reduce);
 		self.R{self.channel_to_work_with} = R(:,1:2)';
 	end
 
