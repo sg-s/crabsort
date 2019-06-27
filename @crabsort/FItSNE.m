@@ -97,7 +97,7 @@ function FItSNE(self)
     % do nothing
     self.R{self.channel_to_work_with} = self.data_to_reduce;
   else
-    R = fast_tsne(self.data_to_reduce);
+    R = fast_tsne(self.data_to_reduce');
     self.R{self.channel_to_work_with} = R(:, 1:2)';
   end
 
