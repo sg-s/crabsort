@@ -39,6 +39,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
 
 
+        R  % this holds the dimensionality reduced data
+
+        % holds spiketimes of all neurons on all nerves
+        spikes
+
+
     end % end properties 
 
     properties (SetAccess = protected)
@@ -46,7 +52,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % these channel names exist in the raw data
         builtin_channel_names@cell
 
-        R  % this holds the dimensionality reduced data
+        
 
         % this is the list of channel names that you can choose from
         channel_names
@@ -73,7 +79,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         dt@double
         channel_ylims
 
-        spikes
         putative_spikes
 
         installed_plugins
@@ -183,7 +188,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
             % figure out what plugins are installed, and link them
             if get_plugins
-                self = self.plugins;
+                self.installed_plugins = crabsort.plugins();
             end
 
             % get the version name and number

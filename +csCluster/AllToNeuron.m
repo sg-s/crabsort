@@ -1,6 +1,3 @@
-% crabsort plugin
-% plugin_type = 'cluster';
-% plugin_dimension = 2; 
 % 
 %                 _                    _   
 %   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
@@ -16,12 +13,8 @@
 % this is expected to be useful in cases where the data is
 % very clean and the spikes can be easily detected 
 
-function AllToNeuron(self)
+function self = AllToNeuron(self)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
 
 
 channel = self.channel_to_work_with;

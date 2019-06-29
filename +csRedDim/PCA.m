@@ -1,7 +1,4 @@
-% crabsort plugin
-% plugin_type = 'dim-red';
-% plugin_dimension = 2; 
-% 
+
 %                 _                    _   
 %   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
 %  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
@@ -14,7 +11,7 @@
 % created by Srinivas Gorur-Shandilya at 10:20 , 09 April 2014. Contact me at http://srinivas.gs/contact/
 % 
 
-function PCA(self)
+function self = PCA(self)
 
 
 

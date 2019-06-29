@@ -30,10 +30,10 @@ end
 
 % figure out what file types we can work with
 if isempty(self.installed_plugins)
-    self = self.plugins;
+    self.installed_plugins = crabsort.plugins();
 end
-allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}),'n/a');
-allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
+
+allowed_file_extensions = cellfun(@(x) ['*.' x], self.installed_plugins.csloadFile,'UniformOutput',false);
 allowed_file_extensions = allowed_file_extensions(:);
 
 
@@ -174,19 +174,20 @@ end
 
 % OK, user has made some selection. let's figure out which plugin to use to load the data
 chosen_data_ext = strrep(allowed_file_extensions{filter_index},'*.','');
-plugin_to_use = find(strcmp('load-file',{self.installed_plugins.plugin_type}).*(strcmp(chosen_data_ext,{self.installed_plugins.data_extension})));
-assert(~isempty(plugin_to_use),'[ERR 40] Could not figure out how to load the file you chose.')
-assert(length(plugin_to_use) == 1,'[ERR 41] Too many plugins bound to this file type. ')
 
 
 % load the file
-load_file_handle = str2func(self.installed_plugins(plugin_to_use).name);
+load_file_handle = str2func(['csLoadFile.' chosen_data_ext]);
 
 self.builtin_channel_names = {};
 
 
 try
-    load_file_handle(self);
+    S = load_file_handle(self);
+    fn = fieldnames(S);
+    for i = 1:length(fn)
+        self.(fn{i}) = S.(fn{i});
+    end
 catch 
 
 
@@ -221,6 +222,13 @@ catch
 
     return
 end
+
+% populate builtin_channel_names
+self.builtin_channel_names = self.metadata.recChNames;
+
+self.n_channels = size(self.raw_data,2);
+
+self.dt = mean(diff(self.time));
 
 
 % store the size of the raw_data

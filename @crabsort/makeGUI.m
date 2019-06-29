@@ -134,20 +134,15 @@ handles.dim_red_panel = uipanel('Title','Dimensionality reduction','Position',[.
 handles.multi_channel_control = uicontrol(handles.dim_red_panel,'Style','checkbox','String','on','units','normalized','Position',[.01 .3 .18 .7],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1],'Value',0);
 handles.multi_channel_control_text = uicontrol(handles.dim_red_panel,'Style','edit','String','','units','normalized','Position',[.15 .15 .15 .7],'Enable','on','FontSize',self.pref.fs,'BackgroundColor',[1 1 1]);
 
-all_plugin_names = {self.installed_plugins.name};
-dim_red_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'dim-red')));
 
-handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',dim_red_plugins,'units','normalized','Position',[.65 .04 .34 .9],'Callback',@self.reduceDimensionsCallback,'FontSize',self.pref.fs);
+handles.method_control = uicontrol(handles.dim_red_panel,'Style','popupmenu','String',self.installed_plugins.csRedDim,'units','normalized','Position',[.65 .04 .34 .9],'Callback',@self.reduceDimensionsCallback,'FontSize',self.pref.fs);
 
 
 
 handles.cluster_panel = uipanel('Title','Cluster & Sort','Position',[.49 .92 .12 .07],'BackgroundColor',[1 1 1],'Visible','off','FontSize',self.pref.fs);
 
-% find the available methods for clustering
-all_plugin_names = {self.installed_plugins.name};
-cluster_plugins = all_plugin_names(find(strcmp({self.installed_plugins.plugin_type},'cluster')));
 
-handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',cluster_plugins,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'FontSize',self.pref.fs);
+handles.cluster_control = uicontrol(handles.cluster_panel,'Style','popupmenu','String',self.installed_plugins.csCluster,'units','normalized','Position',[.02 .6 .9 .2],'Callback',@self.clusterCallback,'FontSize',self.pref.fs);
 
 
 % mask panel

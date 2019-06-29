@@ -18,7 +18,7 @@ end
 method = (get(self.handles.method_control,'Value'));
 temp = get(self.handles.method_control,'String');
 method = temp{method};
-method = str2func(method);
+method = str2func(['csRedDim.' method]);
 
 
 self.handles.popup.Visible = 'on';
@@ -40,7 +40,7 @@ end
 self.getDataToReduce; 
 
 % use the method
-method(self);
+self = method(self);
 
 self.handles.popup.Visible = 'off';
 

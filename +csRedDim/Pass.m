@@ -14,12 +14,7 @@
 % and you want every putative spike to be assigned to 
 % a single neuron 
 
-function Pass(self)
-
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
+function self = Pass(self)
 
 
 self.R{self.channel_to_work_with} = self.data_to_reduce;
