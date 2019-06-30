@@ -21,5 +21,4 @@ self.builtin_channel_names = builtin_channel_names;
 self.metadata = metadata;
 self.raw_data = raw_data;
 self.dt = dt;
-self.n_channels = size(self.raw_data,2);
 self.time = (1:length(self.raw_data))*dt;
