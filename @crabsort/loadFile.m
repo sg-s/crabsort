@@ -23,26 +23,36 @@ try
 hard_load = false;
 
 if nargin == 1
-    src.String = '';
-    src.Style = 'none';
+    % assume that file_name path_name is set
+    assert(~isempty(self.file_name),'file_name not set')
+    assert(~isempty(self.path_name),'file_name not set')
+
     hard_load = true;
-end
 
-% figure out what file types we can work with
-if isempty(self.installed_plugins)
-    self.installed_plugins = crabsort.plugins();
-end
-
-allowed_file_extensions = cellfun(@(x) ['*.' x], self.installed_plugins.csloadFile,'UniformOutput',false);
-allowed_file_extensions = allowed_file_extensions(:);
+    [~,~,chosen_data_ext] = fileparts(self.file_name);
+    chosen_data_ext = upper(chosen_data_ext(2:end));
 
 
 
-if nargin > 1
+else
+
+    % figure out what file types we can work with
+    if isempty(self.installed_plugins)
+        self.installed_plugins = crabsort.plugins();
+    end
+
+    allowed_file_extensions = cellfun(@(x) ['*.' x], self.installed_plugins.csloadFile,'UniformOutput',false);
+    allowed_file_extensions = allowed_file_extensions(:);
+
+
+
+
     self.saveData;
+
+
 end
 
-if strcmp(src.String,'Load File')
+if nargin > 1 && strcmp(src.String,'Load File')
 
 
     % attempt to cancel all workers
@@ -100,7 +110,7 @@ if strcmp(src.String,'Load File')
     allfiles = dir([self.path_name filesep allowed_file_extensions{filter_index}]);
     src.String = {allfiles.name};
 
-elseif strcmp(src.Style,'popupmenu')
+elseif nargin > 1 && strcmp(src.Style,'popupmenu')
 
 
     % jump to file
@@ -109,7 +119,7 @@ elseif strcmp(src.Style,'popupmenu')
     [~,~,ext]=fileparts(self.file_name);
     filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 
-elseif strcmp(src.String,'<')
+elseif nargin > 1 && strcmp(src.String,'<')
 
     if self.verbosity > 5
         disp('[loadFile] < is src]')
@@ -133,7 +143,7 @@ elseif strcmp(src.String,'<')
         
     
     end
-elseif strcmp(src.String,'>')
+elseif nargin > 1 && strcmp(src.String,'>')
 
     if self.verbosity > 5
         disp('[loadFile] > is src')
@@ -162,8 +172,7 @@ else
 
 
     % do nothing, assuming that file_name is correctly set
-    [~,~,ext] = fileparts(self.file_name);
-    filter_index = find(strcmp(['*' ext],allowed_file_extensions));
+
 end
 
 self.reset(false);
@@ -171,10 +180,11 @@ if self.automate_action == crabsort.automateAction.none
     self.displayStatus('Loading...',true);
 end
 
+if nargin > 1
 
-% OK, user has made some selection. let's figure out which plugin to use to load the data
-chosen_data_ext = strrep(allowed_file_extensions{filter_index},'*.','');
-
+    % OK, user has made some selection. let's figure out which plugin to use to load the data
+    chosen_data_ext = strrep(allowed_file_extensions{filter_index},'*.','');
+end
 
 % load the file
 load_file_handle = str2func(['csLoadFile.' chosen_data_ext]);
@@ -188,7 +198,7 @@ try
     for i = 1:length(fn)
         self.(fn{i}) = S.(fn{i});
     end
-catch 
+catch err
 
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
