@@ -9,7 +9,7 @@
 %  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
 %
 % 
-function loadFile_CRAB(self,~,~)
+function S = loadFile_CRAB(self,~,~)
 
 
 
@@ -17,8 +17,7 @@ function loadFile_CRAB(self,~,~)
 load(pathlib.join(self.path_name,self.file_name),'-mat');
 
 % populate builtin_channel_names
-self.builtin_channel_names = builtin_channel_names;
-self.metadata = metadata;
-self.raw_data = raw_data;
-self.dt = dt;
-self.time = (1:length(self.raw_data))*dt;
+S.builtin_channel_names = builtin_channel_names;
+S.metadata = metadata;
+S.raw_data = raw_data;
+S.time = (1:length(raw_data))*dt;
