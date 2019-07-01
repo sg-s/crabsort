@@ -29,9 +29,6 @@ if nargin == 1
 
     hard_load = true;
 
-    [~,~,chosen_data_ext] = fileparts(self.file_name);
-    chosen_data_ext = upper(chosen_data_ext(2:end));
-
 
 
 else
@@ -138,8 +135,7 @@ elseif nargin > 1 && strcmp(src.String,'<')
         allfiles = circshift({allfiles.name},[0,length(allfiles)-find(strcmp(self.file_name,{allfiles.name}))])';
         % pick the previous one 
         self.file_name = allfiles{end-1};
-        % figure out what the filter_index is
-        filter_index = find(strcmp(['*' ext],allowed_file_extensions));
+
         
     
     end
@@ -163,8 +159,7 @@ elseif nargin > 1 && strcmp(src.String,'>')
         allfiles = circshift({allfiles.name},[0,length(allfiles)-find(strcmp(self.file_name,{allfiles.name}))])';
         % pick the first one 
         self.file_name = allfiles{1};
-        % figure out what the filter_index is
-        filter_index = find(strcmp(['*' ext],allowed_file_extensions));
+
         
 
     end
@@ -180,11 +175,8 @@ if self.automate_action == crabsort.automateAction.none
     self.displayStatus('Loading...',true);
 end
 
-if nargin > 1
-
-    % OK, user has made some selection. let's figure out which plugin to use to load the data
-    chosen_data_ext = strrep(allowed_file_extensions{filter_index},'*.','');
-end
+[~,~,chosen_data_ext] = fileparts(self.file_name);
+chosen_data_ext = upper(chosen_data_ext(2:end));
 
 % load the file
 load_file_handle = str2func(['csLoadFile.' chosen_data_ext]);
@@ -232,9 +224,6 @@ catch err
 
     return
 end
-
-% populate builtin_channel_names
-self.builtin_channel_names = self.metadata.recChNames;
 
 self.n_channels = size(self.raw_data,2);
 

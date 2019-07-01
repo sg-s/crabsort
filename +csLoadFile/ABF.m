@@ -17,3 +17,6 @@ function S = ABF(self,~,~)
 
 S.time = (1:length(S.raw_data))*dt*1e-6;
 
+
+% populate builtin_channel_names
+S.builtin_channel_names = S.metadata.recChNames;
