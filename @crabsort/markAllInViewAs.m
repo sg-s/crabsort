@@ -43,5 +43,10 @@ if strcmp(src.String{src.Value},'Noise')
 	self.showSpikes;
 	return
 else
-	keyboard
+	if self.debug_mode
+		keyboard
+	else
+		error('Error in marking all spikes in view as...')
+	end
+    
 end

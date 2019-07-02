@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>crabsort: leaderboard</title>
+    <link rel="stylesheet" href="../../css/star.css">
+
+
+	<link rel="stylesheet" type="text/css" href="../../css/dataTables.css">
+
+	<script type="text/javascript" language="javascript" src="../../js/jquery-1.12.4.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="../../js/jquery.dataTables.min.js">
+	</script>
+
+	<script type="text/javascript" class="init">
+	
+		$(document).ready(function() {
+			$('#example').DataTable();
+		} );
+
+	</script>
+
+</head>
+<body>
+
+<div id="content">
+
+
+<div id ="top-content">
+	<div id = "top-star">
+		🦀
+	</div>
+	<div id = "top-sgs">
+		<a href = "http://github.com/sg-s/crabsort">crabsort</a>/leaderboard
+	</div>
+	<br>
+	<br>
+	<p>Data from the STG: which one is the cleanest? Let's find out! </p>
+
+	<h1>$NERVE_NAME/$NEURON_NAME</h1>
+
+</div>
+
+<br>
+<br>
+
+
+</div>
+
+
+<table id="example" class="sortable" cellspacing="0" width="90%">
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Best SNR</th>
+<th>Worst SNR</th>
+<th>Mean SNR</th>
+<th>Trace</th>
+
+</tr>
+</thead>
+
+
+<tbody>
+
+
+$INSERT_ROWS_HERE
+
+
+
+
+
+
+</tbody>
+</table><!-- </div> -->
+
+
+
+</body>
+</html>

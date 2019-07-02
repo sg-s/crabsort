@@ -51,6 +51,11 @@ crabsort.uninstall
 | `p` | Predict spikes using Neural network |
 | `r` | reset zoom | 
 | `0` | Set channel as having no spikes |
+| `↑` | Select channel above currently chosen channel |
+| `↓` | Select channel below currently chosen channel |
+| `→` | Load next file in dataset |
+| `←` | Load next file in dataset |
+| `p` | Predict spikes using Neural network |
 
 
 

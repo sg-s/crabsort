@@ -37,7 +37,11 @@ if strcmp(Checked{strcmp({M.Text},'Stop when data exceeds YLim')},'on')
 	else
 		% stop if data exceeds Ylim in any channel
 		errordlg(err.message,'This case has not been coded yet.')
-		keyboard
+		if self.debug_mode
+			keyboard
+		else
+			error('FATAL ERROR')
+		end
 
 	end
 

@@ -8,11 +8,6 @@
 
 function removeMean(self, channel)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
-
 
 if strcmp(self.common.data_channel_names{channel},'temperature')
 	return
@@ -20,11 +15,8 @@ end
 
 only_here = logical(self.mask(:,channel));
 
-try
-	self.raw_data(only_here,channel) = self.raw_data(only_here,channel) - mean(self.raw_data(only_here,channel));
-catch
-	errordlg(err.message,'This case has not been coded yet.')
-end
+self.raw_data(only_here,channel) = self.raw_data(only_here,channel) - mean(self.raw_data(only_here,channel));
+
 
 if ~isfield(self.handles,'ax')
 	return
@@ -38,9 +30,10 @@ if ~isfield(self.handles.ax,'data')
 end
 
 % update the YData if need be
-if ~strcmp(class(self.handles.ax.data(channel)),'matlab.graphics.chart.primitive.Line')
+if ~isa(self.handles.ax.data(channel),'matlab.graphics.chart.primitive.Line')
 	return
 end
+
 a = find(self.time >= self.handles.ax.data(channel).XData(1),1,'first');
 z = find(self.time <= self.handles.ax.data(channel).XData(end),1,'last');
 self.handles.ax.data(channel).YData = self.raw_data(a:z,channel);

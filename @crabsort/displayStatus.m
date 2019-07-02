@@ -56,5 +56,9 @@ if block_ux
 
 else
 	disp('Not coded')
-	keyboard
+	if self.debug_mode
+		keyboard
+	else
+		warning('Error in Display Status')
+	end
 end

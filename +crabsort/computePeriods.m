@@ -61,7 +61,11 @@ for i = 1:length(neurons)
 	burst_starts(burst_starts>burst_ends(end)) = [];
 
 	if length(burst_starts) ~= length(burst_ends)
-		keyboard
+		if self.debug_mode
+			keyboard
+		else
+			warning('Error computing periods.')
+		end
 	end
 
 	n_spikes_per_burst = burst_ends - burst_starts;

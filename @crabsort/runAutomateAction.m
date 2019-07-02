@@ -27,7 +27,7 @@ case crabsort.automateAction.view_only
 		end
 
 		self.file_name = allfiles(next_file).name;
-		self.loadFile()
+		self.loadFile(self.handles.next_file_control)
 
 		drawnow;
 
@@ -55,10 +55,7 @@ case crabsort.automateAction.all_channels_all_files
 		end
 
 		% simulate a next file button press
-		temp = struct();
-		temp.String = '>';
-		temp.Style = 'none';
-		self.loadFile(temp)
+		self.loadFile(handles.next_file_control)
 
 		for channel = 1:self.n_channels
 
@@ -171,7 +168,7 @@ case crabsort.automateAction.this_channel_all_files
 
 
 		self.file_name = allfiles(next_file).name;
-		self.loadFile()
+		self.loadFile(self.handles.next_file_control)
 
 		self.channel_to_work_with = channel;
 

@@ -30,7 +30,11 @@ case 'open'
 	% double click, ignore
 	return
 otherwise
-	keyboard
-    error('Unknown mouse action')
+	if self.debug_mode
+		keyboard
+	else
+		error('Unknown mouse action')
+	end
+    
 end
 

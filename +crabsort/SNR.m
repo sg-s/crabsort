@@ -7,64 +7,102 @@ function data = SNR(varargin)
 % options and defaults
 options.DataDir = pwd;
 options.MakePlot = false;
+options.UseCache = true;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
 
 allfiles = dir([options.DataDir filesep '*.crabsort']);
 
+
 if isempty(allfiles)
-	error('No data found')
+	N = 1;
+	data.file_name = categorical(repmat(NaN,10*N,1));
+	data.path_name = categorical(repmat(NaN,10*N,1));
+	data.nerve_name = categorical(repmat(NaN,10*N,1));
+	data.neuron_name = categorical(repmat(NaN,10*N,1));
+	data.SNR = (repmat(NaN,10*N,1));
+	return
 end
 
-
-
-% load the common data
-load([allfiles(1).folder filesep 'crabsort.common'],'-mat','common')
-
-
-
-
-
-data = struct;
-N = length(allfiles);
-data.file_name = categorical(repmat(NaN,10*N,1));
-data.nerve_name = categorical(repmat(NaN,10*N,1));
-data.neuron_name = categorical(repmat(NaN,10*N,1));
-data.SNR = (repmat(NaN,10*N,1));
-
-
-temp_data = struct;
-for i = 1:N
-	temp_data(i).file_name = categorical({''});
-	temp_data(i).nerve_name = categorical({''});
-	temp_data(i).neuron_name = categorical({''});
-	temp_data(i).SNR = NaN;
+% hash these files
+for i = length(allfiles):-1:1
+	H{i} = hashlib.md5hash([allfiles(i).folder filesep allfiles(i).name],'File');
 end
 
+H = hashlib.md5hash([H{:}]);
+if exist([allfiles(1).folder filesep H '.snr'],'file') == 2 && options.UseCache
+	load([allfiles(1).folder filesep H '.snr'],'-mat')
+
+else
 
 
-% load all the data into the data structure
-% in parallel
-parfor i = 1:N
-	temp_data(i) = crabsort.analysis.measureSNR(allfiles(i), temp_data(i));
+	% load the common data
+	try
+		load([allfiles(1).folder filesep 'crabsort.common'],'-mat','common')
+	catch
+		% common does not exist, abort
+		N = length(allfiles);
+		data.file_name = categorical(repmat(NaN,10*N,1));
+		data.path_name = categorical(repmat(NaN,10*N,1));
+		data.nerve_name = categorical(repmat(NaN,10*N,1));
+		data.neuron_name = categorical(repmat(NaN,10*N,1));
+		data.SNR = (repmat(NaN,10*N,1));
+		return
+	end
+
+
+
+
+
+	data = struct;
+	N = length(allfiles);
+	data.file_name = categorical(repmat(NaN,10*N,1));
+	data.path_name = categorical(repmat(NaN,10*N,1));
+	data.nerve_name = categorical(repmat(NaN,10*N,1));
+	data.neuron_name = categorical(repmat(NaN,10*N,1));
+	data.SNR = (repmat(NaN,10*N,1));
+
+
+	temp_data = struct;
+	for i = 1:N
+		temp_data(i).file_name = categorical({''});
+		temp_data(i).path_name = categorical({''});
+		temp_data(i).nerve_name = categorical({''});
+		temp_data(i).neuron_name = categorical({''});
+		temp_data(i).SNR = NaN;
+	end
+
+
+
+	% load all the data into the data structure
+	% in parallel
+	parfor i = 1:N
+		temp_data(i) = crabsort.analysis.measureSNR(allfiles(i), temp_data(i));
+	end
+
+
+
+	% reshape
+	data.SNR = vertcat(temp_data.SNR);
+	data.neuron_name = vertcat(temp_data.neuron_name);
+	data.nerve_name = vertcat(temp_data.nerve_name);
+	data.file_name = vertcat(temp_data.file_name);
+	data.path_name = vertcat(temp_data.path_name);
+
+	% clean up
+	rm_this = isnan(data.SNR);
+
+	data.SNR(rm_this) = [];
+	data.neuron_name(rm_this) = [];
+	data.nerve_name(rm_this) = [];
+	data.file_name(rm_this) = [];
+	data.path_name(rm_this) = [];
+
+
+	% save it
+	save([allfiles(1).folder filesep H '.snr'],'data')
 end
-
-
-% reshape
-data.SNR = vertcat(temp_data.SNR);
-data.neuron_name = vertcat(temp_data.neuron_name);
-data.nerve_name = vertcat(temp_data.nerve_name);
-data.file_name = vertcat(temp_data.file_name);
-
-
-% clean up
-rm_this = isnan(data.SNR);
-
-data.SNR(rm_this) = [];
-data.neuron_name(rm_this) = [];
-data.nerve_name(rm_this) = [];
-data.file_name(rm_this) = [];
 
 if ~options.MakePlot
 	return

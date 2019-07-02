@@ -47,8 +47,12 @@ try
 	end
 catch err
 	errordlg(err.message,'Your ABF files are inconsistent')
-	keyboard
-	error(err.message)
+	if self.debug_mode
+		keyboard
+	else
+		warning(err.message)
+	end
+
 end
 
 

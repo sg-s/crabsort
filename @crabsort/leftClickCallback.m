@@ -25,12 +25,19 @@ this_nerve = self.common.data_channel_names{channel};
 % find closest identified point 
 [spiketimes, labels] = self.getLabelledSpikes;
 
-if iscell(self.handles.new_spike_type.String)
-	new_spike_name = self.handles.new_spike_type.String{self.handles.new_spike_type.Value};
-else
-	new_spike_name = self.handles.new_spike_type.String;
-end
 
+if strcmp(upper(this_nerve),this_nerve)
+	% intracellular
+	new_spike_name = this_nerve;
+	self.handles.new_spike_type.String = this_nerve;
+else
+
+	if iscell(self.handles.new_spike_type.String)
+		new_spike_name = self.handles.new_spike_type.String{self.handles.new_spike_type.Value};
+	else
+		new_spike_name = self.handles.new_spike_type.String;
+	end
+end
 
 
 

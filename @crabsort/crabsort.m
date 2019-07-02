@@ -22,6 +22,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % debug
         verbosity@double = 0;
 
+        debug_mode@logical = false;
+
         channel_to_work_with@double
 
         % common data to all files in this folder
@@ -37,6 +39,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
 
 
+        R  % this holds the dimensionality reduced data
+
+        % holds spiketimes of all neurons on all nerves
+        spikes
+
+
     end % end properties 
 
     properties (SetAccess = protected)
@@ -44,7 +52,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % these channel names exist in the raw data
         builtin_channel_names@cell
 
-        R  % this holds the dimensionality reduced data
+        
 
         % this is the list of channel names that you can choose from
         channel_names
@@ -71,7 +79,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         dt@double
         channel_ylims
 
-        spikes
         putative_spikes
 
         installed_plugins
@@ -120,7 +127,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         req_toolboxes = {'srinivas.gs_mtools','crabsort','puppeteer'};
 
         % these variables will not be saved
-        unsaved_variables = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','time','verbosity','timer_handle','workers','auto_predict','automate_action','mask','common','unsaved_variables','NumWorkers','training_on'};
+        unsaved_variables = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','time','verbosity','timer_handle','workers','auto_predict','automate_action','mask','common','unsaved_variables','NumWorkers','training_on','debug_mode'};
         
 
         training_on
@@ -132,10 +139,13 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
     methods
 
-        function self = crabsort(make_gui)
+        function self = crabsort(make_gui, get_plugins)
 
             if nargin == 0 
                 make_gui = true;
+                get_plugins = true;
+            elseif nargin == 1
+                get_plugins = true;
             end
 
             % check for dependencies
@@ -151,10 +161,22 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
                 error('Need Signal Processing toolbox version 6.22 or higher')
             end
 
+            % check if Neural network exists
+            v = ver;
+            nn_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Neural Network'), {v.Name},'UniformOutput', false)));
+            dl_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Deep Learning'), {v.Name},'UniformOutput', false)));
 
+            assert(nn_toolbox | dl_toolbox, 'Neural network toolbox not installed!');
+
+            pc_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Parallel Computing'), {v.Name},'UniformOutput', false)));
+            assert(pc_toolbox, 'Parallel computing toolbox not installed!')
 
             % load preferences
-            self.pref = corelib.readPref(fileparts(fileparts(which(mfilename))));
+            try
+                self.pref = corelib.readPref(fileparts(fileparts(which(mfilename))));
+            catch
+            end
+
 
             % for backward compatibility, convert some things
             % into base props
@@ -165,7 +187,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
             end
 
             % figure out what plugins are installed, and link them
-            self = self.plugins;
+            if get_plugins
+                self.installed_plugins = crabsort.plugins();
+            end
 
             % get the version name and number
             self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) filesep 'build_number']))];

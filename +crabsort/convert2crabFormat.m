@@ -5,16 +5,15 @@ function convert2crabFormat(varargin)
 
 
 
-self = crabsort(false);
 
 
-if nargin == 0
-	allowed_file_extensions = {'*.abf'};
-else
-	allowed_file_extensions = varargin;
-end
 
-self.path_name = pwd;
+allowed_file_extensions = {'*.abf','*.smr'};
+
+
+
+
+% first convert all files into .crab files
 
 for i = 1:length(allowed_file_extensions)
 
@@ -22,76 +21,52 @@ for i = 1:length(allowed_file_extensions)
 	fprintf('File Name           # Channels     Channel Name Hash\n')
 	fprintf('-----------------------------------------------\n')
 
+	this_file_ext = allowed_file_extensions{i};
 
-	n_channels = NaN(length(allfiles),1);
-	channel_name_hash = {};
-	all_channel_names = {};
+	parfor j = 1:length(allfiles)
 
-	for j = 1:length(allfiles)
-		self.file_name = allfiles(j).name;
-
-		fprintf(strlib.fix(self.file_name,20))
-
-
-		self.loadFile;
-	
-
-		if isempty(self.raw_data)
-			if ~exist('corrupted','dir')
-				mkdir('corrupted')
-			end
-			movefile(self.file_name,['corrupted' filesep self.file_name])
-
-			fprintf('FATAL: could not load file\n')
-		else
-			fprintf(strlib.fix(mat2str(size(self.raw_data,2)),15))
-			H = hashlib.md5hash([self.builtin_channel_names{:}]);
-			fprintf([strlib.fix(H,15) '\n'])
-
-			all_channel_names = unique([all_channel_names; self.builtin_channel_names(:)]);
-
-
-			n_channels(j) = size(self.raw_data,2);
-			channel_name_hash{j} = H;
-
-			% do the conversion
-			raw_data = self.raw_data;
-			builtin_channel_names = self.builtin_channel_names;
-			dt = self.dt;
-			metadata = self.metadata;
-
-			file_name = strrep(self.file_name,allowed_file_extensions{i}(2:end),'.crab');
-			save(file_name,'raw_data','builtin_channel_names','builtin_channel_names','dt','metadata','-nocompression','-v7.3')
-
-		end
-		
-	end
-
-	% now go through all the .crab files and make them consistent 
-	if length(unique(channel_name_hash)) > 1
-		disp('Inconsistent files, harmonizing...')
-
-
-		allfiles = dir('*.crab');
-		for j = 1:length(allfiles)
-			corelib.textbar(j,length(allfiles))
-
-			load(allfiles(j).name,'-mat')
-
-			old_builtin_channel_names = builtin_channel_names;
-			builtin_channel_names = all_channel_names;
-
-			old_raw_data = raw_data;
-			raw_data = zeros(size(old_raw_data,1),length(builtin_channel_names));
-
-			for k = 1:length(old_builtin_channel_names)
-				raw_data(:,strcmp(old_builtin_channel_names{k},all_channel_names)) = old_raw_data(:,k);
-			end
-
-			save(allfiles(j).name,'raw_data','builtin_channel_names','-append')
-		end
+		crabsort.convertFile2crabFormat(allfiles(j), this_file_ext);
 
 	end
 
 end
 
+
+
+allfiles = dir('*.crab');
+all_hashes = cell(length(allfiles),1);
+all_channel_names = {};
+
+for i = 1:length(allfiles)
+	load(allfiles(i).name,'-mat','builtin_channel_names');
+
+	all_channel_names = unique([all_channel_names; builtin_channel_names(:)]);
+
+	all_hashes{i} = hashlib.md5hash([builtin_channel_names{:}]);
+end
+
+% now go through all the .crab files and make them consistent 
+
+if length(unique(all_hashes)) > 1
+	disp('Inconsistent files, harmonizing...')
+
+
+	for j = 1:length(allfiles)
+		corelib.textbar(j,length(allfiles))
+
+		load(allfiles(j).name,'-mat')
+
+		old_builtin_channel_names = builtin_channel_names;
+		builtin_channel_names = all_channel_names;
+
+		old_raw_data = raw_data;
+		raw_data = zeros(size(old_raw_data,1),length(builtin_channel_names));
+
+		for k = 1:length(old_builtin_channel_names)
+			raw_data(:,strcmp(old_builtin_channel_names{k},all_channel_names)) = old_raw_data(:,k);
+		end
+
+		save(allfiles(j).name,'raw_data','builtin_channel_names','-append')
+	end
+
+end
