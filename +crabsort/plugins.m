@@ -21,7 +21,7 @@ for j = 1:length(plugin_types)
     p.(plugin_types{j}) = '';
 
     for i = 1:length(a)
-        p.(plugin_types{j}) = [p.(plugin_types{j}); cellfun(@(x) strrep(x, '.m',''), a.m, 'UniformOutput',false)];
+        p.(plugin_types{j}) = [p.(plugin_types{j}); cellfun(@(x) strrep(x, '.m',''), a(i).m, 'UniformOutput',false)];
     end
 
 end
