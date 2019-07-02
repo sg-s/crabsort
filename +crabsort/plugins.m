@@ -12,7 +12,7 @@ function varargout = plugins()
 
 p = struct;
 
-plugin_types = {'csloadFile','csRedDim','csCluster'};
+plugin_types = {'csLoadFile','csRedDim','csCluster'};
 
 
 for j = 1:length(plugin_types)
