@@ -1,13 +1,13 @@
-%                 _                    _   
-%   ___ _ __ __ _| |__  ___  ___  _ __| |_ 
+%                 _                    _
+%   ___ _ __ __ _| |__  ___  ___  _ __| |_
 %  / __| '__/ _` | '_ \/ __|/ _ \| '__| __|
-% | (__| | | (_| | |_) \__ \ (_) | |  | |_ 
+% | (__| | | (_| | |_) \__ \ (_) | |  | |_
 %  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
 %
-% 
+%
 % figure out which plugins and installed and link them
 % so we can use them
-% 
+%
 function varargout = plugins()
 
 p = struct;
@@ -27,7 +27,7 @@ for j = 1:length(plugin_types)
 end
 
 
-if nargout == 0 
+if nargout == 0
     % print things out
     disp('The following plugins for crabsort have been installed:')
 
@@ -37,7 +37,7 @@ if nargout == 0
         for i = 1:length(p.(plugin_types{j}))
             disp(p.(plugin_types{j}){i})
         end
-        
+
     end
 
 
