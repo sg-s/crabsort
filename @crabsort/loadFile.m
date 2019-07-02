@@ -23,26 +23,33 @@ try
 hard_load = false;
 
 if nargin == 1
-    src.String = '';
-    src.Style = 'none';
+    % assume that file_name path_name is set
+    assert(~isempty(self.file_name),'file_name not set')
+    assert(~isempty(self.path_name),'file_name not set')
+
     hard_load = true;
-end
-
-% figure out what file types we can work with
-if isempty(self.installed_plugins)
-    self = self.plugins;
-end
-allowed_file_extensions = setdiff(unique({self.installed_plugins.data_extension}),'n/a');
-allowed_file_extensions = cellfun(@(x) ['*.' x], allowed_file_extensions,'UniformOutput',false);
-allowed_file_extensions = allowed_file_extensions(:);
 
 
 
-if nargin > 1
+else
+
+    % figure out what file types we can work with
+    if isempty(self.installed_plugins)
+        self.installed_plugins = crabsort.plugins();
+    end
+
+    allowed_file_extensions = cellfun(@(x) ['*.' x], self.installed_plugins.csloadFile,'UniformOutput',false);
+    allowed_file_extensions = allowed_file_extensions(:);
+
+
+
+
     self.saveData;
+
+
 end
 
-if strcmp(src.String,'Load File')
+if nargin > 1 && strcmp(src.String,'Load File')
 
 
     % attempt to cancel all workers
@@ -100,7 +107,7 @@ if strcmp(src.String,'Load File')
     allfiles = dir([self.path_name filesep allowed_file_extensions{filter_index}]);
     src.String = {allfiles.name};
 
-elseif strcmp(src.Style,'popupmenu')
+elseif nargin > 1 && strcmp(src.Style,'popupmenu')
 
 
     % jump to file
@@ -109,7 +116,7 @@ elseif strcmp(src.Style,'popupmenu')
     [~,~,ext]=fileparts(self.file_name);
     filter_index = find(strcmp(['*' ext],allowed_file_extensions));
 
-elseif strcmp(src.String,'<')
+elseif nargin > 1 && strcmp(src.String,'<')
 
     if self.verbosity > 5
         disp('[loadFile] < is src]')
@@ -128,12 +135,11 @@ elseif strcmp(src.String,'<')
         allfiles = circshift({allfiles.name},[0,length(allfiles)-find(strcmp(self.file_name,{allfiles.name}))])';
         % pick the previous one 
         self.file_name = allfiles{end-1};
-        % figure out what the filter_index is
-        filter_index = find(strcmp(['*' ext],allowed_file_extensions));
+
         
     
     end
-elseif strcmp(src.String,'>')
+elseif nargin > 1 && strcmp(src.String,'>')
 
     if self.verbosity > 5
         disp('[loadFile] > is src')
@@ -153,8 +159,7 @@ elseif strcmp(src.String,'>')
         allfiles = circshift({allfiles.name},[0,length(allfiles)-find(strcmp(self.file_name,{allfiles.name}))])';
         % pick the first one 
         self.file_name = allfiles{1};
-        % figure out what the filter_index is
-        filter_index = find(strcmp(['*' ext],allowed_file_extensions));
+
         
 
     end
@@ -162,8 +167,7 @@ else
 
 
     % do nothing, assuming that file_name is correctly set
-    [~,~,ext] = fileparts(self.file_name);
-    filter_index = find(strcmp(['*' ext],allowed_file_extensions));
+
 end
 
 self.reset(false);
@@ -171,23 +175,22 @@ if self.automate_action == crabsort.automateAction.none
     self.displayStatus('Loading...',true);
 end
 
-
-% OK, user has made some selection. let's figure out which plugin to use to load the data
-chosen_data_ext = strrep(allowed_file_extensions{filter_index},'*.','');
-plugin_to_use = find(strcmp('load-file',{self.installed_plugins.plugin_type}).*(strcmp(chosen_data_ext,{self.installed_plugins.data_extension})));
-assert(~isempty(plugin_to_use),'[ERR 40] Could not figure out how to load the file you chose.')
-assert(length(plugin_to_use) == 1,'[ERR 41] Too many plugins bound to this file type. ')
-
+[~,~,chosen_data_ext] = fileparts(self.file_name);
+chosen_data_ext = upper(chosen_data_ext(2:end));
 
 % load the file
-load_file_handle = str2func(self.installed_plugins(plugin_to_use).name);
+load_file_handle = str2func(['csLoadFile.' chosen_data_ext]);
 
 self.builtin_channel_names = {};
 
 
 try
-    load_file_handle(self);
-catch 
+    S = load_file_handle(self);
+    fn = fieldnames(S);
+    for i = 1:length(fn)
+        self.(fn{i}) = S.(fn{i});
+    end
+catch err
 
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
@@ -221,6 +224,10 @@ catch
 
     return
 end
+
+self.n_channels = size(self.raw_data,2);
+
+self.dt = mean(diff(self.time));
 
 
 % store the size of the raw_data

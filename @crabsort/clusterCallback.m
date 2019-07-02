@@ -10,21 +10,13 @@
 
 function clusterCallback(self,~,~)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
-
 
 channel = self.channel_to_work_with;
 
-cluster_method_handle = (get(self.handles.cluster_control,'Value'));
-temp = get(self.handles.cluster_control,'String');
-cluster_method_handle = temp{cluster_method_handle};
-cluster_method_handle = str2func(cluster_method_handle);
+cluster_func_handle = str2func(['csCluster.' self.handles.cluster_control.String{self.handles.cluster_control.Value}]);
 
+self = cluster_func_handle(self);
 
-cluster_method_handle(self);
 self.channel_stage(channel) = 3; 
  
 self.showSpikes(channel);
@@ -38,7 +30,7 @@ self.handles.ax.found_spikes(channel).XData = NaN;
 self.handles.ax.found_spikes(channel).YData = NaN;
 
 
-self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_method_handle)];
+self.handles.main_fig.Name = [self.file_name '  -- Clustering complete using ' func2str(cluster_func_handle)];
 
 % now lock the channel names on this channel and prevent the user from ever renaming it
 self.common.channel_name_lock(self.channel_to_work_with) = true;

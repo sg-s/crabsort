@@ -8,17 +8,12 @@
 
 function reduceDimensionsCallback(self,~,~)
 
-if self.verbosity > 5
-    corelib.cprintf('green','\n[INFO] ')
-    d = dbstack;
-    corelib.cprintf('text',[mfilename ' called by ' d(2).name])
-end
 
 
 method = (get(self.handles.method_control,'Value'));
 temp = get(self.handles.method_control,'String');
 method = temp{method};
-method = str2func(method);
+method = str2func(['csRedDim.' method]);
 
 
 self.handles.popup.Visible = 'on';
@@ -40,7 +35,7 @@ end
 self.getDataToReduce; 
 
 % use the method
-method(self);
+self = method(self);
 
 self.handles.popup.Visible = 'off';
 
@@ -52,5 +47,5 @@ drawnow;
 
 self.channel_stage(idx) = 2; 
 
-self.handles.main_fig.Name = [self.file_name '  -- Dimensions reduced using ' func2str(method)]
+self.handles.main_fig.Name = [self.file_name '  -- Dimensions reduced using ' func2str(method)];
 
