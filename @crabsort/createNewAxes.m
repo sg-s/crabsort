@@ -131,12 +131,12 @@ for i = 1:self.n_channels
 	end
 
 
-	% show indicator of automate status
-	self.handles.ax.has_automate(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.41 .05 .1 .15],'Style', 'text', 'String', 'A','BackgroundColor',[.9 .9 .9],'ForegroundColor',[1 1 1],'FontSize',self.pref.fs,'FontWeight','bold','Visible','on');
-
 	% make indicators for neural network status 
 	self.handles.ax.NN_accuracy(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .21 .4 .2],'Style', 'text', 'String', '00.0%','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*(sz(4)/1e3),'FontWeight','bold','Visible','on');
 	self.handles.ax.NN_status(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.01 .41 .8 .2],'Style', 'text', 'String', 'No data','BackgroundColor',[1 1 1],'ForegroundColor',[.7 .7 .7],'FontSize',self.pref.fs*(sz(4)/1e3),'FontWeight','bold','Visible','on','HorizontalAlignment','left');
+
+	% make buttons to hide channels
+	self.handles.ax.hide_channel_button(i) = uicontrol(self.handles.ax.panel(i),'units','normalized','Position',[.51 .41 .4 .2],'Style', 'pushbutton', 'String', 'Hide','FontSize',self.pref.fs*.8,'Visible','on','Callback',@self.hideChannel);
 
 
 

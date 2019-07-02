@@ -71,12 +71,6 @@ for i = 1:self.n_channels
 		
 
 
-		if canDetectSpikes(self.common.NNdata(i))
-			self.handles.ax.has_automate(i).BackgroundColor = [0 .5 0];
-		else
-			self.handles.ax.has_automate(i).BackgroundColor = [.9 .9 .9];
-		end
-
 		% show all children of plot
 		ax = self.handles.ax.ax(i);
 		for j = 1:length(ax.Children)

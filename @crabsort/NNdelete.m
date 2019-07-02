@@ -20,7 +20,6 @@ case 'Delete NN data on this channel'
 	% update the NN display
 	self.handles.ax.NN_accuracy(channel).String = 'No data';
 	self.handles.ax.NN_status(channel).String = 'No data';
-	self.handles.ax.has_automate(channel).BackgroundColor = [.9 .9 .9];
 
 case 'Delete all NN data'
 	self.common.NNdata = crabsort.NNdata(self.n_channels);
@@ -43,7 +42,6 @@ case 'Delete this channels NN'
 	% update the NN display
 	self.handles.ax.NN_accuracy(channel).String = 'No data';
 	self.handles.ax.NN_status(channel).String = 'No data';
-	self.handles.ax.has_automate(channel).BackgroundColor = [.9 .9 .9];
 
 case 'Delete all nets'
 	for i = 1:self.n_channels
