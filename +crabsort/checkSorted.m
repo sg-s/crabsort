@@ -1,4 +1,10 @@
 % check if all files are sorted
+%
+% usage:
+%
+% crabsort.checkSorted(dir('*.abf'),'PD')
+% crabsort.checkSorted(dir('*.abf'),'PD', true)
+
 function fatal = checkSorted(allfiles, neurons, early_exit)
 
 if nargin < 3
