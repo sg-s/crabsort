@@ -3,17 +3,18 @@ function runAutomateAction(self)
 
 menu_items = self.handles.menu_name(4).Children;
 
+
+% go over all the files and load them
+[~,~,ext] = fileparts(self.file_name);
+n_files = length((dir([self.path_name '*' ext])));
+
 switch self.automate_action
 
 case crabsort.automateAction.view_only
 		
-
 	channel = self.channel_to_work_with;
 
-	% go over all the files and load them
-	[~,~,ext]=fileparts(self.file_name);
-	allfiles = (dir([self.path_name '*' ext]));
-	for i = 1:length(allfiles)
+	for i = 1:n_files
 
 		if self.shouldAutomateStop(channel)
 			beep
@@ -21,17 +22,9 @@ case crabsort.automateAction.view_only
 			break
 		end
 
-		next_file = self.getFileSequence+1;
-		if next_file > length(allfiles)
-			next_file = 1;
-		end
-
-		self.file_name = allfiles(next_file).name;
 		self.loadFile(self.handles.next_file_control)
 
 		drawnow;
-
-
 	end
 
 	self.automate_action = crabsort.automateAction.none;
@@ -43,10 +36,8 @@ case crabsort.automateAction.view_only
 
 case crabsort.automateAction.all_channels_all_files
 	
-	% go over all the files and load them
-	[~,~,ext]=fileparts(self.file_name);
-	allfiles = (dir([self.path_name '*' ext]));
-	for i = 1:length(allfiles)
+
+	for i = 1:n_files
 
 		if self.shouldAutomateStop
 			beep
@@ -147,10 +138,8 @@ case crabsort.automateAction.this_channel_all_files
 		channel = self.channel_to_work_with;
 	end
 
-	% go over all the files and load them
-	[~,~,ext]=fileparts(self.file_name);
-	allfiles = (dir([self.path_name '*' ext]));
-	for i = 1:length(allfiles)
+
+	for i = 1:n_files
 
 		if self.shouldAutomateStop
 			beep
@@ -158,16 +147,6 @@ case crabsort.automateAction.this_channel_all_files
 			break
 		end
 
-
-		% % check if the next file is already sorted
-		next_file = self.getFileSequence+1;
-		if next_file > length(allfiles)
-			next_file = 1;
-		end
-
-
-
-		self.file_name = allfiles(next_file).name;
 		self.loadFile(self.handles.next_file_control)
 
 		self.channel_to_work_with = channel;

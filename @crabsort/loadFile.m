@@ -38,7 +38,7 @@ else
         self.installed_plugins = crabsort.plugins();
     end
 
-    allowed_file_extensions = cellfun(@(x) ['*.' x], self.installed_plugins.csloadFile,'UniformOutput',false);
+    allowed_file_extensions = cellfun(@(x) ['*.' x], self.installed_plugins.csLoadFile,'UniformOutput',false);
     allowed_file_extensions = allowed_file_extensions(:);
 
 
