@@ -39,15 +39,28 @@ end
 putative_spikes = find(self.putative_spikes(:,channel));
 this_nerve = self.common.data_channel_names{channel};
 
-[idx, labels] = clusterlib.manual(R,V_snippets,default_names,@self.showSpikeInContext);
 
-for i = 1:length(labels)
-	if strcmp(labels{i},'Noise')
+M = clusterlib.manual('ReducedData',R,'RawData',V_snippets,'labels',categorical(default_names),'AllowNewClasses',false); 
+M.makeUI; 
+uiwait(M.handles.main_fig)
+
+
+idx = M.idx;
+delete(M)
+
+all_labels = categories(idx);
+
+for i = 1:length(all_labels)
+	if strcmp(all_labels{i},'Noise')
 		continue
 	end
 
-	these_spikes = putative_spikes(idx==i);
+	if strcmp(all_labels{i},'Undefined')
+		continue
+	end
 
-	self.spikes.(this_nerve).(labels{i}) = these_spikes;
+	these_spikes = putative_spikes(idx==all_labels(i));
+
+	self.spikes.(this_nerve).(all_labels{i}) = these_spikes;
 
 end
