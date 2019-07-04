@@ -44,6 +44,7 @@ end
 uncertain_spikes = round(self.handles.ax.uncertain_spikes(channel).XData/self.dt);
 
 
+
 if self.handles.mode_off.Value == 1
 	% the only thing possible is to affirm uncertain spikes
 	% so we're going to find the closest uncertain spike

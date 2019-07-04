@@ -8,7 +8,11 @@
 function fatal = checkSorted(allfiles, neurons, early_exit)
 
 if nargin < 3
-	early_exit = false;
+	if length(allfiles) > 50
+		early_exit = false;
+	else
+		early_exit = true;
+	end
 end
 
 fatal = false;

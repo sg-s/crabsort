@@ -149,7 +149,7 @@ elseif nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'>')
 
 
         % get the list of files
-        [~,~,ext]=fileparts(self.file_name);
+        [~,~,ext] = fileparts(self.file_name);
         allfiles = dir([self.path_name '*' ext]);
         % remove hidden files that begin with a ".
         allfiles(cellfun(@(x) strcmp(x(1),'.'),{allfiles.name})) = [];

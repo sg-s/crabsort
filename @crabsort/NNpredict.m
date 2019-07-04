@@ -60,6 +60,13 @@ end
 % we should be getting all spikes
 
 
+if self.isIntracellular(channel)
+	futz_factor_scale = 1.5;
+else
+	futz_factor_scale = .85;
+end
+
+
 if NNdata.sdp.spike_sign
 
 	goon = true;
@@ -69,12 +76,13 @@ if NNdata.sdp.spike_sign
 
 		self.loadSDPFromNNdata(futz_factor)
 
+
 		self.findSpikes()
 		spiketimes = find(self.putative_spikes(:,channel));
 
 
 		if isempty(spiketimes)
-			futz_factor = futz_factor*.85;
+			futz_factor = futz_factor*futz_factor_scale;
 			continue
 		end
 
@@ -86,7 +94,7 @@ if NNdata.sdp.spike_sign
 		end
 
 		if nanmin(nanmax(V_snippets)) > smallest_spike 
-			futz_factor = futz_factor*.85;
+			futz_factor = futz_factor*futz_factor_scale;
 		else
 			goon = false;
 		end
@@ -103,7 +111,7 @@ else
 		spiketimes = find(self.putative_spikes(:,channel));
 
 		if isempty(spiketimes)
-			futz_factor = futz_factor*.85;
+			futz_factor = futz_factor*futz_factor_scale;
 			continue
 		end
 
@@ -116,7 +124,7 @@ else
 		end
 
 		if nanmax(nanmin(V_snippets)) < smallest_spike 
-			futz_factor = futz_factor*.85;
+			futz_factor = futz_factor*futz_factor_scale;
 		else
 			goon = false;
 		end
