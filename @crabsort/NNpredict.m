@@ -60,87 +60,87 @@ end
 % we should be getting all spikes
 
 
+
+
 if self.isIntracellular(channel)
-	futz_factor_scale = 1.1;
+	% just find the damn spikes, decay be damned
+	self.loadSDPFromNNdata()
+	self.findSpikes()
+	spiketimes = find(self.putative_spikes(:,channel));
 else
 	futz_factor_scale = .85;
-end
+
+	if NNdata.sdp.spike_sign
+
+		goon = true;
+		smallest_spike = min(max(NNdata.raw_data(:,NNdata.label_idx~='Noise')));
+
+		while goon
+
+			self.loadSDPFromNNdata(futz_factor)
 
 
-if NNdata.sdp.spike_sign
-
-	goon = true;
-	smallest_spike = min(max(NNdata.raw_data(:,NNdata.label_idx~='Noise')));
-
-	while goon
-
-		self.loadSDPFromNNdata(futz_factor)
+			self.findSpikes()
+			spiketimes = find(self.putative_spikes(:,channel));
 
 
-		self.findSpikes()
-		spiketimes = find(self.putative_spikes(:,channel));
-
-
-		if isempty(spiketimes)
-			futz_factor = futz_factor*futz_factor_scale;
-			continue
-		end
-
-		V_snippets = self.getSnippets(channel,spiketimes);
-		V_snippets(:,(sum(V_snippets) == 0)) = NaN;
-
-		if futz_factor < .3
-			goon = false;
-		end
-
-
-		if self.isIntracellular(channel)
-			if ~nanmin(nanmax(V_snippets)) > smallest_spike 
+			if isempty(spiketimes)
 				futz_factor = futz_factor*futz_factor_scale;
-			else
+				continue
+			end
+
+			V_snippets = self.getSnippets(channel,spiketimes);
+			V_snippets(:,(sum(V_snippets) == 0)) = NaN;
+
+
+			if futz_factor < .1
 				goon = false;
 			end
-		else
+
 			if nanmin(nanmax(V_snippets)) > smallest_spike 
 				futz_factor = futz_factor*futz_factor_scale;
 			else
+
+				goon = false;
+			end
+
+
+			
+		end
+	else
+		goon = true;
+		smallest_spike = max(min(NNdata.raw_data(:,NNdata.label_idx~='Noise')));
+
+		while goon
+
+			self.loadSDPFromNNdata(futz_factor)
+
+			self.findSpikes()
+			spiketimes = find(self.putative_spikes(:,channel));
+
+			if isempty(spiketimes)
+				futz_factor = futz_factor*futz_factor_scale;
+				continue
+			end
+
+
+			V_snippets = self.getSnippets(channel,spiketimes);
+			V_snippets(:,(sum(V_snippets) == 0)) = NaN;
+
+			if futz_factor < .3
+				goon = false;
+			end
+
+			if nanmax(nanmin(V_snippets)) < smallest_spike 
+				futz_factor = futz_factor*futz_factor_scale;
+			else
 				goon = false;
 			end
 		end
-
-		
 	end
-else
-	goon = true;
-	smallest_spike = max(min(NNdata.raw_data(:,NNdata.label_idx~='Noise')));
 
-	while goon
-
-		self.loadSDPFromNNdata(futz_factor)
-
-		self.findSpikes()
-		spiketimes = find(self.putative_spikes(:,channel));
-
-		if isempty(spiketimes)
-			futz_factor = futz_factor*futz_factor_scale;
-			continue
-		end
-
-
-		V_snippets = self.getSnippets(channel,spiketimes);
-		V_snippets(:,(sum(V_snippets) == 0)) = NaN;
-
-		if futz_factor < .3
-			goon = false;
-		end
-
-		if nanmax(nanmin(V_snippets)) < smallest_spike 
-			futz_factor = futz_factor*futz_factor_scale;
-		else
-			goon = false;
-		end
-	end
 end
+
 
 
 n_spikes = sum(spiketimes);
