@@ -49,7 +49,7 @@ else
 
 end
 
-if nargin > 1 && strcmp(src.String,'Load File')
+if nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'Load File')
 
 
     % attempt to cancel all workers
@@ -109,14 +109,12 @@ if nargin > 1 && strcmp(src.String,'Load File')
 
 elseif nargin > 1 && strcmp(src.Style,'popupmenu')
 
-
     % jump to file
     self.file_name = src.String{src.Value};
+    self.loadFile;
+    return
 
-    [~,~,ext]=fileparts(self.file_name);
-    filter_index = find(strcmp(['*' ext],allowed_file_extensions));
-
-elseif nargin > 1 && strcmp(src.String,'<')
+elseif nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'<')
 
     if self.verbosity > 5
         disp('[loadFile] < is src]')
@@ -139,7 +137,7 @@ elseif nargin > 1 && strcmp(src.String,'<')
         
     
     end
-elseif nargin > 1 && strcmp(src.String,'>')
+elseif nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'>')
 
     if self.verbosity > 5
         disp('[loadFile] > is src')
