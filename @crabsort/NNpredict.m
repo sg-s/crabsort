@@ -61,7 +61,7 @@ end
 
 
 if self.isIntracellular(channel)
-	futz_factor_scale = 1.5;
+	futz_factor_scale = 1.1;
 else
 	futz_factor_scale = .85;
 end
@@ -93,11 +93,22 @@ if NNdata.sdp.spike_sign
 			goon = false;
 		end
 
-		if nanmin(nanmax(V_snippets)) > smallest_spike 
-			futz_factor = futz_factor*futz_factor_scale;
+
+		if self.isIntracellular(channel)
+			if ~nanmin(nanmax(V_snippets)) > smallest_spike 
+				futz_factor = futz_factor*futz_factor_scale;
+			else
+				goon = false;
+			end
 		else
-			goon = false;
+			if nanmin(nanmax(V_snippets)) > smallest_spike 
+				futz_factor = futz_factor*futz_factor_scale;
+			else
+				goon = false;
+			end
 		end
+
+		
 	end
 else
 	goon = true;

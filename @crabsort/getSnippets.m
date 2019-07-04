@@ -58,7 +58,7 @@ for i = 1:length(spiketimes)
 		continue
 	end
 
-	raw_snippet = V(spiketimes(i)-before+1:spiketimes(i)+after);;
+	raw_snippet = V(spiketimes(i)-before+1:spiketimes(i)+after);
 	if is_intracellular
 		V_snippets(:,i) = raw_snippet - mean(raw_snippet);
 	else
