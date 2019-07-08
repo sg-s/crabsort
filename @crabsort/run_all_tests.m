@@ -196,6 +196,8 @@ for i = 1:length(dim_red_methods)
 
 end
 
+close(self)
+close all
 
 total = passed + failed;
 
