@@ -11,11 +11,7 @@
 
 function showSpikeInContext(self,idx)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
-end
-
+idx = idx.CurrentPoint;
 
 channel = self.channel_to_work_with;
 

@@ -6,20 +6,22 @@
 %  \___|_|  \__,_|_.__/|___/\___/|_|   \__|
 %
 % this is a plugin for crabsort.m
-% computes the PCA on the spike shape, and then uses the top 2 components
+% computes the PCA on the spike shape, and peak amplitude
+%  and then uses the top 2 components
 % 
 % created by Srinivas Gorur-Shandilya at 10:20 , 09 April 2014. Contact me at http://srinivas.gs/contact/
 % 
 
-function self = PCA(self)
+function self = AmplitudeShapePCA(self)
+
+channel = self.channel_to_work_with;
+
+P = self.raw_data(self.putative_spikes(:,channel),channel);
+P = P/std(P);
 
 
 
-if size(self.data_to_reduce,1) <= 2
-	% do nothing
-	self.R{self.channel_to_work_with} = self.data_to_reduce;
-else
-	R = pca(self.data_to_reduce);
-	self.R{self.channel_to_work_with} = R(:,1:2)';
-end
+R = pca([P'; self.data_to_reduce]);
+self.R{channel} = R(:,1:2)';
+
 
