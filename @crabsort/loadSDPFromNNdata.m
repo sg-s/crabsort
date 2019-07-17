@@ -31,7 +31,10 @@ end
 
 % futz with some parameters
 self.sdp.MinPeakProminence = self.sdp.MinPeakProminence*futz_factor;
-self.sdp.MinPeakHeight = self.sdp.MinPeakHeight*futz_factor;
+
+if ~self.isIntracellular(channel)
+	self.sdp.MinPeakHeight = self.sdp.MinPeakHeight*futz_factor;
+end
 
 
 

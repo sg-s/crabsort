@@ -10,11 +10,19 @@ if any(isnan(corelib.vectorise(self.sdp)))
 	self.sdp = self.sdp.default;
 end
 
+if self.isIntracellular(self.channel_to_work_with)
+	self.sdp.MinPeakHeight = -80;
+	self.sdp.MaxPeakHeight = 200;
+	self.sdp.MinPeakDistance = 5;
+end
+
+
 [V, N] = corelib.vectorise(self.sdp);
 
 rm_this = strcmp(N,'spike_sign');
 N(rm_this) = [];
 V(rm_this) = [];
+
 
 lb = 0*V;
 ub = 2*V + 1;
