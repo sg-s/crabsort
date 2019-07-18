@@ -27,6 +27,23 @@ if any(strfind(src.Text,'BEFORE'))
 	end
 
 else
-	error('Not coded');
+	
+	for i = length(allfiles):-1:1
+
+		if strcmp(allfiles(i).name,thisfile)
+			return
+		end
+
+		% load the file
+		if exist([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'file') == 2
+
+			load([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'-mat')
+			crabsort_obj.ignore_section.ons = 1;
+			crabsort_obj.ignore_section.offs = crabsort_obj.raw_data_size(1);
+			save([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'crabsort_obj')
+		end
+
+
+	end
 
 end

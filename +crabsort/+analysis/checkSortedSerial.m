@@ -6,6 +6,13 @@ load([allfiles.folder filesep allfiles.name],'-mat','crabsort_obj')
 self = crabsort_obj;
 
 
+% check if the entire file is ignored
+if ~isempty(self.ignore_section.ons)
+	if self.ignore_section.ons(1) == 1 & self.ignore_section.offs(1) == self.raw_data_size(1)
+		return
+	end
+end
+
 % figure out all the neurons that exist in self.spikes
 sorted_neurons = {};
 
