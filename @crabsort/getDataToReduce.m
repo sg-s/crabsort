@@ -8,8 +8,11 @@
 % populates the data_to_reduce property of crabsort
 % using the options on hand 
 
-function getDataToReduce(self)
+function getDataToReduce(self, OverWriteYScale)
 
+if nargin == 1
+	OverWriteYScale = false;
+end
 
 % always get the spike shape. this is always included
 % in the data to reduce
@@ -18,9 +21,12 @@ original_data = data_to_reduce;
 
 if self.handles.multi_channel_control.Value
 
-	if self.verbosity > 5
-		disp(['[' mfilename '] Using multi-channel spike shape...'])
+
+	% update y_scales
+	if OverWriteYScale
+		self.common.y_scales(self.channel_to_work_with) = prctile(abs(self.raw_data(:,self.channel_to_work_with)),99);
 	end
+
 
 	% let's make sure we have the delays computed
 	self.estimateDelay;
@@ -50,9 +56,15 @@ if self.handles.multi_channel_control.Value
 			self.sdp.t_after = old_t_after;
 
 			% normalize to match scale of original data
+
+			% update y_scales
+			if OverWriteYScale
+				self.common.y_scales(this_channel) = prctile(abs(self.raw_data(:,this_channel)),99);
+			end
+
 			if ~isempty(original_data)
 				these_snippets = these_snippets/self.common.y_scales(this_channel);
-				these_snippets = these_snippets*self.common.y_scales(self.channel_to_work_with);
+
 			end
 
 			data_to_reduce = [data_to_reduce; these_snippets];

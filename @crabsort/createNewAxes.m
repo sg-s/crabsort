@@ -99,7 +99,7 @@ end
 % make ui panels
 c = lines(100);
 for i = 1:self.n_channels
-	self.handles.ax.panel(i) = uipanel('Parent',self.handles.main_fig,'BackgroundColor',[1 1 1],'Title',self.builtin_channel_names{i},'ForegroundColor',c(i,:),'FontWeight','bold');
+	self.handles.ax.panel(i) = uipanel('Parent',self.handles.main_fig,'BackgroundColor',[1 1 1],'Title',[self.builtin_channel_names{i} '  (channel ' mat2str(i) ')'],'ForegroundColor',c(i,:),'FontWeight','bold');
 	self.handles.ax.panel(i).Position = [.01 bottom_plot + spacing*(i-1) .1 .95*spacing];
 end
 

@@ -106,8 +106,8 @@ handles.menu_name(7) = uimenu('Label','Artifacts');
 uimenu(handles.menu_name(7),'Label','Ignore this section','Callback',@self.ignoreSection,'Separator','off');
 uimenu(handles.menu_name(7),'Label','UNignore this section','Callback',@self.ignoreSection,'Separator','off');
 uimenu(handles.menu_name(7),'Label','Ignore sections where data exceeds Y bounds','Callback',@self.ignoreSection,'Separator','on');
-
-
+uimenu(handles.menu_name(7),'Label','Mark all data BEFORE this file as useless','Callback',@self.ignoreEntireFiles,'Separator','on');
+uimenu(handles.menu_name(7),'Label','Mark all data AFTER this file as useless','Callback',@self.ignoreEntireFiles,'Separator','off');
 
 % file I/O panel
 handles.data_panel = uipanel('Title','Select Data file','Position',[.01 .92 .15 .07],'BackgroundColor',[1 1 1],'FontSize',self.pref.fs);

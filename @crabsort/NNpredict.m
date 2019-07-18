@@ -187,7 +187,6 @@ uncertain_spikes = putative_spikes(uncertain_spikes);
 manual_labels = NNdata.label_idx(NNdata.file_idx == self.getFileSequence);
 uniq_manual_labels = unique(NNdata.label_idx);
 
-
 if any(NNdata.file_idx == self.getFileSequence)
 	manually_labelled_spikes = NNdata.spiketimes(NNdata.file_idx == self.getFileSequence);
 

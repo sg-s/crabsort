@@ -31,8 +31,10 @@ if sum(self.putative_spikes(:,self.channel_to_work_with)) < 2
 end
 
 
-% get the data to reduce
-self.getDataToReduce; 
+% get the data to reduce, and overwrite y-scales if need be, because
+% this call has to originate from a human generating data 
+% initially 
+self.getDataToReduce(true); 
 
 % use the method
 self = method(self);

@@ -26,18 +26,25 @@ common_name = pathlib.join(self.path_name, 'crabsort.common');
 
 % generate ignore_section from the mask
 global_mask = 1-max(self.mask,[],2);
-offs = find(diff(global_mask)<0);
-ons = find(diff(global_mask)>0);
-if ~isempty(ons) && ~isempty(offs)
-	if offs(1) < ons(1)
-		ons = [1; ons];
+if min(global_mask) == 1
+	% we're ignoring the whole file
+	self.ignore_section.ons = 1;
+	self.ignore_section.offs = length(global_mask);
+else
+	offs = find(diff(global_mask)<0);
+	ons = find(diff(global_mask)>0);
+	if ~isempty(ons) && ~isempty(offs)
+		if offs(1) < ons(1)
+			ons = [1; ons];
+		end
 	end
+	if length(offs) < length(ons)
+		offs = [offs; self.raw_data_size(1)];
+	end
+	self.ignore_section.ons = ons;
+	self.ignore_section.offs = offs;
 end
-if length(offs) < length(ons)
-	offs = [offs; self.raw_data_size(1)];
-end
-self.ignore_section.ons = ons;
-self.ignore_section.offs = offs;
+
 
 crabsort_obj = crabsort(false, false);
 

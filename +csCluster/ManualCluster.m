@@ -40,7 +40,7 @@ putative_spikes = find(self.putative_spikes(:,channel));
 this_nerve = self.common.data_channel_names{channel};
 
 
-M = clusterlib.manual('ReducedData',R','RawData',V_snippets,'labels',categorical(default_names),'AllowNewClasses',false); 
+M = clusterlib.manual('ReducedData',R','RawData',self.data_to_reduce,'labels',categorical(default_names),'AllowNewClasses',false); 
 M.makeUI; 
 M.MouseCallbackFcn = @self.showSpikeInContext;
 uiwait(M.handles.main_fig)
