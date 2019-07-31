@@ -5,6 +5,14 @@
 function loadFile(self,src,~)
 
 
+if ~isempty(self.handles)
+    if isfield(self.handles,'main_fig')
+        set(self.handles.main_fig, 'pointer', 'watch')
+        drawnow
+    end
+end
+
+
 channel = self.channel_to_work_with;
 
 
@@ -182,6 +190,7 @@ load_file_handle = str2func(['csLoadFile.' chosen_data_ext]);
 self.builtin_channel_names = {};
 
 
+
 try
     S = load_file_handle(self);
     fn = fieldnames(S);
@@ -189,6 +198,13 @@ try
         self.(fn{i}) = S.(fn{i});
     end
 catch err
+
+    if ~isempty(self.handles)
+        if isfield(self.handles,'main_fig')
+            set(self.handles.main_fig, 'pointer', 'arrow')
+            drawnow
+        end
+    end
 
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
@@ -222,6 +238,7 @@ catch err
 
     return
 end
+
 
 self.n_channels = size(self.raw_data,2);
 
@@ -455,6 +472,13 @@ end
 self.showSpikes;
 
 
+if ~isempty(self.handles)
+    if isfield(self.handles,'main_fig')
+        set(self.handles.main_fig, 'pointer', 'arrow')
+        drawnow
+    end
+end
+
 catch err
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
@@ -471,6 +495,13 @@ catch err
         error('Error loading file.')
     end
 
+
+    if ~isempty(self.handles)
+        if isfield(self.handles,'main_fig')
+            set(self.handles.main_fig, 'pointer', 'arrow')
+            drawnow
+        end
+    end
     
 
 

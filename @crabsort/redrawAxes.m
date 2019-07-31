@@ -9,9 +9,11 @@
 
 function redrawAxes(self)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+if ~isempty(self.handles)
+    if isfield(self.handles,'main_fig')
+        set(self.handles.main_fig, 'pointer', 'watch')
+        drawnow
+    end
 end
 
 
@@ -34,3 +36,10 @@ end
 % this gets run no matter what
 self.showHideAxes;
 
+
+if ~isempty(self.handles)
+    if isfield(self.handles,'main_fig')
+        set(self.handles.main_fig, 'pointer', 'arrow')
+        drawnow
+    end
+end
