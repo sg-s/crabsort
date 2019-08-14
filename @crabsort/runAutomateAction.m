@@ -6,7 +6,8 @@ menu_items = self.handles.menu_name(4).Children;
 
 % go over all the files and load them
 [~,~,ext] = fileparts(self.file_name);
-n_files = length((dir([self.path_name '*' ext])));
+allfiles = dir([self.path_name '*' ext]);
+n_files = length(allfiles);
 
 switch self.automate_action
 
@@ -147,7 +148,26 @@ case crabsort.automateAction.this_channel_all_files
 			break
 		end
 
-		self.loadFile(self.handles.next_file_control)
+
+		% does this file have a .crabsort file, and
+		% are the channels sorted there? 
+
+		if strcmp(menu_items(find(strcmp({menu_items.Text},'Overwrite previous predictions'))).Checked,'on')
+			% just load the next file
+			self.loadFile(self.handles.next_file_control)
+		else
+			% we can skip if needed
+			% find the next data file that doesn't have spikes on this channel
+			should_stop = self.loadNextUnsortedFile();
+
+			if should_stop 
+				beep
+				self.auto_predict = true;
+				break
+			end
+
+		end
+
 
 		self.channel_to_work_with = channel;
 

@@ -35,9 +35,9 @@ if nargin == 1
     assert(~isempty(self.file_name),'file_name not set')
     assert(~isempty(self.path_name),'file_name not set')
 
-    hard_load = true;
-
-
+    if isempty(self.common)
+        hard_load = true;
+    end
 
 else
 

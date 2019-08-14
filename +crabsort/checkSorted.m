@@ -32,7 +32,7 @@ if early_exit
 
 else
 	fatal = false(length(allfiles),1);
-	parfor i = 1:length(allfiles)
+	for i = 1:length(allfiles)
 		fatal(i) = crabsort.analysis.checkSortedSerial(allfiles(i), neurons, false);
 
 	end

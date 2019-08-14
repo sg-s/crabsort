@@ -7,7 +7,7 @@ self = crabsort_obj;
 
 
 % check if the entire file is ignored
-if ~isempty(self.ignore_section.ons)
+if ~isempty(self.ignore_section) && ~isempty(self.ignore_section.ons)
 	if self.ignore_section.ons(1) == 1 & self.ignore_section.offs(1) == self.raw_data_size(1)
 		return
 	end

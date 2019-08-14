@@ -145,9 +145,22 @@ end
 
 n_spikes = sum(spiketimes);
 
+this_nerve = self.common.data_channel_names{channel};
+
+% load the net 
+load(NN_dump_file,'trainedNet');
+
 if n_spikes == 0
 	self.say('No spikes detected, nothing to do.')
 	self.channel_stage(channel) = 3;
+
+	% also create empty arrays
+	neuron_names = trainedNet.Layers(end).ClassNames;
+	for i = 1:length(neuron_names)
+		if ~strcmp(neuron_names{i},'Noise')
+			self.spikes.(this_nerve).(neuron_names{i}) = [];
+		end
+	end
 	return
 else
 	self.say([strlib.oval(n_spikes) ' spikes detected; using NN to sort...'])
@@ -157,8 +170,7 @@ self.getDataToReduce()
 
 X = self.data_to_reduce;
 
-% load the net 
-load(NN_dump_file,'trainedNet');
+
 N = size(X,2);
 SZ = size(X,1);
 X = reshape(X,SZ,1,1,N);
@@ -176,7 +188,7 @@ uncertain_spikes = max(scores,[],2) < (1/(N-1)*(.4)) + .4;
 
 
 
-this_nerve = self.common.data_channel_names{channel};
+
 
 putative_spikes = find(self.putative_spikes(:,channel));
 uncertain_spikes = putative_spikes(uncertain_spikes);
@@ -195,7 +207,7 @@ if any(NNdata.file_idx == self.getFileSequence)
 	uncertain_spikes = setdiff(uncertain_spikes,manually_labelled_spikes);
 
 	if ~isempty(manual_labels)
-		
+	
 
 
 		for i = 1:length(uniq_manual_labels)
@@ -204,6 +216,7 @@ if any(NNdata.file_idx == self.getFileSequence)
 		end
 	end
 end
+
 
 % store in spikes
 for i = 1:length(uniq_manual_labels)
