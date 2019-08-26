@@ -5,6 +5,10 @@
 function loadFile(self,src,~)
 
 
+if self.verbosity > 9
+    disp(mfilename)
+end
+
 if ~isempty(self.handles)
     if isfield(self.handles,'main_fig')
         set(self.handles.main_fig, 'pointer', 'watch')
@@ -20,7 +24,7 @@ channel = self.channel_to_work_with;
 full_trace_view = false;
 if ~isempty(self.handles)
     if isfield(self.handles,'ax')
-        if round(max([self.handles.ax.ax.XLim])) == round(self.raw_data_size(1)*self.dt)
+        if round(max([self.handles.ax.ax(self.common.show_hide_channels).XLim])) == round(self.raw_data_size(1)*self.dt)
             full_trace_view = true;
         end
     end

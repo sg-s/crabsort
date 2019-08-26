@@ -10,6 +10,10 @@
 
 function getDataToReduce(self, OverWriteYScale)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 if nargin == 1
 	OverWriteYScale = false;
 end

@@ -1,5 +1,9 @@
 function ignoreEntireFiles(self, src, ~)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 % get all files in this dataset
 thisfile = self.file_name;
 [~,~,ext]=fileparts(self.file_name);

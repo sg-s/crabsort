@@ -8,6 +8,9 @@
 
 function close(self,~,~)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
 
 
 try

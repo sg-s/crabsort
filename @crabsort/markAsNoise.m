@@ -2,6 +2,10 @@
 
 function markAsNoise(self, this_nerve,this_spike)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 if ~isfield(self.spikes,this_nerve)
 	return
 end

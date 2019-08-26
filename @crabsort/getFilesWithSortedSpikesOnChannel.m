@@ -8,11 +8,9 @@
 
 function S = getFilesWithSortedSpikesOnChannel(self,channel)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+if self.verbosity > 9
+	disp(mfilename)
 end
-
 
 % get all crabsort data for this channel
 [~,~,ext] = fileparts(pathlib.join(self.path_name,self.file_name));

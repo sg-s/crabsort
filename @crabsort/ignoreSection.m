@@ -1,5 +1,9 @@
 function ignoreSection(self,src,~)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 if isempty(self.channel_to_work_with)
 	xlim = vertcat(self.handles.ax.ax.XLim);
 	xlim = xlim(strcmp({self.handles.ax.ax.Visible},'on'),:);

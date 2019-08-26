@@ -13,6 +13,9 @@
 
 function V_snippets = getSnippets(self,channel, spiketimes)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
 
 
 if nargin == 2

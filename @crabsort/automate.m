@@ -21,6 +21,9 @@ automate(self,~,~)
 %}
 function automate(self,src,~)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
 
 % set the automate action
 possible_actions = (enumeration('crabsort.automateAction'));

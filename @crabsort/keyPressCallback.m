@@ -1,5 +1,8 @@
 function keyPressCallback(self,~,value)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
 
 if strcmp(value.Key,'escape')
 	self.channel_to_work_with = [];

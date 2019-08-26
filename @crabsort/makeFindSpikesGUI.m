@@ -1,6 +1,8 @@
 function makeFindSpikesGUI(self,~,~)
 
-
+if self.verbosity > 9
+	disp(mfilename)
+end
 
 % spin up a puppeteer instance by making a slider
 % for every double property

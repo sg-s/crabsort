@@ -7,10 +7,10 @@
 % modifies data based on mouse clicks 
 function modify(self,p)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+if self.verbosity > 9
+	disp(mfilename)
 end
+
 
 
 channel = self.channel_to_work_with;

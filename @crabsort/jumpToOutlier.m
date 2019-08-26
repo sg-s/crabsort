@@ -1,5 +1,9 @@
 function jumpToOutlier(self,direction)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 % find outliers 
 if isempty(self.channel_to_work_with)
 	return

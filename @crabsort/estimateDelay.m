@@ -13,6 +13,11 @@
 
 function estimateDelay(self)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
+
 if ~any(isnan(self.common.delays(:)))
 	% assume delays already computed, exit
 	return

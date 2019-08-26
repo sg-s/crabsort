@@ -1,5 +1,9 @@
 function should_stop = loadNextUnsortedFile(self)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 should_stop = false;
 
 [~,~,ext] = fileparts(self.file_name);

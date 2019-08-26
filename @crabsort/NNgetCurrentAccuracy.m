@@ -2,6 +2,12 @@
 
 function [accuracy, timestamp_last_trained] = NNgetCurrentAccuracy(self, worker)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
+
+
 D = self.workers(worker).Diary;
 
 accuracy = [];

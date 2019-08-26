@@ -10,11 +10,9 @@
 
 function createNewAxes(self)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+if self.verbosity > 9
+	disp(mfilename)
 end
-
 
 % defensive programming 
 assert(~isfield(self.handles,'ax'),'Axes already exist?')

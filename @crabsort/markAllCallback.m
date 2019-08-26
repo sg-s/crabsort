@@ -2,10 +2,10 @@
 
 function [] = markAllCallback(s,~,~)
 
-if s.verbosity > 5
-    corelib.cprintf('green','\n[INFO] ')
-    corelib.cprintf('text',[mfilename ' called'])
+if s.verbosity > 9
+	disp(mfilename)
 end
+
 
 
 % compatability layer

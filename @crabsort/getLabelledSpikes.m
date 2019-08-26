@@ -3,6 +3,9 @@
 
 function [spiketimes, labels] = getLabelledSpikes(self)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
 
 spiketimes = [];
 labels = categorical();

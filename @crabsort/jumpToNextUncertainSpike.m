@@ -2,6 +2,10 @@
 
 function jumpToNextUncertainSpike(self)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 if isempty(self.channel_to_work_with)
 	self.say('No channel chosen');
 	beep

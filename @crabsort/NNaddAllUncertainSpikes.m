@@ -1,5 +1,10 @@
 function NNaddAllUncertainSpikes(self, ~, ~)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
+
 channel = self.channel_to_work_with;
 
 % find closest identified point 

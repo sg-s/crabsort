@@ -13,6 +13,9 @@
 
 function findSpikes(self,Npeaks,~)
 
+if self.verbosity > 9
+    disp(mfilename)
+end
 
 
 if nargin < 2

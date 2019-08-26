@@ -2,6 +2,10 @@
 
 function N = getNeuronsOnThisNerve(self, channel)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 N = {};
 
 if nargin == 1

@@ -69,23 +69,27 @@ data.mask = mask;
 data.T = self.raw_data_size(1)*self.dt;
 
 
+try
+	if ~isempty(options.DataFun)
+		self.file_name = strrep(thisfile.name,'.crabsort','');
+		self.path_name = thisfile.folder;
+		self.loadFile;
+		for j = 1:length(options.DataFun)
+			
+			
+			variable_names = corelib.argOutNames(char(options.DataFun{j}));
+			outputs = cell(1,length(variable_names));
+			[outputs{:}] = options.DataFun{j}(self, options);
 
-if ~isempty(options.DataFun)
-	self.file_name = strrep(thisfile.name,'.crabsort','');
-	self.path_name = thisfile.folder;
-	self.loadFile;
-	for j = 1:length(options.DataFun)
-		
-		
-		variable_names = corelib.argOutNames(char(options.DataFun{j}));
-		outputs = cell(1,length(variable_names));
-		[outputs{:}] = options.DataFun{j}(self, options);
+			for k = 1:length(variable_names)
+				data.(strtrim(variable_names{k})) = outputs{k};
+			end
 
-		for k = 1:length(variable_names)
-			data.(strtrim(variable_names{k})) = outputs{k};
 		end
-
 	end
+catch
+	cprintf('red',['Error when trying to read this data file: ' thisfile.name])
+	keyboard
 end
 
 

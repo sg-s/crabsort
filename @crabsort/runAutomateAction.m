@@ -142,7 +142,7 @@ case crabsort.automateAction.this_channel_all_files
 
 	for i = 1:n_files
 
-		if self.shouldAutomateStop
+		if self.shouldAutomateStop(channel)
 			beep
 			self.auto_predict = true;
 			break
@@ -190,7 +190,7 @@ case crabsort.automateAction.this_channel_all_files
 			self.showSpikes(channel);
 			self.saveData;
 
-			if self.shouldAutomateStop
+			if self.shouldAutomateStop(channel)
 				beep
 				self.auto_predict = true;
 				break

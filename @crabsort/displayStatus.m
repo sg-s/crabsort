@@ -29,6 +29,10 @@ to the user about what crabsort is doign right now
 
 function displayStatus(self, msg, block_ux)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 if isempty(self.handles)
 	return
 end

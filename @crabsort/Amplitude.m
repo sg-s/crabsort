@@ -16,11 +16,9 @@
 
 function Amplitude(self)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+if self.verbosity > 9
+	disp(mfilename)
 end
-
 
 
 if size(self.data_to_reduce,1) <= 2

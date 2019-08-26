@@ -4,6 +4,10 @@
 
 function loadSDPFromNNdata(self, futz_factor)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 channel = self.channel_to_work_with;
 
 if nargin == 1

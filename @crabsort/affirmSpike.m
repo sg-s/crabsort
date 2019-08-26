@@ -3,6 +3,9 @@
 
 function affirmSpike(self, channel, spike_position, spike_name)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
 
 if isempty(self.common.NNdata(channel).spiketimes)
 	return

@@ -24,6 +24,11 @@ in the list of all data files in the current folder
 
 function idx = getFileSequence(self)
 
+
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 [~,~,ext]=fileparts(self.file_name);
 allfiles = (dir([self.path_name '*' ext]));
 idx = find(strcmp({allfiles.name},self.file_name));

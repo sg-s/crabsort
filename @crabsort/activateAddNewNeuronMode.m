@@ -25,4 +25,8 @@ and activates the new spike mode in manual override
 
 function activateAddNewNeuronMode(self,~,~)
 
+if self.verbosity > 9
+	disp(mfilename)
+end
+
 self.handles.mode_new_spike.Value = 1;
