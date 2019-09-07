@@ -13,22 +13,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
     properties
        
-        pref@struct % stores the preferences
-
-        % file handling 
-        file_name
-        path_name
-
-        % debug
-        verbosity@double = 0;
-
-        debug_mode@logical = false;
-
-        channel_to_work_with@double
-
-        % common data to all files in this folder
-        common@crabsort.common
-
 
         % futz factor to pick up spikes and classify
         % using NN
@@ -39,13 +23,81 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
 
 
-        R  % this holds the dimensionality reduced data
-
         % holds spiketimes of all neurons on all nerves
         spikes
 
 
     end % end properties 
+
+
+    properties (Transient = true)
+
+        % file handling 
+        file_name
+        path_name
+
+        R  % this holds the dimensionality reduced data
+
+        channel_to_work_with@double
+
+        pref@struct % stores the preferences
+
+        % debug
+        verbosity@double = 0;
+
+        % common data to all files in this folder
+        common@crabsort.common
+
+        debug_mode@logical = false;
+
+    end
+
+
+
+    properties (SetAccess = protected, Transient = true)
+
+        % UI
+        handles % a structure that handles everything else
+
+        raw_data
+
+        % this structure maps nerves onto the neurons that 
+        % are expected to be seen on them 
+        nerve2neuron@struct
+
+
+        putative_spikes
+
+        installed_plugins
+
+        version_name@char = 'crabsort';
+        build_number@char = 'automatically-generated';
+
+        % this is the list of channel names that you can choose from
+        channel_names
+
+        % this is passed to the dimensional reduction callback
+        % in general, this is MxN elements long, where N is
+        % the number of putative spikes, and M is the dimension
+        % we are operating in (which depends on what options are
+        % selected for spike shape, timing, etc.)
+        data_to_reduce
+
+        time
+
+        timer_handle@timer
+
+         % parallel workers
+        workers@parallel.FevalFuture
+
+        auto_predict@logical = true;
+
+        automate_action@crabsort.automateAction = crabsort.automateAction.none
+
+        mask
+
+
+    end
 
     properties (SetAccess = protected)
 
@@ -53,24 +105,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         builtin_channel_names@cell
 
         
-
-        % this is the list of channel names that you can choose from
-        channel_names
-
-        % this structure maps nerves onto the neurons that 
-        % are expected to be seen on them 
-        nerve2neuron
-
-
-        % UI
-        handles % a structure that handles everything else
-
         metadata
 
         % data 
         n_channels
-        raw_data
-        time
+        
+        
         raw_data_size
 
         % for reasons revolving around the crappiness of the ABF 
@@ -79,9 +119,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         dt@double
         channel_ylims
 
-        putative_spikes
+        
 
-        installed_plugins
+        
 
         % this keeps track of which stage each channel is in 
         % in the data analysis pipeline
@@ -92,43 +132,17 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % 3 == done (spikes assigned to neurons)
         channel_stage@double
 
-        version_name@char = 'crabsort';
-        build_number@char = 'automatically-generated';
-
-
-        % this is passed to the dimensional reduction callback
-        % in general, this is MxN elements long, where N is
-        % the number of putative spikes, and M is the dimension
-        % we are operating in (which depends on what options are
-        % selected for spike shape, timing, etc.)
-        data_to_reduce
-
 
         % ignores this section
         ignore_section
 
-        % parallel workers
-        workers@parallel.FevalFuture
 
-        timer_handle@timer
 
-        auto_predict@logical = true;
-
-        automate_action@crabsort.automateAction = crabsort.automateAction.none
-
-        mask
 
     end
 
-    properties (Access = protected)
+    properties (Access = protected, Transient = true)
 
-        % auto-update
-        req_update
-        req_toolboxes = {'srinivas.gs_mtools','crabsort','puppeteer'};
-
-        % these variables will not be saved
-        unsaved_variables = {'handles','raw_data','nerve2neuron','file_name','path_name','R','putative_spikes','installed_plugins','channel_to_work_with','build_number','version_name','pref','channel_names','data_to_reduce','time','verbosity','timer_handle','workers','auto_predict','automate_action','mask','common','unsaved_variables','NumWorkers','training_on','debug_mode'};
-        
 
         training_on
 

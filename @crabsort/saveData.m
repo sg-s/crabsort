@@ -16,7 +16,7 @@ end
 
 % saveData saves data to two different locations:
 % local data that pertains to this file in a .crabsort file
-% and common data that eprtains to all files in this folder
+% and common data that pertains to all files in this folder
 % to a file called crabsort.common in that folder 
 
 
@@ -46,20 +46,18 @@ else
 end
 
 
-crabsort_obj = crabsort(false, false);
+% crabsort_obj = crabsort(false, false);
 
-fn = properties(self);
+% fn = properties(self);
 
-for i = 1:length(fn)
-	this_prop = fn{i};
-	if any(strcmp(this_prop,self.unsaved_variables))
-		continue
-	end
+% for i = 1:length(fn)
+% 	this_prop = fn{i};
+% 	crabsort_obj.(this_prop) = self.(this_prop);
 
-	crabsort_obj.(this_prop) = self.(this_prop);
+% end
 
-end
 
+crabsort_obj = self;
 save(file_name,'crabsort_obj','-v7.3')
 
 

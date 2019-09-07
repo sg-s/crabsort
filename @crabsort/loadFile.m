@@ -46,15 +46,11 @@ if nargin == 1
 else
 
     % figure out what file types we can work with
-    if isempty(self.installed_plugins)
-        self.installed_plugins = crabsort.plugins();
-    end
+    self.installed_plugins = crabsort.plugins();
+
 
     allowed_file_extensions = cellfun(@(x) ['*.' x], self.installed_plugins.csLoadFile,'UniformOutput',false);
     allowed_file_extensions = allowed_file_extensions(:);
-
-
-
 
     self.saveData;
 
@@ -116,7 +112,7 @@ if nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'Load File
 
     % convert the load file button to a file picker
     src.Style = 'popupmenu';
-    allfiles = dir([self.path_name filesep allowed_file_extensions{filter_index}]);
+    allfiles = dir([self.path_name filesep lower(allowed_file_extensions{filter_index})]);
     src.String = {allfiles.name};
 
 elseif nargin > 1 && strcmp(src.Style,'popupmenu')
@@ -279,16 +275,15 @@ if exist(file_name,'file') == 2
     load(file_name,'crabsort_obj','-mat')
     
     % copy over properties from crabsort_obj into self
-    fn = fieldnames(crabsort_obj);
-    for i = 1:length(fn)
+    propinfo = ?crabsort;
+    for i = 1:length(propinfo.PropertyList)
 
-        if any(strcmp(self.unsaved_variables,fn{i}))
+        if propinfo.PropertyList(i).Transient
             continue
         end
 
-        if ~isempty(crabsort_obj.(fn{i}))
-            self.(fn{i}) = crabsort_obj.(fn{i});
-        end
+        N = propinfo.PropertyList(i).Name;
+        self.(N) = crabsort_obj.(N);
     end
 
 end

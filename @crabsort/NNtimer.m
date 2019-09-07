@@ -89,10 +89,10 @@ end
 
 spinner_symbols = {'.','..','...','+'};
 
-if self.verbosity > 0
-	clc
-	disp(['[NNtimer] ' mat2str(length(free_workers)) ' free workers'])
-end
+% if self.verbosity > 0
+% 	clc
+% 	disp(['[NNtimer] ' mat2str(length(free_workers)) ' free workers'])
+% end
 
 
 
