@@ -49,7 +49,7 @@ for i = 2:length(all_folders)
 		catch err
 			corelib.cprintf('r','  [FAILED]\n')
 			failed = failed + 1;
-			disp(err)
+			keyboard
 		end
 
 	end
@@ -77,9 +77,10 @@ try
 	self.loadFile(self.handles.next_file_control);
 	corelib.cprintf('g','  [OK]\n')
 	passed = passed + 1;
-catch
+catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
+	keyboard
 end
 
 
@@ -89,9 +90,10 @@ try
 	self.loadFile(self.handles.prev_file_control);
 	corelib.cprintf('g','  [OK]\n')
 	passed = passed + 1;
-catch
+catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
+	keyboard
 end
 
 
@@ -104,9 +106,10 @@ try
 	self.NNdelete(self.handles.menu_name(5).Children(5))
 	corelib.cprintf('g','  [OK]\n')
 	passed = passed + 1;
-catch
+catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
+	keyboard
 end
 
 fprintf('Delete all NNdata button: ')
@@ -115,9 +118,10 @@ try
 	self.NNdelete(self.handles.menu_name(5).Children(6))
 	corelib.cprintf('g','  [OK]\n')
 	passed = passed + 1;
-catch
+catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
+	keyboard
 end
 
 
@@ -137,9 +141,10 @@ try
 	corelib.cprintf('g','  [OK]\n')
 	passed = passed + 1;
 
-catch
+catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
+	keyboard
 
 end
 
@@ -153,9 +158,10 @@ try
 	n_spikes = sum(self.putative_spikes(:,2));
 	corelib.cprintf('g',[strlib.oval(n_spikes) ' spikes found\n'])
 	passed = passed + 1;
-catch
+catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
+	keyboard
 end
 
 fprintf('\n\n')
@@ -189,10 +195,10 @@ for i = 1:length(dim_red_methods)
 
 		passed = passed + 1;
 
-	catch
+	catch err
 		corelib.cprintf('r','   [FAILED]\n')
 
-		failed = failed + 1;
+		failed = failed + 1;keyboard
 	end
 
 end
