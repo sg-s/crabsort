@@ -16,8 +16,8 @@ function self = SpikePeakValue(self)
 
 if self.sdp.spike_sign
 
-	self.R = max(self.data_to_reduce);
+	self.R{self.channel_to_work_with} = max(self.data_to_reduce);
 else
-	self.R = max(-self.data_to_reduce);
+	self.R{self.channel_to_work_with} = max(-self.data_to_reduce);
 end
 
