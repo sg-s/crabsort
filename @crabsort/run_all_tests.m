@@ -46,9 +46,10 @@ for i = 2:length(all_folders)
 			self.loadFile;
 			corelib.cprintf('g','  [OK]\n')
 			passed = passed + 1;
-		catch
+		catch err
 			corelib.cprintf('r','  [FAILED]\n')
 			failed = failed + 1;
+			disp(err)
 		end
 
 	end
