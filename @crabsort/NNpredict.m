@@ -94,6 +94,7 @@ else
 
 
 			if futz_factor < .1
+				warning('Futz factor is too small to resolve spikes.')
 				goon = false;
 			end
 
@@ -109,7 +110,7 @@ else
 		end
 	else
 		goon = true;
-		smallest_spike = max(min(NNdata.raw_data(:,NNdata.label_idx~='Noise')));
+		smallest_spike = -min(abs(min(NNdata.raw_data(:,NNdata.label_idx~='Noise'))));
 
 		while goon
 
@@ -127,11 +128,12 @@ else
 			V_snippets = self.getSnippets(channel,spiketimes);
 			V_snippets(:,(sum(V_snippets) == 0)) = NaN;
 
-			if futz_factor < .3
+			if futz_factor < .1
+				warning('Futz factor is too small to resolve spikes.')
 				goon = false;
 			end
 
-			if nanmax(nanmin(V_snippets)) < smallest_spike 
+			if nanmin(nanmin(V_snippets)) < smallest_spike 
 				futz_factor = futz_factor*futz_factor_scale;
 			else
 				goon = false;
@@ -197,6 +199,7 @@ uncertain_spikes = putative_spikes(uncertain_spikes);
 % overwrite any predictions from the NN using manual annotations
 % stored in NNdata
 manual_labels = NNdata.label_idx(NNdata.file_idx == self.getFileSequence);
+
 uniq_manual_labels = unique(NNdata.label_idx);
 
 if any(NNdata.file_idx == self.getFileSequence)
@@ -208,8 +211,6 @@ if any(NNdata.file_idx == self.getFileSequence)
 
 	if ~isempty(manual_labels)
 	
-
-
 		for i = 1:length(uniq_manual_labels)
 			mark_as_spike = ismember(putative_spikes,manually_labelled_spikes(manual_labels==uniq_manual_labels(i)));
 			Y_pred(mark_as_spike) = uniq_manual_labels(i);
