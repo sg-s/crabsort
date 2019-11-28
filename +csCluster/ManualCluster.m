@@ -43,7 +43,7 @@ this_nerve = self.common.data_channel_names{channel};
 M = clusterlib.manual('ReducedData',R','RawData',self.data_to_reduce,'labels',categorical(default_names),'AllowNewClasses',false); 
 M.makeUI; 
 M.MouseCallbackFcn = @self.showSpikeInContext;
-uiwait(M.handles.main_fig)
+waitfor(M.handles.main_fig)
 
 
 idx = M.idx;
