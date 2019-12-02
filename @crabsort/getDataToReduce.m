@@ -28,7 +28,9 @@ if self.handles.multi_channel_control.Value
 
 	% update y_scales
 	if OverWriteYScale
-		self.common.y_scales(self.channel_to_work_with) = prctile(abs(self.raw_data(:,self.channel_to_work_with)),99);
+		%self.common.y_scales(self.channel_to_work_with) = prctile(abs(self.raw_data(:,self.channel_to_work_with)),99);
+
+		self.common.y_scales(self.channel_to_work_with) = diff(self.handles.ax.ax(self.channel_to_work_with).YLim)/2;
 	end
 
 
@@ -59,15 +61,16 @@ if self.handles.multi_channel_control.Value
 			self.sdp.t_before = old_t_before;
 			self.sdp.t_after = old_t_after;
 
-			% normalize to match scale of original data
 
 			% update y_scales
 			if OverWriteYScale
-				self.common.y_scales(this_channel) = prctile(abs(self.raw_data(:,this_channel)),99);
+				self.common.y_scales(this_channel) = diff(self.handles.ax.ax(this_channel).YLim)/2;
 			end
 
+			% normalize to match scale of original data
 			if ~isempty(original_data)
 				these_snippets = these_snippets/self.common.y_scales(this_channel);
+				these_snippets = these_snippets*self.common.y_scales(self.channel_to_work_with);
 
 			end
 

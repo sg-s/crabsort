@@ -44,6 +44,7 @@ if isempty(this_ax)
 	return
 end
 
+
 if ~isempty(self.channel_to_work_with) && this_ax == self.channel_to_work_with
 	% still working with same channel, do things based
 	% on the mode we are in manual_override
@@ -57,8 +58,6 @@ end
 
 if self.handles.mode_new_spike.Value == 1
 	set(self.handles.main_fig,'pointer','crosshair');
-
-	disp('Crosshair')
 	drawnow
 else
 	set(self.handles.main_fig,'pointer','arrow');
