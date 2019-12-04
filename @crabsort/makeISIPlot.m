@@ -1,7 +1,11 @@
-function makeISIPlot(self,~,~)
+function makeISIPlot(self,~,~, refresh_only)
 
 if self.verbosity > 9
 	disp(mfilename)
+end
+
+if nargin < 4
+	refresh_only = false;
 end
 
 channel = self.channel_to_work_with;
@@ -18,24 +22,34 @@ end
 
 neurons = fieldnames(self.spikes.(nerve));
 
-figure('outerposition',[300 300 1200 901],'PaperUnits','points','PaperSize',[1200 901]); hold on
 
+if ~refresh_only
+	figure('outerposition',[300 300 1200 901],'PaperUnits','points','PaperSize',[1200 901]); hold on
 
-for i = 1:length(neurons)
-	subplot(length(neurons),1,i); hold on
+end
+
+for i = length(neurons):-1:1
 
 	spiketimes = self.spikes.(nerve).(neurons{i});
 	isis = [diff(spiketimes); NaN];
 
-	plot(spiketimes*self.dt, isis*self.dt,'k.')
+	if ~refresh_only
+		subplot(length(neurons),1,i,'ButtonDownFcn',@self.jumpFromISIPlot); hold on
+		self.handles.isi_plot(i) = plot(spiketimes*self.dt, isis*self.dt,'k.');
+		ylabel([neurons{i} ' ISI (s)'])
+		set(gca,'YScale','log')
 
-	ylabel([neurons{i} ' ISI (s)'])
+	else
+		self.handles.isi_plot(i).XData = spiketimes*self.dt;
+		self.handles.isi_plot(i).YData = isis*self.dt;
+	end
 
-
-	set(gca,'YScale','log')
 
 end
-xlabel('Time (s)')
+
+if ~refresh_only
+	xlabel('Time (s)')
+	figlib.pretty
+end
 
 
-figlib.pretty

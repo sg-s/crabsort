@@ -21,7 +21,7 @@ if ischar(allfiles)
 	allfiles = pathlib.join(getpref('crabsort','store_spikes_here'),allfiles);
 end
 
-if isfolder(allfiles)
+if ~isstruct(allfiles) && isfolder(allfiles)
 	allfiles = dir(pathlib.join(allfiles,'*.crabsort'));
 end
 
