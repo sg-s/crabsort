@@ -162,6 +162,17 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
                 get_plugins = true;
             end
 
+
+            % figure out where to stash spikes
+            try
+                ssh = getpref('crabsort','store_spikes_here');
+            catch
+                ssh = [fileparts(fileparts(which('crabsort'))) filesep 'spikes'];
+                setpref('crabsort','store_spikes_here',ssh);
+                filelib.mkdir(ssh)
+            end
+
+
             % check for dependencies
             self.version_name = 'crabsort';
 

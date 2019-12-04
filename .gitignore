@@ -13,3 +13,4 @@ tensorflow/models/*
 *.prj
 .github_token.json
 *.kapalin
+spikes/

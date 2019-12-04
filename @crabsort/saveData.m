@@ -20,8 +20,8 @@ end
 % to a file called crabsort.common in that folder 
 
 
-file_name = pathlib.join(self.path_name, [self.file_name '.crabsort']);
-common_name = pathlib.join(self.path_name, 'crabsort.common');
+file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[self.file_name '.crabsort']);
+common_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),'crabsort.common');
 
 
 % generate ignore_section from the mask
@@ -46,15 +46,7 @@ else
 end
 
 
-% crabsort_obj = crabsort(false, false);
 
-% fn = properties(self);
-
-% for i = 1:length(fn)
-% 	this_prop = fn{i};
-% 	crabsort_obj.(this_prop) = self.(this_prop);
-
-% end
 
 
 crabsort_obj = self;

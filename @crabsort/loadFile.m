@@ -30,6 +30,8 @@ if ~isempty(self.handles)
     end
 end
 
+
+% this try wraps everything in loadfile
 try
 
 hard_load = false;
@@ -265,8 +267,8 @@ self.channel_ylims = zeros(self.n_channels,1);
 self.ignore_section = [];
 
 % check if there is a .crabsort file already
-file_name = pathlib.join(self.path_name, [self.file_name '.crabsort']);
 
+file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[self.file_name '.crabsort']);
 
 
 if exist(file_name,'file') == 2
@@ -291,7 +293,7 @@ end
 if hard_load
 
     % check that there is a crabsort.common file already
-    file_name = pathlib.join(self.path_name, 'crabsort.common');
+    file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),'crabsort.common');
 
     if exist(file_name,'file') == 2
         if self.verbosity > 5
