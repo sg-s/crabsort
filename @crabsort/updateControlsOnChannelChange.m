@@ -74,5 +74,6 @@ self.handles.new_spike_type.String = self.getNeuronsOnThisNerve;
 self.handles.new_spike_type.Value = 1;
 
 
-
+warning('off','MATLAB:gui:array:InvalidArrayShape')
 drawnow;
+warning('on','MATLAB:gui:array:InvalidArrayShape')

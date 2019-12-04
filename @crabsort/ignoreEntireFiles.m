@@ -19,12 +19,14 @@ if any(strfind(src.Text,'BEFORE'))
 		end
 
 		% load the file
-		if exist([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'file') == 2
+		file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[allfiles(i).name  '.crabsort']);
 
-			load([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'-mat')
+		if exist(file_name,'file') == 2
+
+			load(file_name,'-mat','crabsort_obj')
 			crabsort_obj.ignore_section.ons = 1;
 			crabsort_obj.ignore_section.offs = crabsort_obj.raw_data_size(1);
-			save([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'crabsort_obj')
+			save(file_name,'crabsort_obj')
 		end
 
 
@@ -39,9 +41,11 @@ else
 		end
 
 		% load the file
-		if exist([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'file') == 2
+		file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[allfiles(i).name  '.crabsort']);
 
-			load([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'-mat')
+		if exist(file_name,'file') == 2
+
+			load(file_name,'-mat','crabsort_obj')
 			crabsort_obj.ignore_section.ons = 1;
 			crabsort_obj.ignore_section.offs = crabsort_obj.raw_data_size(1);
 			save([allfiles(i).folder filesep allfiles(i).name '.crabsort'],'crabsort_obj')
