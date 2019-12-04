@@ -17,6 +17,13 @@ end
 
 fatal = false;
 
+if ischar(allfiles)
+	allfiles = pathlib.join(getpref('crabsort','store_spikes_here'),allfiles);
+end
+
+if isfolder(allfiles)
+	allfiles = dir(pathlib.join(allfiles,'*.crabsort'));
+end
 
 % note that setting early_exit to false can actually be faster in
 % many cases because it uses the parallel pool 
