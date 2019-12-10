@@ -36,7 +36,12 @@ options.UseParallel = true;
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
 
-allfiles = dir([options.DataDir filesep '*.crabsort']);
+
+% figure out where the spikes are, and where the data is
+exp_name = pathlib.lowestFolder(options.DataDir);
+spikes_loc = pathlib.join(getpref('crabsort','store_spikes_here'),exp_name);
+
+allfiles = dir([spikes_loc filesep '*.crabsort']);
 
 if isempty(allfiles)
 	error(['No data found in this directory: ' options.DataDir])

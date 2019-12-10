@@ -21,11 +21,10 @@ data.mask = mask;
 data.T = self.raw_data_size(1)*self.dt;
 
 
-
 try
 	if ~isempty(options.DataFun)
 		self.file_name = strrep(thisfile.name,'.crabsort','');
-		self.path_name = thisfile.folder;
+		self.path_name = options.DataDir;
 		self.loadFile;
 		for j = 1:length(options.DataFun)
 			
@@ -41,8 +40,8 @@ try
 		end
 	end
 catch
-	cprintf('red',['Error when trying to read this data file: ' thisfile.name])
-	keyboard
+	corelib.cprintf('red',['Error when trying to read this data file: ' thisfile.name])
+	return
 end
 
 
