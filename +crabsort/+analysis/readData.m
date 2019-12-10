@@ -3,12 +3,69 @@
 function data = readData(thisfile, options, data)
 
 
-
 load([thisfile.folder filesep thisfile.name],'-mat','crabsort_obj')
 
 disp(thisfile.name)
 
 self = crabsort_obj;
+
+% reconstruct mask
+self.reconstructMaskFromIgnoreSection;
+
+mask = min(self.mask,[],2);
+
+S = round(options.dt/self.dt);
+mask = mask(1:S:end);
+data.mask = mask;
+
+data.T = self.raw_data_size(1)*self.dt;
+
+
+
+try
+	if ~isempty(options.DataFun)
+		self.file_name = strrep(thisfile.name,'.crabsort','');
+		self.path_name = thisfile.folder;
+		self.loadFile;
+		for j = 1:length(options.DataFun)
+			
+			
+			variable_names = corelib.argOutNames(char(options.DataFun{j}));
+			outputs = cell(1,length(variable_names));
+			[outputs{:}] = options.DataFun{j}(self, options);
+
+			for k = 1:length(variable_names)
+				data.(strtrim(variable_names{k})) = outputs{k};
+			end
+
+		end
+	end
+catch
+	cprintf('red',['Error when trying to read this data file: ' thisfile.name])
+	keyboard
+end
+
+
+
+
+% check if it is sorted
+notsorted = crabsort.analysis.checkSortedSerial(thisfile,options.neurons,false);
+
+if notsorted
+	data.mask = data.mask*0;
+
+	for j = 1:length(options.neurons)
+		data.(options.neurons{j}) = [];
+	end
+
+	return
+
+
+end
+
+
+
+
 
 % read out all the spiketimes
 for j = 1:length(options.neurons)
@@ -51,46 +108,6 @@ for j = 1:length(options.neurons)
 
 end
 
-
-
-
-% reconstruct mask
-self.reconstructMaskFromIgnoreSection;
-
-mask = min(self.mask,[],2);
-
-S = round(options.dt/self.dt);
-mask = mask(1:S:end);
-data.mask = mask;
-
-
-
-
-data.T = self.raw_data_size(1)*self.dt;
-
-
-try
-	if ~isempty(options.DataFun)
-		self.file_name = strrep(thisfile.name,'.crabsort','');
-		self.path_name = thisfile.folder;
-		self.loadFile;
-		for j = 1:length(options.DataFun)
-			
-			
-			variable_names = corelib.argOutNames(char(options.DataFun{j}));
-			outputs = cell(1,length(variable_names));
-			[outputs{:}] = options.DataFun{j}(self, options);
-
-			for k = 1:length(variable_names)
-				data.(strtrim(variable_names{k})) = outputs{k};
-			end
-
-		end
-	end
-catch
-	cprintf('red',['Error when trying to read this data file: ' thisfile.name])
-	keyboard
-end
 
 
 clear self outputs 

@@ -32,7 +32,6 @@ options.DataFun = {};
 options.ChunkSize = NaN; % seconds 
 options.nerves = {};
 options.UseParallel = true;
-options.ForceStack = false;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
@@ -88,17 +87,6 @@ end
 
 
 
-% check that all files are sorted
-fatal = crabsort.checkSorted(allfiles, options.neurons, true);
-
-
-if fatal
-	error('Some files are not sorted')
-else
-	corelib.cprintf('green','All files sorted\n')
-end
-
-
 
 % load all the data into the data structure
 % in parallel
@@ -116,9 +104,26 @@ for i = 1:length(data)
 	data(i).filename = categorical({allfiles(i).name(1:min(strfind(allfiles(i).name,'.'))-1)});
 end
 
+
+
 % set the time_offsets for all the data
+
 for i = 2:length(data)
-	data(i).time_offset = data(i-1).time_offset + data(i-1).T;
+
+	% only increment if files are consequtive
+	this_file_idx = strsplit(char(data(i).filename),'_');
+	this_file_idx = str2double(this_file_idx{end});
+
+	prev_file_idx = strsplit(char(data(i-1).filename),'_');
+	prev_file_idx = str2double(prev_file_idx{end});
+
+
+	if this_file_idx == prev_file_idx + 1
+		data(i).time_offset = data(i-1).time_offset + data(i-1).T;
+	else
+		data(i).time_offset = 0;
+	end
+
 end
 
 
@@ -142,54 +147,15 @@ if ~isempty(metadata_file)
 
 end
 
+
+
 if options.stack
 
 	fprintf('Stacking data...')
-
-
-	if ~options.ForceStack
-		crabsort.checkConsecutive(allfiles);
-	end
-
-	fn = fieldnames(data);
-	sdata = struct;
-
-	for j = 1:length(fn)
-		sdata.(fn{j}) = [];
-	end
-
-	for i = 1:length(data)
-		corelib.textbar(i,length(data))
-		for j = 1:length(fn)
-			if any(strcmp(fn{j},options.neurons))
-				sdata.(fn{j}) = [sdata.(fn{j}); data(i).time_offset+data(i).(fn{j})];
-			elseif strcmp(fn{j},'T')
-			elseif strcmp(fn{j},'time_offset')
-			elseif strcmp(fn{j},'experiment_idx')
-				sdata.experiment_idx = data(i).experiment_idx;
-			else
-
-				% check size
-				this_variable = data(i).(fn{j});
-				if length(this_variable) ~= length(data(i).mask)
-					if isa(this_variable,'categorical')
-						this_variable = repmat(this_variable,length(data(i).mask),1);
-					else
-						this_variable = this_variable*(data(i).mask*0 + 1);
-					end
-				end
-				sdata.(fn{j}) = [sdata.(fn{j}); this_variable];
-				
-			end
-		end
-	end
-
-
-	data = sdata;
+	data = crabsort.analysis.stack(data, options);
 	corelib.cprintf('green','[DONE]\n')
 
 end
-
 
 
 % chunk
@@ -206,6 +172,11 @@ if ~isnan(options.ChunkSize)
 
 
 		for i = 2:length(data)
+
+			if max(data(i).time_offset) < options.ChunkSize
+				continue
+			end
+
 
 			temp = crabsort.analysis.chunk(data(i),options);
 			% glom them all together
@@ -231,5 +202,3 @@ if ~isnan(options.ChunkSize)
 
 
 end
-
-

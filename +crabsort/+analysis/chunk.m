@@ -29,6 +29,7 @@ for i = 1:n_rows
 		cdata.(options.neurons{j})(1:length(these_spikes),i) = these_spikes;
 
 	end
+
 end
 
 fn = fieldnames(data);
@@ -39,10 +40,9 @@ for j = 1:length(fn)
 	if any(strcmp(fn{j},options.neurons))
 	elseif strcmp(fn{j},'T')
 	elseif strcmp(fn{j},'time_offset')		
-		
 	elseif length(data.(fn{j}))== 1
 		% scalar value, need to broadcast
-		cdata.(fn{j})=  repmat(data.(fn{j}),n_rows,1);
+		cdata.(fn{j}) =  repmat(data.(fn{j}),n_rows,1);
 
 	else
 
@@ -51,3 +51,5 @@ for j = 1:length(fn)
 	end
 
 end
+
+cdata.time_offset = ((1:size(cdata.(options.neurons{1}),2))-1)*options.ChunkSize;
