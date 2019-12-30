@@ -90,7 +90,10 @@ if is_intracellular
     z = find(self.time >= self.handles.ax.ax(channel).XLim(2),1,'first');
     m = mean(self.raw_data(a:z,channel));
     yl = (self.handles.ylim_slider.Value)*100;
-    self.handles.ax.ax(channel).YLim = [m-yl m+yl];
+    if yl > 0
+         self.handles.ax.ax(channel).YLim = [m-yl m+yl];
+    end
+   
 
 end
 

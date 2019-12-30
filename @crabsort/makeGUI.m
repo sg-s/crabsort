@@ -49,6 +49,7 @@ handles.menu_name(2) = uimenu('Label','Tools');
 uimenu(handles.menu_name(2),'Label','Reload preferences','Callback',@self.reloadPreferences);
 uimenu(handles.menu_name(2),'Label','Reset current channel','Callback',@self.redo,'Separator','on');
 uimenu(handles.menu_name(2),'Label','Mark channel as having no spikes','Callback',@self.zeroSpikes);
+uimenu(handles.menu_name(2),'Label','Auto Y zoom','Callback',@self.autoYZoom,'Separator','on');
 
 % view
 handles.menu_name(3) = uimenu('Label','View');

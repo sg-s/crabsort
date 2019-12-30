@@ -18,7 +18,8 @@ zoomCallback(self,~,event)
 **Description**
 
 This method is executed when the user zooms in and out of 
-any plot in the main figure
+any plot in the main figure. Note that this alters only the X zoom
+
 
 %}
 
