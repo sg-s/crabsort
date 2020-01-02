@@ -19,6 +19,7 @@ end
 % and common data that pertains to all files in this folder
 % to a file called crabsort.common in that folder 
 
+filelib.mkdir(pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name)))
 
 file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[self.file_name '.crabsort']);
 common_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),'crabsort.common');
@@ -44,8 +45,6 @@ else
 	self.ignore_section.ons = ons;
 	self.ignore_section.offs = offs;
 end
-
-
 
 
 

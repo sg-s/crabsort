@@ -2,9 +2,8 @@
 %
 % usage:
 %
-% crabsort.checkSorted(dir('*.abf'),'PD')
-% crabsort.checkSorted(dir('*.abf'),'PD', true)
-
+% crabsort.checkSorted('857_108',{'PD','LP'})
+% 
 function fatal = checkSorted(allfiles, neurons, early_exit)
 
 if nargin < 3

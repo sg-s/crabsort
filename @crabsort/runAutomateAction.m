@@ -47,7 +47,7 @@ case crabsort.automateAction.all_channels_all_files
 		end
 
 		% simulate a next file button press
-		self.loadFile(handles.next_file_control)
+		self.loadFile(self.handles.next_file_control)
 
 		for channel = 1:self.n_channels
 
