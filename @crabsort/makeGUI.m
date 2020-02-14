@@ -105,6 +105,7 @@ handles.menu_name(7) = uimenu('Label','Artifacts');
 uimenu(handles.menu_name(7),'Label','Ignore this section','Callback',@self.ignoreSection,'Separator','off');
 uimenu(handles.menu_name(7),'Label','UNignore this section','Callback',@self.ignoreSection,'Separator','off');
 uimenu(handles.menu_name(7),'Label','Ignore sections where data exceeds Y bounds','Callback',@self.ignoreSection,'Separator','on');
+uimenu(handles.menu_name(7),'Label','Ignore section before first spike','Callback',@self.ignoreBeforeFirstSpike,'Separator','off');
 uimenu(handles.menu_name(7),'Label','Mark all data BEFORE this file as useless','Callback',@self.ignoreEntireFiles,'Separator','on');
 uimenu(handles.menu_name(7),'Label','Mark all data AFTER this file as useless','Callback',@self.ignoreEntireFiles,'Separator','off');
 
