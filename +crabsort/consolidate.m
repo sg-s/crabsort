@@ -136,6 +136,7 @@ end
 
 % parse metadata if exists
 metadata_file = dir([options.DataDir filesep '*.txt']);
+
 if ~isempty(metadata_file)
 	metadata = crabsort.parseMetadata([metadata_file(1).folder filesep metadata_file(1).name],allfiles);
 

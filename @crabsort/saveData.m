@@ -42,6 +42,9 @@ else
 	if length(offs) < length(ons)
 		offs = [offs; self.raw_data_size(1)];
 	end
+	if length(ons) < length(offs)
+		ons = [ons; 1];
+	end
 	self.ignore_section.ons = ons;
 	self.ignore_section.offs = offs;
 end
