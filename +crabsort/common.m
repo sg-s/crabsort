@@ -13,22 +13,22 @@ classdef common
 properties 
 
 
-	y_scales@double
+	y_scales double
 	delays
 	
-	data_channel_names@cell
+	data_channel_names cell
 
 
-	show_hide_channels@logical
-	channel_name_lock@logical
+	show_hide_channels logical
+	channel_name_lock logical
 
 
-	NNdata@crabsort.NNdata
+	NNdata crabsort.NNdata
 
 end
 
 properties (SetAccess = private)
-	n_channels@double
+	n_channels double
 end
 
 

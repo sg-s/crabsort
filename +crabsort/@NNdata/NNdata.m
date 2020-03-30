@@ -10,23 +10,23 @@ properties
 
 
 	% timestamps to determine if more training is needed
-	timestamp_last_modified@char = datestr(now)
-	timestamp_last_trained@char = datestr(now)
+	timestamp_last_modified char = datestr(now)
+	timestamp_last_trained char = datestr(now)
 
 
 	% neural network performance 
-	accuracy@double
-	acceptable_accuracy@double = 98
+	accuracy double
+	acceptable_accuracy double = 98
 
 
 	% spike detection parameters
-	sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.empty()
+	sdp crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.empty()
 
 	% define what a data frame is
-	other_nerves@char = ''
-	other_nerves_control@logical
+	other_nerves char = ''
+	other_nerves_control logical
 
-	norm_factor@double = 1
+	norm_factor double = 1
 
 end
 

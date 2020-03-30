@@ -16,11 +16,11 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         % futz factor to pick up spikes and classify
         % using NN
-        futz_factor@double = .5
+        futz_factor (1,1) double = .5
 
 
         % spike detection parameters
-        sdp@crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
+        sdp (1,1) crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
 
 
         % holds spiketimes of all neurons on all nerves
@@ -38,17 +38,17 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         R  % this holds the dimensionality reduced data
 
-        channel_to_work_with@double
+        channel_to_work_with double
 
-        pref@struct % stores the preferences
+        pref struct % stores the preferences
 
         % debug
-        verbosity@double = 0;
+        verbosity (1,1) double = 0;
 
         % common data to all files in this folder
         common@crabsort.common
 
-        debug_mode@logical = false;
+        debug_mode (1,1) logical = false;
 
     end
 
@@ -63,15 +63,15 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 
-        nerve2neuron@struct
+        nerve2neuron (1,1) struct
 
 
         putative_spikes
 
         installed_plugins
 
-        version_name@char = 'crabsort';
-        build_number@char = 'automatically-generated';
+        version_name  char = 'crabsort';
+        build_number  char = 'automatically-generated';
 
         % this is the list of channel names that you can choose from
         channel_names
@@ -85,14 +85,14 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         time
 
-        timer_handle@timer
+        timer_handle (1,1) timer
 
          % parallel workers
-        workers@parallel.FevalFuture
+        workers parallel.FevalFuture
 
-        auto_predict@logical = true;
+        auto_predict (1,1) logical = true;
 
-        automate_action@crabsort.automateAction = crabsort.automateAction.none
+        automate_action (1,1) crabsort.automateAction = crabsort.automateAction.none
 
         mask
 
@@ -102,7 +102,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
     properties (SetAccess = protected)
 
         % these channel names exist in the raw data
-        builtin_channel_names@cell
+        builtin_channel_names cell
 
         
         metadata
@@ -116,7 +116,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % for reasons revolving around the crappiness of the ABF 
         % file format, dt will be stored after being rounded off to
         % the nearest microsecond
-        dt@double
+        dt  double
         channel_ylims
 
         
@@ -130,7 +130,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % 1 == spikes found (need to reduce dimensions)
         % 2 == dimensions reduced (need to cluster)
         % 3 == done (spikes assigned to neurons)
-        channel_stage@double
+        channel_stage double
 
 
         % ignores this section
@@ -226,6 +226,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
                 % destroy old timers
                 t = timerfindall;
                 for i = 1:length(t)
+                    if isempty(t(i).TimerFcn)
+                        stop(t(i));
+                        delete(t(i));
+                        continue
+                    end
+
                     if any(strfind(func2str(t(i).TimerFcn),'NNtimer'))
                         stop(t(i));
                         delete(t(i));
