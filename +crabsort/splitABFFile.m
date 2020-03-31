@@ -10,11 +10,11 @@ options = corelib.parseNameValueArguments(options,varargin{:});
 [~,~,file_ext] = fileparts(options.abf_file_name);
 
 
-[raw_data,sampling_rate,metadata]=filelib.abfload(options.abf_file_name);
+[raw_data,dt,metadata]=filelib.abfload(options.abf_file_name);
 
-time = (1:size(raw_data,1))/sampling_rate/1e3; % in seconds
+dt = dt/1e6; % now in seconds
 
-dt = 1/(sampling_rate*1e3);
+time = (1:size(raw_data,1))*dt; % in seconds
 
 sub_sample = round(options.deltat/dt);
 
@@ -25,6 +25,8 @@ dt = options.deltat;
 all_raw_data = raw_data;
 
 builtin_channel_names = metadata.recChNames;
+
+
 
 
 if max(time) <= options.max_file_length
@@ -40,7 +42,13 @@ file_breaks(file_breaks==0) = 1;
 for i = 1:length(file_breaks)-1
 	raw_data = all_raw_data(file_breaks(i):file_breaks(i+1),:);
 	file_name = strrep(options.abf_file_name,file_ext(2:end),'crab');
-	file_name = strrep(file_name,'.crab',['_' mat2str(i) '.crab']);
+
+	idx = mat2str(i);
+	if length(idx) < 3
+		idx = [repmat('0',1,3-length(idx)) idx];
+	end
+
+	file_name = strrep(file_name,'.crab',['_' idx '.crab']);
 	save(file_name,'raw_data','builtin_channel_names','dt','metadata','-nocompression','-v7.3')
 
 end
@@ -48,6 +56,12 @@ end
 if file_breaks(end)*dt < max(time)
 	raw_data = all_raw_data(file_breaks(end):end,:);
 	file_name = strrep(options.abf_file_name,file_ext(2:end),'crab');
-	file_name = strrep(file_name,'.crab',['_' mat2str(i+1) '.crab']);
+
+	idx = mat2str(i+1);
+	if length(idx) < 3
+		idx = [repmat('0',1,3-length(idx)) idx];
+	end
+
+	file_name = strrep(file_name,'.crab',['_' idx '.crab']);
 	save(file_name,'raw_data','builtin_channel_names','dt','metadata','-nocompression','-v7.3')
 end
