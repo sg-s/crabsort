@@ -93,6 +93,7 @@ if nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'Load File
 
     [file_name,path_name,filter_index] = uigetfile(allowed_file_extensions);
 
+
     if ~file_name
         return
     else

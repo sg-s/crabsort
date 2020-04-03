@@ -46,7 +46,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         verbosity (1,1) double = 0;
 
         % common data to all files in this folder
-        common@crabsort.common
+        common (1,1) crabsort.common = crabsort.common(1)
 
         debug_mode (1,1) logical = false;
 
