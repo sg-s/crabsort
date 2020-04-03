@@ -32,8 +32,8 @@ ub = 2*V + 1;
 puppeteer_handle = puppeteer(N,V,lb,ub,[]);
 puppeteer_handle.handles.fig.Name = 'Spike detection parameters';
 
-puppeteer_handle.callback_function = @self.findSpikes;
-puppeteer_handle.continuous_callback_function = @self.findSpikesInView;
+puppeteer_handle.valueChangedFcn = @self.findSpikes;
+puppeteer_handle.valueChangingFcn = @self.findSpikesInView;
 
 self.handles.puppeteer_handle = puppeteer_handle;
 
