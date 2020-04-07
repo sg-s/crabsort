@@ -8,7 +8,7 @@ function convert2crabFormat(varargin)
 
 
 
-allowed_file_extensions = {'*.abf','*.smr'};
+allowed_file_extensions = {'*.abf','*.smr','*.mat'};
 
 
 
@@ -17,9 +17,12 @@ allowed_file_extensions = {'*.abf','*.smr'};
 
 for i = 1:length(allowed_file_extensions)
 
+
+	disp(allowed_file_extensions{i})
+
 	allfiles = dir(allowed_file_extensions{i});
-	fprintf('File Name           # Channels     Channel Name Hash\n')
-	fprintf('-----------------------------------------------\n')
+	fprintf('File Name                     # Channels     Channel Name Hash\n')
+	fprintf('---------------------------------------------------------\n')
 
 	this_file_ext = allowed_file_extensions{i};
 

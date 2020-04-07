@@ -15,7 +15,7 @@ self = crabsort(false);
 self.path_name = pwd;
 self.file_name = filename.name;
 
-fprintf(strlib.fix(self.file_name,20))
+fprintf(strlib.fix(self.file_name,30))
 
 
 self.loadFile;
@@ -29,7 +29,7 @@ if isempty(self.raw_data)
 
 	fprintf('FATAL: could not load file\n')
 else
-	fprintf(strlib.fix(mat2str(size(self.raw_data,2)),15))
+	fprintf(strlib.fix(mat2str(size(self.raw_data,2)),25))
 	H = hashlib.md5hash([self.builtin_channel_names{:}]);
 	fprintf([strlib.fix(H,15) '\n'])
 

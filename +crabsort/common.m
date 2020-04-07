@@ -40,7 +40,6 @@ methods
 
 		self.channel_name_lock = false(n_channels,1);
 
-		assert(n_channels > 0,'n_channels must be > 0')
 		self.y_scales = NaN(n_channels,1);
 
 		self.show_hide_channels = true(n_channels,1);

@@ -483,6 +483,9 @@ end
 
 catch err
 
+
+    keyboard
+
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
     errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort is now in debug mode. You must exit from debug mode before continuting. ','crabsort::LoadFile FATAL ERROR',opts)
 
