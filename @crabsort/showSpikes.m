@@ -48,13 +48,8 @@ for i = 1:length(channels)
 		continue
 	end
 
-	if strcmp(upper(this_nerve),this_nerve)
-		% intracellular
-		neuron_names = this_nerve;
-	else
-		neuron_names = self.nerve2neuron.(this_nerve);
-
-	end
+	
+	neuron_names = self.nerve2neuron.(this_nerve);
 
 
 	if ~iscell(neuron_names)

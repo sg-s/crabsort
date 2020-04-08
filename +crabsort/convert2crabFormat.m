@@ -3,8 +3,19 @@
 
 function convert2crabFormat(varargin)
 
+original_dir = pwd;
 
-
+% does this folder contain folders? if so, then we need to drill deeper...
+allfolders = dir(pwd);
+for i = 1:length(allfolders)
+	if strcmp(allfolders(i).name(1),'.')
+		continue
+	end
+	if allfolders(i).isdir
+		cd([allfolders(i).folder filesep allfolders(i).name])
+		crabsort.convert2crabFormat;
+	end
+end
 
 
 

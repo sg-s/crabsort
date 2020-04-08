@@ -1,10 +1,10 @@
+global-network/
 *DS_Store
 *pref.m
 *sublime-workspace
 *.abf
 *.mat
 *__pycache__*
-tensorflow/models/*
 *.smr
 *.SMR
 *.ABF

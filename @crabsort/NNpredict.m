@@ -28,7 +28,6 @@ if nargin == 1
 end
 
 
-
 if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
 	return
 end
@@ -41,7 +40,79 @@ end
 NNdata = self.common.NNdata(channel);
 
 if ~NNdata.canDetectSpikes()
+
+	% maybe there is a default network we can use?
+	this_nerve = self.common.data_channel_names{self.channel_to_work_with};
+
+	if exist([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '.network'],'file') ~= 2
+		return
+	end
+
+	self.say('Using global network...')
+
+
+	% OK, let's use the default network 
+	self.sdp.MinPeakProminence = 5;
+	self.sdp.MinPeakHeight = self.handles.ax.ax(channel).YLim(1)
+	self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
+	self.findSpikes()
+	spiketimes = find(self.putative_spikes(:,channel));
+
+
+	% get spike shapes
+	X = self.getSnippets(channel,spiketimes);
+
+	% load trained net
+	load([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '.network'],'trainedNet','-mat');
+
+	% predict
+
+	N = size(X,2);
+	SZ = size(X,1);
+	X = reshape(X,SZ,1,1,N);
+
+	[Y_pred, scores] = classify(trainedNet,X);
+	N = size(scores,2);
+	uncertain_spikes = max(scores,[],2) < (1/(N-1)*(.4)) + .4;
+	putative_spikes = find(self.putative_spikes(:,channel));
+	uncertain_spikes = putative_spikes(uncertain_spikes);
+
+	cats = categories(Y_pred);
+	% store in spikes
+	for i = 1:length(cats)
+		if strcmp(char(cats(i)),'Noise')
+			continue
+		end
+		self.spikes.(this_nerve).(char(cats(i))) = spiketimes(Y_pred == cats(i));
+	end
+
+
+	% show the uncertain spikes
+	self.handles.ax.uncertain_spikes(channel).XData = uncertain_spikes*self.dt;
+	yrange = diff(self.handles.ax.ax(channel).YLim);
+
+	if self.sdp.spike_sign
+		self.handles.ax.uncertain_spikes(channel).YData = self.raw_data(uncertain_spikes,channel)+yrange*.07;
+		self.handles.ax.uncertain_spikes(channel).Marker = 'v';
+	else
+		self.handles.ax.uncertain_spikes(channel).YData = self.raw_data(uncertain_spikes,channel)-yrange*.07;
+		self.handles.ax.uncertain_spikes(channel).Marker = '^';
+	end
+
+
+
+	self.channel_stage(channel) = 3;
+
+	uxlib.enable(self.handles.manual_panel)
+
+	self.putative_spikes(:,channel) = 0;
+	self.showSpikes(channel);
+
+	self.say('DONE. Spikes classified using global network')
+
 	return
+
+
 end
 
 

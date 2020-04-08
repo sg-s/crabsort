@@ -18,15 +18,10 @@ V_snippets = self.getSnippets(self.channel_to_work_with);
 
 
 channel = self.channel_to_work_with;
-% if it's intracellular
-temp = isstrprop(self.common.data_channel_names{channel},'upper');
-if any(temp)
 
-	% intracellular 
-	default_neuron_name = self.common.data_channel_names{channel};
-else
-	default_neuron_name =  self.nerve2neuron.(self.common.data_channel_names{channel});
-end
+
+default_neuron_name =  self.nerve2neuron.(self.common.data_channel_names{channel});
+
 
 if iscell(default_neuron_name)
 	default_names = [default_neuron_name, 'Noise'];
@@ -43,6 +38,10 @@ this_nerve = self.common.data_channel_names{channel};
 M = clusterlib.manual('ReducedData',R','RawData',self.data_to_reduce,'labels',categorical(default_names),'AllowNewClasses',false); 
 M.makeUI; 
 M.MouseCallbackFcn = @self.showSpikeInContext;
+M.handles.ax(1).Position = [-.1 .1 .8 .8];
+
+
+
 waitfor(M.handles.main_fig)
 
 
@@ -50,6 +49,7 @@ idx = M.idx;
 delete(M)
 
 all_labels = categories(idx);
+
 
 for i = 1:length(all_labels)
 	if strcmp(all_labels{i},'Noise')
