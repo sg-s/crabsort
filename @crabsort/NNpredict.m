@@ -39,12 +39,30 @@ end
 
 NNdata = self.common.NNdata(channel);
 
+
 if ~NNdata.canDetectSpikes()
 
 	% maybe there is a default network we can use?
 	this_nerve = self.common.data_channel_names{self.channel_to_work_with};
 
-	if exist([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '.network'],'file') ~= 2
+	SpikeSign = self.common.NNdata(channel).sdp.spike_sign;
+
+	if isempty(SpikeSign) 
+		if strcmp(upper(this_nerve),this_nerve)
+			% intracellular
+			SpikeSign = true;
+		else
+			self.say('Cannot use global network, spike sign unknown')
+			return
+		end
+	end
+
+	
+
+	NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '_' mat2str(SpikeSign) '.network'];
+
+	if exist(NN_dump_file,'file') ~= 2
+		disp('No network that I can use...')
 		return
 	end
 
@@ -52,18 +70,44 @@ if ~NNdata.canDetectSpikes()
 
 
 	% OK, let's use the default network 
-	self.sdp.MinPeakProminence = 5;
-	self.sdp.MinPeakHeight = self.handles.ax.ax(channel).YLim(1)
-	self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
-	self.findSpikes()
-	spiketimes = find(self.putative_spikes(:,channel));
+	self.sdp = crabsort.spikeDetectionParameters.default;
 
+	if strcmp(upper(this_nerve),this_nerve)
+		self.sdp.MinPeakProminence = 5;
+		self.sdp.MinPeakHeight = self.handles.ax.ax(channel).YLim(1)
+		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
+		self.findSpikes()
+		spiketimes = find(self.putative_spikes(:,channel));
 
-	% get spike shapes
-	X = self.getSnippets(channel,spiketimes);
+		% get spike shapes
+		X = self.getSnippets(channel,spiketimes);
+
+	else
+		self.sdp.spike_sign = self.common.NNdata(channel).sdp.spike_sign;
+		yl = self.handles.ax.ax(channel).YLim(1);
+
+		self.sdp.MinPeakProminence = abs(self.handles.ax.ax(channel).YLim(1)/5);
+		self.sdp.MinPeakHeight = 0;
+		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
+		self.findSpikes()
+		spiketimes = find(self.putative_spikes(:,channel));
+
+		% get spike shapes
+		X = self.getSnippets(channel,spiketimes);
+
+		% normalize
+		% extracellular 
+		y_scale = abs(self.handles.ax.ax(channel).YLim(1));
+		for i = 1:size(X,2)
+			X(:,i) = X(:,i)/y_scale;
+		end
+
+	end
+
+	
 
 	% load trained net
-	load([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '.network'],'trainedNet','-mat');
+	load(NN_dump_file,'trainedNet','-mat');
 
 	% predict
 

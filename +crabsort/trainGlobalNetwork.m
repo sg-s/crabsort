@@ -1,13 +1,13 @@
 % this function does the actual heavy lifting in
 % training the NN. meant to be run on a b/g worker
 
-function trainGlobalNetwork(nerve_name)
+function trainGlobalNetwork(nerve_name, SpikeSign)
 
 
 % load all the data for this nerve
 
 
-allfiles = dir([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep nerve_name '_*.mat']);
+allfiles = dir([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep nerve_name '_' mat2str(SpikeSign) '*.mat']);
 
 if length(allfiles) == 0 
     disp('No files found, nothing to do...')
@@ -30,9 +30,10 @@ X = all_X;
 Y = all_Y;
 
 
-
 % split into training and validation
 R = rand(size(X,2),1)>.5;
+
+
 
 
 X_train = X(:,R);
@@ -47,7 +48,7 @@ Y_validate = Y(~R);
 SZ = size(X_train,1);
 
 
-NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep nerve_name '.network'];
+NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep nerve_name '_' mat2str(SpikeSign) '.network'];
 
 
 if exist(NN_dump_file,'file') == 2
