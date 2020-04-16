@@ -243,6 +243,8 @@ catch err
 end
 
 
+assert(max(self.time>5),'This data file has less than 5 seconds of data. Cannot load.')
+
 self.n_channels = size(self.raw_data,2);
 
 self.dt = mean(diff(self.time));
@@ -388,8 +390,6 @@ uxlib.disable(self.handles.manual_panel);
 if hard_load
 
 
-    
-
     delete(self.handles.menu_name(6).Children)
 
     % do we already have some preference for which channels to hide?
@@ -404,7 +404,6 @@ if hard_load
         uimenu(self.handles.menu_name(6),'Label',self.builtin_channel_names{i},'Callback',@self.showHideChannels,'Checked',V);
 
     end
-
 
 
     self.redrawAxes;
@@ -483,8 +482,6 @@ end
 
 catch err
 
-
-    keyboard
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
     errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort is now in debug mode. You must exit from debug mode before continuting. ','crabsort::LoadFile FATAL ERROR',opts)

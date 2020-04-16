@@ -17,7 +17,6 @@ end
 % defensive programming 
 assert(~isfield(self.handles,'ax'),'Axes already exist?')
 
-
 % we're going to blindly create self.n_channel
 % plots, and let other functions worry about 
 % hiding/showing specific channels 

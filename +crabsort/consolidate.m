@@ -32,6 +32,7 @@ options.DataFun = {};
 options.ChunkSize = NaN; % seconds 
 options.nerves = {};
 options.UseParallel = true;
+options.ParseMetadata = true;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
@@ -137,7 +138,7 @@ end
 % parse metadata if exists
 metadata_file = dir([options.DataDir filesep '*.txt']);
 
-if ~isempty(metadata_file)
+if ~isempty(metadata_file) && options.ParseMetadata
 	metadata = crabsort.parseMetadata([metadata_file(1).folder filesep metadata_file(1).name],allfiles);
 
 

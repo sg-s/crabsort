@@ -16,7 +16,6 @@ if ~isempty(self.handles)
     end
 end
 
-
 % are there already some axes handles? 
 if isfield(self.handles,'ax') && ~isempty(self.handles.ax) && isfield(self.handles.ax,'ax')
 
