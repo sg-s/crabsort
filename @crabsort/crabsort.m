@@ -70,8 +70,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         installed_plugins
 
-        version_name  char = 'crabsort';
-        build_number  char = 'automatically-generated';
+        version_name  char = ['crabsort ' crabsort.version()]
 
         % this is the list of channel names that you can choose from
         channel_names
@@ -174,8 +173,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
 
             % check for dependencies
-            self.version_name = 'crabsort';
-
 
             if verLessThan('matlab', '8.0.1')
                 error('Need MATLAB 2014b or better to run')
@@ -216,9 +213,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
                 self.installed_plugins = crabsort.plugins();
             end
 
-            % get the version name and number
-            self.build_number = ['v' strtrim(fileread([fileparts(fileparts(which(mfilename))) filesep 'build_number']))];
-            self.version_name = ['crabsort (' self.build_number ')'];
             
             if make_gui 
 
