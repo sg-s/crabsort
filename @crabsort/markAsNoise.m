@@ -19,3 +19,5 @@ for i = 1:length(neuron_names)
 		self.spikes.(this_nerve).(neuron_names{i}) = spikes;
 	end
 end
+
+self.showSpikes(self.channel_to_work_with);

@@ -33,6 +33,10 @@ for i = length(neurons):-1:1
 	spiketimes = self.spikes.(nerve).(neurons{i});
 	isis = [diff(spiketimes); NaN];
 
+	if isempty(spiketimes)
+		continue
+	end
+
 	if ~refresh_only
 		subplot(length(neurons),1,i,'ButtonDownFcn',@self.jumpFromISIPlot); hold on
 		self.handles.isi_plot(i) = plot(spiketimes*self.dt, isis*self.dt,'k.');

@@ -27,6 +27,7 @@ end
 % note that setting early_exit to false can actually be faster in
 % many cases because it uses the parallel pool 
 
+
 if early_exit
 
 	for i = 1:length(allfiles)

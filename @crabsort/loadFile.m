@@ -452,6 +452,30 @@ if hard_load
         end
     end
 
+
+    % some shim code for legacy data
+    for i = 1:length(self.common.NNdata)
+        if isempty(self.common.NNdata(i).label_idx)
+            continue
+        end
+        if ~iscategorical(self.common.NNdata(i).label_idx)
+            warning('Legacy data found. Attempting to convert to new format...')
+            old_label_idx = self.common.NNdata(i).label_idx;
+            new_label_idx = categorical(NaN*old_label_idx);
+            new_label_idx(old_label_idx == 0) = 'Noise';
+            neuron_names = self.nerve2neuron.(self.common.data_channel_names{i});
+            if iscell(neuron_names)
+                for j = 1:length(neuron_names)
+                    new_label_idx(old_label_idx == j) = neuron_names{j};
+                end
+            else
+                new_label_idx(old_label_idx ~= 0) = neuron_names;
+            end
+            self.common.NNdata(i).label_idx = new_label_idx;
+
+        end
+    end
+
 end
 
 
@@ -504,6 +528,7 @@ catch err
             drawnow
         end
     end
+
     
 
 

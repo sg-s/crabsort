@@ -103,4 +103,4 @@ if ~isempty(self.common.NNdata(channel).spiketimes)
 	self.putative_spikes(:,channel) = 0;
 end
 
-self.showSpikes(channel);
+

@@ -155,6 +155,15 @@ if ~isempty(metadata_file) && options.ParseMetadata
 end
 
 
+% propagate temperate to next file
+if isfield(data,'temperature')
+	for i = 2:length(data)
+		if isnan(data(i).temperature)
+			data(i).temperature = data(i-1).temperature;
+		end
+	end
+end
+
 
 if options.stack
 

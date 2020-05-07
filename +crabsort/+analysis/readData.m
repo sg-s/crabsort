@@ -5,7 +5,7 @@ function data = readData(thisfile, options, data)
 
 load([thisfile.folder filesep thisfile.name],'-mat','crabsort_obj')
 
-disp(thisfile.name)
+%disp(thisfile.name)
 
 self = crabsort_obj;
 
@@ -73,6 +73,7 @@ for j = 1:length(options.neurons)
 
 	% find all possible places where this neuron could be
 	if ~isstruct(self.spikes)
+		disp(thisfile.name)
 		disp('self.spikes not a struct, WTF?')
 		if self.debug_mode
 			keyboard
