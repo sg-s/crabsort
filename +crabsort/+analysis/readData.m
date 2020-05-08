@@ -63,6 +63,12 @@ if notsorted
 end
 
 
+if ~isstruct(self.spikes)
+	% something wrong, abort
+	data.mask = data.mask*0;
+	return
+end
+
 
 
 
@@ -70,17 +76,6 @@ end
 for j = 1:length(options.neurons)
 	possible_spiketimes = {};
 	this_neuron = options.neurons{j};
-
-	% find all possible places where this neuron could be
-	if ~isstruct(self.spikes)
-		disp(thisfile.name)
-		disp('self.spikes not a struct, WTF?')
-		if self.debug_mode
-			keyboard
-		else
-			warning('Error reading data')
-		end
-	end
 
 	fn = fieldnames(self.spikes);
 	for k = 1:length(fn)
