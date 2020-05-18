@@ -45,17 +45,7 @@ if ~NNdata.canDetectSpikes()
 	% maybe there is a default network we can use?
 	this_nerve = self.common.data_channel_names{self.channel_to_work_with};
 
-	SpikeSign = self.common.NNdata(channel).sdp.spike_sign;
-
-	if isempty(SpikeSign) 
-		if strcmp(upper(this_nerve),this_nerve)
-			% intracellular
-			SpikeSign = true;
-		else
-			self.say('Cannot use global network, spike sign unknown')
-			return
-		end
-	end
+	SpikeSign = logical(self.handles.spike_sign_control.Value);
 
 	
 
@@ -69,7 +59,7 @@ if ~NNdata.canDetectSpikes()
 	self.say('Using global network...')
 
 
-	% OK, let's use the default network 
+	% OK, let's use the default SDP 
 	self.sdp = crabsort.spikeDetectionParameters.default;
 
 	if strcmp(upper(this_nerve),this_nerve)
@@ -83,10 +73,13 @@ if ~NNdata.canDetectSpikes()
 		X = self.getSnippets(channel,spiketimes);
 
 	else
-		self.sdp.spike_sign = self.common.NNdata(channel).sdp.spike_sign;
+
+		% be smart about choosing SDP
+
+		self.sdp.spike_sign = logical(self.handles.spike_sign_control.Value);
 		yl = self.handles.ax.ax(channel).YLim(1);
 
-		self.sdp.MinPeakProminence = abs(self.handles.ax.ax(channel).YLim(1)/5);
+		self.sdp.MinPeakProminence = abs(self.handles.ax.ax(channel).YLim(1)/3);
 		self.sdp.MinPeakHeight = 0;
 		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
 		self.findSpikes()
@@ -101,6 +94,20 @@ if ~NNdata.canDetectSpikes()
 		for i = 1:size(X,2)
 			X(:,i) = X(:,i)/y_scale;
 		end
+
+
+		% resample
+		old_time = linspace(-self.sdp.t_before,self.sdp.t_after,size(X,1));
+		new_time = linspace(-self.sdp.t_before,self.sdp.t_after,91);
+
+		new_X = NaN(91,size(X,2));
+		for i = 1:size(X,2)
+			new_X(:,i) = interp1(old_time,X(:,i),new_time);
+		end
+
+		X = new_X;
+		clear new_X;
+
 
 	end
 

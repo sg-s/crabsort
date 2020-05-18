@@ -17,8 +17,11 @@ self.file_name = filename.name;
 
 fprintf(strlib.fix(self.file_name,30))
 
+try
+	self.loadFile;
+catch
 
-self.loadFile;
+end
 
 
 if isempty(self.raw_data)

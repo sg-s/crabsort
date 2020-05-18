@@ -1,3 +1,10 @@
+% this function adds the spikes in some channel
+% to a global dataset that a global network can be trained on
+% 
+% usage:
+% C.addToGlobalTrainingData() % where C is your crabsort object
+
+
 function addToGlobalTrainingData(self, nerve_name)
 
 
@@ -21,8 +28,53 @@ end
 
 self.say('Generating training data for NN...')
 
+
+
+% infer spike detection parameters
 [spiketimes, Y] = self.getLabelledSpikes;
 all_spiketimes = spiketimes;
+
+if self.isIntracellular(self.channel_to_work_with)
+	keyboard
+end
+
+if mean(self.raw_data(spiketimes,self.channel_to_work_with)) < 0
+	disp('Inferring negative spikes...')
+	self.sdp.spike_sign = false;
+
+else
+	disp('Inferring +ve spikes...')
+	self.sdp.spike_sign = true;
+end
+
+% set some standard parameters
+self.sdp.t_before = 4;
+self.sdp.t_after = 5;
+
+
+% iteratively decrease spike prominence till we get all the spikes in the dataset
+goon = true;
+self.sdp.MinPeakProminence = mean(abs(self.raw_data(spiketimes,self.channel_to_work_with)));
+disp('Estimating peak prominence...')
+while goon
+	self.findSpikes;
+	if sum(self.putative_spikes(:,self.channel_to_work_with)) > length(spiketimes)
+		goon = false;
+	else
+		self.sdp.MinPeakProminence = self.sdp.MinPeakProminence*.9;
+	end
+
+
+	disp(self.sdp.MinPeakProminence)
+	
+
+end
+
+
+
+
+
+
 
 
 self.putative_spikes(:,channel) = 0;
@@ -70,9 +122,6 @@ self.getDataToReduce;
 all_spiketimes = [all_spiketimes(:); find(self.putative_spikes(:,channel))];
 X2 = self.data_to_reduce;
 
-% self.handles.ax.found_spikes(channel).XData = find(self.putative_spikes(:,channel))*self.dt;
-% self.handles.ax.found_spikes(channel).YData = self.raw_data(find(self.putative_spikes(:,channel)),channel);
-
 
 % reset
 self.putative_spikes(:,channel) = 0;
@@ -119,10 +168,22 @@ disp(['Saving ' mat2str(length(Y)) ' new spikes...'])
 
 
 
+% resample to a .1ms time step
+old_time = linspace(-self.sdp.t_before,self.sdp.t_after,size(X,1));
+new_time = linspace(-self.sdp.t_before,self.sdp.t_after,91);
+
+new_X = NaN(91,size(X,2));
+for i = 1:size(X,2)
+	new_X(:,i) = interp1(old_time,X(:,i),new_time);
+end
+
+X = new_X;
+clear new_X;
+
+
 
 % save this 
 filelib.mkdir([fileparts(fileparts(which('crabsort'))) filesep 'global-network'])
 
-self.common.NNdata(channel).sdp.spike_sign = SpikeSign;
 
 save([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep nerve_name '_' mat2str(SpikeSign) '_' self.file_name '.mat'],'X','Y','SpikeSign')

@@ -5,7 +5,7 @@ function data = readData(thisfile, options, data)
 
 load([thisfile.folder filesep thisfile.name],'-mat','crabsort_obj')
 
-%disp(thisfile.name)
+disp(thisfile.name)
 
 self = crabsort_obj;
 
