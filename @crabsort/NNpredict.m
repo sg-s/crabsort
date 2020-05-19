@@ -39,8 +39,12 @@ end
 
 NNdata = self.common.NNdata(channel);
 
+checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
+H = NNdata.networkHash();
+NN_dump_file = [checkpoint_path filesep H '.mat'];
 
-if ~NNdata.canDetectSpikes()
+
+if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 
 	% maybe there is a default network we can use?
 	this_nerve = self.common.data_channel_names{self.channel_to_work_with};
@@ -167,16 +171,8 @@ if ~NNdata.canDetectSpikes()
 end
 
 
-checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
-
-H = NNdata.networkHash();
 
 
-NN_dump_file = [checkpoint_path filesep H '.mat'];
-if exist(NN_dump_file,'file') ~= 2
-	self.say('Cannot find network, aborting')
-	return
-end
 
 % iteratively mess with the futz_factor till we are sure
 % we should be getting all spikes
