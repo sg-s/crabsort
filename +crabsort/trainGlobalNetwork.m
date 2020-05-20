@@ -29,6 +29,8 @@ end
 X = all_X;
 Y = all_Y;
 
+disp([mat2str(length(Y)) ' samples in training data'])
+
 
 % split into training and validation
 R = rand(size(X,2),1)>.5;

@@ -126,6 +126,7 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	SZ = size(X,1);
 	X = reshape(X,SZ,1,1,N);
 
+
 	[Y_pred, scores] = classify(trainedNet,X);
 	N = size(scores,2);
 	uncertain_spikes = max(scores,[],2) < (1/(N-1)*(.4)) + .4;
@@ -185,6 +186,8 @@ if self.isIntracellular(channel)
 	self.loadSDPFromNNdata()
 	self.findSpikes()
 	spiketimes = find(self.putative_spikes(:,channel));
+
+	
 else
 	futz_factor_scale = .85;
 
@@ -263,7 +266,7 @@ end
 
 
 
-n_spikes = sum(spiketimes);
+n_spikes = length(spiketimes);
 
 this_nerve = self.common.data_channel_names{channel};
 
@@ -297,6 +300,7 @@ X = reshape(X,SZ,1,1,N);
 
 % rescale
 X = X/NNdata.norm_factor;
+
 
 
 [Y_pred, scores] = classify(trainedNet,X);

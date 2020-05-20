@@ -45,6 +45,7 @@ if isempty(this_ax)
 end
 
 
+
 if ~isempty(self.channel_to_work_with) && this_ax == self.channel_to_work_with
 	% still working with same channel, do things based
 	% on the mode we are in manual_override

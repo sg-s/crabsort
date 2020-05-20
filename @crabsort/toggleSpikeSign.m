@@ -22,6 +22,3 @@ else
 end
 
 self.common.NNdata(self.channel_to_work_with).sdp.spike_sign = self.sdp.spike_sign;
-
-
-self.findSpikes;

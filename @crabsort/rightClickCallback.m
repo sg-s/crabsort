@@ -25,7 +25,6 @@ this_nerve = self.common.data_channel_names{channel};
 
 
 
-
 % find closest identified point 
 spiketimes = find(self.getSpikesOnThisNerve);
 

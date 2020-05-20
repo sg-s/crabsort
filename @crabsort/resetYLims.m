@@ -14,8 +14,18 @@ end
 
 idx = self.channel_to_work_with;
 
+
+
 % compute the extremum of the channel
-e = max(abs(self.raw_data(:,idx)));
+if isnan(self.ExtremumValues(idx))
+	e = max(abs(self.raw_data(:,idx)));
+	self.ExtremumValues(idx) = e;
+else
+	e = self.ExtremumValues(idx);
+end
+
+
+e = e*1.5;
 
 is_temp = false;
 

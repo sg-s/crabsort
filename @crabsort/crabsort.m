@@ -95,6 +95,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         mask
 
+        ExtremumValues = NaN(100,1);
+
 
     end
 
