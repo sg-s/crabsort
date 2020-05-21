@@ -193,4 +193,4 @@ filelib.mkdir([fileparts(fileparts(which('crabsort'))) filesep 'global-network']
 
 save([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep nerve_name '_' mat2str(SpikeSign) '_' self.file_name '.mat'],'X','Y','SpikeSign')
 
-self.chanel_stage(self.channel_to_work_with) = 3;
+self.channel_stage(self.channel_to_work_with) = 3;

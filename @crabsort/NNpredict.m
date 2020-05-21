@@ -82,6 +82,19 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 		% get spike shapes
 		X = self.getSnippets(channel,spiketimes);
 
+				% resample
+		old_time = linspace(-self.sdp.t_before,self.sdp.t_after,size(X,1));
+		new_time = linspace(-self.sdp.t_before,self.sdp.t_after,91);
+
+		new_X = NaN(91,size(X,2));
+		for i = 1:size(X,2)
+			new_X(:,i) = interp1(old_time,X(:,i),new_time);
+		end
+
+		X = new_X;
+		clear new_X;
+
+
 	else
 
 		% be smart about choosing SDP
