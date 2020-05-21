@@ -11,6 +11,7 @@ elseif strcmp(value.Key ,'uparrow') && any(strcmp(value.Modifier,'shift'))
 elseif strcmp(value.Key ,'downarrow') && any(strcmp(value.Modifier,'shift'))
 	self.jumpToOutlier('down')
 elseif strcmp(value.Key,'p')
+	self.auto_predict = true;
 	self.redo;
 	self.NNpredict;
 elseif strcmp(value.Key,'space')
