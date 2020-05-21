@@ -166,6 +166,8 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 
 	self.say('DONE. Spikes classified using global network')
 
+	self.common.channel_name_lock(self.channel_to_work_with) = true;
+
 	return
 
 
@@ -284,6 +286,7 @@ if n_spikes == 0
 			self.spikes.(this_nerve).(neuron_names{i}) = [];
 		end
 	end
+	self.common.channel_name_lock(self.channel_to_work_with) = true;
 	return
 else
 	self.say([strlib.oval(n_spikes) ' spikes detected; using NN to sort...'])
@@ -377,3 +380,4 @@ self.showSpikes(channel);
 
 self.say('DONE. Spikes classified using NN')
 
+self.common.channel_name_lock(self.channel_to_work_with) = true;
