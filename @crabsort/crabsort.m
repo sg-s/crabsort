@@ -50,6 +50,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         debug_mode (1,1) logical = false;
 
+        PostPredictAction crabsort.postPredictAction
+
     end
 
 

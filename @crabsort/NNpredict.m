@@ -167,6 +167,13 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	self.say('DONE. Spikes classified using global network')
 
 	self.common.channel_name_lock(self.channel_to_work_with) = true;
+	self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
+
+	% run PostPredictAction, if any
+	if ~isempty(self.PostPredictAction) && strcmp(self.common.data_channel_names{self.channel_to_work_with},self.PostPredictAction.channel)
+		self.PostPredictAction.method(self.PostPredictAction.arguments{:})
+
+	end
 
 	return
 
@@ -287,6 +294,14 @@ if n_spikes == 0
 		end
 	end
 	self.common.channel_name_lock(self.channel_to_work_with) = true;
+	self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
+
+
+	if ~isempty(self.PostPredictAction) && strcmp(self.common.data_channel_names{self.channel_to_work_with},self.PostPredictAction.channel)
+		self.PostPredictAction.method(self.PostPredictAction.arguments{:})
+
+	end
+
 	return
 else
 	self.say([strlib.oval(n_spikes) ' spikes detected; using NN to sort...'])
@@ -381,3 +396,10 @@ self.showSpikes(channel);
 self.say('DONE. Spikes classified using NN')
 
 self.common.channel_name_lock(self.channel_to_work_with) = true;
+self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
+
+
+if ~isempty(self.PostPredictAction) && strcmp(self.common.data_channel_names{self.channel_to_work_with},self.PostPredictAction.channel)
+	self.PostPredictAction.method(self.PostPredictAction.arguments{:})
+
+end

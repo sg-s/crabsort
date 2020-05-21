@@ -5,6 +5,9 @@
 % crabsort.pruneSpikes('828_114_2','lvn','lgn/LG')
 function pruneSpikes(self, based_on, tolerance)
 
+
+disp('pruning spikes...')
+
 if nargin < 3
 	tolerance = 5e-4; % seconds
 end

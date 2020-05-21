@@ -35,17 +35,22 @@ self.say('Generating training data for NN...')
 all_spiketimes = spiketimes;
 
 if self.isIntracellular(self.channel_to_work_with)
-	keyboard
-end
-
-if mean(self.raw_data(spiketimes,self.channel_to_work_with)) < 0
-	disp('Inferring negative spikes...')
-	self.sdp.spike_sign = false;
+	self.sdp.spike_sign = true;
 
 else
-	disp('Inferring +ve spikes...')
-	self.sdp.spike_sign = true;
+
+	if mean(self.raw_data(spiketimes,self.channel_to_work_with)) < 0
+		disp('Inferring negative spikes...')
+		self.sdp.spike_sign = false;
+
+	else
+		disp('Inferring +ve spikes...')
+		self.sdp.spike_sign = true;
+	end
+
 end
+
+
 
 % set some standard parameters
 self.sdp.t_before = 4;
@@ -187,3 +192,5 @@ filelib.mkdir([fileparts(fileparts(which('crabsort'))) filesep 'global-network']
 
 
 save([fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep nerve_name '_' mat2str(SpikeSign) '_' self.file_name '.mat'],'X','Y','SpikeSign')
+
+self.chanel_stage(self.channel_to_work_with) = 3;
