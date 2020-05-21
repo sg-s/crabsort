@@ -4,6 +4,8 @@ if self.verbosity > 9
 	disp(mfilename)
 end
 
+self.saveData;
+
 should_stop = false;
 
 [~,~,ext] = fileparts(self.file_name);
