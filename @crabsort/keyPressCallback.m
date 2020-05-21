@@ -59,6 +59,8 @@ elseif strcmp(value.Key,'downarrow') && isempty(value.Modifier)
 	end
 	self.channel_to_work_with = allowed_channels(idx);
 	
+elseif  ~isempty(value.Modifier) && strcmp(value.Key,'shift')
+	% do nothing -- this is part of a key combination
 else
-	% do nothing
+	self.say('WARNING: Unrecognized key command')
 end
