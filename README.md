@@ -56,6 +56,7 @@ crabsort.uninstall
 | `→` | Load next file in dataset |
 | `←` | Load next file in dataset |
 | `p` | Predict spikes using Neural network |
+| `⇧ + →` | jump to the next file with unsorted data on this channel |
 
 
 

@@ -14,18 +14,22 @@ this_file_seq = self.getFileSequence;
 allfiles = circshift(allfiles,-this_file_seq);
 
 
-
 for i = 1:length(allfiles)
 
-	if exist([self.path_name filesep allfiles(i).name '.crabsort'],'file') ~= 2
+	[~,thisdir]=fileparts(allfiles(i).folder);
+
+	crabsort_file = [getpref('crabsort','store_spikes_here') filesep thisdir filesep allfiles(i).name '.crabsort'];
+
+	if exist(crabsort_file,'file') ~= 2
 		% no .crabsort file, so must sort this
+		disp('nocrabsort file')
 		self.file_name = allfiles(i).name;
 		self.loadFile;
 		return
 	end
 
 	% .crabsort file exists, load it and check if spikes are marked
-	load([self.path_name filesep allfiles(i).name '.crabsort'],'-mat')
+	load(crabsort_file,'-mat')
 
 
 	if crabsort_obj.channel_stage(self.channel_to_work_with) ~= 3

@@ -32,6 +32,8 @@ elseif strcmp(value.Character,'0')
 	self.zeroSpikes;
 elseif strcmp(value.Key,'rightarrow') && isempty(value.Modifier)
 	self.loadFile(self.handles.next_file_control)
+elseif strcmp(value.Key,'rightarrow') && ~isempty(value.Modifier) && any(strcmp(value.Modifier,'shift'))
+	self.loadNextUnsortedFile()
 elseif strcmp(value.Key,'leftarrow') && isempty(value.Modifier)
 	self.loadFile(self.handles.prev_file_control)
 elseif strcmp(value.Key,'uparrow') && isempty(value.Modifier)
