@@ -73,6 +73,12 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 		self.findSpikes()
 		spiketimes = find(self.putative_spikes(:,channel));
 
+		if length(spiketimes) == 0
+			self.say('No spikes detected, nothing to do.')
+			self.channel_stage(channel) = 3;
+			return
+		end
+
 		% get spike shapes
 		X = self.getSnippets(channel,spiketimes);
 
@@ -88,6 +94,13 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
 		self.findSpikes()
 		spiketimes = find(self.putative_spikes(:,channel));
+
+		if length(spiketimes) == 0
+			self.say('No spikes detected, nothing to do.')
+			self.channel_stage(channel) = 3;
+			return
+		end
+
 
 		% get spike shapes
 		X = self.getSnippets(channel,spiketimes);
