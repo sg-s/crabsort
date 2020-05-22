@@ -24,7 +24,6 @@ for i = 1:length(allfiles)
 
 	if exist(crabsort_file,'file') ~= 2
 		% no .crabsort file, so must sort this
-		disp('nocrabsort file')
 		self.file_name = allfiles(i).name;
 		self.loadFile;
 		return

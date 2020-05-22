@@ -56,7 +56,7 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '_' mat2str(SpikeSign) '.network'];
 
 	if exist(NN_dump_file,'file') ~= 2
-		disp('No network that I can use...')
+		self.say('[ABORT] No network that I can use...')
 		return
 	end
 
