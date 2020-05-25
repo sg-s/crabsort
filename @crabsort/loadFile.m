@@ -497,6 +497,15 @@ end
 self.showSpikes;
 
 
+
+
+% if the ISI window is open, update that
+if isfield(self.handles,'isi_plot') && isvalid(self.handles.isi_plot)
+    self.makeISIPlot([],[],true);
+
+
+end
+
 if ~isempty(self.handles)
     if isfield(self.handles,'main_fig')
         set(self.handles.main_fig, 'pointer', 'arrow')

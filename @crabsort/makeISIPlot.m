@@ -24,9 +24,11 @@ neurons = fieldnames(self.spikes.(nerve));
 
 
 if ~refresh_only
-	figure('outerposition',[300 300 1200 901],'PaperUnits','points','PaperSize',[1200 901]); hold on
-
+	self.handles.isi_figure = figure('outerposition',[300 300 1200 901],'PaperUnits','points','PaperSize',[1200 901]); hold on
+	self.handles.isi_ax = gca;
 end
+
+
 
 for i = length(neurons):-1:1
 
@@ -37,9 +39,14 @@ for i = length(neurons):-1:1
 		continue
 	end
 
+	if isfield(self.handles,'isi_plot') && isvalid(self.handles.isi_plot(i))
+	else
+		self.handles.isi_plot(i) = plot(self.handles.isi_ax,NaN,NaN,'k.');
+	end
+
 	if ~refresh_only
 		subplot(length(neurons),1,i,'ButtonDownFcn',@self.jumpFromISIPlot); hold on
-		self.handles.isi_plot(i) = plot(spiketimes*self.dt, isis*self.dt,'k.');
+		self.handles.isi_plot(i) = plot(self.handles.isi_ax,spiketimes*self.dt, isis*self.dt,'k.');
 		ylabel([neurons{i} ' ISI (s)'])
 		set(gca,'YScale','log')
 
@@ -55,5 +62,3 @@ if ~refresh_only
 	xlabel('Time (s)')
 	figlib.pretty
 end
-
-
