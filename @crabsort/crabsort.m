@@ -12,11 +12,6 @@
 classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
     properties
-       
-
-        % futz factor to pick up spikes and classify
-        % using NN
-        futz_factor (1,1) double = .5
 
 
         % spike detection parameters
@@ -51,6 +46,8 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         debug_mode (1,1) logical = false;
 
         PostPredictAction crabsort.postPredictAction
+
+        futz_factor double = ones(100,1)*.85
 
     end
 

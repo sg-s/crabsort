@@ -23,19 +23,23 @@ makes predictions using a trained neural network
 
 function NNpredict(self, futz_factor)
 
+channel = self.channel_to_work_with;
+if isempty(channel)
+	return
+end
+
+
 if nargin == 1
-	futz_factor = self.futz_factor;
+	futz_factor = self.futz_factor(channel);
 end
 
 
 if ~self.auto_predict && self.automate_action == crabsort.automateAction.none
 	return
 end
-channel = self.channel_to_work_with;
 
-if isempty(channel)
-	return
-end
+
+
 
 NNdata = self.common.NNdata(channel);
 
@@ -224,7 +228,7 @@ if self.isIntracellular(channel)
 
 	
 else
-	futz_factor_scale = .85;
+	futz_factor_scale = self.futz_factor(channel);
 
 	if NNdata.sdp.spike_sign
 
@@ -252,6 +256,7 @@ else
 			if futz_factor < .1
 				warning('Futz factor is too small to resolve spikes.')
 				goon = false;
+
 			end
 
 			if nanmin(nanmax(V_snippets)) > smallest_spike 
@@ -261,6 +266,8 @@ else
 				goon = false;
 			end
 
+
+			self.futz_factor(channel) = futz_factor;
 
 			
 		end
@@ -294,6 +301,9 @@ else
 			else
 				goon = false;
 			end
+
+			self.futz_factor(channel) = futz_factor;
+			
 		end
 	end
 

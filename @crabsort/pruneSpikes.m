@@ -80,10 +80,15 @@ if isempty(delete_these_spikes)
 	return
 end
 
+
+
+
 % now delete these spikes
 for j = 1:length(fn)
 	spikes.(delete_from_this_nerve).(fn{j}) = setdiff(spikes.(delete_from_this_nerve).(fn{j}),delete_these_spikes);
 end
+
+
 
 
 disp(['deleting ' mat2str(length(delete_these_spikes)) ' spikes'])
