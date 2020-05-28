@@ -1,13 +1,11 @@
-function data = measureSNR(file_name, data)
+function data = measureSNR(DataDir, spike_file, data)
 
-load([file_name.folder filesep file_name.name],'-mat','crabsort_obj')
-
-disp(file_name.name)
+disp(spike_file.name)
 
 self = crabsort(false);
 
-self.path_name = file_name.folder;
-self.file_name = strrep(file_name.name,'.crabsort','');
+self.path_name = DataDir;
+self.file_name = strrep(spike_file.name,'.crabsort','');
 
 self.loadFile;
 
@@ -52,7 +50,7 @@ for i = 1:(self.raw_data_size(2))
 
 
 		% find minimum absolute spike height
-		min_spike_ht = abs(min(self.raw_data(spike_locations,i)));
+		min_spike_ht = min(abs(self.raw_data(spike_locations,i)));
 
 
 		% chunbk data

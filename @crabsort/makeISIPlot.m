@@ -28,7 +28,7 @@ if ~refresh_only
 	self.handles.isi_ax = gca;
 end
 
-
+yl = [Inf -Inf];
 
 for i = length(neurons):-1:1
 
@@ -55,6 +55,8 @@ for i = length(neurons):-1:1
 		self.handles.isi_plot(i).YData = isis*self.dt;
 	end
 
+	yl(1) = min([yl(1) nanmin(isis*self.dt)]);
+	yl(2) = max([yl(2) nanmax(isis*self.dt)]);
 
 end
 
@@ -62,3 +64,13 @@ if ~refresh_only
 	xlabel('Time (s)')
 	figlib.pretty
 end
+
+if yl(1) == yl(2)
+	yl(2) = yl(1) + 1;
+end
+
+if any(isinf(yl))
+	yl = [1 2];
+end
+
+self.handles.isi_ax.YLim = yl;

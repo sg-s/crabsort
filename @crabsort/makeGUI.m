@@ -93,7 +93,9 @@ uimenu(handles.menu_name(5),'Label','Delete this channels NN','Callback',@self.N
 uimenu(handles.menu_name(5),'Label','Delete all nets','Callback',@self.NNdelete);
 handles.auto_predict_handle = uimenu(handles.menu_name(5),'Label','Auto predict','Callback',@self.NNupdateAutoPredict,'Checked','on','Separator','on');
 handles.add_uncertain = uimenu(handles.menu_name(5),'Label','Add uncertain and relabelled spikes to training data...','Callback',@self.NNaddAllUncertainSpikes,'Separator','on');
+
 handles.purge_uncertain_spikes = uimenu(handles.menu_name(5),'Label','Purge uncertain spikes...','Callback',@self.purgeUncertainSpikes,'Separator','on');
+handles.purge_uncertain_spikes = uimenu(handles.menu_name(5),'Label','Purge uncertain noise...','Callback',@self.purgeUncertainSpikes,'Separator','off');
 handles.NN_introspect_handle = uimenu(handles.menu_name(5),'Label','Inspect training data...','Callback',@self.NNintrospect,'Separator','on');
 
 

@@ -12,10 +12,12 @@ options.UseCache = true;
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
 
-allfiles = dir([options.DataDir filesep '*.crabsort']);
+
+[~,exp_name] = fileparts(options.DataDir);
+spike_files = dir([getpref('crabsort','store_spikes_here') filesep exp_name filesep '*.crabsort']);
 
 
-if isempty(allfiles)
+if isempty(spike_files)
 	N = 1;
 	data.file_name = categorical(repmat(NaN,10*N,1));
 	data.path_name = categorical(repmat(NaN,10*N,1));
@@ -26,37 +28,27 @@ if isempty(allfiles)
 end
 
 % hash these files
-for i = length(allfiles):-1:1
-	H{i} = hashlib.md5hash([allfiles(i).folder filesep allfiles(i).name],'File');
+for i = length(spike_files):-1:1
+	H{i} = hashlib.md5hash([spike_files(i).folder filesep spike_files(i).name],'File');
 end
 
 H = hashlib.md5hash([H{:}]);
-if exist([allfiles(1).folder filesep H '.snr'],'file') == 2 && options.UseCache
-	load([allfiles(1).folder filesep H '.snr'],'-mat')
+if exist([spike_files(1).folder filesep H '.snr'],'file') == 2 && options.UseCache
+	load([spike_files(1).folder filesep H '.snr'],'-mat')
 
 else
 
 
 	% load the common data
 	try
-		load([allfiles(1).folder filesep 'crabsort.common'],'-mat','common')
+		load([spike_files(1).folder filesep 'crabsort.common'],'-mat','common')
 	catch
 		% common does not exist, abort
-		N = length(allfiles);
-		data.file_name = categorical(repmat(NaN,10*N,1));
-		data.path_name = categorical(repmat(NaN,10*N,1));
-		data.nerve_name = categorical(repmat(NaN,10*N,1));
-		data.neuron_name = categorical(repmat(NaN,10*N,1));
-		data.SNR = (repmat(NaN,10*N,1));
 		return
 	end
 
-
-
-
-
 	data = struct;
-	N = length(allfiles);
+	N = length(spike_files);
 	data.file_name = categorical(repmat(NaN,10*N,1));
 	data.path_name = categorical(repmat(NaN,10*N,1));
 	data.nerve_name = categorical(repmat(NaN,10*N,1));
@@ -78,7 +70,7 @@ else
 	% load all the data into the data structure
 	% in parallel
 	parfor i = 1:N
-		temp_data(i) = crabsort.analysis.measureSNR(allfiles(i), temp_data(i));
+		temp_data(i) = crabsort.analysis.measureSNR(options.DataDir, spike_files(i), temp_data(i));
 	end
 
 
@@ -101,7 +93,7 @@ else
 
 
 	% save it
-	save([allfiles(1).folder filesep H '.snr'],'data')
+	save([spike_files(1).folder filesep H '.snr'],'data')
 end
 
 if ~options.MakePlot
@@ -133,5 +125,5 @@ end
 ylabel('SNR')
 ax = gca;
 set(gca,'YScale','log','YGrid','on','XLim',[0 idx],'XTick',[1:idx-1],'XTickLabel',L,'YLim',[ax.YLim(1)*.75 ax.YLim(2)*1.5])
-title(char(data.file_name(1)),'interpreter','none')
+title(exp_name,'interpreter','none')
 figlib.pretty()
