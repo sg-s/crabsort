@@ -95,4 +95,12 @@ disp(['deleting ' mat2str(length(delete_these_spikes)) ' spikes'])
 
 self.spikes = spikes;
 
+
+% remove uncertain spike markers
+channel = self.channel_to_work_with;
+uncertain_spikes = round(self.handles.ax.uncertain_spikes(channel).XData/self.dt);
+rm_this = ismember(uncertain_spikes,delete_these_spikes);
+self.handles.ax.uncertain_spikes(channel).XData(rm_this) = [];
+self.handles.ax.uncertain_spikes(channel).YData(rm_this) = [];
+
 self.showSpikes;
