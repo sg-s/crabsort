@@ -171,12 +171,12 @@ for i = 2:length(data)
 end
 
 
-
-
-% parse metadata if exists
 spikesfolder = getpref('crabsort','store_spikes_here');
 
 
+
+
+% parse metadata if exists
 metadata_file = dir(fullfile(spikesfolder,ExpName,'*.txt'));
 
 if ~isempty(metadata_file) && options.ParseMetadata
@@ -196,10 +196,35 @@ if ~isempty(metadata_file) && options.ParseMetadata
 end
 
 
+% add temperature metadata if it exists
+metadata_file = dir(fullfile(spikesfolder,ExpName,'*.metadata'));
+
+if ~isempty(metadata_file) 
+	load(fullfile(metadata_file.folder,metadata_file.name),'-mat')
+
+	% strip file extensions from metadata
+	for j = 1:length(metadata)
+		[~,metadata(j).file_name]=fileparts(metadata(j).file_name);
+	end
+
+	for i = 1:length(data)
+		idx = find(strcmp({metadata.file_name},char(data(i).filename)));
+		if isempty(idx)
+			continue
+		end
+		data(i).temperature = metadata(idx).temperature;
+
+	end
+
+end
+
+
+
 % propagate temperate to next file
+% if temperature is a scalar
 if isfield(data,'temperature')
 	for i = 2:length(data)
-		if isnan(data(i).temperature)
+		if isscalar(data(i).temperature) && isnan(data(i).temperature)
 			data(i).temperature = data(i-1).temperature;
 		end
 	end
