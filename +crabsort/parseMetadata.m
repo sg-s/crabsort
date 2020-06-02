@@ -30,44 +30,58 @@ end
 
 for i = 1:length(lines)
 	
-	this_line =strsplit(lines{i},' ');
-	if length(this_line) < 2
-		continue
-	end
-
+	this_line = strsplit(strtrim(lines{i}),' ');
 	file_idx = find(str2double(this_line{1}) == file_identifiers);
 
 
-	if ~isnan(str2double(this_line{2})) && ~isempty(file_idx)
-		% interpret as temperature
-		metadata.temperature(file_idx) = str2double(this_line{2});
-	
-	elseif strcmp(this_line{2},'decentralized')
+	switch length(this_line)
+	case 1
+		error(['Error parsing metadata:' path_to_metadata])
+	case 2
+		if  strcmp(this_line{2},'decentralized')
+			% get file_idx right
+			if isempty(file_idx)
+				file_idx = (find(file_identifiers > str2double(this_line{1}),1,'first'));
+			end
+
+			metadata.decentralized(file_idx:end) = true;
+
+
+		elseif ~isempty(file_idx)
+			% interpret as temperature that is stored in .txt file
+			% e.g. in Sara's data 
+			metadata.temperature(file_idx) = str2double(this_line{2});
+		end
+		
+
+	case 3
+
+		% interpret this as something + value
+		% this could be modulator + concentration 
 
 		% get file_idx right
 		if isempty(file_idx)
 			file_idx = (find(file_identifiers > str2double(this_line{1}),1,'first'));
 		end
 
-		metadata.decentralized(file_idx:end) = true;
-	elseif length(this_line) == 3 && ~isnan(str2double(this_line{3}))
-		% interpret this as neuromodualtor + conc
 
-		% get file_idx right
-		if isempty(file_idx)
-			file_idx = (find(file_identifiers > str2double(this_line{1}),1,'first'));
+		thing_name = this_line{2};
+		thing_value = str2double(this_line(3));
+		if isnan(thing_value)
+			thing_value = categorical(this_line(3));
+		end
+		if ~isfield(metadata,thing_name)
+			if isnumeric(thing_value)
+				metadata.(thing_name) = zeros(n_files,1);
+			else
+				metadata.(thing_name) = categorical(NaN(n_files,1));
+			end
 		end
 
 
+		metadata.(thing_name)(file_idx:end) = thing_value;
 
-		neuromodulator_name = this_line{2};
-		neuromodualtor_conc = str2double(this_line{3});
-		if ~isfield(metadata,neuromodulator_name)
-			metadata.(neuromodulator_name) = zeros(n_files,1);
-		end
-
-
-		metadata.(neuromodulator_name)(file_idx:end) = neuromodualtor_conc;
 	end
+
 
 end
