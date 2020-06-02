@@ -1,9 +1,14 @@
 % this is called internally by crabsort.consolidate 
+% this reads .crabsort files and pulls out spikes from nerves
 
 function data = readData(thisfile, options, data)
 
 
 load([thisfile.folder filesep thisfile.name],'-mat','crabsort_obj')
+
+if isempty(crabsort_obj.dt)
+	return
+end
 
 disp(thisfile.name)
 
@@ -75,6 +80,8 @@ end
 % read out all the spiketimes
 for j = 1:length(options.neurons)
 	possible_spiketimes = {};
+	possible_channels = {};
+
 	this_neuron = options.neurons{j};
 
 	fn = fieldnames(self.spikes);
@@ -82,6 +89,7 @@ for j = 1:length(options.neurons)
 		neurons_here = fieldnames(self.spikes.(fn{k}));
 		if any(strcmp(neurons_here,this_neuron))
 			possible_spiketimes{end+1} = self.spikes.(fn{k}).(this_neuron);
+			possible_channels{end+1} = fn{k};
 		end
 	end
 
@@ -91,15 +99,18 @@ for j = 1:length(options.neurons)
 		% blindly pick the one with the most spikes
 		[~,pick_me] = max(cellfun(@length,possible_spiketimes));
 		spiketimes = possible_spiketimes{pick_me};
+		possible_channels = possible_channels(pick_me);
 	elseif length(possible_spiketimes) == 1
 		spiketimes = possible_spiketimes{1};
 	else
 		spiketimes = [];
 	end
 
+
 	spiketimes  = round(spiketimes*self.dt*(1/options.dt));
 	spiketimes = spiketimes*options.dt;
 	data.(this_neuron) = spiketimes;
+	data.([this_neuron '_channel']) = categorical(possible_channels);
 
 end
 

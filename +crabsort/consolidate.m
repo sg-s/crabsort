@@ -6,12 +6,12 @@
 % **Syntax**
 %
 % ```
-% crabsort.consolidate('neurons',{'PD','LP'})
-% crabsort.consolidate(...'DataDir',/path/to/data)
-% crabsort.consolidate(...'DataFun',{@function1, @function2,...})
-% crabsort.consolidate(...'dt',1e-3)
-% crabsort.consolidate(...'stack',true)
-% crabsort.consolidate(...,'ChunkSize',20)
+% crabsort.consolidate(ExpName,'neurons',{'PD','LP'})
+% crabsort.consolidate(ExpName,...'DataDir',/path/to/data)
+% crabsort.consolidate(ExpName,...'DataFun',{@function1, @function2,...})
+% crabsort.consolidate(ExpName,...'dt',1e-3)
+% crabsort.consolidate(ExpName,...'stack',true)
+% crabsort.consolidate(ExpName,...,'ChunkSize',20)
 % ```
 %
 % Chunking may throw away data at the end if it doesn't fit into
@@ -21,7 +21,7 @@
 % but may affect the behaviour of functions in DataFun
 
 
-function data = consolidate(varargin)
+function data = consolidate(ExpName, varargin)
 
 % options and defaults
 options.DataDir = pwd;
@@ -33,16 +33,40 @@ options.ChunkSize = NaN; % seconds
 options.nerves = {};
 options.UseParallel = true;
 options.ParseMetadata = true;
+options.RebuildCache = false;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
 
 
-% figure out where the spikes are, and where the data is
-exp_name = pathlib.lowestFolder(options.DataDir);
-spikes_loc = pathlib.join(getpref('crabsort','store_spikes_here'),exp_name);
+options.neurons = sort(options.neurons);
 
-allfiles = dir([spikes_loc filesep '*.crabsort']);
+% figure out where the spikes are, and where the data is
+spikes_loc = fullfile(getpref('crabsort','store_spikes_here'),ExpName);
+
+
+if exist(spikes_loc,'file') == 0
+	data = [];
+	return
+end
+
+% hash
+options2 = rmfield(options,'DataDir');
+options2 = rmfield(options2,'RebuildCache');
+cache_name = [structlib.md5hash(options2) '.cache'];
+cache_name = fullfile(spikes_loc,cache_name);
+
+
+if exist(cache_name,'file') == 2 && ~options.RebuildCache 
+	load(cache_name,'data','-mat')
+
+	return
+end
+
+
+
+
+allfiles = dir(fullfile(spikes_loc, '*.crabsort'));
 
 if isempty(allfiles)
 	error(['No data found in this directory: ' options.DataDir])
@@ -78,6 +102,10 @@ for i = length(allfiles):-1:1
 	data(i).mask = [];
 	data(i).filename = '';
 
+	for j = 1:length(options.neurons)
+		data(i).([options.neurons{j} '_channel']) = categorical(NaN);
+	end
+
 
 	% make variables for the DataFun
 	for j = 1:length(options.DataFun)
@@ -111,12 +139,22 @@ for i = 1:length(data)
 end
 
 
+if length(unique([data.filename])) ~= length(data)
+
+	
+	url = ['matlab:cd(' char(39) allfiles(1).folder char(39) ')'];
+    fprintf(['\n\nThere are more .crabsort files than I expect. The most common reason for this \n is if there is a .crabsort file for a .crab file, \n and another one for a .ABF file, for example. \n To fix this, manually delete the ones you do not want from the \nstore_spikes_here folder. \n\n Click <a href = "' url '">here</a>  to go to that folder\n\n\n'])
+
+
+	error('Too many crabsort files')
+end
+
 
 % set the time_offsets for all the data
 
 for i = 2:length(data)
 
-	% only increment if files are consequtive
+	% only increment if files are consecutive
 	this_file_idx = strsplit(char(data(i).filename),'_');
 	this_file_idx = str2double(this_file_idx{end});
 
@@ -136,10 +174,13 @@ end
 
 
 % parse metadata if exists
-metadata_file = dir([options.DataDir filesep '*.txt']);
+spikesfolder = getpref('crabsort','store_spikes_here');
+
+
+metadata_file = dir(fullfile(spikesfolder,ExpName,'*.txt'));
 
 if ~isempty(metadata_file) && options.ParseMetadata
-	metadata = crabsort.parseMetadata([metadata_file(1).folder filesep metadata_file(1).name],allfiles);
+	metadata = crabsort.parseMetadata(fullfile(metadata_file(1).folder, metadata_file(1).name),allfiles);
 
 
 	% add this to data
@@ -218,3 +259,7 @@ if ~isnan(options.ChunkSize)
 
 
 end
+
+
+% save
+save(cache_name,'data')
