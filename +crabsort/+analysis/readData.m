@@ -82,7 +82,9 @@ for j = 1:length(options.neurons)
 	possible_spiketimes = {};
 	possible_channels = {};
 
+
 	this_neuron = options.neurons{j};
+	data.([this_neuron '_channel'])  = categorical(NaN);
 
 	fn = fieldnames(self.spikes);
 	for k = 1:length(fn)
@@ -110,7 +112,10 @@ for j = 1:length(options.neurons)
 	spiketimes  = round(spiketimes*self.dt*(1/options.dt));
 	spiketimes = spiketimes*options.dt;
 	data.(this_neuron) = spiketimes;
-	data.([this_neuron '_channel']) = categorical(possible_channels);
+	if ~isempty(possible_channels)
+		data.([this_neuron '_channel']) = categorical(possible_channels);
+	end
+
 
 end
 

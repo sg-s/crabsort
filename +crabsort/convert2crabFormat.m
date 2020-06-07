@@ -1,19 +1,21 @@
 % this function converts all ABF files into the .crab 
 % format, and then makes sure that the data is consistent 
 
-function convert2crabFormat(varargin)
+function convert2crabFormat(DataDir)
 
-original_dir = pwd;
+if nargin == 0
+	DataDir = pwd;
+end
 
 % does this folder contain folders? if so, then we need to drill deeper...
-allfolders = dir(pwd);
+allfolders = dir(DataDir);
+
 for i = 1:length(allfolders)
 	if strcmp(allfolders(i).name(1),'.')
 		continue
 	end
 	if allfolders(i).isdir
-		cd([allfolders(i).folder filesep allfolders(i).name])
-		crabsort.convert2crabFormat;
+		crabsort.convert2crabFormat([allfolders(i).folder filesep allfolders(i).name]);
 	end
 end
 
@@ -31,7 +33,7 @@ for i = 1:length(allowed_file_extensions)
 
 	disp(allowed_file_extensions{i})
 
-	allfiles = dir(allowed_file_extensions{i});
+	allfiles = dir(fullfile(DataDir,allowed_file_extensions{i}));
 	fprintf('File Name                     # Channels     Channel Name Hash\n')
 	fprintf('---------------------------------------------------------\n')
 

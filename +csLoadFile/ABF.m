@@ -11,7 +11,7 @@ function S = ABF(self,~,~)
 
 
 % read the file
-[S.raw_data,dt,S.metadata] = filelib.abfload(pathlib.join(self.path_name,self.file_name),'doDispInfo',false);
+[S.raw_data,dt,S.metadata] = filelib.abfload(fullfile(self.path_name,self.file_name),'doDispInfo',false);
 
 
 

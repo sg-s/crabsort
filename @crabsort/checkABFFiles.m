@@ -60,7 +60,7 @@ function channel_names = readABFChannelNames(file_name)
 
 	% get channel names
 
-	[fid, messg] = fopen(pathlib.join(self.path_name,file_name),'r+',machineF);
+	[fid, messg] = fopen(fullfile(self.path_name,file_name),'r+',machineF);
 	if fid == -1
 		error(messg);
 	end

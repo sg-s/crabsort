@@ -271,7 +271,7 @@ self.ignore_section = [];
 
 % check if there is a .crabsort file already
 
-file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[self.file_name '.crabsort']);
+file_name = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[self.file_name '.crabsort']);
 
 
 if exist(file_name,'file') == 2
@@ -296,7 +296,7 @@ end
 if hard_load
 
     % check that there is a crabsort.common file already
-    file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),'crabsort.common');
+    file_name = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),'crabsort.common');
 
     if exist(file_name,'file') == 2
         if self.verbosity > 5
@@ -515,6 +515,8 @@ end
 
 catch err
 
+
+    disp(['Error loading file: ' self.path_name filesep self.file_name])
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
     errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort is now in debug mode. You must exit from debug mode before continuting. ','crabsort::LoadFile FATAL ERROR',opts)

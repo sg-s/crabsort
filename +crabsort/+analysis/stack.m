@@ -10,6 +10,8 @@ for j = 1:length(fn)
 	sdata.(fn{j}) = [];
 end
 
+
+
 for i = 1:length(data)
 
 	if data(i).time_offset == 0
@@ -36,17 +38,28 @@ for i = 1:length(data)
 			sdata(stack_id).experiment_idx = data(i).experiment_idx;
 		else
 
+
+
 			% check size
 			this_variable = data(i).(fn{j});
-			if length(this_variable) ~= length(data(i).mask)
+			if isscalar(this_variable)
 				if isa(this_variable,'categorical')
 					this_variable = repmat(this_variable,length(data(i).mask),1);
 				else
 					this_variable = this_variable*(data(i).mask*0 + 1);
 				end
+
+			elseif length(this_variable) ~= length(data(i).mask)
+				% this variable is neither a scalar nor is it as long as the mask
+				% it's something else, so we need to extrapolate from what we have
+				this_variable = interp1(linspace(0,1,length(this_variable)),this_variable, linspace(0,1,length(data(i).mask)));
+
+				this_variable = this_variable(:);
+
 			end
+
 			sdata(stack_id).(fn{j}) = [sdata(stack_id).(fn{j}); this_variable];
-			
+
 		end
 	end
 

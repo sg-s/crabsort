@@ -46,7 +46,7 @@ for i = length(neurons):-1:1
 
 	if ~refresh_only
 		subplot(length(neurons),1,i,'ButtonDownFcn',@self.jumpFromISIPlot); hold on
-		self.handles.isi_plot(i) = plot(self.handles.isi_ax,spiketimes*self.dt, isis*self.dt,'k.');
+		self.handles.isi_plot(i) = plot(self.handles.isi_ax,spiketimes*self.dt, isis*self.dt,'k.','MarkerSize',30);
 		ylabel([neurons{i} ' ISI (s)'])
 		set(gca,'YScale','log')
 

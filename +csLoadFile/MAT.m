@@ -13,7 +13,7 @@ function S = MAT(self,~,~)
 
 
 % read the file
-data = load(pathlib.join(self.path_name,self.file_name),'-mat');
+data = load(fullfile(self.path_name,self.file_name),'-mat');
 
 fn = fieldnames(data);
 fn = setdiff(fn,{'file'});

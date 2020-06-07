@@ -14,7 +14,7 @@ function S = SMR(self,~,~)
 
 
 % read the file
-[d,h] = smrlib.load(pathlib.join(self.path_name,self.file_name));
+[d,h] = smrlib.load(fullfile(self.path_name,self.file_name));
 
 S.raw_data = cell2mat(d(~cellfun(@isstruct,d)));
 dt = h{1}.sampleinterval;

@@ -16,7 +16,6 @@ end
 % figure out all the neurons that exist in self.spikes
 sorted_neurons = {};
 
-
 if ~isstruct(self.spikes)
 	fatal = true;
 	corelib.cprintf('red',['No spikes at all in ' allfiles.name '\n'])

@@ -13,14 +13,14 @@ if self.verbosity > 9
 end
 
 % get all crabsort data for this channel
-[~,~,ext] = fileparts(pathlib.join(self.path_name,self.file_name));
+[~,~,ext] = fileparts(fullfile(self.path_name,self.file_name));
 allfiles = dir([self.path_name '*' ext '.crabsort']);
 
 
 S = {};
 for i = 1:length(allfiles)
 	clear spikes
-	load(pathlib.join(allfiles(i).folder, allfiles(i).name),'-mat')
+	load(fullfile(allfiles(i).folder, allfiles(i).name),'-mat')
 	spikes = crabsort_obj.spikes;
 	if isempty(spikes)
 		continue

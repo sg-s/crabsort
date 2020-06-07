@@ -69,7 +69,7 @@ end
 allfiles = dir(fullfile(spikes_loc, '*.crabsort'));
 
 if isempty(allfiles)
-	error(['No data found in this directory: ' options.DataDir])
+	error(['No spikes found for this exp: ' ExpName])
 end
 
 if ~iscell(options.DataFun)
@@ -178,8 +178,12 @@ spikesfolder = getpref('crabsort','store_spikes_here');
 
 % parse metadata if exists
 metadata_file = dir(fullfile(spikesfolder,ExpName,'*.txt'));
+metadata_file = metadata_file(~[metadata_file.isdir]);
 
 if ~isempty(metadata_file) && options.ParseMetadata
+
+
+
 	metadata = crabsort.parseMetadata(fullfile(metadata_file(1).folder, metadata_file(1).name),allfiles);
 
 
@@ -199,7 +203,9 @@ end
 % add temperature metadata if it exists
 metadata_file = dir(fullfile(spikesfolder,ExpName,'*.metadata'));
 
+
 if ~isempty(metadata_file) 
+
 	load(fullfile(metadata_file.folder,metadata_file.name),'-mat')
 
 	% strip file extensions from metadata

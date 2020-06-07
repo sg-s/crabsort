@@ -11,6 +11,7 @@ function metadata = parseMetadata(path_to_metadata, allfiles)
 % read metadata.txt
 lines = strsplit(fileread(path_to_metadata),'\n');
 
+
 n_files = length(allfiles);
 
 metadata.temperature = NaN(n_files,1);
@@ -36,7 +37,7 @@ for i = 1:length(lines)
 
 	switch length(this_line)
 	case 1
-		error(['Error parsing metadata:' path_to_metadata])
+		% ignore it
 	case 2
 		if  strcmp(this_line{2},'decentralized')
 			% get file_idx right

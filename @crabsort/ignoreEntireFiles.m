@@ -19,7 +19,7 @@ if any(strfind(src.Text,'BEFORE'))
 		end
 
 		% load the file
-		file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[allfiles(i).name  '.crabsort']);
+		file_name = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[allfiles(i).name  '.crabsort']);
 
 		if exist(file_name,'file') == 2
 
@@ -41,7 +41,7 @@ else
 		end
 
 		% load the file
-		file_name = pathlib.join(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[allfiles(i).name  '.crabsort']);
+		file_name = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name),[allfiles(i).name  '.crabsort']);
 
 		if exist(file_name,'file') == 2
 
