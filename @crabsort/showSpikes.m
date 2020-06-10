@@ -74,10 +74,7 @@ end
 
 drawnow;
 
-if isfield(self.handles,'isi_plot') && isvalid(self.handles.isi_plot)
-	self.makeISIPlot([],[],true);
-end
-
+self.updateISIPlot();
 
 
 

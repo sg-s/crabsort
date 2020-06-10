@@ -41,6 +41,24 @@ end
 this_ax =  find(p(2,:) > ylims(1,:) & p(2,:) < ylims(2,:));
 
 if isempty(this_ax)
+
+	if isempty(self.channel_to_work_with)
+		return
+	end
+
+
+	% maybe it's the ISI ax?
+	p = get(self.handles.isi_ax,'CurrentPoint');
+	ylims = self.handles.isi_ax.YLim;
+	xlims = self.handles.isi_ax.XLim;
+
+	if p(1,1) > xlims(1) && p(1,1) < xlims(2) && p(1,2) > ylims(1) && p(1,2) < ylims(2)
+		xrange = diff(self.handles.ax.ax(self.channel_to_work_with).XLim);
+		self.scroll([p(1,1) - xrange/2 p(1,1) + xrange/2])
+
+
+	end
+
 	return
 end
 

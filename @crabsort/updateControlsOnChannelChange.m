@@ -9,6 +9,10 @@
 
 function updateControlsOnChannelChange(self)
 
+if self.verbosity 
+    disp('updateControlsOnChannelChange')
+end
+
 c = lines;
 
 if ~isfield(self.handles,'ax')
@@ -59,6 +63,7 @@ if isempty(self.common.data_channel_names{channel})
     uxlib.disable(self.handles.cluster_panel)
     uxlib.disable(self.handles.mask_panel)
     uxlib.disable(self.handles.manual_panel)
+    self.updateISIPlot;
     return
 end
 
@@ -73,6 +78,8 @@ self.channel_stage(channel) = self.channel_stage(channel);
 self.handles.new_spike_type.String = self.getNeuronsOnThisNerve;
 self.handles.new_spike_type.Value = 1;
 
+
+self.updateISIPlot;
 
 warning('off','MATLAB:gui:array:InvalidArrayShape')
 drawnow;

@@ -24,7 +24,7 @@ z = find(self.time > 5,1,'first');
 c = lines;
 
 bottom_plot = .05;
-top_plot = .9;
+top_plot = .7;
 spacing = (top_plot - bottom_plot)/self.n_channels;
 
 M = self.pref.spike_markers;
@@ -100,6 +100,7 @@ for i = 1:self.n_channels
 	self.handles.ax.panel(i).Position = [.01 bottom_plot + spacing*(i-1) .1 .95*spacing];
 end
 
+
 for i = 1:self.n_channels
 
 	% make things a little more flush
@@ -158,4 +159,19 @@ self.handles.zoom_handles.Motion = 'horizontal';
 self.handles.zoom_handles.ActionPostCallback = @self.zoomCallback;
 self.handles.scroll_bar.Visible = 'on';
 drawnow
+
+
+% make the ISI axes
+self.handles.isi_ax = axes();
+self.handles.isi_ax.Position = [.03 .73 .92 .18];
+
+hold(self.handles.isi_ax,'on')
+
+for i = 1:5
+	self.handles.isi_plot(i) = plot(self.handles.isi_ax,NaN,NaN,'.','MarkerSize',20);
+end
+self.handles.isi_plot_left = plot(self.handles.isi_ax,[NaN NaN],[NaN NaN],'k--');
+self.handles.isi_plot_right = plot(self.handles.isi_ax,[NaN NaN],[NaN NaN],'k--');
+ylabel(self.handles.isi_ax,' ISI (s)')
+set(gca,'YScale','log')
 

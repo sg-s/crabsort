@@ -26,7 +26,7 @@ n_channels_to_show = sum(self.common.show_hide_channels);
 
 if nargin == 1
 	bottom_plot = .05;
-	top_plot = .9;
+	top_plot = .7;
 end
 spacing = (top_plot - bottom_plot)/n_channels_to_show;
 

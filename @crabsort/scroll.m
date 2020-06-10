@@ -98,3 +98,13 @@ if is_intracellular
 end
 
 drawnow limitrate
+
+if any(strcmp(fieldnames(self.handles),'isi_plot_left'))
+
+    self.handles.isi_plot_left.XData = [newlim(1) newlim(1)];
+    self.handles.isi_plot_right.XData = [newlim(2) newlim(2)];
+
+    self.handles.isi_plot_left.YData = [1e-3 1e3];
+    self.handles.isi_plot_right.YData = [1e-3 1e3];
+
+end
