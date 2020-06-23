@@ -35,6 +35,11 @@ for i = 1:length(lines)
 	file_idx = find(str2double(this_line{1}) == file_identifiers);
 
 
+	% ignore comments
+	if strcmp(this_line{1},'//')
+		continue
+	end
+
 	switch length(this_line)
 	case 1
 		% ignore it

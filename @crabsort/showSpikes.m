@@ -30,7 +30,6 @@ if isempty(self.spikes)
 end
 
 
-
 for i = 1:length(channels)
 	this_channel = channels(i);
 

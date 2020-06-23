@@ -1,6 +1,15 @@
 function cacheTemperature(exp_name)
 
 
+spikesfolder = getpref('crabsort','store_spikes_here');
+
+% first check if there is even a temperature channel
+load(fullfile(spikesfolder,exp_name,'crabsort.common'),'-mat')
+if ~any(strcmp(common.data_channel_names,'temperature'))
+	disp('No temperature channel')
+	return
+end
+
 
 try
 	data_loc =  getpref('crabsort','data_loc');
@@ -8,7 +17,7 @@ catch
 	error('data_loc not set! ')
 end
 
-spikesfolder = getpref('crabsort','store_spikes_here');
+
 
 
 % figure out type of data
@@ -47,6 +56,9 @@ else
 	else
 
 
+		metadata = struct;
+
+
 		% do all the datafolders
 		for j = 1:length(datafolders)
 
@@ -63,7 +75,6 @@ else
 
 			allfiles = dir(fullfile(datafolder,['*' ext]));
 
-			metadata = struct;
 
 			for i = 1:length(allfiles)
 
@@ -72,19 +83,17 @@ else
 				self.file_name = allfiles(i).name;
 
 				self.loadFile;
-
 				
 				metadata(i).file_name = allfiles(i).name;
 				metadata(i).temperature = crabsort.getTemperature(self,options);
 				
 
 			end
-
-
-			% save
-			save(metadata_file,'metadata')
-			
 	
 		end
+
+		% save
+		disp('Saving...')
+		save(metadata_file,'metadata')
 	end
 end

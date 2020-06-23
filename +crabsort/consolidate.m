@@ -33,7 +33,6 @@ options.ChunkSize = NaN; % seconds
 options.nerves = {};
 options.UseParallel = true;
 options.ParseMetadata = true;
-options.RebuildCache = false;
 
 % validate and accept options
 options = corelib.parseNameValueArguments(options,varargin{:});
@@ -44,20 +43,29 @@ options.neurons = sort(options.neurons);
 % figure out where the spikes are, and where the data is
 spikes_loc = fullfile(getpref('crabsort','store_spikes_here'),ExpName);
 
+data = [];
 
 if exist(spikes_loc,'file') == 0
-	data = [];
 	return
 end
 
 % hash
+cfiles = dir(fullfile(spikes_loc,'*.crabsort'));
+if isempty(cfiles)
+	return
+end
+for i = length(cfiles):-1:1
+	H{i} = hashlib.md5hash(fullfile(cfiles(i).folder,cfiles(i).name),'File');
+end
+H1 = hashlib.md5hash(vertcat(H{:}));
 options2 = rmfield(options,'DataDir');
-options2 = rmfield(options2,'RebuildCache');
-cache_name = [structlib.md5hash(options2) '.cache'];
+H2 = structlib.md5hash(options2);
+H = hashlib.md5hash([H1 H2]);
+cache_name = [H '.cache'];
 cache_name = fullfile(spikes_loc,cache_name);
 
 
-if exist(cache_name,'file') == 2 && ~options.RebuildCache 
+if exist(cache_name,'file') == 2
 	load(cache_name,'data','-mat')
 
 	return
@@ -87,8 +95,6 @@ assert(iscell(options.nerves),'Expected nerves to be a cell array')
 
 
 % figure out the experiment idx from the folder name
-[~,exp_dir]=fileparts(options.DataDir);
-exp_dir = categorical(cellstr(exp_dir));
 
 
 data = struct;
@@ -98,7 +104,7 @@ for i = length(allfiles):-1:1
 	end
 	data(i).time_offset = 0;
 	data(i).T = NaN;
-	data(i).experiment_idx = exp_dir;
+	data(i).experiment_idx = categorical(cellstr(ExpName));
 	data(i).mask = [];
 	data(i).filename = '';
 
@@ -186,6 +192,9 @@ if ~isempty(metadata_file) && options.ParseMetadata
 
 	metadata = crabsort.parseMetadata(fullfile(metadata_file(1).folder, metadata_file(1).name),allfiles);
 
+	assert(isfield(metadata,'experimenter'),'Metadata is missing a required field: experimenter')
+
+	assert(length(metadata.experimenter) == length(data),'Length of data and metadata do not match')
 
 	% add this to data
 	mfn = fieldnames(metadata);
@@ -197,7 +206,10 @@ if ~isempty(metadata_file) && options.ParseMetadata
 		end
 	end
 
+	clearvars metadata
+
 end
+
 
 
 % add temperature metadata if it exists
@@ -205,6 +217,7 @@ metadata_file = dir(fullfile(spikesfolder,ExpName,'*.metadata'));
 
 
 if ~isempty(metadata_file) 
+
 
 	load(fullfile(metadata_file.folder,metadata_file.name),'-mat')
 
@@ -225,7 +238,6 @@ if ~isempty(metadata_file)
 end
 
 
-
 % propagate temperate to next file
 % if temperature is a scalar
 if isfield(data,'temperature')
@@ -235,6 +247,7 @@ if isfield(data,'temperature')
 		end
 	end
 end
+
 
 
 if options.stack
