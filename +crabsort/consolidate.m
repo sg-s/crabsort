@@ -262,40 +262,8 @@ end
 % chunk
 if ~isnan(options.ChunkSize)
 	fprintf('Chunking data...')
-	if length(data) == 1
-		% assume data has been stacked, and now we need to chunk
-		cdata = crabsort.analysis.chunk(data,options);
 
-	else
-		% data hasn't been stacked. Still need to chunk
-		cdata =  crabsort.analysis.chunk(data(1),options);
-		fn = fieldnames(cdata);
-
-
-		for i = 2:length(data)
-
-			if max(data(i).time_offset) < options.ChunkSize
-				continue
-			end
-
-
-			temp = crabsort.analysis.chunk(data(i),options);
-			% glom them all together
-			N2 = size(temp.experiment_idx,1);
-			
-			for j = 1:length(fn)
-				if size(temp.(fn{j}),1) == N2
-					cdata.(fn{j}) = [cdata.(fn{j}); temp.(fn{j})];
-				else
-					cdata.(fn{j}) = [cdata.(fn{j}) temp.(fn{j})];
-				end
-
-			end
-		end
-
-		
-	end
-
+	cdata = crabsort.analysis.chunk(data,options);
 
 	corelib.cprintf('green','[DONE]\n')
 
