@@ -21,7 +21,9 @@ metadata.decentralized = false(n_files,1);
 file_identifiers = zeros(length(allfiles),1);
 for i = 1:length(allfiles)
 	z = min(strfind(allfiles(i).name,'.'));
-	this_file_identifier = str2double(allfiles(i).name(z-4:z-1));
+
+	temp = strsplit(allfiles(i).name(1:z-1),'_');
+	this_file_identifier = str2double(temp{end});
 	if isnan(this_file_identifier)
 		error(['Could not match numeric identifier to this file: ' allfiles(i).name])
 	end
