@@ -39,7 +39,7 @@ for i = 1:length(allowed_file_extensions)
 
 	this_file_ext = allowed_file_extensions{i};
 
-	parfor j = 1:length(allfiles)
+	for j = 1:length(allfiles)
 
 		crabsort.convertFile2crabFormat(allfiles(j), this_file_ext);
 

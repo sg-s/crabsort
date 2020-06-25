@@ -202,6 +202,8 @@ try
     end
 catch err
 
+    disp(err.message)
+
     if ~isempty(self.handles)
         if isfield(self.handles,'main_fig')
             set(self.handles.main_fig, 'pointer', 'arrow')
@@ -211,7 +213,9 @@ catch err
 
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
-    errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort may now be in debug mode. You must exit from debug mode before continuing. ','crabsort::LoadFile FATAL ERROR',opts)
+    if ~isempty(self.handles)
+        errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort may now be in debug mode. You must exit from debug mode before continuing. ','crabsort::LoadFile FATAL ERROR',opts)
+    end
 
     self.raw_data = [];
     self.displayStatus(err, true)
@@ -511,7 +515,12 @@ catch err
     disp(['Error loading file: ' self.path_name filesep self.file_name])
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';
-    errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort is now in debug mode. You must exit from debug mode before continuting. ','crabsort::LoadFile FATAL ERROR',opts)
+
+    keyboard
+
+    if ~isempty(self.handles)
+        errordlg('\fontsize{20} Something went wrong in trying to load the data file. crabsort is now in debug mode. You must exit from debug mode before continuting. ','crabsort::LoadFile FATAL ERROR',opts)
+    end
 
 
     self.raw_data = [];
