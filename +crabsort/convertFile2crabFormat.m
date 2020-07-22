@@ -31,8 +31,6 @@ try
 
 	S = load_file_handle(self);
 
-	disp('File loaded!')
-
 catch err
 	disp('Failed to load file, error was')
 	disp(err.message)
@@ -47,7 +45,10 @@ if isempty(S.raw_data)
 	if ~exist('corrupted','dir')
 		mkdir('corrupted')
 	end
-	movefile( filename.name,['corrupted' filesep  filename.name])
+	try
+		movefile( filename.name,['corrupted' filesep  filename.name])
+	catch
+	end
 
 	fprintf('FATAL: could not load file\n')
 else

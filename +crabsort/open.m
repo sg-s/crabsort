@@ -2,10 +2,11 @@
 % usage
 % crabsort.open('exp_#')
 %
-function open(exp_name)
+function datafolder = open(exp_name, silent)
 
-
-
+if nargin == 1
+	silent = false;
+end
 
 
 
@@ -22,6 +23,12 @@ spikesfolder = getpref('crabsort','store_spikes_here');
 datafolders = dir(fullfile(data_loc,'**',exp_name));
 
 datafolders = datafolders([datafolders.isdir]);
+
+
+if silent
+	datafolder = datafolders(1);
+	return
+end
 
 cd(datafolders(1).folder)
 

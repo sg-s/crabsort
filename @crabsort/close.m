@@ -8,6 +8,10 @@
 
 function close(self,~,~)
 
+
+path_name = self.path_name;
+pref = self.pref;
+
 if self.verbosity > 9
 	disp(mfilename)
 end
@@ -45,3 +49,22 @@ end
 delete(self.handles.main_fig)
 delete(self)
 
+% consolidate data
+if isempty(path_name)
+	return
+end
+
+
+try
+	p = strsplit(path_name,filesep);
+	if isempty(p{end})
+		p = p{end-1};
+	else
+		p = p{end};
+	end
+
+
+	
+	crabsort.consolidate(p,'neurons',pref.consolidate_these_neurons_on_close)
+catch
+end

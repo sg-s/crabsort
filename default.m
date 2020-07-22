@@ -51,6 +51,9 @@ nerve2neuron.mvn = {'VD','IC','PY'};
 nerve2neuron.dgn = {'DG','GM','AGR'};
 nerve2neuron.dvn = {'DG','MG','AGR'};
 
+
+consolidate_these_neurons_on_close = {'LP','PD'};
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                 _ _           _             
 %              __| (_)___ _ __ | | __ _ _   _ 
