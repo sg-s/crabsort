@@ -3,6 +3,27 @@ function cacheTemperature(exp_name)
 
 spikesfolder = getpref('crabsort','store_spikes_here');
 
+if nargin == 0
+	% do it for all of them
+	allexps = dir(spikesfolder);
+	for i = 1:length(allexps)
+
+		if strcmp(allexps(i).name(1),'.')
+			continue
+		end
+
+		crabsort.database.cacheTemperature(allexps(i).name)
+
+	end
+
+
+
+	return
+
+end
+
+disp(exp_name)
+
 % first check if there is even a temperature channel
 load(fullfile(spikesfolder,exp_name,'crabsort.common'),'-mat')
 if ~any(strcmp(common.data_channel_names,'temperature'))

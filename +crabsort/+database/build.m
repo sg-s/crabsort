@@ -66,14 +66,6 @@ for i = length(all_exps):-1:1
 
 
 
-	% check if every entry is complete in this row. if so, skip and move on
-	skip_check = [~isempty(T{row,'ExpName'}{1}); ~isempty(T{row,'experimenter'}{1}); ~isempty(T{row,'TempCached'}{1}); ~isempty(T{row,'TempChannelExists'}{1}) ; ~isempty(T{row,'DataMissing'}{1}) ;  T{row,'NumPDSpikes'}~=-1 ;  (T{row,'NumLPSpikes'}~=-1) ; T{row,'SortProgress'}~=-1 ; ~isempty(T{row,'PDLPUsable'}{1})];
-
-	if all(skip_check)
-		continue
-	end
-
-
 
 
 	disp(this_exp)
@@ -198,10 +190,24 @@ for i = length(all_exps):-1:1
 	end
 	
 
+	% label decentralized
+	thisdata = alldata{i};
+	if isfield(thisdata,'decentralized')
+
+		if any([thisdata.decentralized])
+			T{row,'decentralized'} = 1;
+		else
+			T{row,'decentralized'} = 0;
+		end
+
+	else
+		T{row,'decentralized'} = 0;
+	end
+
 
 
 end
 
 
-	% save table
-	writetable(T,fullfile(spikesfolder, 'crabsort-db.xlsx'));
+% save table
+writetable(T,fullfile(spikesfolder, 'crabsort-db.xlsx'));

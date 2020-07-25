@@ -55,7 +55,8 @@ if isempty(cfiles)
 	return
 end
 for i = length(cfiles):-1:1
-	H{i} = hashlib.md5hash(fullfile(cfiles(i).folder,cfiles(i).name),'File');
+	load(fullfile(cfiles(i).folder,cfiles(i).name),'-mat')
+	H{i} = hashlib.md5hash([structlib.md5hash(crabsort_obj.spikes) structlib.md5hash(crabsort_obj.ignore_section)]);
 end
 H1 = hashlib.md5hash(vertcat(H{:}));
 options2 = rmfield(options,'DataDir');
