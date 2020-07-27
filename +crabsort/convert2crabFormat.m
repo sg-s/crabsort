@@ -1,10 +1,14 @@
 % this function converts all ABF files into the .crab 
 % format, and then makes sure that the data is consistent 
 
-function convert2crabFormat(DataDir)
+function convert2crabFormat(DataDir, UseParallel)
 
-if nargin == 0
+if exist('DataDir','var')
 	DataDir = pwd;
+end
+
+if exist('UseParallel','var')
+	UseParallel = true;
 end
 
 % does this folder contain folders? if so, then we need to drill deeper...
@@ -39,11 +43,23 @@ for i = 1:length(allowed_file_extensions)
 
 	this_file_ext = allowed_file_extensions{i};
 
-	parfor j = 1:length(allfiles)
+	if UseParallel
 
-		crabsort.convertFile2crabFormat(allfiles(j), this_file_ext);
+		parfor j = 1:length(allfiles)
+
+			crabsort.convertFile2crabFormat(allfiles(j), this_file_ext);
+
+		end
+
+	else
+		for j = 1:length(allfiles)
+
+			crabsort.convertFile2crabFormat(allfiles(j), this_file_ext);
+
+		end
 
 	end
+
 
 end
 

@@ -23,6 +23,9 @@
 
 function data = consolidate(ExpName, varargin)
 
+spikesfolder = getpref('crabsort','store_spikes_here');
+
+
 % options and defaults
 options.DataDir = pwd;
 options.dt = 1e-3; % 1 ms
@@ -42,12 +45,20 @@ options.neurons = sort(options.neurons);
 
 % figure out where the spikes are, and where the data is
 spikes_loc = fullfile(getpref('crabsort','store_spikes_here'),ExpName);
+allfiles = dir(fullfile(spikes_loc, '*.crabsort'));
 
 data = [];
 
 if exist(spikes_loc,'file') == 0
 	return
 end
+
+
+
+metadata_file = dir(fullfile(spikesfolder,ExpName,'*.txt'));
+metadata_file = metadata_file(~[metadata_file.isdir]);
+
+
 
 % hash
 cfiles = dir(fullfile(spikes_loc,'*.crabsort'));
@@ -61,7 +72,18 @@ end
 H1 = hashlib.md5hash(vertcat(H{:}));
 options2 = rmfield(options,'DataDir');
 H2 = structlib.md5hash(options2);
-H = hashlib.md5hash([H1 H2]);
+
+
+% also hash metadata
+H3 =  '';
+if ~isempty(metadata_file) && options.ParseMetadata
+
+	metadata = crabsort.parseMetadata(fullfile(metadata_file(1).folder, metadata_file(1).name),allfiles);
+
+	H3 = structlib.md5hash(metadata);
+end
+
+H = hashlib.md5hash([H1 H2 H3]);
 cache_name = [H '.cache'];
 cache_name = fullfile(spikes_loc,cache_name);
 
@@ -75,7 +97,6 @@ end
 
 
 
-allfiles = dir(fullfile(spikes_loc, '*.crabsort'));
 
 if isempty(allfiles)
 	error(['No spikes found for this exp: ' ExpName])
@@ -178,14 +199,12 @@ for i = 2:length(data)
 end
 
 
-spikesfolder = getpref('crabsort','store_spikes_here');
+
 
 
 
 
 % parse metadata if exists
-metadata_file = dir(fullfile(spikesfolder,ExpName,'*.txt'));
-metadata_file = metadata_file(~[metadata_file.isdir]);
 
 if ~isempty(metadata_file) && options.ParseMetadata
 
