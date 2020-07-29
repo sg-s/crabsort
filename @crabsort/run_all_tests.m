@@ -208,9 +208,9 @@ for i = 1:length(dim_red_methods)
 		passed = passed + 1;
 
 	catch err
+		keyboard
 		corelib.cprintf('r','   [FAILED]\n')
-
-		failed = failed + 1
+		failed = failed + 1;
 	end
 
 end
