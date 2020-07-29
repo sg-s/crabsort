@@ -14,6 +14,7 @@
   "external_code": [
     "/Users/srinivas/GoogleDrive/code/puppeteer/@puppeteer",
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+axlib",
+    "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+smrlib",
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+corelib",
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+figlib",
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+filelib",
@@ -24,9 +25,10 @@
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+structlib",
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+pathlib",
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/+veclib",
-    "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/@adaptive",
     "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/ConstructableHandle.m",
-    "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/UpdateableHandle.m"
+    "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/UpdateableHandle.m",
+    "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/HashableHandle.m",
+    "/Users/srinivas/GoogleDrive/code/srinivas.gs_mtools/Hashable.m"
   ]
 }
 
