@@ -106,7 +106,8 @@ corelib.cprintf('_white','Checking NNdelete...\n\n')
 fprintf('Delete all nets button: ')
 
 try
-	self.NNdelete(self.handles.menu_name(5).Children(5))
+	idx = find(strcmp({self.handles.menu_name(5).Children.Text},'Delete all nets'));
+	self.NNdelete(self.handles.menu_name(5).Children(idx))
 	corelib.cprintf('g','  [OK]\n')
 	passed = passed + 1;
 catch err
@@ -118,7 +119,8 @@ end
 fprintf('Delete all NNdata button: ')
 
 try
-	self.NNdelete(self.handles.menu_name(5).Children(6))
+	idx = find(strcmp({self.handles.menu_name(5).Children.Text},'Delete all NN data'));
+	self.NNdelete(self.handles.menu_name(5).Children(idx))
 	corelib.cprintf('g','  [OK]\n')
 	passed = passed + 1;
 catch err
@@ -174,6 +176,8 @@ corelib.cprintf('_white','Testing core functionality...\n\n')
 
 fprintf('\n\n')
 corelib.cprintf('_white','Testing dimensionality reduction methods...\n\n')
+
+conda activate umap
 
 dim_red_methods = self.installed_plugins.csRedDim;
 
