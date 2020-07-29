@@ -52,7 +52,7 @@ for i = 2:length(all_folders)
 		catch err
 			corelib.cprintf('r','  [FAILED]\n')
 			failed = failed + 1;
-			keyboard
+		
 		end
 
 	end
@@ -83,7 +83,7 @@ try
 catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
-	keyboard
+
 end
 
 
@@ -96,7 +96,7 @@ try
 catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
-	keyboard
+
 end
 
 
@@ -113,7 +113,7 @@ try
 catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
-	keyboard
+
 end
 
 fprintf('Delete all NNdata button: ')
@@ -126,7 +126,7 @@ try
 catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
-	keyboard
+
 end
 
 
@@ -149,7 +149,7 @@ try
 catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
-	keyboard
+
 
 end
 
@@ -166,7 +166,7 @@ try
 catch err
 	corelib.cprintf('r','  [FAILED]\n')
 	failed = failed + 1;
-	keyboard
+
 end
 
 fprintf('\n\n')
@@ -177,7 +177,12 @@ corelib.cprintf('_white','Testing core functionality...\n\n')
 fprintf('\n\n')
 corelib.cprintf('_white','Testing dimensionality reduction methods...\n\n')
 
-conda activate umap
+
+try
+	conda activate umap
+catch
+	warning('conda not installed, umap will probably fail')
+end
 
 dim_red_methods = self.installed_plugins.csRedDim;
 
@@ -205,7 +210,7 @@ for i = 1:length(dim_red_methods)
 	catch err
 		corelib.cprintf('r','   [FAILED]\n')
 
-		failed = failed + 1;keyboard
+		failed = failed + 1
 	end
 
 end
