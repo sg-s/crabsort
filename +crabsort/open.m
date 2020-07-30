@@ -37,10 +37,13 @@ self = crabsort;
 
 assignin('base','self',self)
 
+filelib.mkdir(fullfile(spikesfolder,exp_name))
+
+
 metadata_file = dir(fullfile(spikesfolder,exp_name,'*.txt'));
 
 if isempty(metadata_file)
-	metadata_file = fullfile(spikesfolder,exp_name,'metadata.txt');
+	metadata_file = fullfile(spikesfolder,exp_name,[exp_name '.txt']);
 
 	filelib.write(metadata_file,{'0000 baseline 1'})
 	edit(metadata_file)

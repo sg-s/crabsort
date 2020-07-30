@@ -3,11 +3,11 @@
 
 function convert2crabFormat(DataDir, UseParallel)
 
-if exist('DataDir','var')
+if ~exist('DataDir','var')
 	DataDir = pwd;
 end
 
-if exist('UseParallel','var')
+if ~exist('UseParallel','var')
 	UseParallel = true;
 end
 
