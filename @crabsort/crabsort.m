@@ -86,7 +86,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         timer_handle (1,1) timer
 
          % parallel workers
-        workers parallel.FevalFuture
+        futures parallel.FevalFuture
 
         auto_predict (1,1) logical = true;
 
@@ -144,7 +144,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
     properties (Access = protected, Transient = true)
 
 
-        training_on
+        CurrentlyTraining
 
         NumWorkers = 0;
 

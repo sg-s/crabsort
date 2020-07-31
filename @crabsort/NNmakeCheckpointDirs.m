@@ -26,11 +26,10 @@ already exist, nothing is done.
 function NNmakeCheckpointDirs(self)
 
 
-if exist([self.path_name 'network'],'dir')  ~= 7
+spikes_dir = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name));
 
-	mkdir([self.path_name 'network'])
-
-
+if exist(fullfile(spikes_dir,'network'),'dir')  ~= 7
+	mkdir(fullfile(spikes_dir,'network'))
 end
 
 for i = 1:self.n_channels
@@ -39,8 +38,8 @@ for i = 1:self.n_channels
 		continue
 	end
 
-	if exist([self.path_name 'network' filesep this_nerve]) ~= 7
-		mkdir([self.path_name 'network' filesep this_nerve])
+	if exist(fullfile(spikes_dir,'network', this_nerve)) ~= 7
+		mkdir(fullfile(spikes_dir,'network', this_nerve))
 	end
 
 

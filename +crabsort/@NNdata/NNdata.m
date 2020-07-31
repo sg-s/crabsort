@@ -6,7 +6,7 @@ properties
 	raw_data
 	file_idx
 	spiketimes
-	label_idx
+	label_idx categorical 
 
 
 	% timestamps to determine if more training is needed
@@ -15,8 +15,8 @@ properties
 
 
 	% neural network performance 
-	accuracy double
-	acceptable_accuracy double = 98
+	accuracy (1,1) double = 0
+	acceptable_accuracy (1,1) double = 98
 
 
 	% spike detection parameters

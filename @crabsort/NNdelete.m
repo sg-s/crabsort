@@ -31,7 +31,11 @@ case 'Delete this channels NN'
 	if isempty(channel)
 		return
 	end
-	allfiles = dir([self.path_name 'network' filesep self.common.data_channel_names{channel},filesep,'*.mat']);
+
+
+	spikes_dir = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name));
+	checkpoint_path = fullfile(spikes_dir,'network', self.common.data_channel_names{channel});
+	allfiles = dir(fullfile(checkpoint_path,'*.mat'));
 
 	for i = 1:length(allfiles)
 		delete([allfiles(i).folder filesep allfiles(i).name])
@@ -49,7 +53,9 @@ case 'Delete this channels NN'
 
 case 'Delete all nets'
 	for i = 1:self.n_channels
-		allfiles = dir([self.path_name 'network' filesep self.common.data_channel_names{i} filesep '*.mat']);
+		spikes_dir = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name));
+		checkpoint_path = fullfile(spikes_dir,'network', self.common.data_channel_names{channel});
+		allfiles = dir(fullfile(checkpoint_path,'*.mat'));
 		for j = 1:length(allfiles)
 			disp(['Deleting: ' [allfiles(j).folder filesep allfiles(j).name]])
 			delete([allfiles(j).folder filesep allfiles(j).name])

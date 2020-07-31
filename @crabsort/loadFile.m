@@ -62,9 +62,9 @@ end
 if nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'Load File')
 
 
-    % attempt to cancel all workers
+    % attempt to cancel all futures
     try
-        cancel(self.workers)
+        cancel(self.futures)
     catch
     end
 
@@ -75,7 +75,7 @@ if nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'Load File
         disp('[loadFile] load_file_button is src')
     end
 
-    cancel(self.workers)
+    cancel(self.futures)
 
     
 
@@ -261,7 +261,7 @@ self.raw_data_size = size(self.raw_data);
 if hard_load
     % reset common
     self.common = crabsort.common(self.n_channels);
-    self.training_on = NaN(self.n_channels,1);
+    self.futures = repmat(parallel.FevalFuture,self.n_channels,1)
 end
 
 
