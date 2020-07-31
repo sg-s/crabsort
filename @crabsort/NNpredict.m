@@ -109,7 +109,9 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 		self.sdp.MinPeakProminence = abs(self.handles.ax.ax(channel).YLim(1)/3);
 		self.sdp.MinPeakHeight = 0;
 		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
-		self.findSpikes()
+
+		self.findSpikes() % 3.6 seconds
+
 		spiketimes = find(self.putative_spikes(:,channel));
 
 		if length(spiketimes) == 0
@@ -120,24 +122,31 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 
 
 		% get spike shapes
-		X = self.getSnippets(channel,spiketimes);
+		
+		X = self.getSnippets(channel,spiketimes); % .7 s
+		
 
 		% normalize
 		% extracellular 
 		y_scale = abs(self.handles.ax.ax(channel).YLim(1));
-		for i = 1:size(X,2)
+		for i = 1:size(X,2)  % very fast
 			X(:,i) = X(:,i)/y_scale;
 		end
+
+
 
 
 		% resample
 		old_time = linspace(-self.sdp.t_before,self.sdp.t_after,size(X,1));
 		new_time = linspace(-self.sdp.t_before,self.sdp.t_after,91);
 
+
+
 		new_X = NaN(91,size(X,2));
-		for i = 1:size(X,2)
+		parfor i = 1:size(X,2)   % .7 s
 			new_X(:,i) = interp1(old_time,X(:,i),new_time);
 		end
+		
 
 		X = new_X;
 		clear new_X;
@@ -155,7 +164,6 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	N = size(X,2);
 	SZ = size(X,1);
 	X = reshape(X,SZ,1,1,N);
-
 
 	[Y_pred, scores] = classify(trainedNet,X);
 	N = size(scores,2);
