@@ -167,9 +167,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
             try
                 ssh = getpref('crabsort','store_spikes_here');
             catch
-                ssh = [fileparts(fileparts(which('crabsort'))) filesep 'spikes'];
-                setpref('crabsort','store_spikes_here',ssh);
-                filelib.mkdir(ssh)
+                error(['You have not configured where to store spikes. Use setpref(' char(39) 'crabsort' char(39) ',' char(39) 'store_spikes_here' char(39) ',' char(39) 'some_place' char(39) ')'])
             end
 
 
