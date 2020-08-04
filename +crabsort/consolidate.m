@@ -83,7 +83,18 @@ if ~isempty(metadata_file) && options.ParseMetadata
 	H3 = structlib.md5hash(metadata);
 end
 
-H = hashlib.md5hash([H1 H2 H3]);
+
+% also hash the .metadata file which is used to store temperature
+serialzied_metadata = dir(fullfile(spikes_loc,'*.metadata'));
+if isempty(serialzied_metadata)
+	H4 = '';
+else
+	loadme = dir(fullfile(spikes_loc,'*.metadata'));
+	load(fullfile(loadme.folder,loadme.name),'-mat')
+	H4 = structlib.md5hash(metadata);
+end
+
+H = hashlib.md5hash([H1 H2 H3 H4]);
 cache_name = [H '.cache'];
 cache_name = fullfile(spikes_loc,cache_name);
 

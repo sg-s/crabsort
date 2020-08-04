@@ -43,7 +43,11 @@ end
 
 NNdata = self.common.NNdata(channel);
 
-checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
+
+spikes_dir = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name));
+
+checkpoint_path = fullfile(spikes_dir,'network', self.common.data_channel_names{channel});
+
 H = NNdata.networkHash();
 NN_dump_file = [checkpoint_path filesep H '.mat'];
 
@@ -55,6 +59,10 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 
 	SpikeSign = logical(self.handles.spike_sign_control.Value);
 
+
+	if self.isIntracellular(channel)
+		SpikeSign = true;
+	end
 	
 
 	NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '_' mat2str(SpikeSign) '.network'];

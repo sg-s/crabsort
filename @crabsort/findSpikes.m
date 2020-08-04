@@ -63,9 +63,10 @@ if ~isa(Npeaks,'double')
        
 
         FragmentSize = size(V2,1);
+        Shift = floor(FragmentSize/2);
 
         V3 = [V; zeros(ceil(length(V)/NFragments)*NFragments - length(V),1)];
-        V3 = reshape(circshift(V3,FragmentSize/2),FragmentSize,NFragments);
+        V3 = reshape(circshift(V3,Shift),FragmentSize,NFragments);
 
         loc2 = cell(NFragments,1);
         loc3 = cell(NFragments,1);
@@ -76,7 +77,7 @@ if ~isa(Npeaks,'double')
             loc2{i} = loc2{i}+(i-1)*FragmentSize;
 
             [~,loc3{i}] = findpeaks(V3(:,i),'MinPeakHeight',MinPeakHeight,'MinPeakProminence',MinPeakProminence,'Threshold',Threshold,'MinPeakDistance',MinPeakDistance,'MinPeakWidth',MinPeakWidth,'MaxPeakWidth',MaxPeakWidth);
-            loc3{i} = loc3{i}+(i-1)*FragmentSize - FragmentSize/2 ;
+            loc3{i} = loc3{i}+(i-1)*FragmentSize - Shift;
 
         end
         loc2 = vertcat(loc2{:});

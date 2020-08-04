@@ -88,7 +88,6 @@ for i = 1:self.n_channels
 		% nothing ever has run
 
 		if self.common.NNdata(i).isMoreTrainingNeeded
-			disp('training/unavailable')
 
 			spinner = spinner_symbols{randi(4)};
 			self.handles.ax.NN_status(i).String = ['TRAINING' spinner];
@@ -113,8 +112,6 @@ for i = 1:self.n_channels
 
 			self.NNtrain(i);
 
-			disp('finished/training some more')
-
 		else
 			self.handles.ax.NN_status(i).String = 'IDLE';
 		end
@@ -128,7 +125,6 @@ for i = 1:self.n_channels
 
 		spinner = spinner_symbols{randi(4)};
 		self.handles.ax.NN_status(i).String = ['TRAINING' spinner];
-		disp('running/updating accuracy')
 
 	end
 
