@@ -272,8 +272,6 @@ if isfield(data,'temperature')
 	end
 end
 
-
-
 if options.stack
 
 	fprintf('Stacking data...')
