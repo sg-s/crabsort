@@ -69,7 +69,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         installed_plugins
 
-        version_name  char = ['crabsort ' crabsort.version()]
+        version_name  char = ['crabsort ' crabsort.version()];
 
         % this is the list of channel names that you can choose from
         channel_names
