@@ -7,6 +7,7 @@ function data = readData(thisfile, options, data)
 load([thisfile.folder filesep thisfile.name],'-mat','crabsort_obj')
 
 if isempty(crabsort_obj.dt)
+	corelib.cprintf('red',['Error when trying to read this data file: ' thisfile.name])
 	return
 end
 
@@ -62,6 +63,7 @@ if notsorted
 		data.(options.neurons{j}) = [];
 	end
 
+	corelib.cprintf('red',['This file was not sorted: ' thisfile.name])
 	return
 
 
@@ -71,6 +73,8 @@ end
 if ~isstruct(self.spikes)
 	% something wrong, abort
 	data.mask = data.mask*0;
+
+	corelib.cprintf('red',['Error when trying to read this data file: ' thisfile.name])
 	return
 end
 
@@ -118,7 +122,6 @@ for j = 1:length(options.neurons)
 
 
 end
-
 
 
 clear self outputs 
