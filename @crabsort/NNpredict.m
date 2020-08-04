@@ -165,7 +165,12 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	
 
 	% load trained net
-	load(NN_dump_file,'trainedNet','-mat');
+	try
+		load(NN_dump_file,'trainedNet','-mat');
+	catch
+		pause(.05)
+		load(NN_dump_file,'trainedNet','-mat');
+	end	
 
 	% predict
 
@@ -332,7 +337,12 @@ n_spikes = length(spiketimes);
 this_nerve = self.common.data_channel_names{channel};
 
 % load the net 
-load(NN_dump_file,'trainedNet');
+try
+	load(NN_dump_file,'trainedNet','-mat');
+catch
+	pause(.05)
+	load(NN_dump_file,'trainedNet','-mat');
+end	
 
 if n_spikes == 0
 	self.say('No spikes detected, nothing to do.')
