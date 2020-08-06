@@ -83,7 +83,18 @@ if ~isempty(metadata_file) && options.ParseMetadata
 	H3 = structlib.md5hash(metadata);
 end
 
-H = hashlib.md5hash([H1 H2 H3]);
+
+% also hash the .metadata file which is used to store temperature
+serialzied_metadata = dir(fullfile(spikes_loc,'*.metadata'));
+if isempty(serialzied_metadata)
+	H4 = '';
+else
+	loadme = dir(fullfile(spikes_loc,'*.metadata'));
+	load(fullfile(loadme.folder,loadme.name),'-mat')
+	H4 = structlib.md5hash(metadata);
+end
+
+H = hashlib.md5hash([H1 H2 H3 H4]);
 cache_name = [H '.cache'];
 cache_name = fullfile(spikes_loc,cache_name);
 
@@ -125,7 +136,7 @@ for i = length(allfiles):-1:1
 		data(i).(options.neurons{j}) = [];
 	end
 	data(i).time_offset = 0;
-	data(i).T = NaN;
+	data(i).T = 0;
 	data(i).experiment_idx = categorical(cellstr(ExpName));
 	data(i).mask = [];
 	data(i).filename = '';
@@ -142,9 +153,6 @@ for i = length(allfiles):-1:1
 			data(i).(strtrim(variable_names{k})) = [];
 		end
 	end
-
-
-
 end
 
 
@@ -162,17 +170,18 @@ else
 	end
 end
 
+
 for i = 1:length(data)
 	data(i).filename = categorical({allfiles(i).name(1:min(strfind(allfiles(i).name,'.'))-1)});
+	assert(~isnan(data(i).time_offset),'time_offset is NaN, which should not have happened')
+	assert(~isnan(data(i).T),'T is NaN, which should not have happened')
 end
 
 
 if length(unique([data.filename])) ~= length(data)
-
 	
 	url = ['matlab:cd(' char(39) allfiles(1).folder char(39) ')'];
     fprintf(['\n\nThere are more .crabsort files than I expect. The most common reason for this \n is if there is a .crabsort file for a .crab file, \n and another one for a .ABF file, for example. \n To fix this, manually delete the ones you do not want from the \nstore_spikes_here folder. \n\n Click <a href = "' url '">here</a>  to go to that folder\n\n\n'])
-
 
 	error('Too many crabsort files')
 end
@@ -197,11 +206,6 @@ for i = 2:length(data)
 	end
 
 end
-
-
-
-
-
 
 
 % parse metadata if exists
@@ -267,8 +271,6 @@ if isfield(data,'temperature')
 		end
 	end
 end
-
-
 
 if options.stack
 

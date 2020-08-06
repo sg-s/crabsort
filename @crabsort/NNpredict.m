@@ -43,7 +43,11 @@ end
 
 NNdata = self.common.NNdata(channel);
 
-checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
+
+spikes_dir = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name));
+
+checkpoint_path = fullfile(spikes_dir,'network', self.common.data_channel_names{channel});
+
 H = NNdata.networkHash();
 NN_dump_file = [checkpoint_path filesep H '.mat'];
 
@@ -55,6 +59,10 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 
 	SpikeSign = logical(self.handles.spike_sign_control.Value);
 
+
+	if self.isIntracellular(channel)
+		SpikeSign = true;
+	end
 	
 
 	NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '_' mat2str(SpikeSign) '.network'];
@@ -109,7 +117,9 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 		self.sdp.MinPeakProminence = abs(self.handles.ax.ax(channel).YLim(1)/3);
 		self.sdp.MinPeakHeight = 0;
 		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
-		self.findSpikes()
+
+		self.findSpikes() % 3.6 seconds
+
 		spiketimes = find(self.putative_spikes(:,channel));
 
 		if length(spiketimes) == 0
@@ -120,24 +130,31 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 
 
 		% get spike shapes
-		X = self.getSnippets(channel,spiketimes);
+		
+		X = self.getSnippets(channel,spiketimes); % .7 s
+		
 
 		% normalize
 		% extracellular 
 		y_scale = abs(self.handles.ax.ax(channel).YLim(1));
-		for i = 1:size(X,2)
+		for i = 1:size(X,2)  % very fast
 			X(:,i) = X(:,i)/y_scale;
 		end
+
+
 
 
 		% resample
 		old_time = linspace(-self.sdp.t_before,self.sdp.t_after,size(X,1));
 		new_time = linspace(-self.sdp.t_before,self.sdp.t_after,91);
 
+
+
 		new_X = NaN(91,size(X,2));
-		for i = 1:size(X,2)
+		parfor i = 1:size(X,2)   % .7 s
 			new_X(:,i) = interp1(old_time,X(:,i),new_time);
 		end
+		
 
 		X = new_X;
 		clear new_X;
@@ -148,14 +165,18 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	
 
 	% load trained net
-	load(NN_dump_file,'trainedNet','-mat');
+	try
+		load(NN_dump_file,'trainedNet','-mat');
+	catch
+		pause(.05)
+		load(NN_dump_file,'trainedNet','-mat');
+	end	
 
 	% predict
 
 	N = size(X,2);
 	SZ = size(X,1);
 	X = reshape(X,SZ,1,1,N);
-
 
 	[Y_pred, scores] = classify(trainedNet,X);
 	N = size(scores,2);
@@ -316,7 +337,12 @@ n_spikes = length(spiketimes);
 this_nerve = self.common.data_channel_names{channel};
 
 % load the net 
-load(NN_dump_file,'trainedNet');
+try
+	load(NN_dump_file,'trainedNet','-mat');
+catch
+	pause(.05)
+	load(NN_dump_file,'trainedNet','-mat');
+end	
 
 if n_spikes == 0
 	self.say('No spikes detected, nothing to do.')

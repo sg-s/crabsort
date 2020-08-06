@@ -69,7 +69,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         installed_plugins
 
-        version_name  char = ['crabsort ' crabsort.version()]
+        version_name  char = ['crabsort ' crabsort.version()];
 
         % this is the list of channel names that you can choose from
         channel_names
@@ -86,7 +86,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         timer_handle (1,1) timer
 
          % parallel workers
-        workers parallel.FevalFuture
+        futures parallel.FevalFuture
 
         auto_predict (1,1) logical = true;
 
@@ -144,7 +144,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
     properties (Access = protected, Transient = true)
 
 
-        training_on
+        CurrentlyTraining
 
         NumWorkers = 0;
 
@@ -167,9 +167,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
             try
                 ssh = getpref('crabsort','store_spikes_here');
             catch
-                ssh = [fileparts(fileparts(which('crabsort'))) filesep 'spikes'];
-                setpref('crabsort','store_spikes_here',ssh);
-                filelib.mkdir(ssh)
+                error(['You have not configured where to store spikes. Use setpref(' char(39) 'crabsort' char(39) ',' char(39) 'store_spikes_here' char(39) ',' char(39) 'some_place' char(39) ')'])
             end
 
 

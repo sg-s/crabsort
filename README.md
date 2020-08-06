@@ -5,11 +5,6 @@
 
 # Installation
 
-## Using a MATLAB toolbox
-
-The simplest way to install `crabsort` is to [download this toolbox](https://github.com/sg-s/crabsort/releases/latest). Drag it onto your MATLAB workspace, and it should automatically install itself. 
-
-
 ## Using git
 
 Clone these repos:

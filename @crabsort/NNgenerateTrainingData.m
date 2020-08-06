@@ -30,7 +30,6 @@ if self.verbosity > 9
 end
 
 
-
 if isempty(self.channel_to_work_with)
 	return
 else

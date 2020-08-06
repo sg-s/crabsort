@@ -24,9 +24,9 @@ onto NNtrainOnParallelWorker()
 
 %}
 
-function NNtrain(self,channel, worker)
+function NNtrain(self,channel)
 
-assert(nargin == 3,'Need to specify the channel and worker')
+assert(nargin == 2,'Need to specify the channel')
 
 
 NNdata = self.common.NNdata(channel);
@@ -60,7 +60,9 @@ end
 
 self.NNmakeCheckpointDirs;
 
-checkpoint_path = [self.path_name 'network' filesep self.common.data_channel_names{channel}];
+spikes_dir = fullfile(getpref('crabsort','store_spikes_here'),pathlib.lowestFolder(self.path_name));
+
+checkpoint_path = fullfile(spikes_dir,'network', self.common.data_channel_names{channel});
 
 
 
@@ -85,12 +87,8 @@ network_data.hash = NNdata.networkHash();
 network_data.X =  NNdata.raw_data(:,focus_here);
 network_data.Y = NNdata.label_idx(focus_here);
 network_data.checkpoint_path = checkpoint_path;
+network_data.timestamp = NNdata.timestamp_last_modified;
 
 
-
-ts = strrep(NNdata.timestamp_last_modified,':','_');
-
-save_name = [self.path_name 'network' filesep  mat2str(worker) '_' ts '.job'];
-
-
-save(save_name,'network_data','-nocompression','-v7.3')
+% train on parallel worker
+self.futures(channel) = parfeval(@self.NNtrainOnParallelWorker,0,network_data);
