@@ -12,53 +12,37 @@ if isempty(self.channel_to_work_with)
 	return
 end
 
-idx = self.channel_to_work_with;
+channel = self.channel_to_work_with;
 
 
 
-% compute the extremum of the channel
-if isnan(self.ExtremumValues(idx))
-	e = max(abs(self.raw_data(:,idx)));
-	self.ExtremumValues(idx) = e;
+if strcmp(self.common.data_channel_names{channel},'temperature')
+	self.handles.ax.ax(channel).YLim = [5 35];
+	self.handles.ax.ax(channel).YTickMode = 'auto';
+	return
+end
+
+
+
+a = find(self.time >= self.handles.ax.ax(channel).XLim(1),1,'first');
+z = find(self.time >= self.handles.ax.ax(channel).XLim(2),1,'first');
+min_value = min(self.raw_data(a:z,channel));
+max_value = max(self.raw_data(a:z,channel));
+mean_value = mean(self.raw_data(a:z,channel));
+if self.isIntracellular(channel)
+	yrange = max_value - min_value + 1;
 else
-	e = self.ExtremumValues(idx);
+	yrange = max_value - min_value;
+end
+yl = (src.Value)*yrange;
+
+self.handles.ax.ax(channel).YLim = [mean_value-yl mean_value+yl];
+self.handles.ax.ax(channel).YTickMode = 'auto';
+
+
+if self.channel_stage(channel) == 0
+	self.sdp.MinPeakProminence = yl;
+	self.sdp.MaxPeakHeight = 2*yl;
 end
 
-
-e = e*1.5;
-
-is_temp = false;
-
-is_intracellular = any(isstrprop(self.common.data_channel_names{idx},'upper'));
-
-
-if strcmp(self.common.data_channel_names{idx},'temperature')
-	is_temp = true;
-end
-
-
-
-if ~is_temp && ~is_intracellular
-	% normal extracellular recording
-	yl = (src.Value)*e;
-	self.handles.ax.ax(idx).YLim = [-yl yl];
-	self.handles.ax.ax(idx).YTickMode = 'auto';
-	self.handles.ax.ax(idx).YTick = self.handles.ax.ax(idx).YTick(self.handles.ax.ax(idx).YTick>=0);
-elseif is_temp
-	self.handles.ax.ax(idx).YLim = [5 35];
-	self.handles.ax.ax(idx).YTickMode = 'auto';
-elseif is_intracellular
-	% find the mean
-	a = find(self.time >= self.handles.ax.ax(idx).XLim(1),1,'first');
-	z = find(self.time >= self.handles.ax.ax(idx).XLim(2),1,'first');
-	m = mean(self.raw_data(a:z,idx));
-	yl = (src.Value)*100+1;
-
-	self.handles.ax.ax(idx).YLim = [m-yl m+yl];
-	self.handles.ax.ax(idx).YTickMode = 'auto';
-end
-
-self.sdp.MinPeakProminence = yl;
-self.sdp.MaxPeakHeight = 2*yl;
-
-self.channel_ylims(idx) = yl;
+self.channel_ylims(channel) = yl;

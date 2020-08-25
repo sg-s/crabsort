@@ -49,6 +49,6 @@ S.raw_data = vertcat(S.raw_data{:})';
 
 % populate builtin_channel_names
 
-S.metadata = [];
+S.metadata = data.file;
 S.time = (1:length(S.raw_data))*max_dt;
 S.dt = max_dt;
