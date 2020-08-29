@@ -78,16 +78,21 @@ end
 allfiles = dir(fullfile(options.DataDir,'*.crab'));
 all_hashes = cell(length(allfiles),1);
 all_channel_names = {};
+all_dt = [];
 
 for i = 1:length(allfiles)
-	load(fullfile(allfiles(i).folder,allfiles(i).name),'-mat','builtin_channel_names');
+	load(fullfile(allfiles(i).folder,allfiles(i).name),'-mat','builtin_channel_names','dt');
+	all_dt(i) = dt;
 	all_channel_names = unique([all_channel_names; builtin_channel_names(:)]);
 	all_hashes{i} = hashlib.md5hash([builtin_channel_names{:}]);
 end
 
-% now go through all the .crab files and make them consistent 
 
-if length(unique(all_hashes)) > 1
+
+% now go through all the .crab files and make them consistent 
+max_dt = max(all_dt);
+
+if length(unique(all_hashes)) > 1 | length(unique(all_dt)) > 1
 	disp('Inconsistent files, harmonizing...')
 
 
@@ -107,7 +112,19 @@ if length(unique(all_hashes)) > 1
 			raw_data(:,strcmp(old_builtin_channel_names{k},all_channel_names)) = old_raw_data(:,k);
 		end
 
-		save(fullfile(allfiles(i).folder,allfiles(i).name),'raw_data','builtin_channel_names','-append')
+		% resample if need be
+		if dt ~= max_dt
+			time = (1:size(raw_data,1))*dt;
+			new_time = max_dt:max_dt:max(time);
+			new_raw_data = zeros(length(new_time),size(raw_data,2));
+			for j = 1:size(raw_data,2)
+				new_raw_data(:,j) = interp1(time(:),raw_data(:,j),new_time(:));
+			end
+			raw_data = new_raw_data;
+			dt = max_dt;
+		end
+
+		save(fullfile(allfiles(i).folder,allfiles(i).name),'raw_data','builtin_channel_names','-append','dt')
 	end
 
 end
