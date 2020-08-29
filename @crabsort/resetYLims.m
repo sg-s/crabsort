@@ -28,7 +28,7 @@ a = find(self.time >= self.handles.ax.ax(channel).XLim(1),1,'first');
 z = find(self.time >= self.handles.ax.ax(channel).XLim(2),1,'first');
 min_value = min(self.raw_data(a:z,channel));
 max_value = max(self.raw_data(a:z,channel));
-mean_value = mean(self.raw_data(a:z,channel));
+mean_value = median(self.raw_data(a:z,channel));
 if self.isIntracellular(channel)
 	yrange = max_value - min_value + 1;
 else

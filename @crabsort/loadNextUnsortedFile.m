@@ -42,3 +42,5 @@ for i = 1:length(allfiles)
 end
 
 should_stop = true;
+
+msgbox('All files have this channel sorted','All done!');

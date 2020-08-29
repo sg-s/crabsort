@@ -56,3 +56,4 @@ if any(isinf(yl))
 end
 
 self.handles.isi_ax.YLim = yl;
+self.handles.isi_ax.XLim = [0 self.time(end)];

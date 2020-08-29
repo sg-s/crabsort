@@ -12,10 +12,10 @@ end
 
 
 self = crabsort(false);
-self.path_name = pwd;
+self.path_name = filename.folder;
 self.file_name = filename.name;
 
-fprintf(strlib.fix(self.file_name,30))
+fprintf([strlib.fix(self.file_name,28) '  '])
 
 % attempt to load the file directly
 S.raw_data = [];
@@ -42,18 +42,18 @@ clearvars self
 
 
 if isempty(S.raw_data)
-	if ~exist('corrupted','dir')
-		mkdir('corrupted')
+	if ~exist(fullfile(filename.folder,'corrupted'),'dir')
+		mkdir(fullfile(filename.folder,'corrupted'))
 	end
 	try
-		movefile( filename.name,['corrupted' filesep  filename.name])
+		movefile(fullfile(filename.folder,filename.name),fullfile(filename.folder,'corrupted' ,filename.name))
 	catch
 	end
 
 	fprintf('FATAL: could not load file\n')
 else
 
-	fprintf(strlib.fix(mat2str(size(S.raw_data,2)),25))
+	fprintf([strlib.fix(mat2str(size(S.raw_data,2)),14) ' '])
 
 	H = hashlib.md5hash([S.builtin_channel_names{:}]);
 	fprintf([strlib.fix(H,15) '\n'])
@@ -66,6 +66,6 @@ else
 	metadata = S.metadata;
 
 	file_name = strrep(filename.name,file_ext(2:end),'.crab');
-	save(file_name,'raw_data','builtin_channel_names','builtin_channel_names','dt','metadata','-nocompression','-v7.3')
+	save(fullfile(filename.folder,file_name),'raw_data','builtin_channel_names','builtin_channel_names','dt','metadata','-nocompression','-v7.3')
 
 end

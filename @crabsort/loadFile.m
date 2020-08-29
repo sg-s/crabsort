@@ -101,10 +101,6 @@ if nargin > 1 && strcmp(src.Style ,'pushbutton') && strcmp(src.String,'Load File
         self.path_name = path_name;
     end
 
-    if ~filelib.isWriteable(self.path_name)
-        warndlg('The file you are loading is in a read-only directory. You will not be able to sort spikes here','crabsort')
-    end
-
     % check to make sure all .ABF files have the same structure
     if strcmpi(self.file_name(end-2:end),'ABF') && ~self.pref.skip_abf_check
         self.checkABFFiles;
@@ -261,7 +257,7 @@ self.raw_data_size = size(self.raw_data);
 if hard_load
     % reset common
     self.common = crabsort.common(self.n_channels);
-    self.futures = repmat(parallel.FevalFuture,self.n_channels,1)
+    self.futures = repmat(parallel.FevalFuture,self.n_channels,1);
 end
 
 
