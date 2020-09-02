@@ -185,7 +185,7 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	SZ = size(X,1);
 	X = reshape(X,SZ,1,1,N);
 
-	[Y_pred, scores] = classify(trainedNet,X,'MiniBatchSize',floor(size(X,4)/20));
+	[Y_pred, scores] = classify(trainedNet,X,'MiniBatchSize',ceil(size(X,4)/20));
 
 
 	N = size(scores,2);
@@ -391,7 +391,7 @@ X = reshape(X,SZ,1,1,N);
 X = X/NNdata.norm_factor;
 
 
-[Y_pred, scores] = classify(trainedNet,X,'MiniBatchSize',floor(size(X,4)/20));
+[Y_pred, scores] = classify(trainedNet,X,'MiniBatchSize',ceil(size(X,4)/20));
 
 N = size(scores,2);
 uncertain_spikes = max(scores,[],2) < (1/(N-1)*(.4)) + .4;
