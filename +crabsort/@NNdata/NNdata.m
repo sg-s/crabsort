@@ -64,6 +64,11 @@ methods
 
 	function TF = isMoreTrainingNeeded(self)
 
+		if isempty(self.timestamp_last_trained)
+			TF = true;
+			return
+		end
+
 
 		if datenum(self.timestamp_last_trained) < datenum(self.timestamp_last_modified)
 			% NNData modified after last trained, so train more
