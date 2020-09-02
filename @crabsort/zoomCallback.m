@@ -23,12 +23,21 @@ any plot in the main figure. Note that this alters only the X zoom
 
 %}
 
-function zoomCallback(self,~,event)
+function zoomCallback(self,src,event)
 
-d = dbstack;
-if self.verbosity > 3
-	disp(['[' mfilename '] called by ' d(2).name])
+
+
+if  self.handles.isi_ax == event.Axes
+	% scrolling on the ISI axis
+
+	% first, undo the automatic zooming
+	XLim = self.handles.isi_ax.XLim;
+	self.handles.isi_ax.XLim = [0 self.time(end)];
+
+
+	self.scroll(XLim);
 end
+
 
 
 idx = find(self.handles.ax.ax == event.Axes);
@@ -39,9 +48,7 @@ for i = 1:length(self.handles.ax.ax)
 		continue
 	end
 
-
 	self.handles.ax.ax(i).XLim = self.handles.ax.ax(idx).XLim;
-
 
 end 
 
