@@ -65,7 +65,14 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	end
 	
 
-	NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '_' mat2str(SpikeSign) '.network'];
+
+	if ~isnan(str2double(this_nerve(end)))
+		temp = this_nerve(1:end-1);
+		NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep temp '_' mat2str(SpikeSign) '.network'];
+	else
+		NN_dump_file = [fileparts(fileparts(which('crabsort'))) filesep 'global-network' filesep this_nerve '_' mat2str(SpikeSign) '.network'];
+	end
+	
 
 	if exist(NN_dump_file,'file') ~= 2
 		self.say('[ABORT] No network that I can use...')
@@ -178,7 +185,9 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 	SZ = size(X,1);
 	X = reshape(X,SZ,1,1,N);
 
-	[Y_pred, scores] = classify(trainedNet,X);
+	[Y_pred, scores] = classify(trainedNet,X,'MiniBatchSize',floor(size(X,4)/20));
+
+
 	N = size(scores,2);
 	uncertain_spikes = max(scores,[],2) < (1/(N-1)*(.4)) + .4;
 	putative_spikes = find(self.putative_spikes(:,channel));
@@ -382,9 +391,7 @@ X = reshape(X,SZ,1,1,N);
 X = X/NNdata.norm_factor;
 
 
-
-[Y_pred, scores] = classify(trainedNet,X);
-
+[Y_pred, scores] = classify(trainedNet,X,'MiniBatchSize',floor(size(X,4)/20));
 
 N = size(scores,2);
 uncertain_spikes = max(scores,[],2) < (1/(N-1)*(.4)) + .4;
