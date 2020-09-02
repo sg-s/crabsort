@@ -170,6 +170,12 @@ hold(self.handles.isi_ax,'on')
 for i = 1:5
 	self.handles.isi_plot(i) = plot(self.handles.isi_ax,NaN,NaN,'.','MarkerSize',20);
 end
+
+
+% used to plot the overall data when no spikes are sorted to show
+self.handles.isi_data_maxmin = plot(self.handles.isi_ax,NaN,NaN,'-','Color',[.5 .5 .5]);
+
+
 self.handles.isi_plot_left = plot(self.handles.isi_ax,[NaN NaN],[NaN NaN],'k--');
 self.handles.isi_plot_right = plot(self.handles.isi_ax,[NaN NaN],[NaN NaN],'k--');
 ylabel(self.handles.isi_ax,' ISI (s)')
