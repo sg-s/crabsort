@@ -18,6 +18,14 @@ if self.verbosity > 9
 end
 
 
+if nargin == 3
+    % this is being called by puppeteer
+    % we assume the value is set by the valuechaningFcn
+    % so we can trust self.sdp
+    Npeaks = self.raw_data_size(1);
+
+end
+
 if nargin < 2
     Npeaks = self.raw_data_size(1);
 end
@@ -52,6 +60,7 @@ MaxPeakHeight = self.sdp.MaxPeakHeight;
 if ~self.sdp.spike_sign
     V = -V;
 end
+
 [~,loc] = findpeaks(V,'MinPeakHeight',MinPeakHeight,'MinPeakProminence',MinPeakProminence,'Threshold',Threshold,'MinPeakDistance',MinPeakDistance,'MinPeakWidth',MinPeakWidth,'MaxPeakWidth',MaxPeakWidth,'Npeaks',Npeaks);
 loc(V(loc) > MaxPeakHeight) = [];
 
@@ -64,7 +73,7 @@ self.putative_spikes(loc,channel) = 1;
 
 
 
-if  Npeaks ~= self.raw_data_size(1)
+if  Npeaks == self.raw_data_size(1)
     % Npeaks is not being called by train, so 
     % after finding spikes, we should update the channel_stage
     if any(self.putative_spikes(:,self.channel_to_work_with))

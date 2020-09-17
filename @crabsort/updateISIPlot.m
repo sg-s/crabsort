@@ -41,6 +41,10 @@ if ~isfield(self.spikes,nerve)
 
 else
 
+	self.handles.isi_data_maxmin.YData = NaN;
+	self.handles.isi_data_maxmin.XData = NaN;
+
+
 	self.handles.isi_ax.YScale = 'log';
 	ylabel(self.handles.isi_ax,'ISI (s)')
 
@@ -50,7 +54,7 @@ else
 
 	for i = length(neurons):-1:1
 
-		spiketimes = self.spikes.(nerve).(neurons{i});
+		spiketimes = sort(self.spikes.(nerve).(neurons{i}));
 		isis = [diff(spiketimes); NaN];
 
 		if isempty(spiketimes)
@@ -78,6 +82,7 @@ else
 	
 
 end
+
 
 self.handles.isi_ax.YLim = yl;
 
