@@ -15,7 +15,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
 
         % spike detection parameters
-        sdp (1,1) crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.default()
+        sdp (1,1) crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters()
 
 
         % holds spiketimes of all neurons on all nerves
@@ -28,12 +28,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
     properties (Transient = true)
 
         % file handling 
-        file_name
-        path_name
+        file_name char
+        path_name char
 
         R  % this holds the dimensionality reduced data
 
-        channel_to_work_with double
+        channel_to_work_with double 
 
         pref struct % stores the preferences
 
@@ -41,7 +41,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         verbosity (1,1) double = 0;
 
         % common data to all files in this folder
-        common 
+        common crabsort.common
 
         debug_mode (1,1) logical = false;
 
@@ -56,18 +56,18 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
     properties (SetAccess = protected, Transient = true)
 
         % UI
-        handles % a structure that handles everything else
+        handles (1,1)  struct % a structure that handles everything else
 
-        raw_data
+        raw_data double
 
         % this structure maps nerves onto the neurons that 
         % are expected to be seen on them 
         nerve2neuron (1,1) struct
 
 
-        putative_spikes
+        putative_spikes logical
 
-        installed_plugins
+        installed_plugins struct
 
         version_name  char = ['crabsort ' crabsort.version()];
 
@@ -86,7 +86,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         timer_handle (1,1) timer
 
          % parallel workers
-        futures parallel.FevalFuture
+        futures (:,1) parallel.FevalFuture
 
         auto_predict (1,1) logical = true;
 
@@ -94,7 +94,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
         mask
 
-        ExtremumValues = NaN(100,1);
+        ExtremumValues double = NaN(100,1);
 
 
     end
@@ -111,12 +111,12 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         n_channels
         
         
-        raw_data_size
+        raw_data_size (1,2) double = [0 0]
 
         % for reasons revolving around the crappiness of the ABF 
         % file format, dt will be stored after being rounded off to
         % the nearest microsecond
-        dt  double
+        dt  (1,1) double = NaN
         channel_ylims
 
         
@@ -130,7 +130,7 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
         % 1 == spikes found (need to reduce dimensions)
         % 2 == dimensions reduced (need to cluster)
         % 3 == done (spikes assigned to neurons)
-        channel_stage double
+        channel_stage (:,1) double
 
 
         % ignores this section
@@ -140,15 +140,6 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
 
 
     end
-
-    properties (Access = protected, Transient = true)
-
-
-        CurrentlyTraining
-
-        NumWorkers = 0;
-
-    end % end protected props
 
 
     methods

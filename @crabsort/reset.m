@@ -14,7 +14,7 @@ end
 
 self.raw_data = [];
 self.time = [];
-self.dt = [];
+self.dt = NaN;
 self.spikes = [];
 self.metadata = [];
 self.putative_spikes = [];

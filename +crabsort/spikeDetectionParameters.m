@@ -8,51 +8,23 @@ properties
 
 
 	% these go directly into findpeaks
-	MinPeakHeight@double
-	MinPeakProminence@double
-	Threshold@double
-	MinPeakDistance@double
-	MinPeakWidth@double 
-	MaxPeakWidth@double
+	MinPeakHeight  (1,1) double {mustBeFinite} = 10
+	MinPeakProminence  (1,1) double {mustBeFinite} = 1
+	Threshold  (1,1) double {mustBeFinite} = 0
+	MinPeakDistance  (1,1) double {mustBeFinite} = 0
+	MinPeakWidth  (1,1) double {mustBeFinite, mustBeNonnegative}  = 0
+	MaxPeakWidth  (1,1) double {mustBeFinite} = 1e3
 
 	% some extra parameters
-	MaxPeakHeight@double
-	spike_sign@logical
-	t_before@double 
-	t_after@double
+	MaxPeakHeight  (1,1) double {mustBeFinite} = 10
+	spike_sign  (1,1) logical = true
+	t_before  (1,1) double {mustBeFinite, mustBePositive} = 4
+	t_after  (1,1) double {mustBeFinite, mustBePositive} = 5
 	
 
 end
 
 
-
-methods (Static)
-
-	% we're overloading the empty method
-	% so that we can define some defaults
-	function self = empty()
-
-		self = crabsort.spikeDetectionParameters();
-	end
-
-	function self = default()
-
-		self = crabsort.spikeDetectionParameters();
-		
-		self.MinPeakHeight = 0;
-		self.MaxPeakHeight = 10;
-		self.MinPeakProminence = 1;
-		self.Threshold = 0;		
-		self.MinPeakDistance = 0;
-		self.MinPeakWidth = 0;
-		self.MaxPeakWidth = 1e3;
-		self.spike_sign = true;
-		self.t_before = 4;
-		self.t_after = 5;
-
-	end
-
-end
 
 methods
 
@@ -65,6 +37,12 @@ methods
 		self2.MaxPeakHeight = 0;
 		H = hash@Hashable(self2);
 
+	end
+
+	% has the SDP been changed from default values?
+	function TF = isdefault(self)
+		sdp = crabsort.spikeDetectionParameters;
+		TF = strcmp(self.hash,sdp.hash);
 	end
 
 end

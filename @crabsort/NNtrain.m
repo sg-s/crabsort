@@ -31,10 +31,6 @@ assert(nargin == 2,'Need to specify the channel')
 
 NNdata = self.common.NNdata(channel);
 
-% check if there's automate data on this channel
-if ~canDetectSpikes(NNdata)
-	return
-end
 
 % check if there's enough data to train on, with at least two
 % categories

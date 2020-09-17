@@ -14,18 +14,16 @@ end
 
 
 
-if any(isnan(corelib.vectorise(self.common.NNdata(channel).sdp)))
+if self.common.NNdata(channel).sdp.isdefault
 
-	% we write to NNdata only if empty. this guarantees
-	% that we cannot overwrite it
+	% we write to NNdata only if it has default values. this guarantees
+	% that we cannot overwrite it accidentally 
 
 	self.common.NNdata(channel).sdp = self.sdp;
 	self.common.NNdata(channel).other_nerves_control = logical(self.handles.multi_channel_control.Value);
 	self.common.NNdata(channel).other_nerves = self.handles.multi_channel_control_text.String;
 
 else
-	warning('Not writing to NNdata to avoid overwriring')
-
-
+	warning('Not writing to NNdata to avoid overwriting data')
 end
 

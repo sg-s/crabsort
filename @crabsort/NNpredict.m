@@ -52,7 +52,7 @@ H = NNdata.networkHash();
 NN_dump_file = [checkpoint_path filesep H '.mat'];
 
 
-if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
+if  exist(NN_dump_file,'file') ~= 2
 
 	% maybe there is a default network we can use?
 	this_nerve = self.common.data_channel_names{self.channel_to_work_with};
@@ -83,7 +83,7 @@ if ~NNdata.canDetectSpikes() || exist(NN_dump_file,'file') ~= 2
 
 
 	% OK, let's use the default SDP 
-	self.sdp = crabsort.spikeDetectionParameters.default;
+	self.sdp = crabsort.spikeDetectionParameters();
 
 	if strcmp(upper(this_nerve),this_nerve)
 		self.sdp.MinPeakProminence = 5;

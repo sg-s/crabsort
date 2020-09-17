@@ -1,3 +1,7 @@
+% computes hash of the other nerves control and the other nerves
+% and all spike detection parameters, which is used to identify the network
+% that is trained and used
+
 function H = networkHash(self)
 
 h1 = self.sdp.hash;

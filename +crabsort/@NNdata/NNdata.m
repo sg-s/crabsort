@@ -20,7 +20,7 @@ properties
 
 
 	% spike detection parameters
-	sdp crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters.empty()
+	sdp (1,1) crabsort.spikeDetectionParameters = crabsort.spikeDetectionParameters()
 
 	% define what a data frame is
 	other_nerves char = ''

@@ -188,8 +188,6 @@ load_file_handle = str2func(['csLoadFile.' chosen_data_ext]);
 
 self.builtin_channel_names = {};
 
-
-
 try
     S = load_file_handle(self);
     fn = fieldnames(S);
@@ -246,6 +244,7 @@ end
 assert(max(self.time>5),'This data file has less than 5 seconds of data. Cannot load.')
 
 self.n_channels = size(self.raw_data,2);
+
 
 self.dt = mean(diff(self.time));
 
@@ -506,7 +505,6 @@ if ~isempty(self.handles)
 end
 
 catch err
-
 
     disp(['Error loading file: ' self.path_name filesep self.file_name])
 
