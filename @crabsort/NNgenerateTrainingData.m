@@ -161,4 +161,4 @@ end
 
 self.common.NNdata(channel) = NNdata;
 
-self.common.NNdata(9).timestamp_last_modified = datestr(now);
+self.common.NNdata(channel).timestamp_last_modified = datestr(now);
