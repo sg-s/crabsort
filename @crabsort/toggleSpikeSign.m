@@ -16,5 +16,3 @@ if self.sdp.spike_sign
 else
 	set(self.handles.spike_sign_control,'String','-ve spikes')
 end
-
-self.common.NNdata(self.channel_to_work_with).sdp.spike_sign = self.sdp.spike_sign;
