@@ -6,18 +6,19 @@ spikesfolder = getpref('crabsort','store_spikes_here');
 if nargin == 0
 	% do it for all of them
 	allexps = dir(spikesfolder);
-	for i = 1:length(allexps)
+	for i = length(allexps):-1:1
 
 		if strcmp(allexps(i).name(1),'.')
+			continue
+		end
+
+		if strcmp(allexps(i).name,'crabsort-db.xlsx')
 			continue
 		end
 
 		crabsort.database.cacheTemperature(allexps(i).name)
 
 	end
-
-
-
 	return
 
 end

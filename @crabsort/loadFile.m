@@ -367,7 +367,7 @@ self.dt = round(self.dt*1e6)/1e6;
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if isempty(self.handles)
+if isempty(fieldnames(self.handles))
     return
 end
 
@@ -505,6 +505,9 @@ if ~isempty(self.handles)
 end
 
 catch err
+
+
+    keyboard
 
     disp(['Error loading file: ' self.path_name filesep self.file_name])
 

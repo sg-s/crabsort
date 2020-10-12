@@ -51,18 +51,10 @@ else
 	msg = {'','','','','','','',msg};
 end
 
-if block_ux
+if block_ux & ~isempty(fieldnames(self.handles))
+
     uistack(self.handles.popup,'top')
     self.handles.popup.Visible = 'on';
     self.handles.popup.String = msg;
     drawnow;
-
-
-else
-	disp('Not coded')
-	if self.debug_mode
-		keyboard
-	else
-		warning('Error in Display Status')
-	end
 end
