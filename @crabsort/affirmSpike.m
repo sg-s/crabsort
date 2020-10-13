@@ -3,6 +3,14 @@
 
 function affirmSpike(self, channel, spike_position, spike_name)
 
+arguments
+	self (1,1) crabsort
+	channel (1,1) double 
+	spike_position (1,1) double 
+	spike_name char
+
+end
+
 if self.verbosity > 9
 	disp(mfilename)
 end

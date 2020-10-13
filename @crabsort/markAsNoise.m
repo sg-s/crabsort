@@ -1,6 +1,12 @@
 % removes a given spiketime from spikes
 
-function markAsNoise(self, this_nerve,this_spike)
+function markAsNoise(self,this_nerve,this_spike)
+
+arguments
+	self (1,1) crabsort
+	this_nerve char
+	this_spike double
+end
 
 if self.verbosity > 9
 	disp(mfilename)

@@ -1,5 +1,10 @@
 function TF = shouldAutomateStop(self, channel)
 
+arguments
+	self (1,1) crabsort
+	channel (1,1) double
+end
+
 TF = false;
 
 if self.automate_action == crabsort.automateAction.none

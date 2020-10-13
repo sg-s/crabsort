@@ -6,11 +6,14 @@
 function pruneSpikes(self, based_on, tolerance)
 
 
+arguments
+	self (1,1) crabsort
+	based_on char
+	tolerance (1,1) double = 5e-4
+end
+
 disp('pruning spikes...')
 
-if nargin < 3
-	tolerance = 5e-4; % seconds
-end
 
 assert(~isempty(strfind(based_on,'/')),'based_on not formatted correctly')
 

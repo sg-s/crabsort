@@ -13,6 +13,12 @@
 
 function findSpikes(self,Npeaks,~)
 
+arguments
+    self (1,1) crabsort
+    
+    Npeaks (1,1) double 
+end
+
 if self.verbosity > 9
     disp(mfilename)
 end

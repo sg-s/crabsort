@@ -13,6 +13,12 @@
 
 function V_snippets = getSnippets(self,channel, spiketimes)
 
+arguments
+	self (1,1) crabsort
+	channel (1,1) double 
+	spiketimes (:,1) 
+end
+
 if self.verbosity > 9
 	disp(mfilename)
 end

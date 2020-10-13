@@ -10,13 +10,16 @@
 
 function getDataToReduce(self, OverWriteYScale)
 
+arguments
+	self (1,1) crabsort
+	OverWriteYScale (1,1) logical = false
+end
+
 if self.verbosity > 9
 	disp(mfilename)
 end
 
-if nargin == 1
-	OverWriteYScale = false;
-end
+
 
 % always get the spike shape. this is always included
 % in the data to reduce

@@ -17,7 +17,7 @@ C.NNtrain(channel, worker)
 
 **Description**
 
-Trains a neural network using labelled data on the current channel
+Trains a neural network using labeled data on the current channel
 
 this is a little shim function which offloads all its work
 onto NNtrainOnParallelWorker()
@@ -25,6 +25,12 @@ onto NNtrainOnParallelWorker()
 %}
 
 function NNtrain(self,channel)
+
+
+arguments
+	self (1,1) crabsort
+	channel (1,1) double 
+end
 
 assert(nargin == 2,'Need to specify the channel')
 

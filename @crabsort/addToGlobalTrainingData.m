@@ -7,7 +7,11 @@
 
 function addToGlobalTrainingData(self, nerve_name)
 
+arguments
+	self (1,1) crabsort
+	nerve_name char
 
+end
 
 if isempty(self.channel_to_work_with)
 	return

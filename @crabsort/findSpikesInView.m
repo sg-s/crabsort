@@ -1,7 +1,11 @@
 % this function finds spikes in view
 % called when sliders are moved in the find spikes popup
 
-function findSpikesInView(self,parameter,value)
+function findSpikesInView(self,~,~)
+
+arguments
+	self (1,1) crabsort 
+end
 
 if self.verbosity > 9
 	disp(mfilename)

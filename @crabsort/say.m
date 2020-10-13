@@ -23,6 +23,11 @@ will automatically get erased due to the NNtimer
 %}
 function say(self,msg)
 
+arguments
+	self (1,1) crabsort
+	msg char
+end
+
 self.handles.main_fig.Name = [self.file_name ' -- ' msg];
 self.handles.main_fig.UserData = now;
 drawnow limitrate

@@ -2,6 +2,12 @@
 
 function [accuracy, timestamp_last_trained] = NNgetCurrentAccuracy(self, worker)
 
+arguments
+	self (1,1) crabsort
+	worker (1,1) double
+
+end
+
 if self.verbosity > 9
 	disp(mfilename)
 end

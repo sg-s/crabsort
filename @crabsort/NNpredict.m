@@ -23,6 +23,11 @@ makes predictions using a trained neural network
 
 function NNpredict(self, futz_factor)
 
+arguments
+	self (1,1) crabsort
+	futz_factor (1,1) double 
+end
+
 channel = self.channel_to_work_with;
 if isempty(channel)
 	return
@@ -231,7 +236,7 @@ if  exist(NN_dump_file,'file') ~= 2
 
 	% run PostPredictAction, if any
 	if ~isempty(self.PostPredictAction) && strcmp(self.common.data_channel_names{self.channel_to_work_with},self.PostPredictAction.channel)
-		self.PostPredictAction.method(self.PostPredictAction.arguments{:})
+		self.PostPredictAction.method(self.PostPredictAction.args{:})
 
 	end
 
@@ -369,7 +374,7 @@ if n_spikes == 0
 
 
 	if ~isempty(self.PostPredictAction) && strcmp(self.common.data_channel_names{self.channel_to_work_with},self.PostPredictAction.channel)
-		self.PostPredictAction.method(self.PostPredictAction.arguments{:})
+		self.PostPredictAction.method(self.PostPredictAction.args{:})
 
 	end
 
@@ -469,6 +474,6 @@ self.handles.ax.channel_label_chooser(self.channel_to_work_with).Enable = 'off';
 
 
 if ~isempty(self.PostPredictAction) && strcmp(self.common.data_channel_names{self.channel_to_work_with},self.PostPredictAction.channel)
-	self.PostPredictAction.method(self.PostPredictAction.arguments{:})
+	self.PostPredictAction.method(self.PostPredictAction.args{:})
 
 end

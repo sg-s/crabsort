@@ -3,7 +3,9 @@
 
 function NNtrainOnParallelWorker(network_data)
 
-
+arguments 
+    network_data (1,1) struct
+end
 
 
 

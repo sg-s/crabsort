@@ -18,7 +18,7 @@ crabsort.NNmake(input_size,n_classes)
 **Description**
 
 a static method of crabsort that
-makes a convolutional neural network
+makes a fully connected neural network
 
 %}
 

@@ -506,9 +506,6 @@ end
 
 catch err
 
-
-    keyboard
-
     disp(['Error loading file: ' self.path_name filesep self.file_name])
 
     opts.WindowStyle = 'modal'; opts.Interpreter = 'tex';

@@ -2,6 +2,11 @@
 
 function TF = isIntracellular(self, channel)
 
+arguments
+	self (1,1) crabsort
+	channel (1,1) double 
+end
+
 if self.verbosity > 9
 	disp(mfilename)
 end

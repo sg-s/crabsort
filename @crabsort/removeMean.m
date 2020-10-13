@@ -9,6 +9,11 @@
 function removeMean(self, channel)
 
 
+arguments
+	self (1,1) crabsort
+	channel (1,1) double
+end
+
 if strcmp(self.common.data_channel_names{channel},'temperature')
 	return
 end

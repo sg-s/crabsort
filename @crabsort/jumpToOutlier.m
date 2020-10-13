@@ -1,5 +1,10 @@
 function jumpToOutlier(self,direction)
 
+arguments
+	self (1,1) crabsort
+	direction char
+end
+
 if self.verbosity > 9
 	disp(mfilename)
 end
