@@ -25,7 +25,7 @@ function NNpredict(self, futz_factor)
 
 arguments
 	self (1,1) crabsort
-	futz_factor (1,1) double 
+	futz_factor (1,1) double = self.futz_factor(self.channel_to_work_with);
 end
 
 channel = self.channel_to_work_with;
@@ -33,10 +33,6 @@ if isempty(channel)
 	return
 end
 
-
-if nargin == 1
-	futz_factor = self.futz_factor(channel);
-end
 
 
 if ~self.auto_predict && self.automate_action == crabsort.automateAction.none

@@ -4,7 +4,7 @@ function N = getNeuronsOnThisNerve(self, channel)
 
 arguments
 	self (1,1) crabsort
-	channel (1,1) double
+	channel (1,1) double = self.channel_to_work_with
 end
 
 if self.verbosity > 9

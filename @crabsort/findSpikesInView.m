@@ -5,6 +5,8 @@ function findSpikesInView(self,~,~)
 
 arguments
 	self (1,1) crabsort 
+	~
+	~
 end
 
 if self.verbosity > 9

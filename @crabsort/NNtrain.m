@@ -32,8 +32,6 @@ arguments
 	channel (1,1) double 
 end
 
-assert(nargin == 2,'Need to specify the channel')
-
 
 NNdata = self.common.NNdata(channel);
 

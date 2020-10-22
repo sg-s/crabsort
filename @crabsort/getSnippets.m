@@ -15,8 +15,8 @@ function V_snippets = getSnippets(self,channel, spiketimes)
 
 arguments
 	self (1,1) crabsort
-	channel (1,1) double 
-	spiketimes (:,1) 
+	channel (1,1) double {mustBeInteger}
+	spiketimes (:,1) = find(self.putative_spikes(:,channel)) 
 end
 
 if self.verbosity > 9
@@ -24,16 +24,12 @@ if self.verbosity > 9
 end
 
 
-if nargin == 2
 
-	assert(mathlib.iswhole(channel),'channel should be a whole number')
-	assert(channel>0,'Channel must be +ve integer')
-	assert(channel <= self.n_channels,'Channel must be <= self.n_channels')
+assert(channel>0,'Channel must be +ve integer')
+assert(channel <= self.n_channels,'Channel must be <= self.n_channels')
 
-	spiketimes = self.putative_spikes(:,channel);
-	spiketimes = find(spiketimes);
 
-end
+
 
 if isempty(spiketimes)
 	return

@@ -16,8 +16,10 @@ function findSpikes(self,Npeaks,~)
 arguments
     self (1,1) crabsort
     
-    Npeaks (1,1) double 
+    Npeaks (1,1) = round(self.raw_data_size(1)/100);
+    ~
 end
+
 
 if self.verbosity > 9
     disp(mfilename)
@@ -28,13 +30,11 @@ if nargin == 3
     % this is being called by puppeteer
     % we assume the value is set by the valuechaningFcn
     % so we can trust self.sdp
-    Npeaks = self.raw_data_size(1);
+    Npeaks = round(self.raw_data_size(1)/100);
 
 end
 
-if nargin < 2
-    Npeaks = self.raw_data_size(1);
-end
+
 
 
 if isempty(self.channel_to_work_with)
