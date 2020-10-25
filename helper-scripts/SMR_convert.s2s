@@ -1,0 +1,31 @@
+var ok%, list%, name$[1000], j%, fname$, n%, ext$, basename$, outname$;
+
+ok%:=FilePathSet("");
+
+if ok%<>0 then
+  halt
+endif
+
+DlgCreate("Select");
+DlgString(1, "Filepath:", 100);
+list%:= FileList(name$[],-1);
+
+for j%:=0 to list%-1 step 1 do
+    fname$:=name$[j%];
+    n%:=Len(fname$);
+    ext$:=Mid$(fname$,n%-4);
+    if ext$=".smr" then
+        FileOpen(fname$,0,1);
+        Trimright(fname$, ".smr");
+        outname$:=fname$+".mat";
+        PrintLog("%s\n",fname$);
+        ExportChanList(1); 'Initialise the channel list
+        ExportChanList(0, MaxTime(), -1);
+        FileSaveAs(outname$,100,0,"",0,
+        "UseSName=1|UseCName=0|WaveTimes=0|BinFreq=0|BinTimes=0|WaveData=2|MarkAs=1|TMarkAs=2|RMarkAs=2|RMarkData=2|WaveMarkAs=2|WaveMarkData=2|Compat=0|WaveAll=1|WaveSameN=0"); 'Export (string args)
+        FileClose(0);
+    endif
+next
+
+
+'Printlog (name$[]);
