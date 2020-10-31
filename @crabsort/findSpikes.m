@@ -79,7 +79,7 @@ self.putative_spikes(loc,channel) = 1;
 
 
 
-if  Npeaks == self.raw_data_size(1)
+if  Npeaks == round(self.raw_data_size(1)/100)
     % Npeaks is not being called by train, so 
     % after finding spikes, we should update the channel_stage
     if any(self.putative_spikes(:,self.channel_to_work_with))
