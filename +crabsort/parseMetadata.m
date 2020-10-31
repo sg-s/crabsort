@@ -31,6 +31,7 @@ for i = 1:length(allfiles)
 end
 
 
+
 for i = 1:length(lines)
 	
 	this_line = strsplit(strtrim(lines{i}),' ');
@@ -46,19 +47,19 @@ for i = 1:length(lines)
 	case 1
 		% ignore it
 	case 2
+
+		% get file_idx right
+		if isempty(file_idx)
+			file_idx = (find(file_identifiers > str2double(this_line{1}),1,'first'));
+		end
+
 		if  strcmp(this_line{2},'decentralized')
-			% get file_idx right
-			if isempty(file_idx)
-				file_idx = (find(file_identifiers > str2double(this_line{1}),1,'first'));
-			end
-
 			metadata.decentralized(file_idx:end) = true;
-
 
 		elseif ~isempty(file_idx)
 			% interpret as temperature that is stored in .txt file
 			% e.g. in Sara's data 
-			metadata.temperature(file_idx) = str2double(this_line{2});
+			metadata.temperature(file_idx:end) = str2double(this_line{2});
 		end
 		
 

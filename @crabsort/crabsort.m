@@ -177,8 +177,9 @@ classdef crabsort < handle & matlab.mixin.CustomDisplay & UpdateableHandle
             v = ver;
             nn_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Neural Network'), {v.Name},'UniformOutput', false)));
             dl_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Deep Learning'), {v.Name},'UniformOutput', false)));
-
-            assert(nn_toolbox | dl_toolbox, 'Neural network toolbox not installed!');
+            if make_gui
+                assert(nn_toolbox | dl_toolbox, 'Neural network toolbox not installed!');
+            end
 
             pc_toolbox = any(~cellfun(@isempty, cellfun(@(x) strfind(x, 'Parallel Computing'), {v.Name},'UniformOutput', false)));
             assert(pc_toolbox, 'Parallel computing toolbox not installed!')
