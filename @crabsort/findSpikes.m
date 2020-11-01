@@ -16,7 +16,7 @@ function findSpikes(self,Npeaks,~)
 arguments
     self (1,1) crabsort
     
-    Npeaks (1,1) = round(self.raw_data_size(1)/100);
+    Npeaks (1,1) = round(self.raw_data_size(1));
     ~
 end
 
@@ -30,7 +30,7 @@ if nargin == 3
     % this is being called by puppeteer
     % we assume the value is set by the valuechaningFcn
     % so we can trust self.sdp
-    Npeaks = round(self.raw_data_size(1)/100);
+    Npeaks = round(self.raw_data_size(1));
 
 end
 
@@ -79,7 +79,7 @@ self.putative_spikes(loc,channel) = 1;
 
 
 
-if  Npeaks == round(self.raw_data_size(1)/100)
+if  Npeaks == round(self.raw_data_size(1))
     % Npeaks is not being called by train, so 
     % after finding spikes, we should update the channel_stage
     if any(self.putative_spikes(:,self.channel_to_work_with))
