@@ -20,8 +20,11 @@ self.reconstructMaskFromIgnoreSection;
 
 mask = min(self.mask,[],2);
 
+
+
 S = round(options.dt/self.dt);
 mask = mask(1:S:end);
+
 data.mask = mask(:);
 
 data.T = self.raw_data_size(1)*self.dt;

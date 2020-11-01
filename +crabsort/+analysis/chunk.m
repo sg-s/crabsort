@@ -1,6 +1,21 @@
+% chunks data into segements
+% ignores data that is smaller than the chunk size
+%
+% usage
+% data = crabsort.analysis.chunk(data,options)
+%
+% where options is a struct such as
+%
+% options.dt = 1e-3 % 1ms
+% options.ChunkSize = 20 % seconds
+% options.neurons = {'PD','LP'} % which neurons?
+
 function cdata = chunk(data,options)
 
-
+arguments
+	data (:,1) struct
+	options (1,1) struct
+end
 
 if length(data) > 1
 	% need to handle multiple chunks
@@ -89,3 +104,12 @@ end
 
 cdata.time_offset = ((1:size(cdata.(options.neurons{1}),2))-1)*options.ChunkSize;
 cdata.time_offset = cdata.time_offset(:);
+
+
+% if there is some trailing data, should we censor it?
+if floor(length(data.mask)*options.dt/options.ChunkSize) == n_rows
+	% no need to censor because it works out exactly
+else
+	% censor the last data point because it's a fragment.
+	cdata.mask(end) = 0;
+end
