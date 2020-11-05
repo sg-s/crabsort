@@ -49,7 +49,19 @@ end
 
 assert(length(data)==1,'Expected a scalar structure')
 
-n_rows = ceil(length(data.mask)*dt/ChunkSize);
+try
+	assert(abs(length(data.mask) - data.T*1e3) < 1,'mask length does not match T')
+catch
+	keyboard
+end
+
+
+
+
+% trim it so that the trailing bit is lost
+Z = floor(data.T/ChunkSize)*ChunkSize*1e3;
+n_rows =  floor(data.T/ChunkSize);
+data.mask = data.mask(1:Z);
 
 cdata = struct;
 
@@ -90,10 +102,17 @@ for j = 1:length(fn)
 		% we need to be conservative about throwing out chunks 
 		% that are masked, so even if one point in the chunk is masked,
 		% then the whole chunk should be masked
-		N = floor(length(data.mask)/n_rows);
-		cdata.mask = veclib.subSample(data.(fn{j}),N,@min);
+		cdata.mask = min(reshape(data.mask,ChunkSize*1e3,n_rows));
+		cdata.mask = cdata.mask(:);
 
 	elseif strcmp(fn{j},'temperature')	
+
+		cdata.temperature = NaN(n_rows,1);
+
+		if n_rows == 0
+			continue
+		end
+
 		% temperature is at a different timescale,
 		% let's try to figure it out
 		temperature_time = linspace(0,data.T,length(data.temperature));

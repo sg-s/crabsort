@@ -21,13 +21,19 @@ self.reconstructMaskFromIgnoreSection;
 mask = min(self.mask,[],2);
 
 
+if isempty(self.mask)
+	return
+end
 
-S = round(options.dt/self.dt);
-mask = mask(1:S:end);
+
+data.T = self.raw_data_size(1)*self.dt;
+SampleTime = options.dt:options.dt:data.T;
+SampleTime = SampleTime(:);
+mask = interp1((1:length(mask))*self.dt,mask,SampleTime);
+
 
 data.mask = mask(:);
 
-data.T = self.raw_data_size(1)*self.dt;
 
 
 try

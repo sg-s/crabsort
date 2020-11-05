@@ -11,11 +11,8 @@
 % crabsort.consolidate(ExpName,...'DataFun',{@function1, @function2,...})
 % crabsort.consolidate(ExpName,...'dt',1e-3)
 % crabsort.consolidate(ExpName,...'stack',true)
-% crabsort.consolidate(ExpName,...,'ChunkSize',20)
 % ```
 %
-% Chunking may throw away data at the end if it doesn't fit into
-% a full chunk
 %
 % the 'nerves' option is not used by anything in consolidate,
 % but may affect the behaviour of functions in DataFun
@@ -32,7 +29,6 @@ options.dt = 1e-3; % 1 ms
 options.neurons = {};
 options.stack = false;
 options.DataFun = {};
-options.ChunkSize = NaN; % seconds 
 options.nerves = {};
 options.UseParallel = true;
 options.ParseMetadata = true;
@@ -280,19 +276,6 @@ if options.stack
 
 end
 
-
-% chunk
-if ~isnan(options.ChunkSize)
-	fprintf('Chunking data...')
-
-	cdata = crabsort.analysis.chunk(data,options);
-
-	corelib.cprintf('green','[DONE]\n')
-
-	data = cdata;	
-
-
-end
 
 
 % save
