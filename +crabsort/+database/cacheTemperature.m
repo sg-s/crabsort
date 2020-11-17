@@ -1,3 +1,7 @@
+% this function reads raw data and pulls out metadata from them
+% such as temperature and pH
+% and saves it to a .metadata file with spikes
+
 function cacheTemperature(exp_name)
 
 
