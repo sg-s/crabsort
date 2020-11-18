@@ -83,8 +83,10 @@ else
 
 end
 
-
-self.handles.isi_ax.YLim = yl;
+try
+	self.handles.isi_ax.YLim = yl;
+catch
+end
 
 self.handles.isi_ax.XLim = [0 self.time(end)];
 self.handles.isi_plot_left.YData = yl;

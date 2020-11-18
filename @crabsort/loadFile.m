@@ -504,6 +504,19 @@ if ~isempty(self.handles)
     end
 end
 
+
+% auto predict
+if self.channel_stage(self.channel_to_work_with) == 0
+    midx = find(strcmp({self.handles.menu_name(5).Children.Text},'Auto predict'));
+    if strcmp(self.handles.menu_name(5).Children(midx).Checked,'on')
+        try
+            self.NNpredict;
+        catch
+        end
+    end
+end
+
+
 catch err
 
     disp(['Error loading file: ' self.path_name filesep self.file_name])
