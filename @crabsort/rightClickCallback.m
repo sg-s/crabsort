@@ -19,7 +19,6 @@ yrange = ylimits(2) - ylimits(1);
 
 p(1) = p(1)/self.dt;
 
-
 V = self.raw_data(:,channel);
 this_nerve = self.common.data_channel_names{channel};
 
@@ -55,7 +54,7 @@ elseif min(dist_to_uncertain_spikes) == min(dist_to_identified_spikes)
 	errordlg(err.message,'This case has not been coded yet.')
 elseif min(dist_to_uncertain_spikes) > min(dist_to_identified_spikes)
 	self.say(' Deleting identified spike');
-	this_spike = spiketimes(dist_to_identified_spikes == min(dist_to_identified_spikes));
+	this_spike = spiketimes(find(dist_to_identified_spikes == min(dist_to_identified_spikes),1,'first'));
 
 	% mark this spike as noise
 	self.markAsNoise(this_nerve,this_spike);
@@ -69,8 +68,10 @@ elseif isempty(dist_to_uncertain_spikes)
 	self.markAsNoise(this_nerve,this_spike);
 
 elseif isnan(min(dist_to_uncertain_spikes)) 
+
+
 	self.say('Deleting identified spike');
-	this_spike = spiketimes(dist_to_identified_spikes == min(dist_to_identified_spikes));
+	this_spike = spiketimes(find(dist_to_identified_spikes == min(dist_to_identified_spikes),1,'first'));
 
 	% mark this spike as noise
 	self.markAsNoise(this_nerve,this_spike);

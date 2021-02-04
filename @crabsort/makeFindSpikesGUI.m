@@ -29,7 +29,15 @@ V(rm_this) = [];
 lb = 0*V;
 ub = 2*V + 1;
 
-puppeteer_handle = puppeteer(N,V,lb,ub,[]);
+puppeteer_handle = puppeteer;
+
+
+for i = 1:length(N)
+	puppeteer_handle.add('Name',N{i},'Value',V(i),'Lower',lb(i),'Upper',ub(i));
+end
+
+puppeteer_handle.makeUI;
+
 puppeteer_handle.handles.fig.Name = 'Spike detection parameters';
 
 puppeteer_handle.valueChangedFcn = @self.findSpikes;
@@ -38,3 +46,4 @@ puppeteer_handle.valueChangingFcn = @self.findSpikesInView;
 self.handles.puppeteer_handle = puppeteer_handle;
 
 self.findSpikes;
+

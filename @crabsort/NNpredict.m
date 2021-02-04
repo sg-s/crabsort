@@ -90,7 +90,7 @@ if  exist(NN_dump_file,'file') ~= 2
 		self.sdp.MinPeakProminence = 5;
 		self.sdp.MinPeakHeight = self.handles.ax.ax(channel).YLim(1)
 		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
-		self.findSpikes()
+		self.findSpikes;
 		spiketimes = find(self.putative_spikes(:,channel));
 
 		if length(spiketimes) == 0
@@ -126,7 +126,7 @@ if  exist(NN_dump_file,'file') ~= 2
 		self.sdp.MinPeakHeight = 0;
 		self.sdp.MaxPeakHeight = self.handles.ax.ax(channel).YLim(2);
 
-		self.findSpikes() % 3.6 seconds
+		self.findSpikes; % 3.6 seconds
 
 		spiketimes = find(self.putative_spikes(:,channel));
 
@@ -254,7 +254,7 @@ end
 if self.isIntracellular(channel)
 	% just find the damn spikes, decay be damned
 	self.loadSDPFromNNdata()
-	self.findSpikes()
+	self.findSpikes;
 	spiketimes = find(self.putative_spikes(:,channel));
 
 	
@@ -271,7 +271,7 @@ else
 			self.loadSDPFromNNdata(futz_factor)
 
 
-			self.findSpikes()
+			self.findSpikes;
 			spiketimes = find(self.putative_spikes(:,channel));
 
 
@@ -310,7 +310,7 @@ else
 
 			self.loadSDPFromNNdata(futz_factor)
 
-			self.findSpikes()
+			self.findSpikes;
 			spiketimes = find(self.putative_spikes(:,channel));
 
 			if isempty(spiketimes)

@@ -70,7 +70,7 @@ assert(length(Y) == size(X,2),'Size mismatch')
 self.loadSDPFromNNdata(.5);
 self.putative_spikes(:,channel) = 0;
 
-self.findSpikes(ceil(length(Y)/2)); % don't get in too much junk
+self.findSpikes([],ceil(length(Y)/2)); % don't get in too much junk
 
 % also pick some points at random, far from actual spikes so that we can augment the -ve training dataset
 random_fake_spikes = veclib.shuffle(find(self.mask(:,channel)));

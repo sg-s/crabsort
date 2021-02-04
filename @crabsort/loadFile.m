@@ -350,7 +350,7 @@ self.putative_spikes = 0*self.raw_data;
 % this fixes bugs that arise from dt being slightly different
 % and causing a different frame size when calling getSnippets
 self.dt = round(self.dt*1e6)/1e6;
-
+self.time = (1:length(self.time))*self.dt;
 
 
 

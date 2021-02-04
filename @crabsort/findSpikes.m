@@ -11,30 +11,19 @@
 % created by Srinivas Gorur-Shandilya at 8:58 , 20 November 2015. Contact me at http://srinivas.gs/contact/
 % 
 
-function findSpikes(self,Npeaks,~)
+function findSpikes(self,Parameters,Npeaks)
 
 arguments
     self (1,1) crabsort
-    
+    Parameters (:,1) struct = struct([])
     Npeaks (1,1) = round(self.raw_data_size(1));
-    ~
 end
 
 
-if self.verbosity > 9
-    disp(mfilename)
+% copy the parameters into sdp
+for i = 1:length(Parameters)
+    self.sdp.(Parameters(i).Name) = Parameters(i).Value;
 end
-
-
-if nargin == 3
-    % this is being called by puppeteer
-    % we assume the value is set by the valuechaningFcn
-    % so we can trust self.sdp
-    Npeaks = round(self.raw_data_size(1));
-
-end
-
-
 
 
 if isempty(self.channel_to_work_with)

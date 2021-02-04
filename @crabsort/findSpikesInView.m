@@ -1,11 +1,11 @@
 % this function finds spikes in view
 % called when sliders are moved in the find spikes popup
 
-function findSpikesInView(self,~,~)
+function findSpikesInView(self,Parameters,~)
 
 arguments
 	self (1,1) crabsort 
-	~
+	Parameters
 	~
 end
 
@@ -19,10 +19,9 @@ else
     channel = self.channel_to_work_with;
 end
 
-values = self.handles.puppeteer_handle.parameter_values;
-parameters = self.handles.puppeteer_handle.parameter_names;
-for i = 1:length(parameters)
-    self.sdp.(parameters{i}) = values(i);
+
+for i = 1:length(Parameters)
+    self.sdp.(Parameters(i).Name) = Parameters(i).Value;
 end
 
 
