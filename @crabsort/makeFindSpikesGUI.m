@@ -33,7 +33,12 @@ puppeteer_handle = puppeteer;
 
 
 for i = 1:length(N)
-	puppeteer_handle.add('Name',N{i},'Value',V(i),'Lower',lb(i),'Upper',ub(i));
+	if lb(i) > ub(i)
+		puppeteer_handle.add('Name',N{i},'Value',V(i),'Lower',ub(i),'Upper',lb(i));
+	else
+		puppeteer_handle.add('Name',N{i},'Value',V(i),'Lower',lb(i),'Upper',ub(i));
+	end
+	
 end
 
 puppeteer_handle.makeUI;
