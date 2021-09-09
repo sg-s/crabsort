@@ -1,5 +1,5 @@
 % checks if a given list
-% of files is consequeitively numbered. 
+% of files is consecutively numbered. 
 % throws an error if not
 
 function checkConsecutive(allfiles)
