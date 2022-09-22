@@ -31,7 +31,7 @@ crabsort.uninstall
 
 # Usage
 
-[Video tutorial by Mara Rue walking through how to use crabsort](https://drive.google.com/file/d/1-2f5-9Xd_bVyeGKz_WouGgyHV2oaxDdG/view?usp=drive_web)
+[Video tutorial by Mara Rue walking through how to use crabsort](https://youtu.be/S5W0SaKJZ-E)
 
 ## Keyboard actions
 
